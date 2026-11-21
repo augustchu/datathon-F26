@@ -7,5 +7,6 @@ Search for a named service near a location. The notebook logic compares publishe
 - [Mass verification](non-ml/MASS_VERIFICATION.md) covers the pre-launch Hindi calls, review workflow, and cost scenarios.
 - [Facility assessment and ranking](non-ml/QUALITY_METHOD.md) explains what earns a higher rank and how to find patient ratings and reviews.
 - [Modular notebooks](non-ml/README.md) cover source audits, location cleanup, model readiness, recommendations, and opt-in load balancing.
-- [Existing modeling work](ML/) contains the capacity random forest and earlier modeling notebooks.
+- [Bed-count model evaluation](ML/MODEL_EVALUATION.md) compares the saved neural networks with ridge and random forest on the same facilities, then compares refits on a shared split.
+- [Model notebooks and W&B setup](ML/README.md) cover capacity training, experiment tracking, and versioned model artifacts.
 - [Public-source data](data/) and the [action log](ACTION_LOG.md) document collection and verification.

@@ -65,6 +65,8 @@ On observed labels, both fitted models improved on the median and remained close
 
 An exploratory wider model had already been scored on this internal holdout before the feature selection rule was refined. The final feature decisions used training folds and the intervals used a separate calibration set. Treat these metrics as an internal comparison. Both geographic transfer and performance on independently recovered missing labels remain unmeasured. [Count model comparison notebook](notebooks/09_count_model_comparison.ipynb)
 
+The [neural bed-count evaluation](../ML/MODEL_EVALUATION.md) scored both saved GitHub networks on the same 522 test facilities, then compared fresh refits with training split overlap removed. The facilities-only network had the lowest MAE in each of three refits.
+
 A logistic regression is appropriate for a binary service target if independently reviewed positives and negatives exist. This snapshot lacks that label set, so the service rules handle the real lookup. Source silence, unanswered calls and model leads stay unlabeled. Assess precision, coverage, calibration and false-positive examples near the chosen threshold. Report abstentions separately. A clinical-text study provides a precedent for comparing interpretable logistic regression with more complex text models. Reporting guidance offers a template for documenting labels, splits and performance. [Sumsion et al., interpretable text classification comparison](https://medinform.jmir.org/2025/1/e64113/) · [TRIPOD+AI reporting guidance](https://www.bmj.com/content/385/bmj-2023-078378)
 
 ## What a strong submission shows

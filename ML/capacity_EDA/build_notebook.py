@@ -1,4 +1,4 @@
-"""Rebuild the standalone Databricks notebook from the model module."""
+"""Rebuild the Databricks random forest notebook."""
 from pathlib import Path
 import json
 
@@ -18,8 +18,8 @@ cells = [
 
 Reads `databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.facilities`
 and predicts the numeric `capacity` column using only columns strictly **after
-`countries`** in the table's column order, excluding the target. This notebook
-is self-contained: import this `.ipynb` into Databricks and attach serverless compute.
+`countries`** in the table's column order, excluding the target. Attach serverless
+compute. For optional W&B logging, open the notebook in the Databricks Git folder.
 
 This is an exploratory model. Descriptions or bed-count fields may
 already state the answer. Review the leakage flags before interpreting the score.
@@ -28,7 +28,7 @@ does not establish performance on facilities whose capacity is missing. Predicti
 are estimates, not verified capacity or current bed availability.
     """),
     cell("code", """
-%pip install "scikit-learn==1.7.2" "cloudpickle==3.1.1" "pandas>=2,<3" "matplotlib>=3.7,<4"
+%pip install "scikit-learn==1.7.2" "skops==0.16.0" "wandb==0.31.2" "pandas>=2,<3" "matplotlib>=3.7,<4"
     """),
     cell("code", "dbutils.library.restartPython()"),
     cell("markdown", """
@@ -44,6 +44,10 @@ The row guard stops collection if the table exceeds the expected small dataset;
 it does not silently train on an arbitrary subset. Optional output storage must be
 an absolute, writable Unity Catalog volume or workspace directory. Nothing writes
 back to the source table.
+
+`LOG_MODEL_TO_WANDB` enables model artifact logging separately from the local audit.
+W&B tracking defaults to offline. The fitted encoder contains learned categories
+and text tokens, so review the artifact before sharing it.
     """),
     cell("code", """
 TABLE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.facilities"
@@ -56,18 +60,35 @@ N_TREES = 300
 PERMUTATION_REPEATS = 3
 # Example: "/Volumes/<catalog>/<schema>/<volume>/capacity_EDA"
 OUTPUT_DIR = None
+REPO_ROOT = None  # Supply the absolute Git folder path if it is outside the working directory.
+LOG_MODEL_TO_WANDB = False
     """),
     cell("markdown", "## Model and preprocessing functions\nFitted imputations, categories, and text vocabularies use the training split only."),
     cell("code", (ROOT / "capacity_rf.py").read_text()),
+    cell("code", """
+if LOG_MODEL_TO_WANDB:
+    import sys
+    from pathlib import Path
+
+    cwd = Path.cwd()
+    candidates = [Path(REPO_ROOT).expanduser()] if REPO_ROOT else (cwd, *cwd.parents)
+    repo_root = next((path for path in candidates if (path / "ML/capacity_EDA/capacity_rf.py").is_file()), None)
+    if repo_root is None:
+        raise FileNotFoundError("For W&B logging, open this notebook in the Git folder or set REPO_ROOT.")
+    sys.path.insert(0, str(repo_root / "ML/capacity_EDA"))
+    # The saved encoder needs a Python module name that can be imported when loading the artifact.
+    from capacity_rf import run_capacity_rf
+    """),
     cell("markdown", "## Read the facility table"),
     cell("code", """
 import platform
 from datetime import datetime, timezone
 from pathlib import Path
 import json
+import numpy as np
+import pandas as pd
 import sklearn
 import matplotlib.pyplot as plt
-import cloudpickle
 
 source = spark.table(TABLE)
 if TARGET not in source.columns:
@@ -144,12 +165,11 @@ fig.tight_layout()
 display(fig)
     """),
     cell("markdown", """
-## Optional: save the run
+## Optional: save the detailed audit
 
-Set `OUTPUT_DIR` above to retain the evaluation tables, split, model, schema, plot,
-and environment metadata. Each run gets its own timestamped directory. The saved
-model is the training-split model used for evaluation; it is not silently refitted
-on the test set. Source capacity values are never overwritten.
+Set `OUTPUT_DIR` above to retain the evaluation tables, split, schema, plot, and
+environment metadata. Each run gets its own timestamped directory. Source capacity
+values are never overwritten.
     """),
     cell("code", """
 if OUTPUT_DIR is None:
@@ -169,14 +189,51 @@ else:
         "seed": SEED, "trees": N_TREES, "permutation_repeats": PERMUTATION_REPEATS,
         "summary": result["summary"],
         "versions": {"python": platform.python_version(), "sklearn": sklearn.__version__,
-                     "pandas": pd.__version__, "numpy": np.__version__, "cloudpickle": cloudpickle.__version__},
+                     "pandas": pd.__version__, "numpy": np.__version__},
     }
     (run_dir / "run_metadata.json").write_text(json.dumps(metadata, indent=2, default=str))
-    # Cloudpickle includes notebook-defined preprocessing classes in the saved artifact.
-    with (run_dir / "capacity_model.pkl").open("wb") as handle:
-        cloudpickle.dump(result["pipeline"], handle)
     fig.savefig(run_dir / "held_out_predictions.png", dpi=160, bbox_inches="tight")
     print(f"Saved run to {run_dir}")
+    """),
+    cell("markdown", """
+## Optional: record a W&B model artifact
+
+Set `LOG_MODEL_TO_WANDB = True` to log the training-split fitted model and aggregate
+test metrics. The detailed audit stays in the notebook and optional output directory.
+The fitted encoder requires the matching `capacity_rf` module for loading.
+    """),
+    cell("code", """
+if LOG_MODEL_TO_WANDB:
+    from copy import copy
+    from sklearn.pipeline import Pipeline
+
+    sys.path.insert(0, str(repo_root / "ML/notebooks"))
+    from wandb_models import log_sklearn_capacity
+
+    # skops needs the fitted transform state. The pandas audit table is display-only.
+    fitted = result["pipeline"]
+    encoder = copy(fitted.named_steps["encode"])
+    del encoder.audit_
+    encoder.feature_names_in_ = np.asarray(encoder.columns_, dtype=object)
+    export_model = Pipeline([("encode", encoder), ("forest", fitted.named_steps["forest"])])
+    metrics = {
+        f"test_{row.model}_{measure}": float(getattr(row, measure))
+        for row in result["metrics"].itertuples(index=False)
+        for measure in ("mae", "rmse", "r2")
+        if np.isfinite(getattr(row, measure))
+    }
+    config = {
+        "table": TABLE, "target": TARGET, "after_column": AFTER_COLUMN, "group_column": GROUP_COLUMN,
+        "read_completed_at_utc": SOURCE_READ_AT_UTC, "predictor_columns": predictor_columns,
+        "seed": SEED, "n_estimators": N_TREES, "permutation_repeats": PERMUTATION_REPEATS,
+        "train_rows": result["summary"]["train_rows"], "test_rows": result["summary"]["test_rows"],
+        "artifact_reviewed_types": ["capacity_rf.FacilityEncoder", "sklearn.tree._tree.Tree"],
+    }
+    wandb_run = log_sklearn_capacity(
+        name="capacity-random-forest", model=export_model, metrics=metrics,
+        config=config, target_transform="identity",
+    )
+    print(f"W&B {wandb_run['mode']} run: {wandb_run['run_directory']}")
     """),
 ]
 

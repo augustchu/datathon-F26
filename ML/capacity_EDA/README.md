@@ -1,6 +1,6 @@
 # Capacity random forest
 
-Open `capacity_random_forest.ipynb` in Databricks, attach Free Edition serverless compute, and run the cells in order. The notebook embeds the preprocessing and model code, so it works when imported on its own. Its first two cells install dependencies and restart Python.
+Open or import `capacity_random_forest.ipynb` in Databricks, attach Free Edition serverless compute, and run the cells in order. The notebook embeds its training code for standalone use. The first two code cells install dependencies and restart Python.
 
 The configured source is:
 
@@ -19,7 +19,7 @@ The final `capacity` in the supplied path is treated as a column. Access to the 
 - Uses an approximately 80/20 split with exact duplicate predictor rows kept together. Set `GROUP_COLUMN` to a reliable facility identifier to also keep repeated facility records together. An identifier at or before `countries` is used for grouping only, not prediction. Canonical row ordering and stable group labels make the seeded result reproducible across reordered reads of the same records.
 - Fits a 300-tree `RandomForestRegressor` and compares held-out MAE, RMSE, and R² against simple baselines.
 - Reports importance by permuting each original column on the test set, rather than comparing thousands of individual text features.
-- Displays target-quality and potential-leakage flags, predictions, and residual plots. Optional output storage saves the model, audit tables, split, metadata, and plots in a new run directory.
+- Displays target-quality and potential-leakage flags, predictions, and residual plots. `OUTPUT_DIR` saves detailed audit tables, the split, metadata, and plots in a new run directory.
 
 The source table is read only. Missing target values are not imputed before training, and predictions do not replace source capacity. Rows with missing or invalid capacity are excluded from model fitting and evaluation.
 
@@ -31,11 +31,17 @@ Importance measures predictive association, not causation or a formal pairwise i
 
 Evaluation applies to records with observed capacity and does not establish accuracy on records with missing capacity. Repeated facilities with differing records can cross the split unless a suitable `GROUP_COLUMN` is supplied. This is an exploratory model, not evidence of actual facility capacity or beds available today.
 
+## W&B model artifact
+
+Set `LOG_MODEL_TO_WANDB = True` to log the fitted training-split forest and its encoder with aggregate held-out and baseline metrics. Open the notebook in a Git folder with `capacity_rf.py` and `ML/notebooks/wandb_models.py`, or set `REPO_ROOT` to the absolute path of that checkout. Logging uses the shared W&B helper and defaults to offline. The detailed audit stays in the notebook and any configured `OUTPUT_DIR`. The encoder retains learned categories and text tokens. Review the artifact before sharing it or syncing the offline run.
+
+To load the artifact from a trusted project run, put the matching checkout's `ML/capacity_EDA` directory on the Python import path and use the versions recorded in `metadata.json`. Inspect `skops.io.get_untrusted_types(file=path)` before loading `model.skops`. The expected project-specific types are `capacity_rf.FacilityEncoder` and `sklearn.tree._tree.Tree`. Review any new types before granting trust. The fitted model takes the predictor columns recorded in its configuration and returns capacity in the original units.
+
 ## Files and development
 
-- `capacity_random_forest.ipynb`: standalone Databricks notebook; no training outputs are embedded.
+- `capacity_random_forest.ipynb`: Databricks notebook with cleared outputs and optional Git folder model logging.
 - `capacity_rf.py`: reusable preprocessing and modeling functions.
-- `build_notebook.py`: rebuilds the notebook from that module and the notebook cells. Run it after changing the module.
+- `build_notebook.py`: rebuilds the notebook after editing its cells or `capacity_rf.py`.
 - `requirements.txt`: local dependencies; the notebook installs its own dependencies.
 - `test_capacity_rf.py`: synthetic-data checks; no real facility records or Databricks credentials are used.
 
