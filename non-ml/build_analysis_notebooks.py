@@ -125,6 +125,8 @@ def main():
             retain their own source and precision.
         '''),
         code('''
+            import json
+
             from facility_tool.data import link_entities
             from facility_tool.geo_audit import attach_routing_review, audit_locations
             from facility_tool.geography import add_postal_context, build_postal_areas
@@ -134,8 +136,11 @@ def main():
             entities, links = link_entities(records)
             postal_areas = build_postal_areas(STORE.read("raw_pins"))
             entities = add_postal_context(entities, postal_areas)
+            reviewed_holds = [] if MODE == "demo" else json.loads(
+                (ROOT / "non-ml/config/reviewed_location_holds.json").read_text(encoding="utf-8")
+            )
             location_records, location_entity_review, location_quality_summary = audit_locations(
-                records, entities, postal_areas, links=links, postal_offset_km=50,
+                records, entities, postal_areas, links=links, postal_offset_km=50, reviewed_holds=reviewed_holds,
             )
             entities = attach_routing_review(entities, location_entity_review)
             snapshots = {"entities": entities, "links": links, "postal_areas": postal_areas,
@@ -154,9 +159,11 @@ def main():
 
             Review the published address, PIN, original point and linked branch records.
             The audit flags likely coordinate reversals, zero placeholders, shared points
-            and inconsistent or ambiguous PINs. Distance to a postal-office centroid
-            is a review signal. Shared points can describe a real campus. An explicit
-            conflict with all directory state labels blocks distance ranking for the branch.
+            and inconsistent or ambiguous PINs. Inspect the persisted routing decision
+            for points held by a strong geographic conflict or a cited manual review.
+            A postal-office coordinate represents an area. Verify the branch address
+            and actual site point before replacing a rejected point in the inputs.
+            Rerun notebook 06b after this audit to update lookup assets.
         '''),
         code('''
             show(location_quality_summary.loc[location_quality_summary["count"].gt(0)])

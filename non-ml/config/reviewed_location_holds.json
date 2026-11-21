@@ -1,0 +1,23 @@
+[
+  {
+    "record_id": "eraktkosh:283575",
+    "latitude": 28.61288,
+    "longitude": 77.16731,
+    "source_url": "https://faridkot.nic.in/about-district/",
+    "reason": "Deep Blood Centre's published Kotkapura Road address is in Faridkot district, Punjab. This source point is outside the district's published coordinate range."
+  },
+  {
+    "record_id": "nabh:ff1425c2b4c726f1871536a1",
+    "latitude": 20.2894961,
+    "longitude": 85.8095771,
+    "source_url": "https://jeevanjyoti.net/contact-us/",
+    "reason": "Jeevan Jyoti Clinic & Hospital publishes 118A/1, Dilshad Garden, New Delhi 110095. This source point is over 1,200 km from the postal area."
+  },
+  {
+    "record_id": "eraktkosh:283701",
+    "latitude": 28.59311,
+    "longitude": 77.21964,
+    "source_url": "https://rajswasthya.rajasthan.gov.in/contact.php",
+    "reason": "The directory lists S.J.M Charitable Janseva Blood Centre opposite Bhiwadi Bus Stand. Rajasthan's health department locates Bhiwadi in Khairthal-Tijara, far from this central Delhi point."
+  }
+]

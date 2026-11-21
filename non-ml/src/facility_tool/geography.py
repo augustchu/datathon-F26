@@ -3,9 +3,12 @@
 from dataclasses import dataclass
 from math import isfinite
 import re
+from statistics import median
 import unicodedata
 
 import pandas as pd
+
+from .recommend import haversine_km
 
 
 STATE_ALIASES = {
@@ -57,17 +60,23 @@ def india_point(lat, lon):
     return isfinite(x) and isfinite(y) and 6 <= x <= 38 and 67 <= y <= 98
 
 
-def _center(rows):
-    points = [(float(a), float(b)) for a, b in zip(rows['lat'], rows['lon']) if india_point(a, b)]
+def _points(rows):
+    return [(float(lat), float(lon)) for lat, lon in zip(rows['lat'], rows['lon']) if india_point(lat, lon)]
+
+
+def _center(points):
     if not points:
         raise ValueError('The matched area has no usable coordinates. Enter a coordinate pair instead.')
-    center = pd.DataFrame(points, columns=['lat', 'lon']).median()
-    return float(center['lat']), float(center['lon'])
+    latitudes, longitudes = zip(*points)
+    return median(latitudes), median(longitudes)
 
 
 def build_postal_areas(pins):
     """One row per published PIN / state / district, retaining competing mappings."""
-    fields = ['pin', 'state', 'district', 'offices', 'lat', 'lon', 'district_choices']
+    fields = [
+        'pin', 'state', 'district', 'offices', 'lat', 'lon',
+        'usable_office_points', 'office_point_spread_km', 'district_choices',
+    ]
     if pins.empty:
         return pd.DataFrame(columns=fields)
     required = ['pincode', 'statename', 'district', 'latitude', 'longitude']
@@ -81,12 +90,14 @@ def build_postal_areas(pins):
     directory = directory.loc[directory[['pin', 'state_key', 'district_key']].ne('').all(axis=1)]
     rows = []
     for (pin, _, _), group in directory.groupby(['pin', 'state_key', 'district_key'], sort=True):
-        try:
-            lat, lon = _center(group)
-        except ValueError:
-            lat, lon = None, None
+        points = _points(group)
+        lat = lon = spread = None
+        if points:
+            lat, lon = _center(points)
+            spread = max(haversine_km(lat, lon, *point) for point in points)
         rows.append({'pin': pin, 'state': group['state'].iloc[0], 'district': group['district'].iloc[0],
-                     'offices': len(group), 'lat': lat, 'lon': lon})
+                     'offices': len(group), 'lat': lat, 'lon': lon,
+                     'usable_office_points': len(points), 'office_point_spread_km': spread})
     areas = pd.DataFrame(rows, columns=fields[:-1])
     areas['district_choices'] = areas.groupby('pin')['pin'].transform('size')
     return areas
@@ -156,7 +167,7 @@ def resolve_origin(query, entities, postal_areas):
             problem = f'found multiple areas: {", ".join(choices)}' if choices else 'was not found in the saved PIN directory'
             raise ValueError(f'PIN {pin} {problem}. Give a state or a coordinate pair.')
         row = rows.iloc[0]
-        lat, lon = _center(rows)
+        lat, lon = _center(_points(rows))
         return Origin(lat, lon, f'{pin}, {row.district}, {row.state}', 'Approximate origin from post-office coordinates')
 
     key = place_key(label)
@@ -182,7 +193,7 @@ def resolve_origin(query, entities, postal_areas):
         if rows.empty:
             raise ValueError('The matched place has conflicting coordinates. Enter a verified coordinate pair.')
         try:
-            lat, lon = _center(rows)
+            lat, lon = _center(_points(rows))
         except ValueError:
             continue
         return Origin(lat, lon, text, basis)

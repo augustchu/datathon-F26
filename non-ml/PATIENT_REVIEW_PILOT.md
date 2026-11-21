@@ -28,4 +28,6 @@ In a **fictional sensitivity test** on the two real Delhi candidates, surveys wi
 
 At the normal 50 km radius the same Delhi coordinates yielded 240 candidates and zero usable ratings. The broader Delhi lookup also exposed a location defect. The saved eRaktKosh source puts Deep Blood Centre (`eraktkosh:283575`) at 28.61288, 77.16731 while its address says Faridkot, Punjab. Its missing PIN bypassed the postal check and the point passed the India-wide bounds check, so the city-based Delhi lookup placed it about 3.74 km away. This is a prepared-location review item. The pilot used the two independently verified Delhi sites for the comparison. [Faridkot district geography](https://faridkot.nic.in/about-district/)
 
+The [follow-up location audit](LOCATION_AUDIT.md) documents the pipeline hold and the other coordinate conflicts.
+
 An authorized Mera Aspataal export with the same survey, reporting window and response counts across comparable branches would support a measured reranking. Public program documentation describes access for designated stakeholders. See the [ranking method](QUALITY_METHOD.md) for the current import and comparison rules. [NHSRC reporting guide](https://qps.nhsrcindia.org/sites/default/files/2022-04/Process%20Note-%20Mera%20Aspataal%20Calculation%20under%20Kayakalp%20%202019-20.pdf)
