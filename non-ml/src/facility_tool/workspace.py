@@ -1,6 +1,7 @@
 """Shared notebook settings and small, inspectable JSON Lines checkpoints."""
 
 import json
+import gzip
 import os
 import re
 import tempfile
@@ -10,11 +11,14 @@ from pathlib import Path
 import pandas as pd
 
 
+INPUT_MODES = {'demo', 'public', 'export', 'databricks'}
+
+
 def read_config(root):
     config = json.loads((Path(root) / 'non-ml/config/project.json').read_text(encoding='utf-8'))
     date.fromisoformat(config['as_of'])
-    if config['input_mode'] not in {'demo', 'public', 'databricks'}:
-        raise ValueError('input_mode must be demo, public, or databricks.')
+    if config['input_mode'] not in INPUT_MODES:
+        raise ValueError(f'Choose an input mode from {sorted(INPUT_MODES)}.')
     return config
 
 
@@ -33,7 +37,7 @@ class Store:
     """Read and write frames in a mode-specific directory with schema metadata."""
 
     def __init__(self, root, mode, as_of, output_dir=None):
-        if mode not in {'demo', 'public', 'databricks'}:
+        if mode not in INPUT_MODES:
             raise ValueError(f'Unknown input mode: {mode}')
         as_of = date.fromisoformat(as_of).isoformat()
         home = Path(output_dir or os.environ.get('DATATHON_OUTPUT_DIR') or Path(root) / 'non-ml/outputs')
@@ -83,8 +87,27 @@ def load_inputs(mode, config, spark=None):
         return demo_inputs()
     if mode == 'public':
         return {key: pd.DataFrame() for key in ('facilities', 'pins', 'nfhs')}
+    if mode == 'export':
+        filename = os.environ.get('DATATHON_FACILITY_EXPORT')
+        if not filename:
+            raise ValueError('Set DATATHON_FACILITY_EXPORT to a private facilities export.')
+        path = Path(filename).expanduser()
+        if path.suffix == '.parquet':
+            facilities = pd.read_parquet(path)
+        elif path.suffix == '.csv':
+            facilities = pd.read_csv(path, dtype='string')
+        else:
+            opener = gzip.open if path.suffix == '.gz' else open
+            with opener(path, 'rt', encoding='utf-8') as stream:
+                snapshot = json.load(stream)
+            facilities = pd.DataFrame(snapshot['rows'], columns=snapshot['columns'], dtype=object)
+        if len(facilities) > int(config['row_limits']['facilities']):
+            raise ValueError('The exported facility table exceeds the configured row limit.')
+        if not {'countries', 'capacity', 'numberDoctors'}.issubset(facilities.columns):
+            raise ValueError('The export must preserve the original facility columns and column order.')
+        return {'facilities': facilities, 'pins': pd.DataFrame(), 'nfhs': pd.DataFrame()}
     if mode != 'databricks' or spark is None:
-        raise ValueError('Use demo or public locally. To read Unity Catalog, choose databricks inside a Databricks notebook with table access.')
+        raise ValueError('Use demo, public or export locally. To read Unity Catalog, choose databricks inside a Databricks notebook with table access.')
 
     def read(key):
         limit = int(config['row_limits'][key])

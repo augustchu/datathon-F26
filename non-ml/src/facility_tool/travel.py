@@ -66,6 +66,9 @@ def _coordinate_pair(values):
 
 
 def _site_point(row):
+    if "location_routing_eligible" in row:
+        flag = row["location_routing_eligible"]
+        return _coordinate_pair((row["lat"], row["lon"])) if pd.api.types.is_bool(flag) and flag else None
     quality = str(row.get("location_quality", "")).casefold()
     conflict = str(row.get("location_conflict", "")).strip().casefold()
     if conflict in {"true", "1", "yes"} or any(term in quality for term in BLOCKED_QUALITIES):

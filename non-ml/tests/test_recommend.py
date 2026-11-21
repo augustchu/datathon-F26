@@ -1,8 +1,11 @@
+import json
+from tempfile import TemporaryDirectory
 import unittest
 
 import pandas as pd
 
-from facility_tool.recommend import compare_modes, simulate_spread
+from facility_tool.recommend import PREPARED_COLUMNS, compare_modes, compare_prepared_modes, prepare_service_candidates, simulate_spread
+from facility_tool.workspace import Store
 
 
 SERVICE = "dialysis"
@@ -112,6 +115,57 @@ class RecommendationTests(unittest.TestCase):
         )
         self.assertEqual(set(self.first_rows(output)["facility_id"]), {"first"})
         self.assertEqual(set(output["summary"]["load_status"]), {"no_measured_load"})
+
+    def test_prepared_routing_uses_audited_flags_and_retains_location_sources(self):
+        held = dict(
+            self.entities[0], location_routing_eligible=False, location_hold_reason="Pin conflicts with coordinates",
+            location_source_urls=["https://example.org/location"], location_review_flags=["pin_conflict"],
+        )
+        ready = dict(self.entities[1], location_routing_eligible=True, location_hold_reason="")
+        prepared = prepare_service_candidates(pd.DataFrame([held, ready]), pd.DataFrame(self.claims), SERVICE, as_of=AS_OF)
+        result = compare_prepared_modes(prepared, 28.0, 77.0, SERVICE, as_of=AS_OF)
+        self.assertEqual(set(self.first_rows(result)["facility_id"]), {"near"})
+        review = result["trace"].loc[result["trace"]["facility_id"].eq("first")].iloc[0]
+        self.assertEqual(review["review_reason"], "Pin conflicts with coordinates")
+        self.assertEqual(review["location_source_urls"], ["https://example.org/location"])
+        self.assertEqual(review["location_review_flags"], ["pin_conflict"])
+        self.assertTrue(pd.isna(review["distance_km"]))
+
+    def test_prepared_comparison_round_trips_through_json_checkpoint(self):
+        entities = pd.DataFrame([
+            dict(row, location_routing_eligible=True, location_hold_reason="")
+            for row in [*self.entities, entity("lead", 77.001)]
+        ])
+        claims = pd.DataFrame([
+            dict(row, validity_start="2026-01-01", validity_end="2026-11-22")
+            for row in self.claims
+        ])
+        updates = pd.DataFrame([
+            dict(update("first", "capacity", "ml", 120, "beds"), lower=pd.NA, upper=float("nan")),
+            update("lead", f"service:{SERVICE}", "regression", 0.8, "probability"),
+        ])
+        prepared = prepare_service_candidates(entities, claims, SERVICE, updates=updates, as_of=AS_OF)
+        expected = compare_modes(entities, claims, 28.0, 77.0, SERVICE, updates=updates, as_of=AS_OF)
+        with TemporaryDirectory() as directory:
+            store = Store(".", "demo", "2026-11-21", output_dir=directory)
+            store.write("service_candidates", prepared)
+            reloaded = store.read("service_candidates")
+            actual = compare_prepared_modes(reloaded, 28.0, 77.0, SERVICE, as_of=AS_OF)
+            later = compare_prepared_modes(reloaded, 28.0, 77.0, SERVICE, as_of="2026-11-25", lead_threshold=1)
+        for name in expected:
+            pd.testing.assert_frame_equal(expected[name], actual[name])
+        self.assertEqual(len(later["rows"].loc[later["rows"]["kind"].eq("lead")]), 0)
+        self.assertEqual(set(later["rows"]["evidence_as_of"]), {"2026-11-21"})
+        self.assertEqual(set(later["rows"]["validity"]), {"active"})
+        fields = self.first_rows(actual).set_index("mode").loc["ml", "field_updates_json"]
+        self.assertIsNone(json.loads(fields)["capacity"]["lower"])
+        self.assertIsNone(json.loads(fields)["capacity"]["upper"])
+
+    def test_empty_prepared_checkpoint_keeps_results_schema(self):
+        result = compare_prepared_modes(pd.DataFrame(columns=PREPARED_COLUMNS), 28.0, 77.0, SERVICE, as_of=AS_OF)
+        self.assertTrue(result["rows"].empty)
+        self.assertEqual(list(result["rows"].columns), list(result["trace"].columns))
+        self.assertEqual(set(result["summary"]["n_eligible"]), {0})
 
     def test_query_date_refreshes_a_claims_parsed_validity(self):
         stale = dict(claim("first"), validity_start="2026-04-01", validity_end="2026-11-20")

@@ -66,8 +66,9 @@ def main():
     notebook("01_source_eda", "Audit the input sources", '''
         Start here to inspect the original facility records and the separate public snapshots.
         The default `demo` mode uses fictional records. `public` mode reads the existing
-        supplemental snapshots in this repository. `databricks` mode reads the configured
-        Unity Catalog tables only when selected inside an authorized Databricks workspace.
+        supplemental snapshots in this repository. `export` mode reads a private facility
+        table export. `databricks` mode reads the configured Unity Catalog tables only
+        when selected inside an authorized Databricks workspace.
         Each mode and evidence date has a separate checkpoint directory.
     ''', [
         markdown('''
@@ -125,7 +126,7 @@ def main():
         '''),
         code('''
             from facility_tool.data import link_entities
-            from facility_tool.geo_audit import audit_locations
+            from facility_tool.geo_audit import attach_routing_review, audit_locations
             from facility_tool.geography import add_postal_context, build_postal_areas
 
             records = STORE.read("records")
@@ -136,11 +137,7 @@ def main():
             location_records, location_entity_review, location_quality_summary = audit_locations(
                 records, entities, postal_areas, links=links, postal_offset_km=50,
             )
-            # A PIN assigned exclusively to a different state leaves the branch point unresolved.
-            state_conflicts = location_entity_review.loc[
-                location_entity_review["postal_resolution"].eq("state_conflict"), "facility_id"
-            ]
-            entities.loc[entities["facility_id"].isin(state_conflicts), "location_quality"] = "conflicting_postal_state"
+            entities = attach_routing_review(entities, location_entity_review)
             snapshots = {"entities": entities, "links": links, "postal_areas": postal_areas,
                          "location_records": location_records, "location_entity_review": location_entity_review,
                          "location_quality_summary": location_quality_summary}
@@ -150,7 +147,7 @@ def main():
             decisions = records[["record_id", "source", "name"]].merge(links, on="record_id", validate="1:1")
             show(decisions.groupby(["source", "link_status"]).size().rename("records").reset_index())
             show(decisions.loc[decisions["link_status"].eq("ambiguous")])
-            show(entities.groupby(["location_quality", "postal_resolution"]).size().rename("facilities").reset_index())
+            show(entities.groupby(["location_routing_eligible", "location_hold_reason"]).size().rename("facilities").reset_index())
         '''),
         markdown('''
             ## Inspect locations that need a second source

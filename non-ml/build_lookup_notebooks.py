@@ -4,8 +4,28 @@ from build_analysis_notebooks import code, markdown, notebook
 
 
 def build():
+    notebook('06b_prepare_lookup', 'Prepare lookup snapshots', '''
+        Run this after the branch audit, service evidence, and field updates. Search uses
+        prepared place and service checkpoints. It reads the existing routing flags and
+        recommendations use the service evidence available on the configured snapshot date.
+    ''', [
+        markdown('''
+            ## Materialize the stable decisions
+
+            The data preparation resolves eligible place centers and known ambiguity,
+            attaches citable contacts, assesses the service evidence, and organizes each
+            service's quotes, field estimates and load inputs. Review the candidate totals
+            before running a search. Refresh these checkpoints when upstream data or rules change.
+        '''),
+        code('''
+            from facility_tool.query_assets import prepare_lookup_assets
+
+            profile = prepare_lookup_assets(STORE, config)
+            show(profile)
+        '''),
+    ])
     notebook('07_compare_and_feedback', 'Compare the three recommendation modes', '''
-        Start here after creating the `entities`, `postal_areas`, and `claims` checkpoints.
+        Run notebook 06b to prepare the place and service snapshots before searching.
         This notebook exercises the tool logic in Python. Its default example is fictional.
         Persistent moderation can be enabled with a private database path.
     ''', [

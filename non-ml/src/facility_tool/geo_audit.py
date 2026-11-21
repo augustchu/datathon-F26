@@ -20,7 +20,19 @@ POSTAL_FLAGS = (
     'pin_not_in_directory', 'pin_state_conflict', 'pin_district_conflict', 'ambiguous_pin_area',
     'far_from_postal_centroid',
 )
-FLAGS = (*COORDINATE_FLAGS, *POSTAL_FLAGS, 'published_location_conflict', 'shared_exact_coordinates')
+FLAGS = (*COORDINATE_FLAGS, *POSTAL_FLAGS, 'published_location_conflict', 'shared_exact_coordinates',
+         'non_site_coordinate_quality')
+HOLD_REASONS = {
+    'published_location_conflict': 'Published facility location details conflict.',
+    'pin_state_conflict': 'The published facility state disagrees with the PIN directory.',
+    'missing_coordinates': 'A branch-level site coordinate is missing.',
+    'invalid_coordinates': 'The published site coordinates are invalid.',
+    'zero_coordinate_placeholder': 'The source used a zero coordinate placeholder.',
+    'likely_lat_lon_swap': 'The latitude and longitude appear to be swapped.',
+    'outside_india_bounds': 'The published coordinates are outside the broad India bounds.',
+    'non_site_coordinate_quality': 'The source coordinate quality does not identify a usable site point.',
+}
+NON_SITE_QUALITY = {'missing', 'invalid', 'ambiguous', 'placeholder', 'centroid', 'approximate', 'unresolved'}
 MISSING_MARKERS = ('', 'n/a', 'na', 'nan', 'null', 'none', '<na>')
 EXPLICIT_ADDRESS_PIN = re.compile(r'\bPIN(?:\s*CODE)?\s*[-:]?\s*([1-9]\d{2})\s*(\d{3})(?!\d)', re.IGNORECASE)
 POSTAL_COLUMNS = (
@@ -38,7 +50,8 @@ RECORD_COLUMNS = (
 ENTITY_COLUMNS = (
     'facility_id', 'base_record_id', 'location_record_id', 'base_source', 'base_source_urls',
     'location_source_urls', *LOCATION_COLUMNS, 'coordinate_status', *POSTAL_COLUMNS,
-    'shared_coordinate_facility_count', 'review_needed', 'review_flags', 'linked_review_record_ids',
+    'shared_coordinate_facility_count', 'location_routing_eligible', 'location_hold_reason',
+    'review_needed', 'review_flags', 'linked_review_record_ids',
 )
 
 
@@ -103,8 +116,11 @@ def _location_review(row, raw_point, pin_groups, shared_points, offset_limit):
         # Some saved source extracts already remove placeholders and retain the reason.
         coordinate_status = 'zero_coordinate_placeholder'
     flags = [] if coordinate_status == COORDINATE_OK else [coordinate_status]
-    if place_key(row.get('location_quality')) == 'conflict' or str(row.get('location_conflict')).casefold() == 'true':
+    quality_terms = set(place_key(row.get('location_quality')).split())
+    if 'conflict' in quality_terms or str(row.get('location_conflict')).casefold() == 'true':
         flags.append('published_location_conflict')
+    if coordinate_status == COORDINATE_OK and (not quality_terms or NON_SITE_QUALITY & quality_terms):
+        flags.append('non_site_coordinate_quality')
     postal, postal_flags = _postal_review(row, point, pin_groups, offset_limit)
     peer_count = len(shared_points.get(point, ()))
     if peer_count > 1:
@@ -150,14 +166,24 @@ def _summary(scope, frame, source_column):
     return rows
 
 
+def _hold_reason(flags, source_coordinate_status):
+    reasons = set(flags)
+    if 'missing_coordinates' in reasons and source_coordinate_status in COORDINATE_FLAGS:
+        # Ingestion may clear an invalid point. Keep the source reason when available.
+        reasons.remove('missing_coordinates')
+        reasons.add(source_coordinate_status)
+    return ' '.join(message for flag, message in HOLD_REASONS.items() if flag in reasons)
+
+
 def audit_locations(records, entities, postal_areas, *, links=None, postal_offset_km=50.0):
     """Return source-row checks, branch review rows, and source-level flag counts.
 
     A plausible point stays a source claim. Shared points may reflect co-located
     sites, copied coordinates or approximation. Distance to an office centroid
     is a review signal over an editable threshold; the site and postal points
-    stay separate. Suspected swaps, conflicting labels, and missing coordinates
-    are surfaced with their source data and left for review.
+    stay separate. Coordinate failures and explicit state or location conflicts
+    put the branch on hold for routing. Shared points, district disagreements,
+    and large postal offsets remain review flags.
     """
     try:
         offset_limit = float(postal_offset_km)
@@ -184,12 +210,14 @@ def audit_locations(records, entities, postal_areas, *, links=None, postal_offse
             shared_points[point].add(key)
 
     source_review = []
+    source_coordinate_status = {}
     flagged_record_ids = defaultdict(list)
     for key, row in source_rows.items():
         link = link_rows.get(key, {})
         entity = entity_rows.get(link.get('facility_id'), {})
         review = _record_review(row, entity, link, pin_groups, shared_points, offset_limit)
         source_review.append(review)
+        source_coordinate_status[key] = review['coordinate_status']
         if _present(review['facility_id']) and review['review_needed']:
             flagged_record_ids[review['facility_id']].append(key)
 
@@ -197,10 +225,13 @@ def audit_locations(records, entities, postal_areas, *, links=None, postal_offse
     for key, row in entity_rows.items():
         stage, flags = _location_review(row, (row.get('lat'), row.get('lon')), pin_groups, shared_points, offset_limit)
         base_id, location_id = row.get('base_record_id'), row.get('location_record_id')
+        point_source_id = location_id if _present(location_id) else base_id
+        hold_reason = _hold_reason(flags, source_coordinate_status.get(point_source_id))
         branch_review.append(dict(
             stage, facility_id=key, base_record_id=base_id, location_record_id=location_id,
             base_source=row.get('base_source'), base_source_urls=source_rows.get(base_id, {}).get('source_urls', []),
             location_source_urls=source_rows.get(location_id, {}).get('source_urls', []),
+            location_routing_eligible=not hold_reason, location_hold_reason=hold_reason,
             review_needed=bool(flags), review_flags=flags, linked_review_record_ids=flagged_record_ids.get(key, []),
         ))
     record_audit = pd.DataFrame(source_review, columns=RECORD_COLUMNS)
@@ -210,3 +241,14 @@ def audit_locations(records, entities, postal_areas, *, links=None, postal_offse
         columns=['scope', 'source', 'check', 'count', 'total'],
     )
     return record_audit, entity_review, summary
+
+
+def attach_routing_review(entities, entity_review):
+    """Persist the audited routing decision and its evidence on each branch."""
+    fields = ['facility_id', 'location_routing_eligible', 'location_hold_reason',
+              'location_source_urls', 'review_flags']
+    routing = entity_review[fields].rename(columns={'review_flags': 'location_review_flags'})
+    result = entities.merge(routing, on='facility_id', how='left', validate='1:1')
+    if result['location_routing_eligible'].isna().any():
+        raise ValueError('Each facility must have a saved location routing decision.')
+    return result

@@ -5,9 +5,10 @@ import re
 
 import pandas as pd
 
-from .geography import place_key, resolve_origin
-from .recommend import compare_modes
-from .response import format_recommendations
+from .geography import place_key
+from .origin_index import resolve_prepared_origin
+from .recommend import compare_prepared_modes
+from .response import CONTACT_FIELDS, format_recommendations
 from .travel import estimate_travel
 
 
@@ -36,50 +37,45 @@ def resolve_service(concern, aliases):
 def lookup(store, config, *, concern, location, spread_demand=False, traveltime_enabled=False,
            travel_weight=None, max_extra_km=None, max_extra_minutes=None, pressure_inputs=None, feedback=()):
     """Return all three modes from one snapshot and one optional routing request."""
-    entities = store.read('entities')
-    claims = store.read('claims')
-    updates = store.read('field_updates', optional=True)
-    measured = store.read('measured_load', optional=True)
-    contacts = store.read('contact_evidence', optional=True)
-    geography = store.read('location_entity_review', optional=True)
-    if pressure_inputs is None:
-        pressure_inputs = store.read('pressure_scenarios', optional=True)
     service = resolve_service(concern, config['service_aliases'])
-    origin = resolve_origin(location, entities, store.read('postal_areas'))
+    candidates = store.read(f'lookup_candidates_{service}')
+    origin = resolve_prepared_origin(location, store.read('origin_index'))
     excluded = {entry.facility_id for entry in feedback if entry.service == service and not entry.confirmed}
     if excluded:
-        entities = entities.loc[~entities['facility_id'].isin(excluded)]
-        claims = claims.loc[~claims['facility_id'].isin(excluded)]
-        if not updates.empty:
-            updates = updates.loc[~updates['facility_id'].isin(excluded)]
+        candidates = candidates.loc[~candidates['facility_id'].isin(excluded)]
     limits = config['lookup']
-    parameters = dict(updates=updates, top_k=limits['top_k'], max_radius_km=limits['max_radius_km'],
-                      max_load_age_hours=limits['max_load_age_hours'], as_of=config['as_of'],
+    demo = store.path.parent.name == 'demo'
+    measured = store.read(f'lookup_measured_{service}', optional=True) if spread_demand else None
+    if spread_demand and pressure_inputs is None:
+        pressure_inputs = store.read(f'lookup_pressure_{service}', optional=True)
+    parameters = dict(top_k=limits['top_k'], max_radius_km=limits['max_radius_km'],
+                      max_load_age_hours=limits['max_load_age_hours'], as_of=config['as_of'] if demo else datetime.now(timezone.utc),
                       travel_weight=limits['travel_weight'] if travel_weight is None else travel_weight,
                       max_extra_km=limits['max_extra_km'] if max_extra_km is None else max_extra_km,
                       max_extra_minutes=limits['max_extra_minutes'] if max_extra_minutes is None else max_extra_minutes)
-    baseline = compare_modes(entities, claims, origin.lat, origin.lon, service, **parameters)
-    candidates = baseline['trace']
-    route_ids = set(candidates.loc[candidates['kind'].isin(['recommendation', 'lead']), 'facility_id'])
-    sites = entities.loc[entities['facility_id'].isin(route_ids)] if route_ids else entities.iloc[:0]
-    routing = config['traveltime']
     # Synthetic coordinates and IDs never go to the routing provider.
-    use_travel = bool(traveltime_enabled) and store.path.parent.name != 'demo'
-    routing_results = estimate_travel((origin.lat, origin.lon), sites, enabled=use_travel, mode=routing['mode'],
-                                      departure_time=datetime.now(timezone.utc),
-                                      max_travel_minutes=routing['max_travel_minutes'], max_destinations=routing['max_destinations'])
-    result = compare_modes(entities, claims, origin.lat, origin.lon, service, **parameters,
-                           spread_demand=spread_demand, pressure_inputs=pressure_inputs,
-                           measured_load=measured, travel_times=routing_results)
+    routing_results = pd.DataFrame()
+    if traveltime_enabled and not demo:
+        supported = candidates['evidence_hold_reason'].eq('') | candidates['model_leads'].map(bool)
+        routeable = candidates.loc[supported & candidates['location_routing_eligible'].eq(True)]
+        sites = routeable[['facility_id', 'site_lat', 'site_lon', 'location_routing_eligible']].rename(
+            columns={'site_lat': 'lat', 'site_lon': 'lon'},
+        )
+        routing = config['traveltime']
+        routing_results = estimate_travel(
+            (origin.lat, origin.lon), sites, enabled=True, mode=routing['mode'],
+            departure_time=datetime.now(timezone.utc), max_travel_minutes=routing['max_travel_minutes'],
+            max_destinations=routing['max_destinations'],
+        )
+    result = compare_prepared_modes(candidates, origin.lat, origin.lon, service, **parameters,
+                                    spread_demand=spread_demand, pressure_inputs=pressure_inputs,
+                                    measured_load=measured, travel_times=routing_results)
     result['route_status'] = routing_results
     result['origin'] = origin
     result['service'] = service
     result['excluded_by_caller'] = sorted(excluded)
-    result['rows'] = format_recommendations(result['rows'], contacts, origin, limits['max_radius_km'], feedback)
-    location_fields = ['facility_id', 'location_source_urls', 'review_flags']
-    location_details = geography.reindex(columns=location_fields).rename(columns={'review_flags': 'location_review_flags'})
-    for key in ('rows', 'trace'):
-        result[key] = result[key].merge(location_details, on='facility_id', how='left', validate='m:1')
+    contact_choices = candidates[['facility_id', *CONTACT_FIELDS]]
+    result['rows'] = format_recommendations(result['rows'], contact_choices, origin, limits['max_radius_km'], feedback)
     return result
 
 

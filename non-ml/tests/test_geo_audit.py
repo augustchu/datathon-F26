@@ -51,6 +51,8 @@ class GeographicAuditTests(unittest.TestCase):
         })
         self.assertTrue(pd.isna(by_name.loc['documented-zero', 'raw_latitude']))
         self.assertTrue(branches['lat'].isna().all())
+        self.assertFalse(branches['location_routing_eligible'].any())
+        self.assertIn('appear to be swapped', branches.set_index('name').loc['bad-swap', 'location_hold_reason'])
         self.assertTrue(by_name['postal_centroid_distance_km'].isna().all())
         self.assertTrue(by_name['postal_centroid_lat'].eq(26.91).all())
         metric = summary.loc[(summary['scope'] == 'record') & (summary['check'] == 'likely_lat_lon_swap')].iloc[0]
@@ -111,6 +113,37 @@ class GeographicAuditTests(unittest.TestCase):
         review = source_audit.set_index('name').loc['address-conflict']
         self.assertEqual(review['explicit_address_pins'], ['302019'])
         self.assertIn('declared_pin_conflicts_with_address', review['review_flags'])
+
+    def test_routing_holds_are_computed_before_lookup_and_leave_review_only_branches_eligible(self):
+        records = records_for([
+            source_row('bad-state', 26.92, 75.78, state='Bihar'),
+            source_row('published-conflict', 26.91, 75.78),
+            source_row('approximate-site', 26.912, 75.781),
+            source_row('district-only', 26.913, 75.782),
+            source_row('far', 28.1, 76.3),
+            source_row('shared-a', 26.915, 75.784),
+            source_row('shared-b', 26.915, 75.784),
+        ])
+        records.loc[records['name'].eq('district-only'), 'district'] = 'Ajmer'
+        entities, links = link_entities(records)
+        entities.loc[entities['name'].eq('published-conflict'), 'location_conflict'] = True
+        entities.loc[entities['name'].eq('approximate-site'), 'location_quality'] = 'postal_centroid'
+        postal = build_postal_areas(pd.DataFrame([postal_row(PIN, 'Rajasthan', 'Jaipur', 26.91, 75.78)]))
+        _, branches, _ = audit_locations(records, entities, postal, links=links)
+        by_name = branches.set_index('name')
+        self.assertEqual(set(by_name.index[~by_name['location_routing_eligible']]),
+                         {'bad-state', 'published-conflict', 'approximate-site'})
+        self.assertIn('disagrees with the PIN directory', by_name.at['bad-state', 'location_hold_reason'])
+        self.assertIn('location details conflict', by_name.at['published-conflict', 'location_hold_reason'])
+        self.assertIn('usable site point', by_name.at['approximate-site', 'location_hold_reason'])
+        self.assertEqual(by_name.at['approximate-site', 'location_quality'], 'postal_centroid')
+        for facility, flag in (
+            ('district-only', 'pin_district_conflict'),
+            ('far', 'far_from_postal_centroid'),
+            ('shared-a', 'shared_exact_coordinates'),
+        ):
+            self.assertIn(flag, by_name.at[facility, 'review_flags'])
+            self.assertEqual(by_name.at[facility, 'location_hold_reason'], '')
 
 
 if __name__ == '__main__':

@@ -9,6 +9,7 @@ from .profiles import plausible_phone
 
 LOAD_OPT_IN_LABEL = 'Not an emergency? Opt in to find less crowded facilities, which may be further away.'
 CALL_PROMPT = 'Call this facility before traveling to verify the service, branch, and current availability.'
+CONTACT_FIELDS = ('phone_number', 'phone_source_url', 'phone_source_note', 'phone_source_urls', 'other_listed_phones')
 
 
 @dataclass(frozen=True)
@@ -36,9 +37,8 @@ def report_unconfirmed_call(feedback, service, facility_id, *, moderation_stack,
     return moderation_stack.submit_report(facility_id, service, reason=reason, submission_id=submission_id)
 
 
-def format_recommendations(rows, contacts, origin, radius_km, feedback=()):
-    """Add analogous details to each mode without changing the shared ranking."""
-    result = rows.copy()
+def prepare_contacts(contacts):
+    """Choose citable published contacts once for each facility snapshot."""
     phones = {}
     if not contacts.empty:
         for phone in contacts.loc[contacts['field'].eq('phone_numbers')].itertuples(index=False):
@@ -46,28 +46,33 @@ def format_recommendations(rows, contacts, origin, radius_km, feedback=()):
             if not phone.source_url or not plausible_phone(value):
                 continue
             phones.setdefault(phone.facility_id, []).append(phone)
+    details = []
+    for facility_id, candidates in phones.items():
+        # Prefer a single source URL and retain competing listed numbers.
+        candidates = sorted(candidates, key=lambda p: (len(p.source_urls) != 1, p.source, str(p.value), p.record_id))
+        first = candidates[0]
+        details.append({
+            'facility_id': facility_id, 'phone_number': str(first.value), 'phone_source_url': first.source_url,
+            'phone_source_note': first.url_note, 'phone_source_urls': list(first.source_urls),
+            'other_listed_phones': list(dict.fromkeys(str(p.value) for p in candidates))[1:],
+        })
+    return pd.DataFrame(details, columns=['facility_id', *CONTACT_FIELDS])
+
+
+def format_recommendations(rows, contacts, origin, radius_km, feedback=()):
+    """Combine saved contact choices with request-specific fit and call feedback."""
+    result = rows.merge(contacts, how='left', on='facility_id', validate='m:1')
     calls = {(entry.service, entry.facility_id): entry.confirmed for entry in feedback}
     details = []
     for row in result.itertuples(index=False):
-        candidates = phones.get(row.facility_id, [])
-        # Prefer a record tied to one source URL; retain competing cited numbers separately.
-        candidates = sorted(candidates, key=lambda p: (len(p.source_urls) != 1, p.source, str(p.value), p.record_id))
-        first = candidates[0] if candidates else None
-        alternatives = list(dict.fromkeys(str(p.value) for p in candidates))
         fit, basis = _fit_score(row, origin, radius_km)
         called = calls.get((row.service, row.facility_id))
         details.append({
-            'phone_number': str(first.value) if first else None,
-            'phone_source_url': first.source_url if first else None,
-            'phone_source_note': first.url_note if first else 'No citable, plausible published number found',
-            'phone_source_urls': list(first.source_urls) if first else [],
-            'other_listed_phones': alternatives[1:],
-            'call_to_verify': CALL_PROMPT if first else 'Find an official contact and call to verify the service and current availability before traveling.',
+            'call_to_verify': CALL_PROMPT if pd.notna(row.phone_number) else 'Find an official contact and call to verify the service and current availability before traveling.',
             'fit_score': fit, 'fit_score_basis': basis,
             'call_response': 'confirmed_by_caller' if called else 'not_confirmed_by_caller' if called is False else 'not_checked',
         })
-    fields = ('phone_number', 'phone_source_url', 'phone_source_note', 'phone_source_urls', 'other_listed_phones',
-              'call_to_verify', 'fit_score', 'fit_score_basis', 'call_response')
+    fields = ('call_to_verify', 'fit_score', 'fit_score_basis', 'call_response')
     return result.join(pd.DataFrame(details, index=result.index, columns=fields))
 
 

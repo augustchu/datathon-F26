@@ -11,10 +11,11 @@ python -m pip install "pandas>=2.2" "numpy>=1.26" matplotlib jupyterlab
 jupyter lab
 ```
 
-Run notebooks 01, 02, 04, 05, and 07 in order for the same evidence date. Notebook 03 audits original count fields after 02 and precedes any new count modeling. Notebook 06 is optional district context after 02. Notebook 08 exercises the selector after 04 and 05. The generators are only needed when changing notebook source through code.
+Run notebooks 01, 02, 04, 05, 06b, and 07 in order for the same evidence date. Notebook 03 audits original count fields after 02 and precedes any new count modeling. Notebook 06 is optional district context after 02. Notebook 08 exercises the selector using the same checkpoints as 07. The generators are only needed when changing notebook source through code.
 
 - **`demo`** is the default. Facilities, contacts, and estimates are fictional. TravelTime stays off.
 - **`public`** reads the saved public extracts. Start Jupyter with `DATATHON_MODE=public`. The default search in 07 is for the demo, so change the location and service to ones covered by the selected public sources.
+- **`export`** reads a private local copy of the original facility table. Set `DATATHON_MODE=export` and `DATATHON_FACILITY_EXPORT` to its path. Keep all original columns in order. Supported inputs are CSV, Parquet with a local engine installed, and a JSON or gzip JSON object with `columns` and `rows`. This mode joins the saved public extracts. It leaves the separate PIN and NFHS inputs empty.
 - **`databricks`** is for an authorized workspace. Set `DATATHON_MODE=databricks` before running 01, make the shared code available alongside the notebooks, and check the catalog names and output location. It reads the original dataset with the notebook's existing Spark session. This path awaits verification in Databricks.
 
 Set `DATATHON_REPO_ROOT` if the notebook cannot find the repository. Checkpoints go under the ignored `non-ml/outputs/<mode>/<as_of>/` by default. Set `DATATHON_OUTPUT_DIR` to a writable project location if needed. Keep the evidence date and upstream inputs consistent across related runs.
@@ -29,10 +30,13 @@ Set `DATATHON_REPO_ROOT` if the notebook cannot find the repository. Checkpoints
 | [04 · Service evidence](notebooks/04_service_evidence.ipynb) | Quoted service text, branch, validity, scheme scope, ambiguous matches and contradictions |
 | [05 · Field updates](notebooks/05_field_updates.ipynb) | Cited reported fields, contact provenance, optional model overlays, and separate load inputs |
 | [06 · District context](notebooks/06_district_context.ipynb) | Optional NFHS indicators, unique district joins, suppressed values and small-sample flags |
+| [06b · Prepare lookup snapshots](notebooks/06b_prepare_lookup.ipynb) | Stored city, district and PIN origins, per-service evidence decisions and candidates, scored leads, and cited contacts |
 | [07 · Compare and follow up](notebooks/07_compare_and_feedback.ipynb) | Side-by-side ranks, citations, phone and fit explanations, travel estimates, and call feedback |
 | [08 · Load-policy scenarios](notebooks/08_load_policy_scenarios.ipynb) | Effects of detour caps and travel weights, compared with the default ranking |
 
-Notebook 02 exports `location_records`, `location_entity_review`, and `location_quality_summary`. A reliable branch match can supply published coordinates when the base record lacks them. Review likely swaps, duplicates, invalid points, and address or postal conflicts with the source links. City, district, and PIN centroids are approximate search origins. The selector uses facility-level points for destinations. For example, a branch whose published state conflicts with all matches for its PIN is held out of distance ranking. Shared points and large distances from a postal-office centroid call for review because they can also reflect co-located facilities or broad postal areas.
+Notebook 02 exports `location_records`, `location_entity_review`, and `location_quality_summary`. It writes `location_routing_eligible`, `location_hold_reason`, the review flags, and the source links on each facility. A reliable branch match can supply published coordinates when the base record lacks them. Review likely swaps, duplicates, invalid points, and postal conflicts with their source links. A branch whose published state conflicts with all matches for its PIN is held out of distance ranking. Shared points and large offsets from a postal-office centroid remain review flags. The search uses the saved routing decision and the selected published point.
+
+Notebook 06b consumes those decisions and saves the service evidence as of the snapshot date. It builds approximate city, district and PIN origins, resolves known ambiguities, selects cited contacts, attaches prior field estimates, and partitions the candidates and load inputs by service. Refresh 06b after changing the evidence date, upstream records, contacts, eligibility rules, or model overlays. The search reads the prepared service and place tables. Distance from the request, time-dependent routes or slot age, opt-in ranking, and call feedback are computed per search.
 
 ## Compare a single search
 

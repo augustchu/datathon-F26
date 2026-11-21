@@ -1,24 +1,38 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import json
 import unittest
 from unittest.mock import patch
 
 from facility_tool.data import extract_claims, link_entities, load_records
 from facility_tool.examples import demo_inputs, demo_overlays, demo_pressure
-from facility_tool.geo_audit import audit_locations
+from facility_tool.geo_audit import attach_routing_review, audit_locations
 from facility_tool.geography import build_postal_areas
 from facility_tool.lookup import lookup
 from facility_tool.moderation import ModerationStack
+from facility_tool.query_assets import prepare_lookup_assets
 from facility_tool.response import new_alternatives, record_call, report_unconfirmed_call
-from facility_tool.travel import estimate_travel
 from facility_tool.updates import contact_evidence, load_estimates
-from facility_tool.workspace import Store, read_config
+from facility_tool.workspace import Store, load_inputs, read_config
 
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class LookupWorkflowTest(unittest.TestCase):
+    def test_private_export_keeps_column_order_and_skips_other_tables(self):
+        with TemporaryDirectory() as tmp:
+            source = Path(tmp) / 'facilities.json'
+            columns = ['countries', 'capacity', 'numberDoctors', 'description', 'source_urls']
+            rows = [['India', '40 beds', '7', 'Example', ['https://example.invalid/branch']]]
+            source.write_text(json.dumps({'columns': columns, 'rows': rows}), encoding='utf-8')
+            with patch.dict('os.environ', {'DATATHON_FACILITY_EXPORT': str(source)}):
+                inputs = load_inputs('export', read_config(ROOT))
+            self.assertEqual(inputs['facilities'].columns.tolist(), columns)
+            self.assertEqual(inputs['facilities'].iloc[0]['source_urls'], rows[0][-1])
+            self.assertTrue(inputs['pins'].empty)
+            self.assertTrue(inputs['nfhs'].empty)
+
     def test_import_estimates_validates_units_and_never_accepts_inferred_contacts(self):
         with TemporaryDirectory() as tmp:
             estimate = Path(tmp) / 'overlay.csv'
@@ -38,6 +52,7 @@ class LookupWorkflowTest(unittest.TestCase):
         entities, links = link_entities(records)
         postal = build_postal_areas(inputs['pins'])
         _, locations, _ = audit_locations(records, entities, postal, links=links)
+        entities = attach_routing_review(entities, locations)
         estimates, _ = demo_overlays(entities, config['as_of'])
         with TemporaryDirectory() as tmp:
             store = Store(ROOT, 'demo', config['as_of'], tmp)
@@ -49,10 +64,14 @@ class LookupWorkflowTest(unittest.TestCase):
             }
             for key, frame in sources.items():
                 store.write(key, frame)
-            with patch('facility_tool.lookup.estimate_travel', wraps=estimate_travel) as routing:
+            prepare_lookup_assets(store, config)
+            # A normal search has no dependency on upstream input tables or geographic audits.
+            for key in sources:
+                (store.path / f'{key}.jsonl').unlink()
+            with patch('facility_tool.lookup.estimate_travel') as routing:
                 settings = dict(concern='I need dialysis', location='Jaipur, Rajasthan', traveltime_enabled=True)
                 result = lookup(store, config, **settings)
-                self.assertFalse(routing.call_args.kwargs['enabled'])
+                routing.assert_not_called()
             recommended = result['rows'].query("mode == 'confirmed' and kind == 'recommendation'")
             with_phone = recommended.loc[recommended['phone_number'].notna()].iloc[0]
             self.assertTrue(with_phone['phone_source_urls'][0].startswith('https://example.invalid/'))

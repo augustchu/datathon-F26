@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+from datetime import date
 import json
 from math import asin, cos, isfinite, radians, sin, sqrt
-from numbers import Integral
+from numbers import Integral, Real
 import re
 from urllib.parse import urlparse
 
@@ -18,6 +19,9 @@ ROUTE_METRIC = "route_minutes"
 IDENTITY_COLUMNS = (
     "facility_id", "name", "address", "city", "district", "state", "pin",
     "lat", "lon", "location_quality",
+)
+LOCATION_AUDIT_COLUMNS = (
+    "location_routing_eligible", "location_hold_reason", "location_source_urls", "location_review_flags",
 )
 CLAIM_COLUMNS = (
     "facility_id", "record_id", "service", "stance", "excerpt", "source_url",
@@ -40,7 +44,7 @@ FIELD_COLUMNS = (
 )
 RESULT_COLUMNS = (
     "mode", "service", "kind", "decision", "selected", "rank", "baseline_rank",
-    *IDENTITY_COLUMNS, *REASON_COLUMNS, *FIELD_COLUMNS,
+    *IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS, "evidence_as_of", *REASON_COLUMNS, *FIELD_COLUMNS,
     "model_lead_score", "model_lead_provenance", "model_lead_detail",
     "load_status", "load_available_units", "load_unit", "load_as_of", "load_source_url",
     "extra_km_vs_baseline", "travel_minutes", "travel_source", "ranking_travel_metric",
@@ -49,6 +53,12 @@ RESULT_COLUMNS = (
     "travel_penalty", "pressure_penalty", "travel_weight", "pressure_weight", "weighted_score",
     "weighted_travel_metric", "weighted_extra_travel", "weighted_detour_limit", "weighted_status",
 )
+PREPARED_COLUMNS = (
+    "service", *IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS, "site_lat", "site_lon",
+    "evidence_as_of", "evidence_tier", "evidence_hold_reason", "service_contradiction",
+    "claim", "claims_json", "mode_fields", "model_leads", "snapshot_entity_count", "snapshot_model_methods",
+)
+_DEFAULT_LOCATION_HOLD = "Facility coordinates are missing, ambiguous, or too coarse"
 
 
 def _text(value) -> str:
@@ -78,6 +88,10 @@ def haversine_km(lat1, lon1, lat2, lon2) -> float:
     destination = _coordinate_pair(lat2, lon2)
     if origin is None or destination is None:
         raise ValueError("Invalid coordinates or a zero-coordinate placeholder.")
+    return _haversine_points(origin, destination)
+
+
+def _haversine_points(origin, destination):
     lat1, lon1, lat2, lon2 = map(radians, (*origin, *destination))
     chord = sin((lat2 - lat1) / 2) ** 2 + cos(lat1) * cos(lat2) * sin((lon2 - lon1) / 2) ** 2
     return 2 * 6371.0088 * asin(sqrt(max(0.0, min(1.0, chord))))
@@ -118,6 +132,25 @@ def _require(frame, columns, label):
     missing = set(columns) - set(frame.columns)
     if missing:
         raise ValueError(f"{label} is missing columns: {', '.join(sorted(missing))}.")
+
+
+def _checkpoint_value(value):
+    if isinstance(value, dict):
+        return {key: _checkpoint_value(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_checkpoint_value(item) for item in value]
+    if pd.api.types.is_scalar(value):
+        if pd.isna(value):
+            return None
+        if isinstance(value, date):
+            return value.isoformat()
+        if pd.api.types.is_bool(value):
+            return bool(value)
+        if isinstance(value, Integral):
+            return int(value)
+        if isinstance(value, Real):
+            return float(value) if isfinite(value) else None
+    return value
 
 
 def _record_groups(frame, key):
@@ -161,6 +194,18 @@ def _mode_fields(rows, mode):
         for field, records in _record_groups(rows, "field").items()
         if not field.startswith("service:") and (selected := _select_field(records, mode))
     }
+
+
+def _field_payload(rows, mode):
+    fields = _checkpoint_value(_mode_fields(rows, mode))
+    payload = {"field_updates_json": json.dumps(fields, default=str, ensure_ascii=False)}
+    for field in ("capacity", "numberDoctors"):
+        value = fields.get(field, {})
+        payload[field] = value.get("value")
+        payload[field + "_method"] = value.get("method", "unknown")
+        for key in ("unit", "lower", "upper", "provenance", "detail"):
+            payload[field + "_" + key] = value.get(key)
+    return payload
 
 
 def _direct_claim(row):
@@ -216,7 +261,58 @@ def _claim_assessment(rows):
     return best_review, reason, False
 
 
-def _candidates(entities, claims, updates, origin, radius):
+def _check_as_of(as_of):
+    stamp = pd.Timestamp.now(tz="UTC") if as_of is None else _timestamp(as_of)
+    if stamp is None:
+        raise ValueError("as_of must be a valid date or timestamp.")
+    return stamp
+
+
+def _prepared_model_leads(updates, service_field):
+    leads = {}
+    for mode in ("ml", "regression"):
+        rows = [r for r in updates if r["field"] == service_field and r["method"] == mode]
+        selected = _select_field(rows, mode)
+        score = _number(selected["value"]) if selected else None
+        if score is not None and 0 <= score <= 1:
+            leads[mode] = _checkpoint_value(dict(selected, value=score))
+    return leads
+
+
+def prepare_service_candidates(
+    entities: pd.DataFrame,
+    claims: pd.DataFrame,
+    service: str,
+    *,
+    updates: pd.DataFrame | None = None,
+    as_of=None,
+) -> pd.DataFrame:
+    """Prepare origin-independent, auditable candidates for a single service.
+
+    Use branch routing flags from the location audit. The evidence date is saved
+    in the checkpoint. Rebuild after changing evidence, modeled fields, or the
+    date used to assess source validity.
+    """
+    service = _text(service)
+    if not service:
+        raise ValueError("Provide a canonical service.")
+    as_of = _check_as_of(as_of)
+    _require(entities, (*IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS[:2]), "entities")
+    _require(claims, CLAIM_COLUMNS, "claims")
+    ids = entities["facility_id"].map(_text)
+    if ids.eq("").any() or ids.duplicated().any():
+        raise ValueError("entities must have a unique nonempty facility_id for each branch.")
+    entities = entities.assign(facility_id=ids)
+    claims = _claim_dates(claims.loc[claims["service"].eq(service)], as_of.date())
+    if updates is None or updates.empty:
+        updates = pd.DataFrame(columns=UPDATE_COLUMNS)
+    else:
+        _require(updates, UPDATE_COLUMNS, "updates")
+    service_field = "service:" + service
+    update_fields = updates["field"].map(_text)
+    updates = updates.loc[~update_fields.str.startswith("service:") | update_fields.eq(service_field)]
+    methods = set(updates.loc[updates["value"].map(_text).ne(""), "method"])
+    model_methods = [mode for mode in ("ml", "regression") if mode in methods]
     claim_groups = _record_groups(claims, "facility_id")
     update_groups = _record_groups(updates, "facility_id")
     candidates = []
@@ -224,29 +320,51 @@ def _candidates(entities, claims, updates, origin, radius):
         ident = entity["facility_id"]
         records = claim_groups.get(ident, [])
         field_rows = update_groups.get(ident, [])
-        # The candidate trace concerns this service, rather than unrelated records.
-        if not records and not any(_text(r["field"]).startswith("service:") for r in field_rows):
+        if not records and not any(_text(r["field"]) == service_field for r in field_rows):
             continue
         selected, reason, contradiction = _claim_assessment(records)
-        coords = _site_coordinates(entity)
-        distance = haversine_km(*origin, *coords) if coords is not None else None
+        flag = entity["location_routing_eligible"]
+        hold_reason = _text(entity["location_hold_reason"])
+        coords = (
+            _coordinate_pair(entity["lat"], entity["lon"])
+            if pd.api.types.is_bool(flag) and flag and not hold_reason else None
+        )
+        lat, lon = coords if coords is not None else (None, None)
+        candidates.append({
+            "service": service, **{key: _checkpoint_value(entity.get(key)) for key in IDENTITY_COLUMNS},
+            "location_routing_eligible": coords is not None,
+            "location_hold_reason": "" if coords is not None else hold_reason or _DEFAULT_LOCATION_HOLD,
+            "location_source_urls": _checkpoint_value(entity.get("location_source_urls")) or [],
+            "location_review_flags": _checkpoint_value(entity.get("location_review_flags")) or [],
+            "site_lat": lat, "site_lon": lon,
+            "evidence_as_of": as_of.date().isoformat(),
+            "evidence_tier": EVIDENCE_TIERS.get(_text(selected["validity"])) if selected else None,
+            "evidence_hold_reason": reason, "service_contradiction": contradiction,
+            "claim": _checkpoint_value(selected or {}),
+            "claims_json": json.dumps(_checkpoint_value(records), default=str, ensure_ascii=False),
+            "mode_fields": {mode: _field_payload(field_rows, mode) for mode in MODES},
+            "model_leads": _prepared_model_leads(field_rows, service_field) if not contradiction and reason else {},
+            "snapshot_entity_count": len(entities), "snapshot_model_methods": model_methods,
+        })
+    return pd.DataFrame(candidates, columns=PREPARED_COLUMNS, dtype=object)
+
+
+def _candidates(prepared, origin, radius):
+    candidates = []
+    for candidate in prepared.to_dict("records"):
+        distance = None
+        if candidate["location_routing_eligible"]:
+            distance = _haversine_points(origin, (candidate["site_lat"], candidate["site_lon"]))
         outside = distance is None or distance > radius
         geography = (
-            "Facility coordinates are missing, ambiguous, or too coarse"
+            candidate["location_hold_reason"]
             if distance is None else "Outside the requested radius" if outside else ""
         )
-        audit = [str(v) for v in (reason, geography) if v]
+        audit = [reason for reason in (candidate["evidence_hold_reason"], geography) if reason]
         candidates.append({
-            **{key: entity.get(key) for key in IDENTITY_COLUMNS},
-            "distance_km": distance,
-            "distance_metric": DISTANCE_METRIC,
-            "eligible": not audit,
+            **candidate, "distance_km": distance, "eligible": not audit,
             "reason": "; ".join(audit) or "Direct, traceable service evidence for this branch",
-            "reviewable": not outside and not contradiction,
-            "evidence_tier": EVIDENCE_TIERS.get(_text(selected.get("validity")) if selected else None),
-            "claim": selected or {},
-            "records": records,
-            "updates": field_rows,
+            "reviewable": not outside and not candidate["service_contradiction"],
         })
     return candidates
 
@@ -492,8 +610,7 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
     load = ranking["measured"].get(ident, {})
     pressure = ranking["weighted"].get(ident, {})
     chosen = candidate["claim"]
-    fields = _mode_fields(candidate["updates"], mode)
-    record = {key: candidate.get(key) for key in IDENTITY_COLUMNS}
+    record = {key: candidate[key] for key in (*IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS)}
     record.update({
         key: chosen.get(key)
         for key in ("excerpt", "source_url", "source", "scope", "validity", "validity_text", "citation_quality", "record_id")
@@ -512,9 +629,8 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
         mode=mode, service=service, kind="recommendation" if decision == "eligible" else decision,
         decision=decision, selected=selected, rank=rank, baseline_rank=baseline_rank,
         distance_km=candidate["distance_km"], distance_metric=DISTANCE_METRIC,
-        evidence_tier=candidate["evidence_tier"], reason=reason,
-        review_reason=candidate["reason"], claims_json=json.dumps(candidate["records"], default=str, ensure_ascii=False),
-        field_updates_json=json.dumps(fields, default=str, ensure_ascii=False),
+        evidence_tier=candidate["evidence_tier"], evidence_as_of=candidate["evidence_as_of"], reason=reason,
+        review_reason=candidate["reason"], claims_json=candidate["claims_json"],
         model_lead_score=_number(lead["value"]) if lead else None,
         model_lead_provenance=lead.get("provenance") if lead else None,
         model_lead_detail=lead.get("detail") if lead else None,
@@ -530,22 +646,8 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
         extra_minutes_vs_baseline=route["travel_minutes"] - refs["travel_minutes"] if route and refs else None,
         **pressure,
     )
-    for field in ("capacity", "numberDoctors"):
-        value = fields.get(field, {})
-        record[field] = value.get("value")
-        record[field + "_method"] = value.get("method", "unknown")
-        for key in ("unit", "lower", "upper", "provenance", "detail"):
-            record[field + "_" + key] = value.get(key)
+    record.update(candidate["mode_fields"][mode])
     return record
-
-
-def _service_lead(candidate, field, mode, threshold):
-    if not candidate["reviewable"] or mode == "confirmed":
-        return None
-    rows = [r for r in candidate["updates"] if r["field"] == field and r["method"] == mode]
-    selected = _select_field(rows, mode)
-    score = _number(selected["value"]) if selected else None
-    return selected if score is not None and threshold <= score <= 1 else None
 
 
 def _clear_emergency_service(key):
@@ -561,6 +663,28 @@ def compare_modes(
     service: str,
     *,
     updates: pd.DataFrame | None = None,
+    as_of=None,
+    **query_options,
+) -> dict[str, pd.DataFrame]:
+    """Prepare then compare candidates for callers working with raw frames."""
+    if "location_routing_eligible" not in entities.columns:
+        eligible = [_site_coordinates(entity) is not None for entity in entities.to_dict("records")]
+        entities = entities.assign(location_routing_eligible=eligible)
+    if "location_hold_reason" not in entities.columns:
+        entities = entities.assign(location_hold_reason="")
+    as_of = _check_as_of(as_of)
+    prepared = prepare_service_candidates(entities, claims, service, updates=updates, as_of=as_of)
+    result = compare_prepared_modes(prepared, lat, lon, service, as_of=as_of, **query_options)
+    result["summary"]["n_entities"] = len(entities)
+    return result
+
+
+def compare_prepared_modes(
+    prepared: pd.DataFrame,
+    lat: float,
+    lon: float,
+    service: str,
+    *,
     measured_load: pd.DataFrame | None = None,
     pressure_inputs: pd.DataFrame | None = None,
     travel_times: pd.DataFrame | None = None,
@@ -576,14 +700,11 @@ def compare_modes(
     lead_threshold: float = 0.5,
     load_unit: str | None = None,
 ) -> dict[str, pd.DataFrame]:
-    """Return selected recommendations and leads, candidate trace, and mode summary.
+    """Rank a prepared checkpoint and return recommendations, trace, and summary.
 
-    The three modes use the same sourced eligibility rules. Estimates change the
-    fields shown and may add leads in their own section. Planned-care load
-    reranking requires the user's opt-in, comparable scope, and a detour cap.
-    Weighted pressure inputs state service, units, period, basis and provenance.
-    Measured availability can be used separately with comparable, fresh,
-    timezone-aware observations. Route minutes appear even when load is off.
+    Apply origin-specific travel and the requested lead threshold here. The
+    optional query as_of evaluates measured load age. The checkpoint keeps its
+    original date for service evidence validity.
     """
     origin = _coordinate_pair(lat, lon)
     if origin is None:
@@ -605,23 +726,15 @@ def compare_modes(
         raise ValueError("Provide a nonnegative minutes detour limit and travel weight from 0 to 1.")
     if threshold is None or not 0 <= threshold <= 1:
         raise ValueError("lead_threshold must be between 0 and 1.")
-    as_of = pd.Timestamp.now(tz="UTC") if as_of is None else _timestamp(as_of)
-    if as_of is None:
-        raise ValueError("as_of must be a valid date or timestamp.")
-
-    _require(entities, IDENTITY_COLUMNS, "entities")
-    _require(claims, CLAIM_COLUMNS, "claims")
-    if entities["facility_id"].map(_text).eq("").any() or entities["facility_id"].map(_text).duplicated().any():
-        raise ValueError("entities must have a unique nonempty facility_id for each branch.")
-    entities = entities.assign(facility_id=entities["facility_id"].map(_text))
-    claims = _claim_dates(claims.loc[claims["service"].eq(service)], as_of.date())
-    if updates is None or updates.empty:
-        updates = pd.DataFrame(columns=UPDATE_COLUMNS)
-    else:
-        _require(updates, UPDATE_COLUMNS, "updates")
-    service_field = "service:" + service
-    update_fields = updates["field"].map(_text)
-    updates = updates.loc[~update_fields.str.startswith("service:") | update_fields.eq(service_field)]
+    as_of = _check_as_of(as_of)
+    _require(prepared, PREPARED_COLUMNS, "prepared")
+    prepared = prepared.loc[prepared["service"].eq(service)]
+    if prepared["facility_id"].duplicated().any():
+        raise ValueError("Use one prepared row per facility and service.")
+    metadata = prepared.iloc[0] if not prepared.empty else {}
+    model_methods = metadata.get("snapshot_model_methods", [])
+    n_entities = metadata.get("snapshot_entity_count", 0)
+    evidence_as_of = metadata.get("evidence_as_of")
     if measured_load is not None and not measured_load.empty:
         _require(measured_load, MEASURED_LOAD_COLUMNS, "measured_load")
     if pressure_inputs is not None and not pressure_inputs.empty:
@@ -629,7 +742,7 @@ def compare_modes(
     if travel_times is not None and not travel_times.empty:
         _require(travel_times, TRAVEL_COLUMNS, "travel_times")
     routes = _routes(travel_times)
-    candidates = _candidates(entities, claims, updates, origin, radius)
+    candidates = _candidates(prepared, origin, radius)
     eligible = [r for r in candidates if r["eligible"]]
     baseline_metric = _travel_metric(eligible, routes)
     baseline = sorted(
@@ -661,7 +774,8 @@ def compare_modes(
     for mode in MODES:
         leads = {
             r["facility_id"]: lead for r in candidates if not r["eligible"]
-            if (lead := _service_lead(r, service_field, mode, threshold)) is not None
+            if r["reviewable"] and (lead := r["model_leads"].get(mode)) is not None
+            and lead["value"] >= threshold
         }
         lead_order = sorted(
             (r for r in candidates if r["facility_id"] in leads),
@@ -677,18 +791,18 @@ def compare_modes(
                 candidate, mode, service, decision, rank, base_positions.get(ident),
                 selected, ranking, leads.get(ident),
             ))
-        model_rows = updates.loc[updates["method"].eq(mode) & updates["value"].map(_text).ne("")]
         summaries.append(dict(
             mode=mode, service=service,
             mode_status=(
                 "documented_fields_only" if mode == "confirmed"
-                else "model_outputs_available" if not model_rows.empty else "no_model_outputs_supplied"
+                else "model_outputs_available" if mode in model_methods else "no_model_outputs_supplied"
             ),
-            n_entities=len(entities), n_service_candidates=len(candidates),
+            n_entities=n_entities, n_service_candidates=len(candidates),
             n_eligible=len(baseline), n_recommendations=min(len(baseline), top_k),
             n_leads=min(len(leads), top_k), n_excluded=len(candidates) - len(baseline) - len(leads),
             load_status=load_status, spread_demand=spread_demand, max_extra_km=extra,
             max_radius_km=radius, distance_metric=DISTANCE_METRIC, as_of=as_of.isoformat(),
+            evidence_as_of=evidence_as_of,
             ranking_travel_metric=baseline_metric, weighted_status=weighted_status,
             weighted_travel_metric=next(iter(weighted.values()))["weighted_travel_metric"] if weighted else None,
             max_extra_minutes=minutes_cap, travel_weight=weight, pressure_weight=1 - weight,
