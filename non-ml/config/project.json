@@ -1,0 +1,26 @@
+{
+  "input_mode": "demo",
+  "as_of": "2026-11-21",
+  "tables": {
+    "facilities": "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.facilities",
+    "pins": "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory",
+    "nfhs": "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.nfhs_5_district_health_indicators"
+  },
+  "row_limits": {"facilities": 25000, "pins": 250000, "nfhs": 2000},
+  "include_nfhs": false,
+  "service_aliases": {
+    "dialysis": ["dialysis", "haemodialysis", "hemodialysis", "peritoneal dialysis"],
+    "mri": ["MRI", "magnetic resonance imaging"],
+    "nicu": ["NICU", "neonatal intensive care unit"],
+    "nicu_level_3": ["NICU Level 3", "Level 3 NICU", "Level III NICU", "Level III neonatal intensive care"],
+    "emergency_c_section": ["emergency C-section", "emergency C section", "emergency cesarean section", "emergency caesarean section"],
+    "cardiac_surgery": ["cardiac surgery", "cardiothoracic surgery", "cardiothoracic and vascular surgery", "cardiothoracic & vascular surgery", "coronary artery bypass graft"],
+    "burn_care": ["burn care", "burn unit", "burns unit", "burn treatment"],
+    "trauma_care": ["trauma care", "trauma center", "trauma centre", "trauma surgery"],
+    "blood_bank": ["blood bank", "blood centre", "blood center"],
+    "blood_storage_unit": ["blood storage unit", "BSU"],
+    "audio_verbal_therapy": ["audio verbal therapy", "auditory verbal therapy"]
+  },
+  "lookup": {"service": "dialysis", "location": "Jaipur, Rajasthan", "top_k": 5, "max_radius_km": 50, "max_extra_km": 10, "max_extra_minutes": 15, "travel_weight": 0.5, "max_load_age_hours": 24},
+  "traveltime": {"enabled": false, "mode": "driving", "max_travel_minutes": 90, "max_destinations": 25}
+}
