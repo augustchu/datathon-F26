@@ -10,7 +10,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GroupShuffleSplit
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, QuantileTransformer
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -45,6 +45,8 @@ def _features(frame, include_density, include_nfhs):
     for key in numeric:
         values = pd.to_numeric(_clean(frame[key]), errors="coerce").astype(float)
         columns[key] = values.where(np.isfinite(values))
+    if include_density:
+        columns[DENSITY_FEATURES[1]] = columns[DENSITY_FEATURES[0]].isna().astype(float)
     for key in TEXT:
         text = _clean(frame[key])
         columns[f"{key}_len"] = text.str.len().fillna(0).astype(float)
@@ -127,9 +129,17 @@ def train_capacity(frame, *, include_nfhs, include_density=True, seed=42, epochs
     density = features[DENSITY_FEATURES[0]].notna().to_numpy() if include_density else None
     if density is not None and not (density & train).any():
         raise ValueError("No training facilities matched a density value. Check the input keys, columns and units.")
+    indicators = [field for field in numeric if field.endswith("_present") or field == DENSITY_FEATURES[1]]
+    continuous = [field for field in numeric if field not in indicators]
+    # Fit a bounded map on training rows. Unseen extremes saturate at its endpoints.
+    # Keep indicators at 0 or 1 so a rare training value cannot amplify their magnitude.
     processor = ColumnTransformer([
         ("numeric", Pipeline([("impute", SimpleImputer(strategy="median", keep_empty_features=True)),
-                              ("scale", StandardScaler())]), numeric),
+                              ("quantile", QuantileTransformer(
+                                  n_quantiles=min(1000, int(train.sum())), output_distribution="uniform",
+                                  subsample=None,
+                              ))]), continuous),
+        ("indicators", "passthrough", indicators),
         ("categorical", Pipeline([("impute", SimpleImputer(strategy="most_frequent", keep_empty_features=True)),
                                   ("encode", OneHotEncoder(handle_unknown="ignore", min_frequency=5,
                                                            sparse_output=False))]), list(CATEGORICAL)),

@@ -12,4 +12,6 @@ Each run records split sizes, configuration and aggregate scores in beds. The ou
 
 Use a pinned `entity/project/artifact:vN` version when downloading a bundle. `wandb.Api().artifact(...).download()` fetches its files and `artifact.verify(...)` checks them against the manifest. For inference, follow the input preparation and target transformation recorded for that model. [W&B artifact guide](https://docs.coreweave.com/products/wandb/artifacts/download-and-use-an-artifact)
 
+When loading the shared trainer's `preprocessor.skops` from a trusted run, review the types reported by `skops.io.get_untrusted_types`. Fitted scikit-learn imputers can include NumPy's `numpy.dtype` metadata. Verify that reloaded preprocessing reproduces the fitted transform before use.
+
 An offline run stays on the machine where it was logged. Preserve the W&B run directory and artifact staging directory if you will sync it later. [W&B environment variables](https://docs.coreweave.com/products/wandb/track/environment-variables)

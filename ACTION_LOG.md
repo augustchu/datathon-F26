@@ -82,6 +82,7 @@ This log was started on 2026-11-21 at the user's request. Earlier entries are re
 67. Scored both saved neural capacity models on the same 522 facilities used for ridge and random forest, then refit the two architectures on the common train and validation split. The facilities-only network had the lowest MAE in all three refits. Recorded the ranking, limits, and overlap caveat in the [model evaluation](ML/MODEL_EVALUATION.md).
 68. Migrated capacity model exports to W&B and verified offline logging and artifact reloads. Added population-density notebooks with and without NFHS indicators, plus a data handoff covering table, file, district and PIN input formats. Both notebooks ran on fictional density data and produced matching facility splits. The teammate's density data is needed for an accuracy comparison.
 69. Added a facilities-only control and held-out row fingerprint to the density notebooks. Documented MAE, RMSE, R² and absolute-error percentiles. Ran the control on the frozen facility snapshot and kept the extreme prediction in the full test score.
+70. Traced the extreme bed forecast to a social-media count outside the training range and a scaler that amplified rare inputs. Added a bounded training-fitted numeric transform and unscaled flags to the shared trainer. Retrained and evaluated on the identical 504 test rows, with MAE falling from 3,042.13 to 126.48 beds. Verified the fitted preprocessor serialization and all three notebook paths.
 
 ## Statistical validation requested
 

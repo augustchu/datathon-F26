@@ -74,4 +74,18 @@ On the frozen FDR snapshot, one CPU run at seed 42 used 1,510 training, 503 vali
 
 The MLP's median absolute error was 47 beds and its 90th-percentile error was 302.1 beds. One prediction of about 1.47 million beds accounted for 95.8% of its total absolute error. This is a serious failure for automated imputation. The full test score includes that row. The earlier 522-facility comparison showed useful signal in the same architecture on a different split. Together the results show why we track both typical error and extreme misses. A predeclared training-side rule for handling extreme inputs would need evaluation on a fresh holdout.
 
-The density data has yet to be supplied. A small MAE gain over this unstable MLP alone would be weak evidence. Check the training median, RMSE and tail errors on the matched holdout when the two density results are available.
+### Diagnosing and replaying the outlier
+
+The affected row had 109 reported beds. Its source listed a fractional social-media presence count of 79.53, while the training counts ranged from 0 to 9. The original standard scaler turned 79.53 into an input of +42.12. The missing-procedure indicator, seen on only two training rows, separately became −27.46. The network predicted 14.20 on the log scale, which became 1,469,024 beds after the inverse transform and rounding.
+
+The shared trainer now fits median imputation and a [uniform quantile transform](https://scikit-learn.org/1.7/modules/generated/sklearn.preprocessing.QuantileTransformer.html) on the training rows. Numeric inputs are bounded between 0 and 1, and values beyond the fitted range map to an endpoint. Binary presence and missingness flags stay at 0 or 1. On the affected row, the two inputs became 1 and 0. The fitted input transform is part of the saved preprocessor.
+
+The facilities-only network was retrained on CPU with the same seed, 1,510 training rows and 503 validation rows. The test fingerprint and all 504 test labels matched the original run. The affected row earned a new prediction of 11 beds, an error of 98 beds.
+
+| Model on the same 504 test rows | MAE (beds) | Median absolute error (beds) | 90th-percentile absolute error (beds) | RMSE (beds) | R² |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Training median | 151.11 | 66.5 | 400.0 | 326.38 | −0.08 |
+| MLP, original preprocessing | 3,042.13 | 47.0 | 302.1 | 65,431.29 | −43,480.24 |
+| MLP, bounded preprocessing | 126.48 | 45.5 | 279.4 | 284.89 | 0.18 |
+
+This is a retrospective rerun after inspecting a test failure. The result shows that the specific extrapolation was removed and that error improved on this cohort. Generalization still needs an independent holdout. The density data has yet to be supplied. Rerun the density variants with the same shared preprocessing when it is available.
