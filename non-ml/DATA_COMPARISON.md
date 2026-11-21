@@ -29,7 +29,7 @@ The challenge brief describes about **10,000 facilities** and **51 attributes**.
 
 ### Archived Unity Catalog counts and FDR content checks
 
-Verified archived Unity Catalog metadata for the FDR facilities table reports **10,088 rows and 51 fields**. The counts below are catalog non-NULL counts for individual columns. The denominator in the last column is 10,088. The archive contains schema and statistics. The observed content checks require access to facility rows.
+Archived Unity Catalog metadata for the FDR facilities table reports **10,088 rows and 51 fields**. The counts below are catalog non-NULL counts for individual columns. The denominator in the last column is 10,088. A later read-only export from the team workspace contained the same shape and enabled a separate content audit.
 
 | FDR column | Non-NULL rows in catalog metadata | Share of FDR rows |
 | --- | ---: | ---: |
@@ -43,7 +43,18 @@ Verified archived Unity Catalog metadata for the FDR facilities table reports **
 | `address_zipOrPostcode` | 10,030 | 99.4% |
 | `source_urls` | 9,970 | 98.8% |
 
-The cited **99.4%** phone figure represents non-NULL entries in each phone column separately. A content audit must check for blanks, placeholders, empty collections, valid formats, duplicates across fields and numbers published for the correct branch. The separate coordinate counts leave paired coverage, decimal ranges and location validity open. `source_urls` needs link parsing and claim-level attribution checks. The gap between the brief's count coverage and the archived non-NULL rates cannot be interpreted until the team examines actual bed and doctor values for exact counts, ranges, placeholders and conflicting labels. Use [source coverage](notebooks/01_source_eda.ipynb), [geography](notebooks/02_facility_and_geography.ipynb) and [count EDA](notebooks/03_count_field_eda.ipynb) for those audits.
+The content audit counts values according to how the recommendation or modeling notebooks can use them.
+
+| Content audit measure | Count | Denominator |
+| --- | ---: | ---: |
+| At least one listed phone after parsing contact fields | 9,749 (96.6%) | 10,088 original rows |
+| At least one plausibly formatted phone | 9,722 (96.4%) | 10,088 original rows |
+| Paired coordinates within broad India bounds | 9,964 (98.8%) | 10,088 original rows |
+| Parseable six-digit PIN in postcode or address | 9,771 (96.9%) | 10,088 original rows |
+| Exact reported bed count | 2,509 (24.9%) | 10,073 linked FDR branches |
+| Exact reported doctor count | 3,626 (36.0%) | 10,073 linked FDR branches |
+
+The prior **99.4%** phone figure was a non-NULL measure. A listed or plausibly formatted number still requires a call to verify the branch and current service. Phone numbers stay in recommendation contact details and outside the predictor set. A coordinate within broad bounds needs further checks against the branch and geography. The full PIN audit flagged 2,531 FDR branches for review and withheld 499 from distance ranking. Four FDR source rows were ambiguous at linkage. Twenty-six linked FDR branches matched a supplemental record under the conservative join, 19 through eRaktKosh and seven through NABH. That count describes the links accepted by this version of the pipeline. [Source coverage](notebooks/01_source_eda.ipynb) · [Geography](notebooks/02_facility_and_geography.ipynb) · [Count EDA](notebooks/03_count_field_eda.ipynb)
 
 ## Measured public extract coverage
 
@@ -57,7 +68,7 @@ The local pipeline loaded **31,507 source rows** across the saved supplemental a
 | Kerala SHA Sruthitharangam | 11 | 1 | 11 | 11 | 0 |
 | Rajasthan RGHS | 0 | 0 | 0 | 0 | 0 |
 
-These are counts of populated fields in the saved seven-field exports. The validity field can include statuses such as suspended, exited or non-renewing. A listed phone is useful for follow-up. The format checks yielded plausible numbers in 286 BIS rows, six ESIC rows and 11 Kerala rows. A call is needed to check the branch, service and current availability. The three older supplemental extracts do not include contacts in their saved schema. [Government export schema and source links](../data/government_sources/README.md) · [Supplemental schema](../data/supplemental/schema.json)
+These are counts of populated fields in the saved seven-field exports. The validity field can include statuses such as suspended, exited or non-renewing. The format checks yielded plausible numbers in 286 BIS rows, six ESIC rows and 11 Kerala rows. A call is needed to check the branch, service and current availability. The older supplemental projections left out contacts. The query preparation now recovers published phones from 5,348 eRaktKosh and 207 NABH source rows by checking exact IDs and matching source identity. [Government export schema and source links](../data/government_sources/README.md) · [Supplemental schema](../data/supplemental/schema.json)
 
 | Saved directory extract | Rows | Published geography in extract | Evidence it contributes |
 | --- | ---: | --- | --- |

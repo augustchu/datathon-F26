@@ -7,7 +7,7 @@ import unittest
 
 import pandas as pd
 
-from facility_tool.data import extract_claims, link_entities, load_records
+from facility_tool.data import GOVERNMENT_SCOPES, SUPPLEMENTAL_SCOPES, extract_claims, link_entities, load_records
 
 
 class FacilityDataTests(unittest.TestCase):
@@ -49,6 +49,83 @@ class FacilityDataTests(unittest.TestCase):
         self.assertIn("contradicts", set(claims.loc[claims["service"].eq("MRI"), "stance"]))
         self.assertEqual(set(claims["citation_quality"]), {"candidate_links"})
         self.assertEqual(set(claims["source_url"]), {""})
+
+    def test_service_citation_uses_the_cmchis_record_or_correct_pdf_scope(self):
+        listing = "https://www.cmchistn.com/empanelment/hospital-list"
+        endpoint = "https://chtn.cmchistn.com/api/v1/tpa-hospitals-v2/"
+        entity = endpoint + "?search=EXAMPLE"
+        pdf = "https://example.org/list.pdf"
+        cases = [
+            ("cmchis", [listing, entity], entity, "direct"),
+            ("cmchis", [entity, listing], entity, "direct"),
+            ("cmchis", [listing, endpoint + "?json=true"], "", "candidate_links"),
+            ("bis_cghs", [pdf + "#page=5"], pdf + "#page=5", "direct"),
+            ("bis_cghs", [pdf + "#page=5", pdf + "#page=6"], pdf, "direct"),
+            ("esic", [pdf + "#page=5", "https://example.org/other.pdf#page=3"], "", "candidate_links"),
+        ]
+        records = pd.DataFrame([
+            {"record_id": str(index), "source": source, "source_urls": urls, "scope": "Published scheme",
+             "validity_text": [], "service_texts": [("services", "Dialysis")]}
+            for index, (source, urls, _, _) in enumerate(cases)
+        ])
+        links = records[["record_id"]].assign(facility_id=records["record_id"])
+        claims = extract_claims(records, links, {"dialysis": []}, "2026-11-21").set_index("record_id")
+        for index, (source, urls, primary, quality) in enumerate(cases):
+            with self.subTest(source=source, urls=urls):
+                claim = claims.loc[str(index)]
+                self.assertEqual(claim["source_url"], primary)
+                self.assertEqual(claim["citation_quality"], quality)
+                self.assertEqual(claim["source_urls"], urls)
+
+    def test_fdr_keeps_listed_and_official_phone_claims(self):
+        source = {
+            "name": "Sample Care", "unique_id": "fdr-phone-test",
+            "phone_numbers": ["+1 202 555 0100", "+1 202 555 0101"], "officialPhone": "+1 202 555 0101",
+        }
+        second = dict(source, unique_id="fdr-other-phone-test", officialPhone="+1 202 555 0102")
+        records = load_records(".", pd.DataFrame([source, second]), include_public=False)
+        self.assertEqual(records.at[0, "phones"], source["phone_numbers"])
+        self.assertEqual(records.at[1, "phones"], [*second["phone_numbers"], second["officialPhone"]])
+        self.assertEqual(records.at[1, "raw"], second)
+
+    def test_public_phones_require_one_identical_published_facility_record(self):
+        url = "https://example.org/directory"
+        phone = "+1 202 555 0100"
+        projected = {"facility_name": "Hospital One", "address": "10 Park Road", "source_url": url}
+        raw = dict(projected, facility_name="HOSPITAL ONE", address="10 Park Rd", phone=phone)
+        exact = dict(raw, address="10, Park Road")
+        public = {
+            "eraktkosh": [dict(projected, source_record_id=str(index)) for index in range(1, 6)],
+            "nabh": [dict(projected, source_record_id="single")],
+        }
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            for directory, sources in (("government_sources", GOVERNMENT_SCOPES), ("supplemental", SUPPLEMENTAL_SCOPES)):
+                folder = base / "data" / directory
+                folder.mkdir(parents=True)
+                for source in sources:
+                    (folder / f"{source}.jsonl").write_text("\n".join(map(json.dumps, public.get(source, []))))
+            saved = {
+                "eraktkosh": [
+                    dict(exact, hospital_code=1), dict(raw, hospital_code=2),
+                    dict(exact, hospital_code=3), dict(exact, hospital_code=3),
+                    dict(exact, hospital_code=4, source_url="https://example.org/other"),
+                    dict(exact, hospital_code=5, phone="placeholder"),
+                ],
+                "nabh": [dict(projected, source_record_id="single", facility_phone=phone)],
+            }
+            for source, rows in saved.items():
+                folder = base / "data" / "external" / source
+                folder.mkdir(parents=True)
+                (folder / "facilities.jsonl").write_text("\n".join(map(json.dumps, rows)))
+            records = load_records(base).set_index("record_id")
+        self.assertEqual(len(records), 6)
+        self.assertEqual(records.at["eraktkosh:1", "phones"], [phone])
+        self.assertEqual(records.at["nabh:single", "phones"], [phone])
+        self.assertEqual(records.at["eraktkosh:1", "source_urls"], [url])
+        self.assertNotIn("phone", records.at["eraktkosh:1", "raw"])
+        for identifier in range(2, 6):
+            self.assertEqual(records.at[f"eraktkosh:{identifier}", "phones"], [])
 
     def test_dates_and_blood_directory_types_keep_scope(self):
         def government(name, validity):

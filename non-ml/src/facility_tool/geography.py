@@ -16,7 +16,9 @@ STATE_ALIASES = {
     'new delhi': 'delhi',
     'orissa': 'odisha',
     'pondicherry': 'puducherry',
+    'tamilnadu': 'tamil nadu',
     'uttaranchal': 'uttarakhand',
+    'u p': 'uttar pradesh',
 }
 
 

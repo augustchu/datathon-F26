@@ -88,24 +88,20 @@ def load_inputs(mode, config, spark=None):
     if mode == 'public':
         return {key: pd.DataFrame() for key in ('facilities', 'pins', 'nfhs')}
     if mode == 'export':
-        filename = os.environ.get('DATATHON_FACILITY_EXPORT')
-        if not filename:
+        if not os.environ.get('DATATHON_FACILITY_EXPORT'):
             raise ValueError('Set DATATHON_FACILITY_EXPORT to a private facilities export.')
-        path = Path(filename).expanduser()
-        if path.suffix == '.parquet':
-            facilities = pd.read_parquet(path)
-        elif path.suffix == '.csv':
-            facilities = pd.read_csv(path, dtype='string')
-        else:
-            opener = gzip.open if path.suffix == '.gz' else open
-            with opener(path, 'rt', encoding='utf-8') as stream:
-                snapshot = json.load(stream)
-            facilities = pd.DataFrame(snapshot['rows'], columns=snapshot['columns'], dtype=object)
-        if len(facilities) > int(config['row_limits']['facilities']):
-            raise ValueError('The exported facility table exceeds the configured row limit.')
+        options = {'facilities': 'DATATHON_FACILITY_EXPORT', 'pins': 'DATATHON_PIN_EXPORT',
+                   'nfhs': 'DATATHON_NFHS_EXPORT'}
+        exports = {}
+        for key, option in options.items():
+            file = os.environ.get(option)
+            exports[key] = _read_export(file) if file else pd.DataFrame()
+            if len(exports[key]) > int(config['row_limits'][key]):
+                raise ValueError(f'The exported {key} table exceeds the configured row limit.')
+        facilities = exports['facilities']
         if not {'countries', 'capacity', 'numberDoctors'}.issubset(facilities.columns):
             raise ValueError('The export must preserve the original facility columns and column order.')
-        return {'facilities': facilities, 'pins': pd.DataFrame(), 'nfhs': pd.DataFrame()}
+        return exports
     if mode != 'databricks' or spark is None:
         raise ValueError('Use demo, public or export locally. To read Unity Catalog, choose databricks inside a Databricks notebook with table access.')
 
@@ -120,3 +116,15 @@ def load_inputs(mode, config, spark=None):
 
     return {'facilities': read('facilities'), 'pins': read('pins'),
             'nfhs': read('nfhs') if config['include_nfhs'] else pd.DataFrame()}
+
+
+def _read_export(filename):
+    path = Path(filename).expanduser()
+    if path.suffix == '.parquet':
+        return pd.read_parquet(path)
+    if path.suffix == '.csv':
+        return pd.read_csv(path, dtype='string')
+    opener = gzip.open if path.suffix == '.gz' else open
+    with opener(path, 'rt', encoding='utf-8') as stream:
+        snapshot = json.load(stream)
+    return pd.DataFrame(snapshot['rows'], columns=snapshot['columns'], dtype=object)

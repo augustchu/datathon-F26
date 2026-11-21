@@ -7,9 +7,10 @@ import pandas as pd
 
 from .geography import place_key
 from .origin_index import resolve_prepared_origin
+from .query_assets import LOOKUP_VERIFICATION_FIELDS
 from .recommend import compare_prepared_modes
 from .response import CONTACT_FIELDS, format_recommendations
-from .travel import estimate_travel
+from .travel import MODES as TRANSPORT_MODES, estimate_travel
 
 
 def resolve_service(concern, aliases):
@@ -34,8 +35,9 @@ def resolve_service(concern, aliases):
     raise ValueError('Choose a listed service. The lookup uses service wording, so a symptom alone cannot resolve it.')
 
 
-def lookup(store, config, *, concern, location, spread_demand=False, traveltime_enabled=False,
-           travel_weight=None, max_extra_km=None, max_extra_minutes=None, pressure_inputs=None, feedback=()):
+def lookup(store, config, *, concern, location, spread_demand=False, traveltime_enabled=None,
+           travel_mode=None, route_sort=None, travel_weight=None, max_extra_km=None,
+           max_extra_minutes=None, pressure_inputs=None, feedback=()):
     """Return all three modes from one snapshot and one optional routing request."""
     service = resolve_service(concern, config['service_aliases'])
     candidates = store.read(f'lookup_candidates_{service}')
@@ -44,6 +46,17 @@ def lookup(store, config, *, concern, location, spread_demand=False, traveltime_
     if excluded:
         candidates = candidates.loc[~candidates['facility_id'].isin(excluded)]
     limits = config['lookup']
+    routing = config['traveltime']
+    travel_mode = routing['mode'] if travel_mode is None else travel_mode
+    if travel_mode not in TRANSPORT_MODES:
+        raise ValueError(f"Choose a transport mode from {', '.join(TRANSPORT_MODES)}.")
+    if route_sort is None:
+        route_sort = 'time' if travel_mode == 'public_transport' else 'distance'
+    if route_sort not in {'distance', 'time'}:
+        raise ValueError('Choose distance or time for route sorting.')
+    if travel_mode == 'public_transport' and route_sort == 'distance':
+        raise ValueError('Choose time for public transport. TravelTime does not return transit route distance in this matrix.')
+    use_travel = routing['enabled'] if traveltime_enabled is None else traveltime_enabled
     demo = store.path.parent.name == 'demo'
     measured = store.read(f'lookup_measured_{service}', optional=True) if spread_demand else None
     if spread_demand and pressure_inputs is None:
@@ -55,25 +68,30 @@ def lookup(store, config, *, concern, location, spread_demand=False, traveltime_
                       max_extra_minutes=limits['max_extra_minutes'] if max_extra_minutes is None else max_extra_minutes)
     # Synthetic coordinates and IDs never go to the routing provider.
     routing_results = pd.DataFrame()
-    if traveltime_enabled and not demo:
+    if use_travel and not demo:
         supported = candidates['evidence_hold_reason'].eq('') | candidates['model_leads'].map(bool)
         routeable = candidates.loc[supported & candidates['location_routing_eligible'].eq(True)]
         sites = routeable[['facility_id', 'site_lat', 'site_lon', 'location_routing_eligible']].rename(
             columns={'site_lat': 'lat', 'site_lon': 'lon'},
         )
-        routing = config['traveltime']
         routing_results = estimate_travel(
-            (origin.lat, origin.lon), sites, enabled=True, mode=routing['mode'],
+            (origin.lat, origin.lon), sites, enabled=True, mode=travel_mode,
             departure_time=datetime.now(timezone.utc), max_travel_minutes=routing['max_travel_minutes'],
             max_destinations=routing['max_destinations'],
         )
     result = compare_prepared_modes(candidates, origin.lat, origin.lon, service, **parameters,
-                                    spread_demand=spread_demand, pressure_inputs=pressure_inputs,
+                                    route_sort=route_sort, spread_demand=spread_demand, pressure_inputs=pressure_inputs,
                                     measured_load=measured, travel_times=routing_results)
     result['route_status'] = routing_results
+    result['transport_mode'] = travel_mode
+    result['route_sort'] = route_sort
     result['origin'] = origin
     result['service'] = service
     result['excluded_by_caller'] = sorted(excluded)
+    checks = candidates[['facility_id', *LOOKUP_VERIFICATION_FIELDS]]
+    for table in ('rows', 'trace'):
+        result[table] = result[table].merge(checks, how='left', on='facility_id', validate='m:1')
+        result[table]['verification_status'] = result[table]['verification_status'].fillna('insufficient')
     contact_choices = candidates[['facility_id', *CONTACT_FIELDS]]
     result['rows'] = format_recommendations(result['rows'], contact_choices, origin, limits['max_radius_km'], feedback)
     return result

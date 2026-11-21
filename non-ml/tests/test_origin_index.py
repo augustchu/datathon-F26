@@ -82,6 +82,19 @@ class OriginIndexTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'India coordinate range'):
             resolve_prepared_origin('77.59, 12.97', saved)
 
+    def test_state_qualified_ambiguous_city_can_use_a_named_postal_district(self):
+        entities = pd.DataFrame([
+            entity('Jaipur', 'District A', 'Rajasthan', 26.90, 75.78),
+            entity('Jaipur', 'District B', 'Rajasthan', 26.94, 75.89),
+        ])
+        areas = pd.DataFrame([postal('302001', 'Jaipur', 'Rajasthan', 26.91, 75.79)])
+        index = build_origin_index(entities, areas)
+        origin = resolve_prepared_origin('Jaipur, Rajasthan', index)
+        self.assertEqual((origin.lat, origin.lon), (26.91, 75.79))
+        self.assertIn('district origin from post-office', origin.basis)
+        with self.assertRaisesRegex(ValueError, 'ambiguous'):
+            resolve_prepared_origin('Jaipur', index)
+
 
 if __name__ == '__main__':
     unittest.main()

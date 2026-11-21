@@ -16,6 +16,12 @@ EVIDENCE_TIERS = {"active": 0, "unknown": 1}
 OBSERVED_METHODS = {"reported", "source_recovered"}
 DISTANCE_METRIC = "straight_line_km"
 ROUTE_METRIC = "route_minutes"
+ROUTE_DISTANCE_METRIC = "route_distance_km"
+ROUTE_SORT_METRICS = {"time": ROUTE_METRIC, "distance": ROUTE_DISTANCE_METRIC}
+TRAVEL_LABELS = {
+    DISTANCE_METRIC: "straight-line distance", ROUTE_METRIC: "route time", ROUTE_DISTANCE_METRIC: "route distance",
+}
+ROUTE_VALUE_FIELDS = {ROUTE_METRIC: "travel_minutes", ROUTE_DISTANCE_METRIC: "route_distance_km"}
 IDENTITY_COLUMNS = (
     "facility_id", "name", "address", "city", "district", "state", "pin",
     "lat", "lon", "location_quality",
@@ -30,7 +36,7 @@ CLAIM_COLUMNS = (
 UPDATE_COLUMNS = ("facility_id", "field", "method", "value")
 MEASURED_LOAD_COLUMNS = ("facility_id", "service", "unit", "as_of", "source_url", "available_units")
 PRESSURE_COLUMNS = ("facility_id", "service", "demand", "capacity", "unit", "period", "basis", "source_url")
-TRAVEL_COLUMNS = ("facility_id", "travel_minutes", "travel_source")
+TRAVEL_COLUMNS = ("facility_id", "travel_source")
 REASON_COLUMNS = (
     "distance_km", "distance_metric", "evidence_tier", "excerpt", "source_url",
     "source", "scope", "validity", "validity_text", "citation_quality",
@@ -47,8 +53,9 @@ RESULT_COLUMNS = (
     *IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS, "evidence_as_of", *REASON_COLUMNS, *FIELD_COLUMNS,
     "model_lead_score", "model_lead_provenance", "model_lead_detail",
     "load_status", "load_available_units", "load_unit", "load_as_of", "load_source_url",
-    "extra_km_vs_baseline", "travel_minutes", "travel_source", "ranking_travel_metric",
-    "extra_minutes_vs_baseline", "pressure_demand", "pressure_capacity", "pressure_unit",
+    "extra_km_vs_baseline", "route_distance_km", "travel_minutes", "travel_mode",
+    "travel_source", "travel_source_url", "route_sort", "ranking_travel_metric", "ranking_travel_reason",
+    "extra_route_km_vs_baseline", "extra_minutes_vs_baseline", "pressure_demand", "pressure_capacity", "pressure_unit",
     "pressure_period", "pressure_basis", "pressure_source_url", "pressure_ratio", "pressure_grade",
     "travel_penalty", "pressure_penalty", "travel_weight", "pressure_weight", "weighted_score",
     "weighted_travel_metric", "weighted_extra_travel", "weighted_detour_limit", "weighted_status",
@@ -386,26 +393,63 @@ def _routes(travel_times):
     if travel_times is None:
         return routes
     for ident, rows in _record_groups(travel_times, "facility_id").items():
-        candidates = {
-            (minutes, source)
-            for r in rows
-            if (minutes := _number(r["travel_minutes"])) is not None and minutes >= 0
-            and (source := _text(r["travel_source"]))
-        }
+        candidates = set()
+        for row in rows:
+            minutes, kilometers = map(_number, (row.get("travel_minutes"), row.get("route_distance_km")))
+            minutes = minutes if minutes is not None and minutes >= 0 else None
+            kilometers = kilometers if kilometers is not None and kilometers >= 0 else None
+            source = _text(row["travel_source"])
+            if source and (minutes is not None or kilometers is not None):
+                url = _text(row.get("travel_source_url"))
+                candidates.add((
+                    minutes, kilometers, _text(row.get("travel_mode")).casefold(), source, url if _url(url) else None,
+                ))
         if ident and len(candidates) == 1:
-            minutes, source = next(iter(candidates))
-            routes[ident] = {"travel_minutes": minutes, "travel_source": source}
+            minutes, kilometers, mode, source, url = next(iter(candidates))
+            routes[ident] = {
+                "travel_minutes": minutes, "route_distance_km": kilometers, "travel_mode": mode or None,
+                "travel_source": source, "travel_source_url": url,
+            }
     return routes
 
 
-def _travel_metric(sites, routes):
-    return ROUTE_METRIC if sites and all(r["facility_id"] in routes for r in sites) else DISTANCE_METRIC
+def _route_context(route):
+    return route.get("travel_mode"), route.get("travel_source")
+
+
+def _travel_metric(sites, routes, route_sort):
+    requested = ROUTE_SORT_METRICS[route_sort]
+    field = ROUTE_VALUE_FIELDS[requested]
+    site_routes = [routes.get(r["facility_id"], {}) for r in sites]
+    if site_routes and all(route.get(field) is not None for route in site_routes):
+        if len({_route_context(route) for route in site_routes}) == 1:
+            return requested
+    return DISTANCE_METRIC
+
+
+def _ranking_travel_reason(metric, route_sort, eligible, supplied):
+    if not eligible:
+        return "No eligible facilities to rank."
+    if metric != DISTANCE_METRIC:
+        return f"Comparable {TRAVEL_LABELS[metric]} available for every eligible facility."
+    if supplied:
+        requested = TRAVEL_LABELS[ROUTE_SORT_METRICS[route_sort]]
+        return f"Comparable {requested} unavailable for the full set. Showing straight-line distance ranking."
+    return "No route estimates supplied. Showing straight-line distance ranking."
 
 
 def _travel_value(site, routes, metric):
-    if metric == ROUTE_METRIC:
-        return routes[site["facility_id"]]["travel_minutes"]
-    return site["distance_km"]
+    if metric == DISTANCE_METRIC:
+        return site["distance_km"]
+    return routes[site["facility_id"]][ROUTE_VALUE_FIELDS[metric]]
+
+
+def _route_difference(route, reference, metric):
+    field = ROUTE_VALUE_FIELDS[metric]
+    value, baseline = route.get(field), reference.get(field)
+    if value is None or baseline is None or _route_context(route) != _route_context(reference):
+        return None
+    return value - baseline
 
 
 def _comparable_sites(baseline):
@@ -417,16 +461,13 @@ def _comparable_sites(baseline):
     ]
 
 
-def _within_detour(site, reference, routes, metric, km_cap, minute_cap):
-    difference = _travel_value(site, routes, metric) - _travel_value(reference, routes, metric)
-    if metric == ROUTE_METRIC:
-        return difference <= minute_cap
-    if difference > km_cap:
-        return False
-    # A known time detour still has to fit, even when a mixed set is scored in km.
-    if site["facility_id"] in routes and reference["facility_id"] in routes:
-        return _within_detour(site, reference, routes, ROUTE_METRIC, km_cap, minute_cap)
-    return True
+def _within_detour(site, reference, routes, km_cap, minute_cap):
+    route, baseline = (routes.get(row["facility_id"], {}) for row in (site, reference))
+    kilometers = _route_difference(route, baseline, ROUTE_DISTANCE_METRIC)
+    if kilometers is None:
+        kilometers = site["distance_km"] - reference["distance_km"]
+    minutes = _route_difference(route, baseline, ROUTE_METRIC)
+    return kilometers <= km_cap and (minutes is None or minutes <= minute_cap)
 
 
 def _pressure_index(pressure, service):
@@ -466,7 +507,9 @@ def _score_pressure(data, extra, limit, metric, travel_weight):
     demand, capacity = data["pressure_demand"], data["pressure_capacity"]
     ratio = demand / capacity
     pressure_penalty = ratio / (1 + ratio) if isfinite(ratio) else 1.0
-    travel_penalty = max(0.0, extra) / limit if limit else 0.0
+    # A cohort can use straight-line scoring while a pair has a valid road
+    # detour within the limit. Keep the fallback penalty on the same scale.
+    travel_penalty = min(1.0, max(0.0, extra) / limit) if limit else float(extra > 0)
     if demand < capacity:
         grade = "demand_below_stated_capacity"
     elif demand == capacity:
@@ -482,7 +525,7 @@ def _score_pressure(data, extra, limit, metric, travel_weight):
     )
 
 
-def _rank_weighted(baseline, pressure, service, routes, opt_in, km_cap, minute_cap, weight):
+def _rank_weighted(baseline, pressure, service, routes, route_sort, opt_in, km_cap, minute_cap, weight):
     if not opt_in:
         return baseline, {}, "off"
     if not baseline:
@@ -498,8 +541,8 @@ def _rank_weighted(baseline, pressure, service, routes, opt_in, km_cap, minute_c
             by_group.setdefault(group, [reference]).append(site)
     comparisons = {}
     for group, sites in by_group.items():
-        metric = _travel_metric(sites, routes)
-        near = [r for r in sites if _within_detour(r, reference, routes, metric, km_cap, minute_cap)]
+        metric = _travel_metric(sites, routes, route_sort)
+        near = [r for r in sites if _within_detour(r, reference, routes, km_cap, minute_cap)]
         if len(near) > 1:
             comparisons[group] = (near, metric)
     if not by_group:
@@ -558,7 +601,7 @@ def _load_index(measures, service, as_of, max_age):
     }
 
 
-def _rank_load(baseline, measures, service, as_of, opt_in, routes, km_cap, minute_cap, max_age, max_gap, requested_unit):
+def _rank_load(baseline, measures, service, as_of, opt_in, routes, route_sort, km_cap, minute_cap, max_age, max_gap, requested_unit):
     if not opt_in:
         return baseline, {}, "off"
     if not baseline:
@@ -567,11 +610,11 @@ def _rank_load(baseline, measures, service, as_of, opt_in, routes, km_cap, minut
         return baseline, {}, "no_measured_load"
     reference = baseline[0]
     comparable_sites = _comparable_sites(baseline)
-    metric = _travel_metric(comparable_sites, routes)
     nearby = [
         r for r in comparable_sites
-        if _within_detour(r, reference, routes, metric, km_cap, minute_cap)
+        if _within_detour(r, reference, routes, km_cap, minute_cap)
     ]
+    metric = _travel_metric(nearby, routes, route_sort)
     fresh = _load_index(measures, service, as_of, max_age)
     ref_measures = fresh.get(reference["facility_id"], {})
     alternatives = {
@@ -617,10 +660,10 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
     })
     reason = candidate["reason"]
     if decision == "eligible":
-        travel_label = "route time" if ranking["travel_metric"] == ROUTE_METRIC else "straight-line distance"
+        travel_label = TRAVEL_LABELS[ranking["travel_metric"]]
         reason = f"Sourced service, then validity and {travel_label}"
         if rank == 1 and baseline_rank != 1 and ranking["load_status"] == "measured_availability_rerank":
-            reason = "More measured service availability within your extra-distance limit"
+            reason = "More measured service availability within your detour limits"
         if rank == 1 and baseline_rank != 1 and ranking["load_status"] == "weighted_pressure_rerank":
             reason = "Lowest weighted travel and demand-to-capacity score within your detour limit"
     elif decision == "lead":
@@ -641,9 +684,11 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
             candidate["distance_km"] - ref["distance_km"]
             if ref is not None and candidate["distance_km"] is not None else None
         ),
-        travel_minutes=route.get("travel_minutes"), travel_source=route.get("travel_source"),
-        ranking_travel_metric=ranking["travel_metric"],
-        extra_minutes_vs_baseline=route["travel_minutes"] - refs["travel_minutes"] if route and refs else None,
+        route_sort=ranking["route_sort"], ranking_travel_metric=ranking["travel_metric"],
+        ranking_travel_reason=ranking["travel_reason"],
+        extra_route_km_vs_baseline=_route_difference(route, refs, ROUTE_DISTANCE_METRIC),
+        extra_minutes_vs_baseline=_route_difference(route, refs, ROUTE_METRIC),
+        **route,
         **pressure,
     )
     record.update(candidate["mode_fields"][mode])
@@ -688,6 +733,7 @@ def compare_prepared_modes(
     measured_load: pd.DataFrame | None = None,
     pressure_inputs: pd.DataFrame | None = None,
     travel_times: pd.DataFrame | None = None,
+    route_sort: str = "time",
     as_of=None,
     max_radius_km: float = 50,
     top_k: int = 5,
@@ -704,7 +750,9 @@ def compare_prepared_modes(
 
     Apply origin-specific travel and the requested lead threshold here. The
     optional query as_of evaluates measured load age. The checkpoint keeps its
-    original date for service evidence validity.
+    original date for service evidence validity. Use the requested route
+    measure when comparable across eligible sites inside the straight-line
+    radius. Balancing enforces both detour limits when the pair has routes.
     """
     origin = _coordinate_pair(lat, lon)
     if origin is None:
@@ -712,6 +760,8 @@ def compare_prepared_modes(
     service = _text(service)
     if not service:
         raise ValueError("Provide a canonical service.")
+    if route_sort not in ("time", "distance"):
+        raise ValueError("route_sort must be time or distance.")
     if not isinstance(top_k, Integral) or isinstance(top_k, bool) or top_k < 1:
         raise ValueError("top_k must be a positive integer.")
     radius, extra, max_age, max_gap, threshold = map(
@@ -739,12 +789,16 @@ def compare_prepared_modes(
         _require(measured_load, MEASURED_LOAD_COLUMNS, "measured_load")
     if pressure_inputs is not None and not pressure_inputs.empty:
         _require(pressure_inputs, PRESSURE_COLUMNS, "pressure_inputs")
-    if travel_times is not None and not travel_times.empty:
+    routes_supplied = travel_times is not None and not travel_times.empty
+    if routes_supplied:
         _require(travel_times, TRAVEL_COLUMNS, "travel_times")
+        if not set(ROUTE_VALUE_FIELDS.values()) & set(travel_times.columns):
+            raise ValueError("travel_times must provide travel_minutes or route_distance_km.")
     routes = _routes(travel_times)
     candidates = _candidates(prepared, origin, radius)
     eligible = [r for r in candidates if r["eligible"]]
-    baseline_metric = _travel_metric(eligible, routes)
+    baseline_metric = _travel_metric(eligible, routes, route_sort)
+    travel_reason = _ranking_travel_reason(baseline_metric, route_sort, eligible, routes_supplied)
     baseline = sorted(
         eligible,
         key=lambda r: (r["evidence_tier"], _travel_value(r, routes, baseline_metric), r["distance_km"], r["facility_id"]),
@@ -754,18 +808,19 @@ def compare_prepared_modes(
         load_status = weighted_status = "non_emergency_only"
     else:
         ranked, weighted, weighted_status = _rank_weighted(
-            baseline, pressure_inputs, service, routes, spread_demand, extra, minutes_cap, weight,
+            baseline, pressure_inputs, service, routes, route_sort, spread_demand, extra, minutes_cap, weight,
         )
         if weighted:
             load, load_status = {}, weighted_status
         else:
             ranked, load, load_status = _rank_load(
-                baseline, measured_load, service, as_of, spread_demand, routes,
+                baseline, measured_load, service, as_of, spread_demand, routes, route_sort,
                 extra, minutes_cap, max_age, max_gap, _unit_key(load_unit),
             )
     ranking = {
         "reference": baseline[0] if baseline else None, "routes": routes,
-        "travel_metric": baseline_metric, "measured": load, "weighted": weighted,
+        "travel_metric": baseline_metric, "travel_reason": travel_reason, "route_sort": route_sort,
+        "measured": load, "weighted": weighted,
         "load_status": load_status, "weighted_status": weighted_status,
     }
     base_positions = {r["facility_id"]: i for i, r in enumerate(baseline, start=1)}
@@ -803,7 +858,8 @@ def compare_prepared_modes(
             load_status=load_status, spread_demand=spread_demand, max_extra_km=extra,
             max_radius_km=radius, distance_metric=DISTANCE_METRIC, as_of=as_of.isoformat(),
             evidence_as_of=evidence_as_of,
-            ranking_travel_metric=baseline_metric, weighted_status=weighted_status,
+            route_sort=route_sort, ranking_travel_metric=baseline_metric, ranking_travel_reason=travel_reason,
+            weighted_status=weighted_status,
             weighted_travel_metric=next(iter(weighted.values()))["weighted_travel_metric"] if weighted else None,
             max_extra_minutes=minutes_cap, travel_weight=weight, pressure_weight=1 - weight,
         ))

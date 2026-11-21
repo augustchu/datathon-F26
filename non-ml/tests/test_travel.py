@@ -34,13 +34,14 @@ class TravelTests(unittest.TestCase):
         self.assertTrue(disabled["travel_status"].eq("disabled").all())
         self.assertTrue(unconfigured["travel_status"].eq("missing_credentials").all())
         self.assertTrue(unconfigured["travel_minutes"].isna().all())
+        self.assertTrue(unconfigured["route_distance_km"].isna().all())
         post.assert_not_called()
 
     @patch("facility_tool.travel._post_json")
     def test_one_matrix_keeps_partial_coverage_visible_and_stable(self, post):
         post.return_value = {"results": [{
             "search_id": "from-origin",
-            "locations": [{"id": "destination-1", "properties": [{"travel_time": 735}]}],
+            "locations": [{"id": "destination-1", "properties": [{"travel_time": 735, "distance": 1570}]}],
             "unreachable": ["destination-2"],
         }]}
         original = facilities()
@@ -64,6 +65,7 @@ class TravelTests(unittest.TestCase):
         by_id = found.set_index("facility_id")
         self.assertEqual(by_id.at["local-id-a", "travel_minutes"], 12.25)
         self.assertEqual(by_id.at["local-id-a", "travel_source"], SOURCE)
+        self.assertTrue(by_id["route_distance_km"].isna().all())
         self.assertEqual(by_id["travel_status"].to_dict(), {
             "local-id-a": "estimated",
             "local-id-b": "not_routed_within_limit",
@@ -97,6 +99,7 @@ class TravelTests(unittest.TestCase):
         self.assertEqual(opener.open.call_args.kwargs, {"timeout": 7})
         self.assertEqual(headers["x-application-id"], "test-app")
         self.assertEqual(headers["x-api-key"], "test-key")
+        self.assertEqual(json.loads(request.data)["departure_searches"][0]["properties"], ["travel_time", "distance"])
         self.assertEqual(found["travel_minutes"].tolist(), [0.25])
         self.assertIsNone(build.call_args.args[0].redirect_request(None, None, 302, "Redirect", {}, "https://example.com"))
 
@@ -116,6 +119,41 @@ class TravelTests(unittest.TestCase):
         found = estimate_travel(ORIGIN, facilities(), max_destinations=1, **SETTINGS)
         self.assertIn("missing_result", set(found["travel_status"]))
         self.assertTrue(found["travel_minutes"].isna().all())
+
+    @patch("facility_tool.travel._post_json")
+    def test_distances_and_times_stay_together_for_the_chosen_route(self, post):
+        post.return_value = {"results": [{
+            "search_id": "from-origin",
+            "locations": [
+                {"id": "destination-1", "properties": [
+                    {"travel_time": 600, "distance": 1250},
+                    {"travel_time": 540, "distance": 2325},
+                ]},
+                {"id": "destination-2", "properties": [
+                    {"travel_time": 420},
+                    {"travel_time": 450, "distance": 1750},
+                    {"distance": 1200},
+                ]},
+                {"id": "destination-3", "properties": [
+                    {"distance": 2700},
+                    {"travel_time": 99999, "distance": 2300},
+                ]},
+            ],
+            "unreachable": [],
+        }]}
+        for mode in ('driving', 'walking', 'cycling'):
+            with self.subTest(mode=mode):
+                found = estimate_travel(ORIGIN, facilities(), mode=mode, max_destinations=3, **SETTINGS).set_index('facility_id')
+                search = post.call_args.args[0]['departure_searches'][0]
+                self.assertEqual(search['transportation'], {'type': mode})
+                self.assertEqual(search['properties'], ['travel_time', 'distance'])
+                self.assertEqual(found.at['local-id-a', 'travel_minutes'], 9)
+                self.assertEqual(found.at['local-id-a', 'route_distance_km'], 2.325)
+                self.assertEqual(found.at['local-id-b', 'travel_minutes'], 7)
+                self.assertTrue(pd.isna(found.at['local-id-b', 'route_distance_km']))
+                self.assertTrue(pd.isna(found.at['local-id-c', 'travel_minutes']))
+                self.assertEqual(found.at['local-id-c', 'route_distance_km'], 2.7)
+                self.assertEqual(found.at['local-id-c', 'travel_source'], SOURCE)
 
 
 if __name__ == "__main__":

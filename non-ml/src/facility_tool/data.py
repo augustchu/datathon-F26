@@ -15,10 +15,12 @@ from math import asin, cos, isfinite, radians, sin, sqrt
 from pathlib import Path
 import re
 import unicodedata
+from urllib.parse import parse_qs, urldefrag, urlsplit
 
 import pandas as pd
 
 from .geography import india_point
+from .profiles import plausible_phone
 
 
 GOVERNMENT_SCOPES = {
@@ -34,6 +36,9 @@ SUPPLEMENTAL_SCOPES = {
     "eraktkosh": "eRaktKosh directory type; no inventory or availability",
 }
 FDR_SERVICE_FIELDS = ("specialties", "procedure", "equipment", "capability", "description")
+CMCHIS_RECORD_ENDPOINT = "https://chtn.cmchistn.com/api/v1/tpa-hospitals-v2/"
+GOVERNMENT_PDF_SOURCES = {"bis_cghs", "esic", "rghs"}
+SAVED_PHONE_FIELDS = {"eraktkosh": ("hospital_code", "phone"), "nabh": ("source_record_id", "facility_phone")}
 RECORD_COLUMNS = (
     "record_id", "source", "source_record_id", "input_position", "name", "address", "city", "district", "state",
     "pin", "lat", "lon", "location_quality", "location_conflict", "coordinate_note", "phones", "emails",
@@ -149,6 +154,31 @@ def _government_geography(raw):
     return address, district
 
 
+def _saved_phone_rows(repo, source, id_field):
+    path = repo / "data" / "external" / source / "facilities.jsonl"
+    indexed = {}
+    if path.is_file():
+        for row in _jsonl(path):
+            identity = _text(row.get(id_field)).strip()
+            if identity:
+                indexed[identity] = None if identity in indexed else row
+    return indexed
+
+
+def _matching_public_phones(record, saved, phone_field):
+    if saved is None:
+        return []
+    name, address = _key(record["name"]), _key(record["address"])
+    urls = _urls(saved.get("source_url"))
+    if (
+        not name or not address or not urls or urls != record["source_urls"]
+        or name != _key(saved.get("facility_name")) or address != _key(saved.get("address"))
+        or not all(urlsplit(url).hostname for url in urls)
+    ):
+        return []
+    return [value for value in _array(saved.get(phone_field)) if plausible_phone(value)]
+
+
 def _make_record(source, raw, position):
     if source == "fdr":
         name = _text(raw.get("name"))
@@ -156,7 +186,7 @@ def _make_record(source, raw, position):
         city, district, state = _text(raw.get("address_city")), "", _text(raw.get("address_stateOrRegion"))
         urls = _urls(raw.get("source_urls"))
         fields = [(column, text) for column in FDR_SERVICE_FIELDS for text in _array(raw.get(column))]
-        phones = _array(raw.get("phone_numbers")) or _array(raw.get("officialPhone"))
+        phones = _array(raw.get("phone_numbers")) + _array(raw.get("officialPhone"))
         emails = _array(raw.get("email"))
         scope = "FDR-recorded claim"
     elif source in GOVERNMENT_SCOPES:
@@ -210,6 +240,7 @@ def load_records(repo_root, fdr: pd.DataFrame | None = None, *, include_public=T
 
     Empty snapshots (e.g. RGHS) are recorded in `attrs['source_counts']`. A
     missing snapshot raises a file error rather than silently hiding a source.
+    Saved raw eRaktKosh and NABH rows may supply a cited facility phone by ID.
     Set `include_public=False` to keep a synthetic FDR fixture fully isolated.
     """
     repo = Path(repo_root)
@@ -224,8 +255,18 @@ def load_records(repo_root, fdr: pd.DataFrame | None = None, *, include_public=T
     records = []
     coverage = {source: 0 for source, _ in sources}
     for source, rows in sources:
+        phone_rows, phone_field, id_counts = {}, "", {}
+        if source in SAVED_PHONE_FIELDS:
+            id_field, phone_field = SAVED_PHONE_FIELDS[source]
+            phone_rows = _saved_phone_rows(repo, source, id_field)
+            if phone_rows:
+                rows = list(rows)
+                id_counts = Counter(_text(row.get("source_record_id")).strip() for row in rows)
         for position, raw in enumerate(rows):
             record = _make_record(source, raw, position)
+            source_id = record["source_record_id"].strip()
+            if id_counts.get(source_id) == 1:
+                record["phones"] = list(dict.fromkeys(_matching_public_phones(record, phone_rows.get(source_id), phone_field)))
             identity = record["source_record_id"] or _fingerprint(raw)
             record["record_id"] = f"{source}:{identity}"
             records.append(record)
@@ -424,6 +465,27 @@ def _clauses(excerpt):
             previous_negation |= negated
 
 
+def _service_citation(source, urls):
+    if not urls:
+        return ""
+    if source == "cmchis":
+        # The public listings page is shared by every hospital. The search URL
+        # locates the record whose service flags produced the saved excerpt.
+        entries = [
+            url for url in urls if url.startswith(CMCHIS_RECORD_ENDPOINT + "?")
+            and len(parse_qs(urlsplit(url).query).get("search", [])) == 1
+        ]
+        return entries[0] if len(entries) == 1 else ""
+    if len(urls) == 1:
+        return urls[0]
+    if source in GOVERNMENT_PDF_SOURCES:
+        # A wrapped listing can span pages. Cite its document when the saved
+        # extract cannot tie one exact page to this specific service excerpt.
+        documents = {urldefrag(url).url for url in urls}
+        return next(iter(documents)) if len(documents) == 1 else ""
+    return "" if source == "fdr" else urls[0]
+
+
 def extract_claims(records: pd.DataFrame, links: pd.DataFrame, aliases, as_of) -> pd.DataFrame:
     """Extract exact, scoped service evidence; missing text is never a negative.
 
@@ -441,8 +503,8 @@ def extract_claims(records: pd.DataFrame, links: pd.DataFrame, aliases, as_of) -
             continue
         validity, start, end = _validity(record, cutoff)
         urls = record["source_urls"]
-        direct = bool(urls and (record["source"] != "fdr" or len(urls) == 1))
-        citation_quality = "direct" if direct else "candidate_links" if urls else "missing"
+        source_url = _service_citation(record["source"], urls)
+        citation_quality = "direct" if source_url else "candidate_links" if urls else "missing"
         for field, excerpt in record["service_texts"]:
             clauses = list(_clauses(excerpt))
             for service, pattern in patterns.items():
@@ -463,7 +525,7 @@ def extract_claims(records: pd.DataFrame, links: pd.DataFrame, aliases, as_of) -
                 for stance, reason in interpretations.items():
                     claims.append({
                         "facility_id": record["facility_id"], "record_id": record["record_id"], "service": service,
-                        "stance": stance, "excerpt": excerpt, "source_url": urls[0] if direct else "", "source_urls": urls,
+                        "stance": stance, "excerpt": excerpt, "source_url": source_url, "source_urls": urls,
                         "source": record["source"], "scope": record["scope"], "validity": validity,
                         "validity_text": record["validity_text"], "validity_start": start, "validity_end": end,
                         "evidence_field": field, "citation_quality": citation_quality, "match_reason": reason,

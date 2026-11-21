@@ -370,6 +370,42 @@ def main():
         '''),
     ])
 
+    notebook("04b_verify_services", "Verify published services before lookup", '''
+        Compare source evidence for the same linked branch and service. This notebook saves
+        the corroboration result, disagreements and the quotes used to make the decision.
+    ''', [
+        markdown('''
+            ## Check the branch, service, publisher and date
+
+            A direct service statement from one publisher is a cited claim. The corroboration
+            check requires a second independent publisher with a compatible, explicit service
+            statement. Two pages from one publisher count together. Manually reviewed public
+            sources attach only when their name and location identify one branch in the snapshot.
+            Expired and conflicting statements remain visible. Check current availability by phone.
+        '''),
+        code('''
+            import json
+
+            from facility_tool.reviewed_claims import attach_reviewed_claims
+            from facility_tool.verification import verify_services
+
+            claims = STORE.read("claims")
+            entries = [] if MODE == "demo" else json.loads(
+                (ROOT / "non-ml/config/reviewed_service_evidence.json").read_text(encoding="utf-8")
+            )
+            reviewed, decisions = attach_reviewed_claims(
+                entries, STORE.read("entities"), config["service_aliases"], config["as_of"],
+            )
+            combined = pd.concat([claims, reviewed], ignore_index=True) if not reviewed.empty else claims
+            verification = verify_services(combined, config["as_of"])
+            STORE.write("reviewed_service_links", decisions)
+            STORE.write("verified_claims", combined)
+            STORE.write("service_verification", verification)
+            show(decisions)
+            show(verification.groupby(["service", "verification_status"]).size().rename("branches").reset_index(), limit=60)
+        '''),
+    ])
+
     notebook("05_field_updates", "Compare reported fields and model estimates", '''
         Read the original facility fields, linked contacts and branch IDs. Save a sidecar
         `field_updates` table with one provenance-tagged value per field, facility and method.
@@ -388,12 +424,13 @@ def main():
             `field`, `method`, `value`, `unit`, `lower`, `upper`, `provenance` and `detail`.
             Method must be `ml` or `regression`. Supply the model name, version, evaluation
             cohort and interval definition in the provenance and detail where available.
+            The count-model notebook can also supply a reviewed checkpoint for this snapshot.
             The demo uses hand-written overlay values so each mode can be compared locally.
         '''),
         code('''
             from facility_tool.eda import COUNT_UNITS, reported_count_updates
             from facility_tool.examples import demo_overlays, demo_pressure
-            from facility_tool.updates import contact_evidence, empty_updates, load_estimates
+            from facility_tool.updates import contact_evidence, empty_updates, load_estimates, validate_estimates
 
             entities = STORE.read("entities")
             records = STORE.read("records")
@@ -402,6 +439,10 @@ def main():
             estimate_file = None  # Optional path to existing results for this snapshot.
             observed = [reported_count_updates(linked, field) for field in COUNT_UNITS if field in linked.columns]
             imported = load_estimates(estimate_file, entities["facility_id"], services=config["service_aliases"])
+            if not estimate_file and MODE != "demo":
+                fitted = STORE.read("count_model_estimates", optional=True)
+                if not fitted.empty:
+                    imported = validate_estimates(fitted, entities["facility_id"], services=config["service_aliases"])
             contacts = contact_evidence(records, links)
             STORE.write("contact_evidence", contacts)
         '''),

@@ -5,7 +5,7 @@ import re
 
 import pandas as pd
 
-from .geography import india_point, place_key
+from .geography import india_point, place_key, state_key
 
 
 _EMPTY = {'', 'none', 'null', 'n/a', 'na', 'nan', 'unknown', 'not available', '-', '[]', '{}'}
@@ -44,10 +44,8 @@ def phone_coverage(records):
     counts = []
     for source, rows in records.groupby('source', sort=True):
         listed = plausible = 0
-        for _, row in rows.iterrows():
-            raw = row.get('raw')
-            raw = raw if isinstance(raw, dict) else {}
-            published = items(raw.get('phone_numbers', row.get('phone_numbers'))) + items(raw.get('officialPhone'))
+        for value in rows['phones']:
+            published = items(value)
             listed += bool(published)
             plausible += any(plausible_phone(text) for text in published)
         n = len(rows)
@@ -86,7 +84,7 @@ def district_context(entities, nfhs, indicators):
         if field not in nfhs:
             raise ValueError(f'NFHS field {field!r} is absent. Choose available columns from the table.')
     survey = nfhs[['state_ut', 'district_name', *indicators]].copy()
-    survey['state_key'] = survey['state_ut'].map(place_key)
+    survey['state_key'] = survey['state_ut'].map(state_key)
     survey['district_key'] = survey['district_name'].map(place_key)
     survey = survey.loc[survey[['state_key', 'district_key']].ne('').all(axis=1)]
     ambiguous = survey.loc[survey.duplicated(['state_key', 'district_key'], keep=False)]
@@ -98,7 +96,7 @@ def district_context(entities, nfhs, indicators):
         survey[field] = pd.to_numeric(text.str.strip('()').str.strip(), errors='coerce')
     selection = entities[['facility_id', 'state', 'district', 'postal_state', 'postal_district', 'postal_resolution']].copy()
     conflicted = selection['postal_resolution'].isin(['state_conflict', 'district_conflict'])
-    selection['state_key'] = selection['state'].map(place_key).replace('', None).fillna(selection['postal_state'].map(place_key))
+    selection['state_key'] = selection['state'].map(state_key).replace('', None).fillna(selection['postal_state'].map(state_key))
     selection['district_key'] = selection['district'].map(place_key).replace('', None).fillna(selection['postal_district'].map(place_key))
     selection.loc[conflicted, ['state_key', 'district_key']] = ''
     context = selection.merge(survey, on=['state_key', 'district_key'], how='left', validate='m:1', indicator='nfhs_join')

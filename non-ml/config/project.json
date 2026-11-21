@@ -22,5 +22,5 @@
     "audio_verbal_therapy": ["audio verbal therapy", "auditory verbal therapy"]
   },
   "lookup": {"service": "dialysis", "location": "Jaipur, Rajasthan", "top_k": 5, "max_radius_km": 50, "max_extra_km": 10, "max_extra_minutes": 15, "travel_weight": 0.5, "max_load_age_hours": 24},
-  "traveltime": {"enabled": false, "mode": "driving", "max_travel_minutes": 90, "max_destinations": 25}
+  "traveltime": {"enabled": true, "mode": "driving", "max_travel_minutes": 90, "max_destinations": 100}
 }

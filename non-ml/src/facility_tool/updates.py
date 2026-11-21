@@ -40,6 +40,11 @@ def load_estimates(path, valid_facility_ids, *, services):
             frame = pd.DataFrame([json.loads(line) for line in stream if line.strip()])
     else:
         raise ValueError('Model outputs must be CSV or standard JSONL with one object per line.')
+    return validate_estimates(frame, valid_facility_ids, services=services)
+
+
+def validate_estimates(frame, valid_facility_ids, *, services):
+    """Check a candidate overlay before exposing it in a recommendation."""
     missing = set(COLUMNS).difference(frame.columns)
     if missing:
         raise ValueError(f'Model output is missing fields: {sorted(missing)}')

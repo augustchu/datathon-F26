@@ -79,13 +79,15 @@ def format_recommendations(rows, contacts, origin, radius_km, feedback=()):
 def _fit_score(row, origin, radius_km):
     if row.kind != 'recommendation':
         return None, 'No fit score for an unverified lead.'
-    service_points = 55  # The ranker already required direct and citable evidence.
+    service_points = 45  # The ranker already required direct and citable evidence.
+    corroboration = 10 if row.verification_status == 'corroborated' else 0
     validity_points = 15 if row.validity == 'active' else 5
     origin_points = 20 if origin.basis == 'User-supplied coordinates' else 10
     proximity_points = 10 * max(0, 1 - row.distance_km / radius_km) if radius_km > 0 else 0
-    score = round(service_points + validity_points + origin_points + proximity_points)
-    return score, (f'{service_points} direct service evidence + {validity_points} validity + {origin_points} origin precision '
-                   f'+ {proximity_points:.1f} proximity. Heuristic fit score, out of 100; no availability probability.')
+    score = round(service_points + corroboration + validity_points + origin_points + proximity_points)
+    return score, (f'{service_points} direct service evidence + {corroboration} independent corroboration '
+                   f'+ {validity_points} validity + {origin_points} origin precision '
+                   f'+ {proximity_points:.1f} straight-line proximity. Heuristic fit score out of 100.')
 
 
 def new_alternatives(before, after):

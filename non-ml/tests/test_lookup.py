@@ -13,6 +13,7 @@ from facility_tool.moderation import ModerationStack
 from facility_tool.query_assets import prepare_lookup_assets
 from facility_tool.response import new_alternatives, record_call, report_unconfirmed_call
 from facility_tool.updates import contact_evidence, load_estimates
+from facility_tool.verification import verify_services
 from facility_tool.workspace import Store, load_inputs, read_config
 
 
@@ -54,11 +55,12 @@ class LookupWorkflowTest(unittest.TestCase):
         _, locations, _ = audit_locations(records, entities, postal, links=links)
         entities = attach_routing_review(entities, locations)
         estimates, _ = demo_overlays(entities, config['as_of'])
+        claims = extract_claims(records, links, config['service_aliases'], config['as_of'])
         with TemporaryDirectory() as tmp:
             store = Store(ROOT, 'demo', config['as_of'], tmp)
             sources = {
                 'entities': entities, 'postal_areas': postal, 'location_entity_review': locations,
-                'claims': extract_claims(records, links, config['service_aliases'], config['as_of']),
+                'verified_claims': claims, 'service_verification': verify_services(claims, config['as_of']),
                 'field_updates': estimates, 'contact_evidence': contact_evidence(records, links),
                 'pressure_scenarios': demo_pressure(entities),
             }
@@ -72,11 +74,17 @@ class LookupWorkflowTest(unittest.TestCase):
                 settings = dict(concern='I need dialysis', location='Jaipur, Rajasthan', traveltime_enabled=True)
                 result = lookup(store, config, **settings)
                 routing.assert_not_called()
+                self.assertEqual((result['transport_mode'], result['route_sort']), ('driving', 'distance'))
+                transit = lookup(store, config, **settings, travel_mode='public_transport')
+                self.assertEqual((transit['transport_mode'], transit['route_sort']), ('public_transport', 'time'))
+                with self.assertRaisesRegex(ValueError, 'Choose time'):
+                    lookup(store, config, **settings, travel_mode='public_transport', route_sort='distance')
             recommended = result['rows'].query("mode == 'confirmed' and kind == 'recommendation'")
             with_phone = recommended.loc[recommended['phone_number'].notna()].iloc[0]
             self.assertTrue(with_phone['phone_source_urls'][0].startswith('https://example.invalid/'))
             self.assertTrue(with_phone['location_source_urls'][0].startswith('https://example.invalid/'))
             self.assertIn('Heuristic fit score', with_phone['fit_score_basis'])
+            self.assertEqual(with_phone['verification_status'], 'single_direct_source')
 
             first = recommended.iloc[0]['facility_id']
             feedback = record_call((), 'dialysis', first, confirmed=False)

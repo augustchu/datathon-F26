@@ -54,6 +54,14 @@ def routes(**times):
     ])
 
 
+def driving_routes(**estimates):
+    return pd.DataFrame([
+        dict(facility_id=branch, route_distance_km=kilometers, travel_minutes=minutes,
+             travel_mode="driving", travel_source="Synthetic road route", travel_source_url="https://example.org/route")
+        for branch, (kilometers, minutes) in estimates.items()
+    ])
+
+
 def query(entities, claims, updates=None, measurements=None, **kwargs):
     return compare_modes(
         pd.DataFrame(entities), pd.DataFrame(claims), 28.0, 77.0, SERVICE,
@@ -232,6 +240,59 @@ class RecommendationTests(unittest.TestCase):
         self.assertEqual(set(self.first_rows(partial)["facility_id"]), {"first"})
         self.assertEqual(set(self.first_rows(partial)["travel_minutes"]), {20})
         self.assertEqual(set(partial["summary"]["ranking_travel_metric"]), {"straight_line_km"})
+
+    def test_requested_driving_distance_can_rank_differently_from_time(self):
+        matrix = driving_routes(first=(6, 30), near=(4, 45), far=(22, 55))
+        by_distance = query(self.entities, self.claims, travel_times=matrix, route_sort="distance")
+        by_time = query(self.entities, self.claims, travel_times=matrix, route_sort="time")
+        first = self.first_rows(by_distance)
+        self.assertEqual(set(first["facility_id"]), {"near"})
+        self.assertEqual(set(self.first_rows(by_time)["facility_id"]), {"first"})
+        self.assertEqual(set(first["ranking_travel_metric"]), {"route_distance_km"})
+        self.assertEqual(set(first["route_distance_km"]), {4})
+        self.assertEqual(set(first["travel_minutes"]), {45})
+        self.assertEqual(set(first["travel_mode"]), {"driving"})
+        self.assertEqual(set(first["travel_source_url"]), {"https://example.org/route"})
+        self.assertEqual(set(first["extra_route_km_vs_baseline"]), {0})
+
+    def test_incomplete_or_mixed_mode_route_distance_falls_back_without_dropping_estimates(self):
+        incomplete = driving_routes(first=(6, 30), near=(4, 15), far=(None, 55))
+        mixed = driving_routes(first=(6, 30), near=(4, 15), far=(25, 55))
+        mixed.loc[mixed["facility_id"].eq("far"), "travel_mode"] = "cycling"
+        for matrix in (incomplete, mixed):
+            with self.subTest(matrix=matrix):
+                result = query(self.entities, self.claims, travel_times=matrix, route_sort="distance")
+                first = self.first_rows(result)
+                self.assertEqual(set(first["facility_id"]), {"first"})
+                self.assertEqual(set(first["ranking_travel_metric"]), {"straight_line_km"})
+                self.assertEqual(set(first["route_distance_km"]), {6})
+                self.assertTrue(first["ranking_travel_reason"].str.contains("unavailable for the full set").all())
+
+    def test_load_detour_enforces_both_driving_distance_and_minutes(self):
+        matrix = driving_routes(first=(20, 20), near=(32, 21), far=(22, 60))
+        pressures = pd.DataFrame([pressure("first", 100, 100), pressure("near", 0, 100), pressure("far", 0, 100)])
+        measurements = [load("first", 1), load("near", 10), load("far", 10)]
+        for route_sort in ("time", "distance"):
+            common = dict(
+                spread_demand=True, route_sort=route_sort, travel_times=matrix,
+                max_extra_km=5, max_extra_minutes=10, travel_weight=0,
+            )
+            with self.subTest(route_sort=route_sort):
+                weighted = query(self.entities, self.claims, pressure_inputs=pressures, **common)
+                measured = query(self.entities, self.claims, measurements=measurements, **common)
+                self.assertEqual(set(self.first_rows(weighted)["facility_id"]), {"first"})
+                self.assertEqual(set(self.first_rows(measured)["facility_id"]), {"first"})
+                self.assertEqual(set(weighted["summary"]["weighted_status"]), {"no_comparable_alternative_within_detour"})
+                self.assertEqual(set(measured["summary"]["load_status"]), {"no_fresh_comparable_measurements"})
+
+    def test_time_ranking_still_caps_straight_line_detour_without_route_km(self):
+        result = query(
+            self.entities, self.claims, measurements=[load("first", 1), load("near", 4), load("far", 10)],
+            travel_times=routes(first=20, near=21, far=22), route_sort="time",
+            spread_demand=True, max_extra_km=5, max_extra_minutes=10,
+        )
+        self.assertEqual(set(self.first_rows(result)["facility_id"]), {"near"})
+        self.assertEqual(set(self.first_rows(result)["ranking_travel_metric"]), {"route_minutes"})
 
     def test_mixed_routes_use_one_score_basis_and_honor_known_time_cap(self):
         pressures = pd.DataFrame([pressure("first", 100, 100), pressure("near", 0, 100), pressure("far", 10, 100)])

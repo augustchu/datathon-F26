@@ -1,4 +1,4 @@
-"""Optional point-to-point route estimates from the TravelTime time-filter API."""
+"""Optional point-to-point journey times and distances from TravelTime."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ import json
 from math import isfinite
 from numbers import Integral
 import os
+from sys import float_info
 from urllib.error import HTTPError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -20,6 +21,7 @@ ENDPOINT = "https://api.traveltimeapp.com/v4/time-filter"
 SOURCE = "TravelTime time-filter"
 SOURCE_URL = "https://docs.traveltime.com/api/reference/travel-time-distance-matrix"
 MODES = ("driving", "walking", "cycling", "public_transport")
+DISTANCE_MODES = ("driving", "walking", "cycling")
 SEARCH_ID = "from-origin"
 BLOCKED_QUALITIES = (
     "missing", "invalid", "conflict", "ambiguous", "placeholder", "centroid",
@@ -94,7 +96,29 @@ def _credential(value, environment_name):
     return value.strip() if isinstance(value, str) else ""
 
 
-def _response_estimates(response, window_seconds):
+def _route_measurements(properties, window_seconds, include_distance):
+    routes = []
+    for route in properties:
+        if not isinstance(route, dict):
+            continue
+        seconds = route.get("travel_time")
+        if seconds is not None and (type(seconds) not in (int, float) or not 0 <= seconds <= window_seconds):
+            continue
+        meters = route.get("distance") if include_distance else None
+        if type(meters) not in (int, float) or not 0 <= meters <= float_info.max:
+            meters = None
+        if seconds is not None or meters is not None:
+            routes.append((seconds, meters))
+    if not routes:
+        return None
+    # Preserve the fastest valid returned route. Tie-break with matching distance.
+    seconds, meters = min(routes, key=lambda route: tuple(
+        value if value is not None else float("inf") for value in route
+    ))
+    return seconds / 60 if seconds is not None else None, meters / 1000 if meters is not None else None
+
+
+def _response_estimates(response, window_seconds, include_distance):
     if not isinstance(response, dict) or not isinstance(response.get("results"), list):
         raise ValueError("Unexpected TravelTime response structure.")
     searches = [row for row in response["results"] if isinstance(row, dict) and row.get("search_id") == SEARCH_ID]
@@ -114,15 +138,11 @@ def _response_estimates(response, window_seconds):
             continue
         seen.add(key)
         properties = row.get("properties")
-        if not isinstance(properties, list):
+        if not isinstance(properties, list) or key in unreachable:
             continue
-        seconds = [value.get("travel_time") for value in properties if isinstance(value, dict)]
-        valid_seconds = [
-            value for value in seconds
-            if type(value) in (int, float) and 0 <= value <= window_seconds
-        ]
-        if valid_seconds and key not in unreachable:
-            estimates[key] = min(valid_seconds) / 60
+        route = _route_measurements(properties, window_seconds, include_distance)
+        if route is not None:
+            estimates[key] = route
     return estimates, unreachable - seen
 
 
@@ -146,7 +166,10 @@ def estimate_travel(
     distance enter the matrix first, breaking ties by facility ID. The returned
     table preserves all input IDs and their order. A missing estimate remains
     null, including destinations the provider lists as unreachable within the
-    search window. Use the same returned table across recommendation modes.
+    search window. Distance in kilometers refers to the same returned route
+    as time in minutes. The matrix supports distance for driving, walking and
+    cycling. It returns time for public transport. Use the same returned
+    table across recommendation modes.
 
     The opt-in request sends coordinates, a departure timestamp, transport
     mode, a search window, and temporary destination IDs to TravelTime. The
@@ -164,6 +187,7 @@ def estimate_travel(
     result = pd.DataFrame({
         "facility_id": ids.reset_index(drop=True),
         "travel_minutes": float("nan"),
+        "route_distance_km": float("nan"),
         "travel_source": "",
         "travel_status": "disabled",
         "travel_mode": "",
@@ -215,6 +239,7 @@ def estimate_travel(
     chosen = list(destination_positions.values())
     result.loc[chosen, "departure_time"] = departure
     result.loc[chosen, "travel_status"] = "missing_result"
+    include_distance = mode in DISTANCE_MODES
     payload = {
         "locations": locations,
         "departure_searches": [{
@@ -224,12 +249,12 @@ def estimate_travel(
             "departure_time": departure,
             "transportation": {"type": mode},
             "travel_time": window_seconds,
-            "properties": ["travel_time"],
+            "properties": ["travel_time", "distance"] if include_distance else ["travel_time"],
         }],
     }
     try:
         response = _post_json(payload, app_id=app_id, api_key=api_key, timeout=timeout)
-        estimates, unreachable = _response_estimates(response, window_seconds)
+        estimates, unreachable = _response_estimates(response, window_seconds, include_distance)
     except HTTPError as error:
         status = {401: "credential_or_plan_rejected", 403: "credential_or_plan_rejected", 429: "rate_limited"}
         result.loc[chosen, "travel_status"] = status.get(
@@ -246,7 +271,9 @@ def estimate_travel(
 
     for key, position in destination_positions.items():
         if key in estimates:
-            result.at[position, "travel_minutes"] = estimates[key]
+            minutes, kilometers = estimates[key]
+            result.at[position, "travel_minutes"] = minutes
+            result.at[position, "route_distance_km"] = kilometers
             result.at[position, "travel_source"] = SOURCE
             result.at[position, "travel_source_url"] = SOURCE_URL
             result.at[position, "travel_status"] = "estimated"

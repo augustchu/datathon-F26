@@ -85,7 +85,9 @@ def build_origin_index(entities, postal_areas):
     supplied. Withheld branches still contribute labels to ambiguity checks.
     Prefer cities, then postal districts, then districts based on facility
     coordinates. A preferred place with usable coordinates or ambiguous area
-    labels resolves the interpretation before considering later sources.
+    labels resolves the interpretation before considering later sources. A
+    state-qualified city with conflicting districts may use the corresponding
+    official postal district center when that district is uniquely resolved.
     """
     prepared = {}
     sources = (
@@ -97,7 +99,11 @@ def build_origin_index(entities, postal_areas):
     for (category, field, frame, facility), basis in zip(sources, _BASES):
         for key, row in _summarize(category, field, basis, _groups(frame, field, facility=facility)):
             previous = prepared.get(key)
-            if previous is None or previous[4] == 'unusable':
+            official_area_fallback = (
+                previous is not None and previous[1] == 'city' and previous[4] == 'ambiguous'
+                and field == 'district' and not facility and bool(row[3]) and row[4] == 'resolved'
+            )
+            if previous is None or previous[4] == 'unusable' or official_area_fallback:
                 prepared[key] = row
     return pd.DataFrame([prepared[key] for key in sorted(prepared)], columns=COLUMNS)
 
