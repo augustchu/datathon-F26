@@ -1,0 +1,402 @@
+{
+  "source": "NABH public healthcare organisation directory",
+  "source_url": "https://nabh.co/find-a-healthcare-organisation/",
+  "started_at_utc": "2026-11-21T17:05:12.740710+00:00",
+  "status": "success",
+  "requested_max_pages": 20,
+  "selection_method": "evenly spaced pages across advertised result range",
+  "requests": [
+    {
+      "method": "GET",
+      "url": "https://nabh.co/robots.txt",
+      "request_data": null,
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:13.772577+00:00",
+      "snapshot": "raw/robots.txt",
+      "bytes": 260,
+      "sha256": "25521203c9cae404b5cc347cc6d39905d2f7ef94247e76362893c68ef45076bf"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 1
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:16.571147+00:00",
+      "snapshot": "raw/page-0001.json",
+      "bytes": 104699,
+      "sha256": "134390755649710099dec67068cabd8d369a6f4021e62c8725fd303e9278c3c8"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 44
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:18.923295+00:00",
+      "snapshot": "raw/page-0044.json",
+      "bytes": 91353,
+      "sha256": "cefead2cbfb3f9cc1445df3a89028e748f1b7d9a34e066ae75bb9cb741934936"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 87
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:21.251706+00:00",
+      "snapshot": "raw/page-0087.json",
+      "bytes": 95414,
+      "sha256": "ad29da750e8b3286b52a728b8472ccd9013ccccc6844eaacdfd9bfd95286189a"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 130
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:23.810302+00:00",
+      "snapshot": "raw/page-0130.json",
+      "bytes": 109025,
+      "sha256": "1930240c64b0ee90e6a5c7aadd49d50189fc9f32894dd1d979a91a6081422e9c"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 174
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:26.135769+00:00",
+      "snapshot": "raw/page-0174.json",
+      "bytes": 88423,
+      "sha256": "aad40c524163a9240b75a469e05e2d1ee920f309f1fcdfcceee98e4bc34a584a"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 217
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:28.718115+00:00",
+      "snapshot": "raw/page-0217.json",
+      "bytes": 104310,
+      "sha256": "bd59ccfbb36331d504411b16a003373cb47615983589abf1d4b37709c2627c82"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 260
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:31.073902+00:00",
+      "snapshot": "raw/page-0260.json",
+      "bytes": 94613,
+      "sha256": "3b3d1dffdda9865792ac63f50721b7503bfd0944a6880f91aae7dc1174ad8db3"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 303
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:33.481043+00:00",
+      "snapshot": "raw/page-0303.json",
+      "bytes": 98190,
+      "sha256": "102f5436c84180d69c71b6719a80095af587d58966dd3562689f2f7a56a29005"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 347
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:35.969319+00:00",
+      "snapshot": "raw/page-0347.json",
+      "bytes": 97083,
+      "sha256": "2df3b60b50f984dcafcee91a518b8a6b6ac5b8ffc455f809d037c543ebb7dd03"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 390
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:38.393681+00:00",
+      "snapshot": "raw/page-0390.json",
+      "bytes": 105179,
+      "sha256": "fcdc70200a2f12f087628fe5e192da6277ca5ee3cdbe705a4efe4b5afaa60bb7"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 433
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:40.797416+00:00",
+      "snapshot": "raw/page-0433.json",
+      "bytes": 94352,
+      "sha256": "75b299acd0c525ee918297dd4a71af45f28bf30e110072176b9b7f9c73edbd90"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 476
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:43.227260+00:00",
+      "snapshot": "raw/page-0476.json",
+      "bytes": 99107,
+      "sha256": "5f50df695258aa78256e4a6459e6ccd3204b9e8406ed33ffad405f326d1ea2bf"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 520
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:45.727640+00:00",
+      "snapshot": "raw/page-0520.json",
+      "bytes": 97752,
+      "sha256": "fffe6f09b627abb0b9e9e58cba4163dbccbc463828663b1f115f588af5332e07"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 563
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:48.486973+00:00",
+      "snapshot": "raw/page-0563.json",
+      "bytes": 81505,
+      "sha256": "be5933b7e68abdf5faa6b136086ae3c9fa38993e250a9403ab412e023148c5fe"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 606
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:50.854852+00:00",
+      "snapshot": "raw/page-0606.json",
+      "bytes": 91045,
+      "sha256": "4d4afb52ad3c4ab59729977c2ee0c46cea7a4756679a6bf624d979e55c7fca18"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 649
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:53.228510+00:00",
+      "snapshot": "raw/page-0649.json",
+      "bytes": 93086,
+      "sha256": "897904ca3a430ef73cf9bc2aaeab5c502355fed33ce6e6e562ec94eeb8d2d089"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 693
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:55.568041+00:00",
+      "snapshot": "raw/page-0693.json",
+      "bytes": 98294,
+      "sha256": "4c902d5eb0de921271c3eaa0430bc17c4f40973c59d31542b783231ecf5d1075"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 736
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:05:57.979553+00:00",
+      "snapshot": "raw/page-0736.json",
+      "bytes": 101346,
+      "sha256": "4051b6a33fdd322003e924cbec705571828d6ddd28108ab6c6280845891337a2"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 779
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:06:00.573376+00:00",
+      "snapshot": "raw/page-0779.json",
+      "bytes": 98324,
+      "sha256": "0ba439840d51a4217f2c169c29f0c6ed7bf5310d10dc743ead25fd256792c4c3"
+    },
+    {
+      "method": "POST",
+      "url": "https://nabh.co/wp-admin/admin-ajax.php",
+      "request_data": {
+        "action": "get_hospitals",
+        "q": "",
+        "lat": "",
+        "long": "",
+        "selectedSpecText": "",
+        "page": 822
+      },
+      "status_code": 200,
+      "retrieved_at_utc": "2026-11-21T17:06:03.537760+00:00",
+      "snapshot": "raw/page-0822.json",
+      "bytes": 99324,
+      "sha256": "2ef1f775360c476ad20f4a335fd7c70860b3b068aaf7134a8d50ce58170b68f0"
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Partial directory extract unless complete_directory is true.",
+    "Listings may include accreditation, certification, empanelment, and renewal; statuses are preserved verbatim.",
+    "NABH warns that website migration can cause incomplete or inconsistent records.",
+    "Directory presence is not evidence of current service availability.",
+    "No certificate contents or service scope inferred; URLs are retained for further verification.",
+    "Missing or fragment-only certificate links are blank; signed URLs are flagged as temporary."
+  ],
+  "advertised_total_pages": 865,
+  "advertised_total_results": 21609,
+  "selected_pages": [
+    1,
+    44,
+    87,
+    130,
+    174,
+    217,
+    260,
+    303,
+    347,
+    390,
+    433,
+    476,
+    520,
+    563,
+    606,
+    649,
+    693,
+    736,
+    779,
+    822
+  ],
+  "complete_directory": false,
+  "finished_at_utc": "2026-11-21T17:06:03.552967+00:00",
+  "row_count": 500,
+  "unique_record_count": 499,
+  "coordinate_count": 449,
+  "reprocessed_at_utc": "2026-11-21T17:08:34.768854+00:00",
+  "certificate_link_missing_count": 109,
+  "certificate_url_temporary_count": 77,
+  "parser_version": 2
+}

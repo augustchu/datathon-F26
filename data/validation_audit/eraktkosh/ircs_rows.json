@@ -1,0 +1,786 @@
+[
+  {
+    "serial": "1",
+    "state": "Andhra Pradesh",
+    "name_district": "Ananthpur",
+    "address": "IRCS Blood Centre Govt,G,G Hospital Compound,Opp. Chenakesava Temple,Near TadipatriBus stand , Old Town Ananthapuram -515005",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "2",
+    "state": "Andhra Pradesh",
+    "name_district": "Bhimavaram",
+    "address": "# 6/94/5,Near Punchyath Offie,Rayalam,Bhimavaram,West Godavari District 534208",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "3",
+    "state": "Andhra Pradesh",
+    "name_district": "Chittoor",
+    "address": "District Govt.Head querters ,Hospital Campus,Chittoor",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "4",
+    "state": "Andhra Pradesh",
+    "name_district": "Eluru",
+    "address": "Government Hospital Compound,Eluru,AP",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "5",
+    "state": "Andhra Pradesh",
+    "name_district": "Guntur",
+    "address": "RedCross Blood Bank,IRCS, Zillapartishath Compound ,Guntur",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "6",
+    "state": "Andhra Pradesh",
+    "name_district": "Kadapa",
+    "address": "#10/971,Oppiste Matti peadapuli Centre,Trunk Raod, Near Chennur Bus Stand,Kadapa Town ,Kadapa District -516001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "7",
+    "state": "Andhra Pradesh",
+    "name_district": "Kakinada, Gandhinagar",
+    "address": "Red Cross Building ,Red Cross Street,Gandhi Nager,Kakinada",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "8",
+    "state": "Andhra Pradesh",
+    "name_district": "Kavali",
+    "address": "RDO Office Compound,Kavali, SPSR.NelloreDistrict",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "9",
+    "state": "Andhra Pradesh",
+    "name_district": "Krishna -Machilipatum, Dr Pattabhi Red Cross Blood Centre",
+    "address": "DM&HO Campus, 21/276,Parasupeta, Machilipatnam,Krishna District,AP",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "10",
+    "state": "Andhra Pradesh",
+    "name_district": "Kurnool",
+    "address": "Indian Red Cross Society,\nDM & HO Compound,\nGovt.General Hospital Road,\nKurnool-518002,\nAndhra Pradesh",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "11",
+    "state": "Andhra Pradesh",
+    "name_district": "Narasapuram",
+    "address": "# IRCS-Blood Centre ,Area Hospital Compound, Narsapuram,West Godavari",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "12",
+    "state": "Andhra Pradesh",
+    "name_district": "Nellore",
+    "address": "Red Cross Road, Near Madras Bus Stand,Oppoiste Vegitable Market,Nellore-524003,SPSR.Nellore District .",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "13",
+    "state": "Andhra Pradesh",
+    "name_district": "Ongole",
+    "address": "IRCS-Blood Bank, Vantavari Colony,Opposite Vegiatble Market, Ongole,Prakasam Dist.AP",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "14",
+    "state": "Andhra Pradesh",
+    "name_district": "Palanadu",
+    "address": "3rd , New Government Hospital, Lingmguntla,Narsarao pet,Palnadu District.522601",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "15",
+    "state": "Andhra Pradesh",
+    "name_district": "Repalle",
+    "address": "Repalle Govt. Hospital campus",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "16",
+    "state": "Andhra Pradesh",
+    "name_district": "Srikakulam",
+    "address": "IRCS,Blood Center,Door-8-5-2/A,OppositeBapujiKalamandir, Palakonda Road,DM&HO Compound,Srikakulam",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "17",
+    "state": "Andhra Pradesh",
+    "name_district": "Tanuku",
+    "address": "# IRCS Blood Centre, Doddipatlavari Street,Tanuku, West Godavari530211",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "18",
+    "state": "Andhra Pradesh",
+    "name_district": "Tirupati",
+    "address": "",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "19",
+    "state": "Andhra Pradesh",
+    "name_district": "Vijayawada",
+    "address": "Ircs Blood Bank- Vijayawada  Gandhi Nagar, G.S Raju Street D.No:#26-5-5, Red Cross Building, Vijayawada- 520 003.",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "20",
+    "state": "Andhra Pradesh",
+    "name_district": "Visakhapatnam",
+    "address": "Red Cross Building, Near Zillparishath Office, Maharanipet Visakahapatnam-530002",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "21",
+    "state": "Andhra Pradesh",
+    "name_district": "Vizianagaram",
+    "address": "T.S.No.1/13P, Beside Water Tank, NYK Building, Cantonment, Vizianagaram",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "22",
+    "state": "Bihar",
+    "name_district": "Arrah",
+    "address": "",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "23",
+    "state": "Bihar",
+    "name_district": "Motihari",
+    "address": "Indian Red Cross Society, District Branch East Champaran, Red Cross Bhawan Hospital Road Motihari  – 845401",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "24",
+    "state": "Bihar",
+    "name_district": "Muzaffarpur",
+    "address": "",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "25",
+    "state": "Bihar",
+    "name_district": "Patna",
+    "address": "Red Cross Blood Bank Indian Red Cross Society, Bihar State Branch, 1st floor Red Cross Bhawan, North of Gandhi Maidan, Patna – 800 001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "26",
+    "state": "Bihar",
+    "name_district": "Purnia",
+    "address": "Indian Red Cross Society District Branch Purnia Red  Cross Bhawan , Line Bazar Purnea – 854301",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "27",
+    "state": "Bihar",
+    "name_district": "Samstipur",
+    "address": "Indian Red Cross Society, District Branch, Red Cross Bhawan Samastipur – 848101",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "28",
+    "state": "Bihar",
+    "name_district": "Sitamarhi",
+    "address": "",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "29",
+    "state": "Chhattisgarh",
+    "name_district": "Durg",
+    "address": "Indian Red Cross Blood Bank,District Hospital Premises  Durg, Chhattisgarh  Pin Code:491001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "30",
+    "state": "Chhattisgarh",
+    "name_district": "Raipur",
+    "address": "DKS SUPER SPECIALITY HOSPITAL PREMISES NEAR SHASTRI CHOWK G.E. ROAD RAIPUR CG 492201",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "31",
+    "state": "D&N Haveli",
+    "name_district": "Silvasa",
+    "address": "Indian Red Cross Society Blood Bank Near Red Cross Bhawan, Silvasa,Dadar Nagar Havali-",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "32",
+    "state": "Delhi",
+    "name_district": "NHQ",
+    "address": "1 Red Cross Road Delhi-110001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "33",
+    "state": "Gujarat",
+    "name_district": "Ahmedabad",
+    "address": "Shri Kiran Chudgar Red Cross  shatabdi Bhavan, Navrang Circle to Stadium Road, Navrangpura, Ahmedabad",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "34",
+    "state": "Gujarat",
+    "name_district": "Amreli",
+    "address": "Mahatma Muldas Red Cross Bhavan, Civil Hospital Campus, Amreli",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "35",
+    "state": "Gujarat",
+    "name_district": "Anand",
+    "address": "“Sardar Bhavan”, Opp. Municipal Building,           Sardar Ganj road,                       Anand –388 001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "36",
+    "state": "Gujarat",
+    "name_district": "Petlad, Anand",
+    "address": "Opp. Ranchodji Temple, Petlad,  Dist: Anand",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "37",
+    "state": "Gujarat",
+    "name_district": "Tarapur, Anand",
+    "address": "Old Water Tank,            Nr. High School, Station Road, Tarapura, Dist. Anand",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "38",
+    "state": "Gujarat",
+    "name_district": "Bharuch",
+    "address": "Sevashram Hospital Compound, Bharuch",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "39",
+    "state": "Gujarat",
+    "name_district": "Bhavnagar",
+    "address": "Diwanpara, Bhavnagar",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "40",
+    "state": "Gujarat",
+    "name_district": "Ahwa, Dang",
+    "address": "Civil Hospital,                Ahwa, Dist. : Dang",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "41",
+    "state": "Gujarat",
+    "name_district": "Dahod",
+    "address": "Dr. Harilal C.Sheth Red Cross Bhavan, Police Line road,                                                      Dahod-389151",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "42",
+    "state": "Gujarat",
+    "name_district": "Kalol, Gandhinagar",
+    "address": "Red Cross Blood Centre, Khuni Bunglow Chowk, Kalol",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "43",
+    "state": "Gujarat",
+    "name_district": "Nadiad, Kheda",
+    "address": "Shri H.V.Desai Blood Bank,Red Cross Building, Santram Road, Nadiad-387001,Dist:- Kheda",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "44",
+    "state": "Gujarat",
+    "name_district": "Kapadwanj, Kheda",
+    "address": "C.R. Parikh Blood Bank, Kapadwanj, Dist. : Kheda",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "45",
+    "state": "Gujarat",
+    "name_district": "Mahisagar",
+    "address": "3rd Floor, District Panchayat Building, Lunawada.",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "46",
+    "state": "Gujarat",
+    "name_district": "Narmada",
+    "address": "Old Dist. Panchayat Bilding, Raj Pipala,",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "47",
+    "state": "Gujarat",
+    "name_district": "Navsari",
+    "address": "B.K.Shah Red Cross Bhavan,                                         Station Road,                                                                       Navsari-396445",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "48",
+    "state": "Gujarat",
+    "name_district": "Godhara, Panchmahal",
+    "address": "Civil Lines, Godhara, Dist. : Panchmahal",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "49",
+    "state": "Gujarat",
+    "name_district": "Patan",
+    "address": "Red Cross Bhavan,        Nr. Padmnabh Cross Road, Patan-384265",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "50",
+    "state": "Gujarat",
+    "name_district": "Rajkot",
+    "address": "Red Cross Blood Bank,Red Cross Building,1st Floor, Suchak road, Nr.Kundaliya College",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "51",
+    "state": "Gujarat",
+    "name_district": "Himmatnagar, Sabarkantha",
+    "address": "Red Cross Bhavan,  Nr. G.P.O. ,         State Highway, Himmatnagar-383001, Dist:-Sabarkantha",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "52",
+    "state": "Gujarat",
+    "name_district": "Surat",
+    "address": "Opp. : TVS Showroom, Nr. Gujarat Gas Circle, Adajan, Surat",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "53",
+    "state": "Gujarat",
+    "name_district": "Vyara, Tapi",
+    "address": "Maliba Raktdan Bhavan, Vyara",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "54",
+    "state": "Gujarat",
+    "name_district": "Bhuj, Kachchh",
+    "address": "Red Cross Bhavan   Opp. : Trimandir, Bhuj",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "55",
+    "state": "Gujarat",
+    "name_district": "Veraval, Gir Somnath",
+    "address": "RED CROSS BHAVAN, Gitanagar, Junagadh Road,  Veraval",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "56",
+    "state": "Gujarat",
+    "name_district": "Vadodara",
+    "address": "Red Cross Blood Centre    First Floor, Behind Railway Station, Alkapuri, Vadodara",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "57",
+    "state": "Gujarat",
+    "name_district": "Palanpur, Banaskantha",
+    "address": "3RD Floor, Somnath Plasa, Abu Road, Palanpur",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "58",
+    "state": "Gujarat",
+    "name_district": "Gandhinagar",
+    "address": "Nr. NHM Bhavan, Civil Hospital Campus, Gandhinagar",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "59",
+    "state": "Haryana",
+    "name_district": "Panipat",
+    "address": "Red Cross Bhawan, G.T. Road, Panipat",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "60",
+    "state": "Himachal Pradesh",
+    "name_district": "Nalagarh (Solan)",
+    "address": "CHC Nalagarh, District Solan",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "61",
+    "state": "Jharkhand",
+    "name_district": "Bokaro",
+    "address": "Near Bokaro Airport, Sector – 1, Bokaro Steel City, Bokaro",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "62",
+    "state": "Jharkhand",
+    "name_district": "Chatra",
+    "address": "Near Post Office, Sadar Hospital Campus Chatra LIC No- JHlBBl36l2oL4",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "63",
+    "state": "Jharkhand",
+    "name_district": "Ranchi",
+    "address": "The Head of Department Blood Bank Red Cross Society,  Sadar Hospital, Morabadi, Ranchi-834008, Jharkhand",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "64",
+    "state": "Karnataka",
+    "name_district": "Bengaluru",
+    "address": "No.26, Red Cross Bhavan, 1st Floor, Race Course Road, Benglauru 560 001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "65",
+    "state": "Karnataka",
+    "name_district": "Bengaluru",
+    "address": "KLE Hospital, #19, 2nd Floor, 2nd Main, Ravi Kirloskar Road, 1st Phase, Peenya Industrial Area, Bangalore -560 058",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "66",
+    "state": "Karnataka",
+    "name_district": "Chickaballapura",
+    "address": "Old Govt. Hospital Premises, Chikkaballapura",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "67",
+    "state": "Karnataka",
+    "name_district": "Davangere",
+    "address": "NA",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "68",
+    "state": "Karnataka",
+    "name_district": "Koppal",
+    "address": "Indian Red Cross Society, Blood Centre, 1st Floor, New District Hospital, Hospet Road Koppal-583231 Karnataka",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "69",
+    "state": "Karnataka",
+    "name_district": "Mangalore, Dakshina Kannada",
+    "address": "Govt. Lady Goschen Hospital Premises, Mangalore",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "70",
+    "state": "Karnataka",
+    "name_district": "Sagara, Shivamogga",
+    "address": "Rotary-Red Cross Blood Centre Sub Divisional Hospital                               J.C. Road Sagar-577401",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "71",
+    "state": "Karnataka",
+    "name_district": "Shimoga",
+    "address": "Red Cross Sanjeevini blood center J P N Road 1st Cross Shimoga 577201",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "72",
+    "state": "Karnataka",
+    "name_district": "Udupi. Kundapara",
+    "address": "Indian Red Cross society Blood Centre Kundapura.\n1st floor, Govt Hospital Building,\nMunicipal road Kundapura.\nUdupi – District\nKarnataka -state 576201",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "73",
+    "state": "Karnataka",
+    "name_district": "Vijayapura",
+    "address": "INDIAN RED CROSS SOCIETY Gurubasappa Rodagi Memorial Components Blood Centre Near Shivaji Circle DHO Office Compound Vijayapura-586101",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "74",
+    "state": "Karnataka",
+    "name_district": "Raichur",
+    "address": "Indian Red Cross Society Blood Centre, Raichur, MPL No.12-11-12 to 12-11-20, Veerasaiva Samaja Complex, First Floor, Beside Veershaiva Kalyana Mantapa, Basaveshwara Road, Raichur",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "75",
+    "state": "Madhya Pradesh",
+    "name_district": "Bhopal",
+    "address": "Red Cross Blood Bank, Red Cross Hospital Campus, Shivaji Nagar, Bhopal",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "76",
+    "state": "Madhya Pradesh",
+    "name_district": "Dabra Distt Gwalior",
+    "address": "Blood Bank, Indian Red Cross Society, Hospital Campus, Red Cross Building,  Dabra",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "77",
+    "state": "Madhya Pradesh",
+    "name_district": "Gwalior",
+    "address": "Red Cross Bhawan, Near Dr.Kaul  Hospital, Kampoo, Gwalior",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "78",
+    "state": "Madhya Pradesh",
+    "name_district": "Indore",
+    "address": "Indian Red Cross Society, Blood Bank, Chawani Hatt Maidan, Near Agarwal Kanya Vidhyalaya, Indore",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "79",
+    "state": "Madhya Pradesh",
+    "name_district": "Mhow Dist, Indore",
+    "address": "Indian Red Cross Society, Blood Bank, Red Cross Hospital, Mhow",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "80",
+    "state": "Madhya Pradesh",
+    "name_district": "Neemuch",
+    "address": "District Hospital Campus, Neemuch",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "81",
+    "state": "Madhya Pradesh",
+    "name_district": "Singrauli",
+    "address": "Red Cross Blood Centre, NTPC Hospital Vindhya Nagar, Singrauli",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "82",
+    "state": "Madhya Pradesh",
+    "name_district": "Sagar",
+    "address": "Civil Hospital, Khurai, Sagar",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "83",
+    "state": "Madhya Pradesh",
+    "name_district": "Dewas",
+    "address": "Indian Red Cross Society, Geeta Bhawan, Station Road, Dewas.",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "84",
+    "state": "Madhya Pradesh",
+    "name_district": "Rewa",
+    "address": "",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "85",
+    "state": "Maharashtra",
+    "name_district": "IRCS (Late Manikbai Chandulal Saraf) Blood Centre\nBaramati, Pune",
+    "address": "IRCS (Late Manikbai Chandulal Saraf) Blood Centre\nNr. Govt. Silver Jubilee Hospital,\nPatas Road Baramati,\nPune-413102 (Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "86",
+    "state": "Maharashtra",
+    "name_district": "Barshi, Shriman Rambhai Shah Blood Bank, jawahar",
+    "address": "Jawahar Hospital compound Somwar peth Barshi 413401 Dist Solapur Maharashtra",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "87",
+    "state": "Maharashtra",
+    "name_district": "Chopda, Jalgaon Dist",
+    "address": "Indian Red Cross Society,\nAskaran Tarachand Jain Blood Centre\n1st Floor , Jawahar Market,\nNear Tehsil Kacheri,\nChopda:-425 107 (Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "88",
+    "state": "Maharashtra",
+    "name_district": "Dr Balachandra Blood Centre, Latur",
+    "address": "Indian Red Cross Society,\nDr. Bhalchandra Blood Centre,\nGandhi Market, Near Bus Stand,\nRed  Cross Bhavan, Latur-413512(Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "89",
+    "state": "Maharashtra",
+    "name_district": "Bai Gopabai Damani Blood Centre,\nSolapur",
+    "address": "Indian Red Cross Society,\nBai Gopabai Damani Blood Centre,\n165 Railway Line ,Red Cross Road,\nDufferin Chowk ,Solapur-413001(Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "90",
+    "state": "Maharashtra",
+    "name_district": "Jalgaon",
+    "address": "Indian Red Cross Society Blood Centre, Jalgaon\nRed Cross Bhavan,\nCivil Hospital Road,\nNear B. J. Market,\nJalgaon-425001 (Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "91",
+    "state": "Maharashtra",
+    "name_district": "IRCS Blood Centre, Mumbai",
+    "address": "141,Shahid Bhagat Singh Road,\nTown Hall Compound,  Fort,\nMumbai-400001 (Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "92",
+    "state": "Maharashtra",
+    "name_district": "Pandharpur, Solapur",
+    "address": "Indian Red Cross Society ,\nSarjubai Bajaj Blood Centre\n62/2/3/4, Bhakti Marg, Dist.: Solapur\nPandharpur – 413304 (Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "93",
+    "state": "Maharashtra",
+    "name_district": "Rajarshi Shahu Blood Bank Trust, Kolhapur",
+    "address": "Rajarshi Shahu Blood Centre\nKolhapur\nRotary Samaj Seva Kendra,\nNear Collector Office,\nKolhapur – 416001. (Maharashtra).",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "94",
+    "state": "Maharashtra",
+    "name_district": "Ratnagiri",
+    "address": "Indian Red Cross Society Blood Centre\nNagarparishad Compound,\nJaystambha,\nRatnagiri-415612(Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "95",
+    "state": "Maharashtra",
+    "name_district": "Sangli, Dr. Shirgaonkar Blood Bank",
+    "address": "Indian Red Cross Society, Dr. Shirgaonkar Blood Centre, Red Cross Chowk, Civil Hospital Road, Sangli 416416, Maharashtra",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "96",
+    "state": "Maharashtra",
+    "name_district": "IRCS Nagappa Amberkhane Blood Centre Udgir Distt Latur",
+    "address": "IRCS Nagappa Amberkhane Blood Centre, Udgir Tq. Udgir\nDist. Latur (Maharashtra)\nPin. 413517",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "97",
+    "state": "Maharashtra",
+    "name_district": "Vazirabad, Nanded",
+    "address": "Indian Red Cross Society Blood Centre,\nParsi Anjuman Complex,\nVazirabad,Nanded-431601(Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "98",
+    "state": "Maharashtra",
+    "name_district": "Bel Air Blood Centre, Wai, Dist. Satara",
+    "address": "IRCS Bel-Air Blood Centre,\nIRCS Bel-Air Multispeciality Hospital,\nWai – 412803 Dist. Satara (Maharashtra)",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "99",
+    "state": "Odisha",
+    "name_district": "Bhubneshwar",
+    "address": "Red Cross Regional blood centre Red Cross Bhawan, Bhubaneswar",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "100",
+    "state": "Odisha",
+    "name_district": "Cuttak",
+    "address": "Near BOSE (Engineering School), Po: Mangalabag, Dist: Cuttack – 753007.",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "101",
+    "state": "Punjab",
+    "name_district": "Ludhiana",
+    "address": "Red cross bhawan ,The mall,Ludhiana.Pin 141001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "102",
+    "state": "Tamil Nadu",
+    "name_district": "Chennai",
+    "address": "The Medical Officer, Blood Centre,\nIndian Red Cross Society, TN Branch,\nNo.32/50, Red Cross Road, Egmore, Chennai – 600 008.",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "103",
+    "state": "Tamil Nadu",
+    "name_district": "Thanjavur",
+    "address": "43, Medical College Road, Thanjavur – 613007",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "104",
+    "state": "Tamil Nadu",
+    "name_district": "Coimbatore",
+    "address": "",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "105",
+    "state": "Telangana",
+    "name_district": "Bhadrachalam ,Kothagudem",
+    "address": "9-1-18/4. flood shelter ,kunavaram road medical colony, bhadrachalam  pin 507111, bhadradrikothagudem (Di) Telangana",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "106",
+    "state": "Telangana",
+    "name_district": "Hanumakonda, Warangal",
+    "address": "# 2-7-941, Opposite: District Collectorate, Subedari, Hanumakonda District Telangana State – 506 001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "107",
+    "state": "Telangana",
+    "name_district": "Karimnagar",
+    "address": "IRCS Blood Centre # 4-1-22, Near SBI Main Branch. Osmanpura Karimnagar",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "108",
+    "state": "Telangana",
+    "name_district": "Mahabubnagar",
+    "address": "Offf. Adm No. 1-6-65/5/A, Modern High XRoad, Mahabubnagar – Dist. Telangana – State",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "109",
+    "state": "Telangana",
+    "name_district": "Mancherial",
+    "address": "Indian Red Cross Society, Ground floor, TSVVP Government District Hospital, Mancherial Telangana-504208.",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "110",
+    "state": "Telangana",
+    "name_district": "Nalgonda",
+    "address": "3-6-300, Red Cross Bhavan, Near Bus Stand, Nalgonda, Telangana – 508001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "111",
+    "state": "Telangana",
+    "name_district": "Nizamabad",
+    "address": "Indian Red Cross Society #5-5-8/1 Behind MRO Office Khaleelwadi , Nizamabad-503001",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  },
+  {
+    "serial": "112",
+    "state": "Telangana",
+    "name_district": "Vidyanagar,Hyderabad",
+    "address": "Red Cross Blood Center,      #1-9-310, Vidyanagar, street no:14, Achyuthreddy marg, Hyderabad, Telangana state-500044",
+    "source_url": "https://www.indianredcross.org/ircs/ircsbloodbanks/"
+  }
+]

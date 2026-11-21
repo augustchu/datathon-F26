@@ -1,0 +1,10 @@
+{
+  "source_url": "https://facility.abdm.gov.in/",
+  "fetched_at": "2026-11-21T17:03:23.579981+00:00",
+  "status": 403,
+  "final_url": "https://facility.abdm.gov.in/",
+  "bytes": 919,
+  "records": 0,
+  "status_label": "blocked_no_bypass",
+  "limitation": "HTTP 403 returned by public landing URL. No credentials, access workaround, or bulk records extracted."
+}
