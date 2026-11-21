@@ -74,6 +74,7 @@ This log was started on 2026-11-21 at the user's request. Earlier entries are re
 59. Added prepared documentary verification and reviewed seven primary-source statements for three matched branches. Separated corroboration from single-source evidence and retained applicable disagreements for review.
 60. Added estimated route distance and time to the optional TravelTime provider request. Set driving distance as the default route sort and exposed walking, cycling and public transport options. Verified the transport adapter and ordering with mocked responses.
 61. Verified the real prepared lookup after adding verified branch claims and model overlays. Jaipur dialysis returned the corroborated Soni Hospital branch with a cited phone. A separate real Jaipur blood-bank query returned five results with cited phones. Verified 59 local logic tests and executed all 11 notebooks in the fictional workflow. The original row exports, moderation database and calculated checkpoints stayed outside Git.
+62. Added a Hindi keypad call prototype for pre-deployment facility verification. The local preview confirmed branch gating, per-service answers, unanswered handling, and opt-in voice recording instructions. All 65 local tests passed. No calls were placed or recordings collected.
 
 ## Statistical validation requested
 

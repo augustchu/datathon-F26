@@ -74,6 +74,21 @@ python non-ml/moderate_reports.py --db /private/path/reports.sqlite3 history 12
 
 Moderation records review decisions. Changes to shared evidence or model training require a separate, sourced update.
 
+## Pre-deployment facility verification in Hindi
+
+Run this check on the facility branches and services the team plans to publish. Review each staff response or voice note alongside the published evidence before finalizing the recommendation snapshot. The lookup and patient follow-up workflow use their existing paths.
+
+[Preview the keypad flow](preview_hindi_ivr.py) with Python and fictional facility details. The first key confirms the branch. The next two describe dialysis and MRI. The final key requests a recording.
+
+```sh
+python non-ml/preview_hindi_ivr.py --services dialysis mri --keys 1 1 2 3
+python non-ml/preview_hindi_ivr.py --services dialysis mri --keys 1 1 2 3 --twiml
+```
+
+The call asks one service at a time. Staff can press **1** if the branch offers it, **2** if it does not, or **0** if unsure. Repeated silence or invalid input stays unanswered. After the checklist, **3** starts an optional recording for missed services. The Hindi prompt asks staff to omit patient details and press **#** when finished. Answers describe services offered at the branch. Appointment slots and current admission capacity have their own verification.
+
+The prototype emits a transcript, sample TwiML, or a simulated facility self-report. Live use needs a voice provider connection that stores each call’s branch ID and timestamp, validates callbacks, and handles retries for the same question. A recording is available for review after the provider reports completion. Keep access to live results and audio restricted. Twilio documents outbound calling to ordinary Indian numbers with an eligible international caller ID. Exotel is an option for an India-hosted voice flow. The preview runs locally and makes no calls or recordings. [Twilio Gather](https://www.twilio.com/docs/voice/twiml/gather) · [Twilio Record](https://www.twilio.com/docs/voice/twiml/record) · [Twilio India voice guidelines](https://www.twilio.com/en-us/guidelines/in/voice) · [Exotel programmable voice](https://developer.exotel.com/docs/exoml/programmable-voice)
+
 ## Tests
 
 ```sh
