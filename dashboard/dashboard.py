@@ -1,68 +1,97 @@
-"""Facility Finder: pick a service + a location, get ranked facilities with evidence.
+"""Facility Finder dashboard.
 
-Run locally:  streamlit run app.py
-Data: uses synthetic demo data by default; upload a CSV (schema in the sidebar)
-or edit load_data() to read your team's table (e.g. from Databricks SQL).
+Inputs (service + location, plus optional facility attributes) -> saved capacity model -> outputs on screen.
+
+Run:  streamlit run dashboard/dashboard.py
+Data: synthetic demo, a private facilities export (original table columns), or a CSV in this
+      dashboard's own schema. Model estimates follow the team's docs (non-ml/PROJECT_SUMMARY.md,
+      ML/MODEL_EVALUATION.md): they are tagged ML estimates, fill missing capacity only, never decide
+      whether a facility offers a service, and are withheld when inputs fall outside the training range.
 """
-import math
+import html
+import os
 import re
+import sys
+from pathlib import Path
 
+import folium
 import numpy as np
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from capacity_model import CapacityModel, MAX_BEDS, Z_LIMIT, available_models  # noqa: E402
 
 st.set_page_config(page_title="Facility Finder", page_icon="🏥", layout="wide")
+CALL_PROMPT = "Call this facility before traveling to verify the service, branch, and current availability."
 
 # ----------------------------------------------------------------------------
-# 1. SERVICE TAXONOMY  (edit freely; every service has a specialty + body area)
+# 1. SERVICE TAXONOMY
 # ----------------------------------------------------------------------------
 SERVICES = {
     "Dialysis": dict(specialty="Nephrology", area="Kidneys", urgent=False,
-                     equip=["hemodialysis machine", "RO water plant"],
-                     staff=["nephrologist", "dialysis technician"], related=[]),
+                     equip=["hemodialysis machine", "RO water plant"], staff=["nephrologist", "dialysis technician"], related=[],
+                     aliases=["dialysis", "haemodialysis", "hemodialysis", "peritoneal dialysis"]),
     "Emergency C-section": dict(specialty="Obstetrics & Gynecology", area="Pregnancy & childbirth", urgent=True,
-                                equip=["operation theatre", "blood bank"],
-                                staff=["obstetrician", "anesthetist"], related=["Maternity / delivery"]),
+                                equip=["operation theatre", "blood bank"], staff=["obstetrician", "anesthetist"],
+                                related=["Maternity / delivery"],
+                                aliases=["emergency c-section", "emergency c section", "emergency cesarean", "emergency caesarean"]),
     "Maternity / delivery": dict(specialty="Obstetrics & Gynecology", area="Pregnancy & childbirth", urgent=False,
-                                 equip=["labour room", "operation theatre"],
-                                 staff=["obstetrician"], related=[]),
+                                 equip=["labour room", "operation theatre"], staff=["obstetrician"], related=[],
+                                 aliases=["maternity", "obstetric", "normal delivery", "labour room", "gynecology", "gynaecology"]),
     "NICU": dict(specialty="Neonatology", area="Newborn", urgent=True,
-                 equip=["incubator", "ventilator", "phototherapy unit"],
-                 staff=["neonatologist"], related=["Pediatric care"]),
+                 equip=["incubator", "ventilator", "phototherapy unit"], staff=["neonatologist"], related=["Pediatric care"],
+                 aliases=["nicu", "neonatal intensive care", "sncu", "neonatology"]),
     "Pediatric care": dict(specialty="Pediatrics", area="Children", urgent=False,
-                           equip=["pediatric ward"], staff=["pediatrician"], related=[]),
+                           equip=["pediatric ward"], staff=["pediatrician"], related=[],
+                           aliases=["pediatric", "paediatric", "pediatrics", "paediatrics"]),
     "Cardiac surgery": dict(specialty="Cardiology & Cardiac Surgery", area="Heart", urgent=True,
-                            equip=["cath lab", "heart-lung machine", "ICU"],
-                            staff=["cardiac surgeon", "perfusionist"], related=["Cardiology consultation"]),
+                            equip=["cath lab", "heart-lung machine", "ICU"], staff=["cardiac surgeon", "perfusionist"],
+                            related=["Cardiology consultation"],
+                            aliases=["cardiac surgery", "cardiothoracic", "coronary artery bypass", "cabg", "heart surgery"]),
     "Cardiology consultation": dict(specialty="Cardiology & Cardiac Surgery", area="Heart", urgent=False,
-                                    equip=["ECG", "echocardiography"], staff=["cardiologist"], related=[]),
+                                    equip=["ECG", "echocardiography"], staff=["cardiologist"], related=[],
+                                    aliases=["cardiology", "cardiologist", "echocardiography"]),
     "MRI": dict(specialty="Radiology", area="Imaging (whole body)", urgent=False,
-                equip=["MRI scanner"], staff=["radiologist", "MRI technologist"], related=["CT scan"]),
+                equip=["MRI scanner"], staff=["radiologist", "MRI technologist"], related=["CT scan"],
+                aliases=["mri", "magnetic resonance"]),
     "CT scan": dict(specialty="Radiology", area="Imaging (whole body)", urgent=False,
-                    equip=["CT scanner"], staff=["radiologist"], related=[]),
+                    equip=["CT scanner"], staff=["radiologist"], related=[],
+                    aliases=["ct scan", "ct scanner", "computed tomography"]),
     "Burn care": dict(specialty="Plastic & Burn Surgery", area="Skin", urgent=True,
-                      equip=["burn unit", "operation theatre", "ICU"],
-                      staff=["plastic surgeon"], related=["Trauma / emergency"]),
+                      equip=["burn unit", "operation theatre", "ICU"], staff=["plastic surgeon"], related=["Trauma / emergency"],
+                      aliases=["burn care", "burn unit", "burns unit", "burn treatment"]),
     "Orthopedic surgery": dict(specialty="Orthopedics", area="Bones & joints", urgent=False,
-                               equip=["operation theatre", "C-arm / X-ray"],
-                               staff=["orthopedic surgeon", "anesthetist"], related=["Fracture care"]),
+                               equip=["operation theatre", "C-arm / X-ray"], staff=["orthopedic surgeon", "anesthetist"],
+                               related=["Fracture care"],
+                               aliases=["orthopedic", "orthopaedic", "joint replacement", "arthroplasty"]),
     "Fracture care": dict(specialty="Orthopedics", area="Bones & joints", urgent=True,
-                          equip=["X-ray", "plaster room"], staff=["orthopedic surgeon"], related=["Trauma / emergency"]),
+                          equip=["X-ray", "plaster room"], staff=["orthopedic surgeon"], related=["Trauma / emergency"],
+                          aliases=["fracture"]),
     "Dental care": dict(specialty="Dentistry", area="Teeth & mouth", urgent=False,
-                        equip=["dental chair", "dental X-ray"], staff=["dentist"], related=["Oral surgery"]),
+                        equip=["dental chair", "dental X-ray"], staff=["dentist"], related=["Oral surgery"],
+                        aliases=["dental", "dentist", "dentistry", "orthodontic", "endodontic"]),
     "Oral surgery": dict(specialty="Dentistry", area="Teeth & mouth", urgent=False,
-                         equip=["operation theatre", "dental X-ray"], staff=["oral surgeon"], related=["Dental care"]),
+                         equip=["operation theatre", "dental X-ray"], staff=["oral surgeon"], related=["Dental care"],
+                         aliases=["oral surgery", "maxillofacial"]),
     "Cataract surgery": dict(specialty="Ophthalmology", area="Eyes", urgent=False,
-                             equip=["operating microscope", "phaco machine"], staff=["ophthalmologist"], related=[]),
+                             equip=["operating microscope", "phaco machine"], staff=["ophthalmologist"], related=[],
+                             aliases=["cataract", "phacoemulsification"]),
     "Stroke care": dict(specialty="Neurology", area="Brain & nerves", urgent=True,
-                        equip=["CT scanner", "ICU", "thrombolysis protocol"],
-                        staff=["neurologist"], related=["Trauma / emergency"]),
+                        equip=["CT scanner", "ICU", "thrombolysis protocol"], staff=["neurologist"],
+                        related=["Trauma / emergency"], aliases=["stroke"]),
     "Chemotherapy": dict(specialty="Oncology", area="Cancer", urgent=False,
-                         equip=["chemo day-care", "pharmacy"], staff=["oncologist"], related=[]),
+                         equip=["chemo day-care", "pharmacy"], staff=["oncologist"], related=[],
+                         aliases=["chemotherapy", "oncology", "cancer treatment"]),
     "Trauma / emergency": dict(specialty="Emergency Medicine", area="Whole body", urgent=True,
-                               equip=["emergency bay", "ICU", "blood bank", "ambulance"],
-                               staff=["emergency physician"], related=[]),
+                               equip=["emergency bay", "ICU", "blood bank", "ambulance"], staff=["emergency physician"], related=[],
+                               aliases=["trauma care", "trauma centre", "trauma center", "emergency care", "casualty"]),
 }
+ALIAS_RE = {s: re.compile(r"\b(?:" + "|".join(re.escape(a) for a in sorted(m["aliases"], key=len, reverse=True)) + r")\b")
+            for s, m in SERVICES.items()}
+NEGATION_RE = re.compile(r"\b(?:no|not|without|nil|unavailable)\s+(?:\w+\s+){0,2}$")
+ALWAYS_OPEN_RE = re.compile(r"\b(?:24\s*[x/*×]\s*7|24\s*hours?|24[- ]hour|round[- ]the[- ]clock)\b")
 
 
 def group_services(by: str) -> dict:
@@ -76,8 +105,6 @@ def group_services(by: str) -> dict:
 # ----------------------------------------------------------------------------
 # 2. LOCATION VALIDATION
 # ----------------------------------------------------------------------------
-# Indian PIN first-two-digit postal regions that are actually assigned.
-# (Format/region check only: it cannot prove a specific PIN is in use.)
 def _valid_prefixes() -> set:
     ranges = [(11, 28), (30, 34), (36, 53), (56, 64), (67, 85)]
     return {f"{n:02d}" for lo, hi in ranges for n in range(lo, hi + 1)}
@@ -89,7 +116,7 @@ PLACE_RE = re.compile(r"^[A-Za-z][A-Za-z .'\-&()]{1,59}$")
 
 
 def validate_pin(raw: str):
-    """Return (pin, error). error is None when valid."""
+    """Return (pin, error). Format and postal-region check only; cannot prove a PIN is in use."""
     pin = (raw or "").strip().replace(" ", "")
     if not pin:
         return None, "Enter a 6-digit PIN code."
@@ -107,7 +134,6 @@ def validate_pin(raw: str):
 
 
 def validate_place(raw: str, label: str):
-    """Return (clean_name, error) for a city / district / state text box."""
     name = " ".join((raw or "").split())
     if not name:
         return None, f"Enter a {label} name."
@@ -119,8 +145,7 @@ def validate_place(raw: str, label: str):
 def validate_coordinates(lat_raw: str, lon_raw: str):
     """Return (lat, lon, error, warning)."""
     try:
-        lat = float((lat_raw or "").strip())
-        lon = float((lon_raw or "").strip())
+        lat, lon = float((lat_raw or "").strip()), float((lon_raw or "").strip())
     except ValueError:
         return None, None, "Latitude and longitude must be decimal numbers, e.g. 18.5204 and 73.8567.", None
     if not (-90 <= lat <= 90):
@@ -128,130 +153,260 @@ def validate_coordinates(lat_raw: str, lon_raw: str):
     if not (-180 <= lon <= 180):
         return None, None, "Longitude must be between -180 and 180.", None
     warn = None
-    if not (INDIA_BBOX["lat"][0] <= lat <= INDIA_BBOX["lat"][1]
-            and INDIA_BBOX["lon"][0] <= lon <= INDIA_BBOX["lon"][1]):
+    if not (INDIA_BBOX["lat"][0] <= lat <= INDIA_BBOX["lat"][1] and INDIA_BBOX["lon"][0] <= lon <= INDIA_BBOX["lon"][1]):
         warn = "These coordinates are outside India; results may be empty."
     return lat, lon, None, warn
 
 
 # ----------------------------------------------------------------------------
-# 3. DATA
+# 3. DATA: adapt the original facilities-table columns to what the dashboard needs
 # ----------------------------------------------------------------------------
-REQUIRED_COLS = ["name", "city", "district", "state", "pin", "lat", "lon", "services"]
-OPTIONAL_DEFAULTS = dict(equipment="", specialists="", open_24x7=False, accreditation="",
-                         rating=np.nan, beds=np.nan, occupancy=np.nan, ownership="", last_verified=pd.NaT, source="not provided")
-LIST_COLS = ["services", "equipment", "specialists"]
+NULLS = {"null", "none", "nan", "n/a", "na", "", "-", "unknown", "<na>"}
+HOURS_COLUMNS = ("hours", "opening_hours", "openingHours", "operating_hours", "open_hours")
 
 
-def _split(s) -> list:
-    if isinstance(s, list):
-        return s
-    return [x.strip() for x in str(s).split(";") if x.strip() and str(s) != "nan"]
+def _items(value) -> list:
+    """Text, JSON-array text, list or array -> list of non-empty strings."""
+    if value is None or (isinstance(value, float) and np.isnan(value)) or value is pd.NA:
+        return []
+    if isinstance(value, (list, tuple, np.ndarray)):
+        return [s for v in value for s in _items(v)]
+    text = str(value).strip()
+    if text.lower() in NULLS:
+        return []
+    if text.startswith("["):
+        try:
+            import json
+            return [s for v in json.loads(text) for s in _items(v)]
+        except ValueError:
+            pass
+    return [text]
 
 
-def normalize(df: pd.DataFrame) -> pd.DataFrame:
-    missing = [c for c in REQUIRED_COLS if c not in df.columns]
+def clean_phone(*values):
+    """First plausibly formatted phone (10-13 digits, not a repeated-digit placeholder)."""
+    for value in values:
+        for item in _items(value):
+            digits = re.sub(r"\D", "", item)
+            if 10 <= len(digits) <= 13 and len(set(digits)) > 2:
+                return item
+    return ""
+
+
+def _text(df, col):
+    if col not in df:
+        return pd.Series([""] * len(df), index=df.index)
+    s = df[col].astype("string").fillna("").str.strip()
+    return s.where(~s.str.lower().isin(NULLS), "")
+
+
+def from_facility_table(raw: pd.DataFrame) -> pd.DataFrame:
+    """Original facilities-table columns -> dashboard columns. Raw columns are kept for the model."""
+    for need in ("name", "latitude", "longitude"):
+        if need not in raw.columns:
+            raise ValueError(f"The facilities table needs a '{need}' column.")
+    df = raw.copy().reset_index(drop=True)
+    df["lat"] = pd.to_numeric(_text(df, "latitude"), errors="coerce")
+    df["lon"] = pd.to_numeric(_text(df, "longitude"), errors="coerce")
+    inside = df["lat"].between(*INDIA_BBOX["lat"]) & df["lon"].between(*INDIA_BBOX["lon"])
+    df.attrs["dropped_no_point"] = int((~inside).sum())
+    df = df[inside].reset_index(drop=True)
+
+    zip_text = _text(df, "address_zipOrPostcode")
+    addr_parts = [_text(df, c) for c in ("address_line1", "address_line2", "address_line3", "address_city", "address_stateOrRegion")]
+    address = pd.concat(addr_parts + [zip_text], axis=1).apply(lambda r: ", ".join(p for p in r if p), axis=1)
+    pin = zip_text.str.extract(r"(?<!\d)([1-9]\d{5})(?!\d)")[0].fillna(address.str.extract(r"(?<!\d)([1-9]\d{5})(?!\d)")[0]).fillna("")
+    state = _text(df, "address_stateOrRegion")
+    df["facility_id"] = ("fdr:" + _text(df, "unique_id")) if "unique_id" in df else [f"row:{i}" for i in range(len(df))]
+    df["city"] = _text(df, "address_city")
+    df["district"] = df["city"]            # the table has no district column; PIN-directory join is in the team notebooks
+    df["state"] = state.where(~state.str.islower(), state.str.title())
+    df["pin"] = pin
+    df["address"] = address
+    df["phone"] = [clean_phone(a, b) for a, b in zip(df["phone_numbers"] if "phone_numbers" in df else [None] * len(df),
+                                                     df["officialPhone"] if "officialPhone" in df else [None] * len(df))]
+    hours_col = next((c for c in HOURS_COLUMNS if c in df), None)
+    df["hours"] = _text(df, hours_col) if hours_col else ""
+    blob = (_text(df, "capability") + " " + _text(df, "description") + " " + _text(df, "procedure") + " " + _text(df, "specialties")).str.lower()
+    df["open_24x7"] = blob.map(lambda t: bool(ALWAYS_OPEN_RE.search(t)))
+
+    service_text = (blob + " " + _text(df, "equipment").str.lower()).tolist()
+    def services_in(text):
+        found = []
+        for name, rx in ALIAS_RE.items():
+            if any(not NEGATION_RE.search(text[max(0, m.start() - 30):m.start()]) for m in rx.finditer(text)):
+                found.append(name)
+        return found
+    df["service_list"] = [services_in(t) for t in service_text]
+    df["equip_list"] = [[e.lower() for e in _items(v)] or ([t] if t else []) for v, t in zip(df["equipment"] if "equipment" in df else [None] * len(df), _text(df, "equipment"))]
+    df["staff_list"] = [[s.lower() for s in _items(v)] for v in (df["specialties"] if "specialties" in df else [None] * len(df))]
+    op = _text(df, "operatorTypeId")
+    df["ownership"] = op.str.title()
+    cap_text = _text(df, "capacity")
+    df["capacity_text"] = cap_text
+    df["capacity_present"] = cap_text.ne("")
+    df["capacity_num"] = pd.to_numeric(cap_text.str.extract(r"^(\d+(?:\.0+)?)$")[0], errors="coerce")
+    df["occupancy"] = pd.to_numeric(df["occupancy"], errors="coerce") if "occupancy" in df else np.nan
+    df["occupancy"] = df["occupancy"].where(df["occupancy"].isna() | (df["occupancy"] <= 1), df["occupancy"] / 100)
+    df["last_verified"] = pd.to_datetime(df["last_verified"], errors="coerce") if "last_verified" in df else pd.NaT
+    df["accreditation"] = _text(df, "accreditation")
+    df["rating"] = pd.to_numeric(df["rating"], errors="coerce") if "rating" in df else np.nan
+    df["source"] = _text(df, "source").replace("", "facilities table")
+    df.attrs["district_from_city"] = True
+    return df
+
+
+def from_dashboard_csv(df: pd.DataFrame) -> pd.DataFrame:
+    """CSV in this dashboard's own simple schema -> the same unified frame."""
+    required = ["name", "city", "district", "state", "pin", "lat", "lon", "services"]
+    missing = [c for c in required if c not in df.columns]
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
-    df = df.copy()
-    for col, default in OPTIONAL_DEFAULTS.items():
-        if col not in df.columns:
-            df[col] = default
-    df["pin"] = df["pin"].astype(str).str.extract(r"(\d+)")[0].str.zfill(6)
-    df["lat"] = pd.to_numeric(df["lat"], errors="coerce")
-    df["lon"] = pd.to_numeric(df["lon"], errors="coerce")
-    df = df.dropna(subset=["lat", "lon"])
-    for c in LIST_COLS:
-        df[c] = df[c].apply(_split)
-    df["open_24x7"] = df["open_24x7"].astype(str).str.lower().isin(["true", "1", "yes", "y"])
-    df["last_verified"] = pd.to_datetime(df["last_verified"], errors="coerce")
-    df["occupancy"] = pd.to_numeric(df["occupancy"], errors="coerce")
-    df["occupancy"] = df["occupancy"].where(df["occupancy"].isna() | (df["occupancy"] <= 1), df["occupancy"] / 100)
-    return df.reset_index(drop=True)
+    raw = pd.DataFrame({
+        "unique_id": df["name"].astype(str), "name": df["name"], "latitude": df["lat"], "longitude": df["lon"],
+        "address_city": df["city"], "address_stateOrRegion": df["state"], "address_zipOrPostcode": df["pin"],
+        "specialties": df["services"], "equipment": df.get("equipment", ""), "capacity": df.get("beds", df.get("capacity")),
+        "phone_numbers": df.get("phone"), "hours": df.get("hours"), "operatorTypeId": df.get("ownership"),
+        "occupancy": df.get("occupancy"), "accreditation": df.get("accreditation"), "rating": df.get("rating"),
+        "last_verified": df.get("last_verified"), "source": df.get("source"),
+    })
+    out = from_facility_table(raw)
+    out["district"] = _text(df.reset_index(drop=True).loc[out.index] if len(df) == len(out) else out, "district").where(lambda s: s != "", out["city"]) if "district" in out else out["district"]
+    # In this schema services are listed explicitly, split on ';'.
+    explicit = df.reset_index(drop=True).get("services")
+    if explicit is not None and len(out) == len(df):
+        out["service_list"] = [[s for s in SERVICES if s.lower() in {x.strip().lower() for x in str(v).split(";")}] for v in explicit]
+    out.attrs["district_from_city"] = False
+    return out
 
 
-@st.cache_data
-def demo_data() -> pd.DataFrame:
-    """Synthetic data so the app runs out of the box. Replace with real data."""
+@st.cache_data(show_spinner=False)
+def demo_table() -> pd.DataFrame:
+    """Synthetic rows shaped like the original facilities table (so the demo exercises the real adapter)."""
     rng = np.random.default_rng(7)
-    cities = {  # city: (state, district, lat, lon, base PIN)
-        "New Delhi": ("Delhi", "New Delhi", 28.6139, 77.2090, 110001),
-        "Mumbai": ("Maharashtra", "Mumbai", 19.0760, 72.8777, 400001),
-        "Pune": ("Maharashtra", "Pune", 18.5204, 73.8567, 411001),
-        "Bengaluru": ("Karnataka", "Bengaluru Urban", 12.9716, 77.5946, 560001),
-        "Chennai": ("Tamil Nadu", "Chennai", 13.0827, 80.2707, 600001),
-        "Kolkata": ("West Bengal", "Kolkata", 22.5726, 88.3639, 700001),
-        "Lucknow": ("Uttar Pradesh", "Lucknow", 26.8467, 80.9462, 226001),
-        "Jaipur": ("Rajasthan", "Jaipur", 26.9124, 75.7873, 302001),
-    }
-    kinds = ["City Hospital", "Medical Centre", "Super Speciality Hospital", "Govt. Hospital",
-             "Care Institute", "Memorial Hospital"]
-    all_services = list(SERVICES)
+    cities = {"New Delhi": ("Delhi", 28.6139, 77.2090, 110001), "Mumbai": ("Maharashtra", 19.0760, 72.8777, 400001),
+              "Pune": ("Maharashtra", 18.5204, 73.8567, 411001), "Bengaluru": ("Karnataka", 12.9716, 77.5946, 560001),
+              "Chennai": ("Tamil Nadu", 13.0827, 80.2707, 600001), "Kolkata": ("West Bengal", 22.5726, 88.3639, 700001),
+              "Lucknow": ("Uttar Pradesh", 26.8467, 80.9462, 226001), "Jaipur": ("Rajasthan", 26.9124, 75.7873, 302001)}
+    kinds = ["City Hospital", "Medical Centre", "Super Speciality Hospital", "Govt. Hospital", "Care Institute", "Memorial Hospital"]
     rows = []
-    for city, (state, district, lat, lon, pin0) in cities.items():
-        for i in range(8):
-            offered = list(rng.choice(all_services, size=rng.integers(4, 11), replace=False))
-            equip, staff = set(), set()
-            for s in offered:
-                equip |= {e for e in SERVICES[s]["equip"] if rng.random() < 0.85}
-                staff |= {p for p in SERVICES[s]["staff"] if rng.random() < 0.85}
+    for city, (state, lat, lon, pin0) in cities.items():
+        for i in range(10):
+            offered = list(rng.choice(list(SERVICES), size=int(rng.integers(3, 9)), replace=False))
+            equip = sorted({e for s in offered for e in SERVICES[s]["equip"] if rng.random() < 0.85})
+            specs = [SERVICES[s]["aliases"][0] for s in offered]
+            hospital = bool(rng.random() < 0.8)
+            always_open = bool(rng.random() < 0.5)
             rows.append(dict(
-                name=f"{city} {kinds[i % len(kinds)]} {i + 1}", city=city, district=district, state=state,
-                pin=str(pin0 + int(rng.integers(0, 40))),
-                lat=lat + rng.uniform(-0.12, 0.12), lon=lon + rng.uniform(-0.12, 0.12),
-                services=";".join(offered), equipment=";".join(sorted(equip)), specialists=";".join(sorted(staff)),
-                open_24x7=bool(rng.random() < 0.55),
-                accreditation=str(rng.choice(["NABH", "JCI", "", ""])),
-                rating=round(float(rng.uniform(3.0, 4.9)), 1), beds=int(rng.integers(30, 600)), occupancy=round(float(rng.uniform(0.35, 0.98)), 2),
-                ownership=str(rng.choice(["Government", "Private", "Trust"])),
+                unique_id=f"synthetic-{city[:3].lower()}-{i:02d}", name=f"{city} {kinds[i % len(kinds)]} {i + 1}",
+                phone_numbers=f'["+91 90000 {int(rng.integers(10000, 99999))}"]',
+                address_line1=f"{int(rng.integers(1, 200))} Example Road", address_city=city, address_stateOrRegion=state.lower(),
+                address_zipOrPostcode=str(pin0 + int(rng.integers(0, 40))), countries="India",
+                facilityTypeId="hospital" if hospital else "clinic", operatorTypeId=str(rng.choice(["public", "private"])),
+                description="Synthetic demo record.", numberDoctors=None if rng.random() < 0.3 else str(int(rng.integers(2, 120))),
+                capacity=str(int(rng.integers(20, 400))) if rng.random() < 0.35 else None,
+                yearEstablished=str(int(rng.integers(1960, 2020))),
+                specialties=";".join(specs), procedure=None, equipment=";".join(equip),
+                capability=("24x7 emergency services. " if always_open else "") + "General inpatient care.",
+                latitude=lat + rng.uniform(-0.12, 0.12), longitude=lon + rng.uniform(-0.12, 0.12),
+                organization_type="facility", affiliated_staff_presence=str(bool(rng.random() < 0.3)).lower(),
+                custom_logo_presence=str(bool(rng.random() < 0.5)).lower(),
+                engagement_metrics_n_followers=str(int(rng.integers(0, 3000))), distinct_social_media_presence_count=str(int(rng.integers(0, 6))),
+                hours="Open 24 hours" if always_open else "Mon-Sat 9:00-17:00 (synthetic)",
+                occupancy=round(float(rng.uniform(0.35, 0.98)), 2),
                 last_verified=(pd.Timestamp.today() - pd.Timedelta(days=int(rng.integers(10, 600)))).date().isoformat(),
                 source="synthetic demo data"))
     return pd.DataFrame(rows)
 
 
-def load_data() -> pd.DataFrame:
+@st.cache_resource(show_spinner=False)
+def load_model(folder: str):
+    try:
+        return CapacityModel(folder), None
+    except Exception as exc:  # noqa: BLE001 - surfaced to the user
+        return None, f"{type(exc).__name__}: {exc}"
+
+
+@st.cache_data(show_spinner="Running the capacity model on every facility...")
+def prepare(raw: pd.DataFrame, kind: str, model_dir: str) -> pd.DataFrame:
+    df = from_dashboard_csv(raw) if kind == "csv" else from_facility_table(raw)
+    model, err = load_model(model_dir) if model_dir else (None, "no model folder selected")
+    if model is None:
+        df["ml_beds"], df["ml_status"], df["ml_reason"] = np.nan, "model_unavailable", err or ""
+        df["ml_gaps"], df["doctors_reported"] = [[] for _ in range(len(df))], False
+    else:
+        pred = model.predict_detailed(df)
+        df["ml_beds"], df["ml_status"], df["ml_reason"] = pred["beds"], pred["status"], pred["reason"]
+        df["ml_gaps"], df["doctors_reported"] = pred["gaps"], pred["doctors_reported"]
+    return df
+
+
+def load_data(model_dir: str):
     st.sidebar.header("Data")
-    mode = st.sidebar.radio("Facility data", ["Demo (synthetic)", "Upload CSV"])
-    if mode == "Upload CSV":
-        up = st.sidebar.file_uploader("CSV file", type="csv")
-        st.sidebar.caption("Required columns: " + ", ".join(REQUIRED_COLS)
-                           + ". Optional: equipment, specialists, open_24x7, accreditation, rating, beds, "
-                             "ownership, occupancy (0-1 or percent), last_verified, source. List columns use `;` separators.")
-        if up is None:
-            st.info("Upload a facility CSV in the sidebar, or switch to demo data.")
+    mode = st.sidebar.radio("Facility data", ["Demo (synthetic)", "Facilities table export", "Dashboard-schema CSV"])
+    if mode == "Demo (synthetic)":
+        st.sidebar.warning("Demo data is synthetic. Do not use it for real decisions.")
+        return prepare(demo_table(), "table", model_dir)
+    if mode == "Facilities table export":
+        path = st.sidebar.text_input("Path to export (CSV or Parquet)", value=os.environ.get("DATATHON_FACILITY_EXPORT", ""))
+        up = st.sidebar.file_uploader("...or upload it", type=["csv", "parquet"])
+        if up is not None:
+            raw = pd.read_parquet(up) if up.name.endswith(".parquet") else pd.read_csv(up, dtype="string")
+        elif path:
+            p = Path(path).expanduser()
+            if not p.is_file():
+                st.error(f"File not found: {p}")
+                st.stop()
+            raw = pd.read_parquet(p) if p.suffix == ".parquet" else pd.read_csv(p, dtype="string")
+        else:
+            st.info("Give the path to the private facilities export (the same file as DATATHON_FACILITY_EXPORT), or upload it.")
             st.stop()
-        return normalize(pd.read_csv(up))
-    st.sidebar.warning("Demo data is synthetic. Do not use it for real decisions.")
-    return normalize(demo_data())
-    # To use Databricks instead, replace the line above with something like:
-    #   from databricks.sdk.core import Config; from databricks import sql
-    #   ... pd.read_sql / cursor.fetchall_arrow().to_pandas() ... then normalize(df)
+        df = prepare(raw, "table", model_dir)
+    else:
+        up = st.sidebar.file_uploader("CSV file", type="csv")
+        st.sidebar.caption("Required: name, city, district, state, pin, lat, lon, services (';'-separated). "
+                           "Optional: phone, hours, beds, equipment, ownership, occupancy (0-1 or %), accreditation, rating, last_verified, source.")
+        if up is None:
+            st.info("Upload a CSV in the sidebar, or switch to demo data.")
+            st.stop()
+        df = prepare(pd.read_csv(up, dtype="string"), "csv", model_dir)
+    if df.attrs.get("dropped_no_point"):
+        st.sidebar.caption(f"{df.attrs['dropped_no_point']:,} rows without a usable India coordinate are excluded from distance ranking.")
+    return df
 
 
 # ----------------------------------------------------------------------------
 # 4. LOCATION RESOLUTION + SCORING
 # ----------------------------------------------------------------------------
 def resolve_location(kind, vals, df):
-    """Return (lat, lon, label, note) or raise ValueError with a user-facing message."""
+    """Return (lat, lon, label, note, state_hint) or raise ValueError with a user-facing message."""
     if kind == "Coordinates (lat/lon)":
-        return vals["lat"], vals["lon"], f"{vals['lat']:.4f}, {vals['lon']:.4f}", None
+        lat, lon = vals["lat"], vals["lon"]
+        i = int(np.argmin(haversine_km(lat, lon, df["lat"].values, df["lon"].values)))
+        return lat, lon, f"{lat:.4f}, {lon:.4f}", None, df["address_stateOrRegion"].iloc[i] if "address_stateOrRegion" in df else df["state"].iloc[i]
     if kind == "PIN code":
         pin = vals["pin"]
         hit = df[df["pin"] == pin]
-        if len(hit):
-            return hit["lat"].mean(), hit["lon"].mean(), f"PIN {pin}", None
-        near = df[df["pin"].str[:3] == pin[:3]]
-        if len(near):
-            return (near["lat"].mean(), near["lon"].mean(), f"PIN {pin}",
-                    f"No facility on record in PIN {pin}; using the centre of PIN area {pin[:3]}xxx (approximate).")
-        raise ValueError(f"No facilities on record near PIN {pin}. Try a city or enter coordinates.")
-    col = "city" if kind == "City" else "district"
-    hit = df[df[col].str.lower() == vals["name"].lower()]
-    if vals.get("state"):
-        hit = hit[hit["state"].str.lower() == vals["state"].lower()]
-    if len(hit):
-        return hit["lat"].mean(), hit["lon"].mean(), vals["name"], f"Using the centre of facilities in this {col}."
-    raise ValueError(f"No facilities on record for {col} '{vals['name']}'. Check spelling or enter coordinates.")
+        note = None
+        if not len(hit):
+            hit = df[df["pin"].str[:3] == pin[:3]]
+            note = f"No facility on record in PIN {pin}; using the centre of PIN area {pin[:3]}xxx (approximate)."
+        if not len(hit):
+            raise ValueError(f"No facilities on record near PIN {pin}. Try a city or enter coordinates.")
+        label = f"PIN {pin}"
+    else:
+        col = "city" if kind == "City" else "district"
+        hit = df[df[col].str.lower() == vals["name"].lower()]
+        if vals.get("state"):
+            hit = hit[hit["state"].str.lower() == vals["state"].lower()]
+        if not len(hit):
+            raise ValueError(f"No facilities on record for {col} '{vals['name']}'. Check spelling or enter coordinates.")
+        label = vals["name"]
+        note = f"Using the centre of facilities in this {col}."
+        if kind == "District" and df.attrs.get("district_from_city"):
+            note += " The table has no district column, so districts are matched on the facility's city."
+    state = hit["address_stateOrRegion"].iloc[0] if "address_stateOrRegion" in hit else hit["state"].iloc[0]
+    return hit["lat"].mean(), hit["lon"].mean(), label, note, state
 
 
 def haversine_km(lat1, lon1, lat2, lon2):
@@ -266,85 +421,93 @@ def _covered(required, have):
     return found, [r for r in required if r not in found]
 
 
-def score_facilities(df, service, lat, lon, weights):
-    """Score every facility that offers the service (or a related one); sorted nearest-first."""
+def estimate_view(r, ml_assisted: bool, require_doctors: bool):
+    """What the dashboard may show about capacity for one facility: (kind, headline, value, note)."""
+    if r["capacity_present"]:
+        num = r["capacity_num"]
+        return "reported", f"Reported capacity: {r['capacity_text']}", (f"{num:.0f}" if pd.notna(num) else r["capacity_text"][:12]), "Beds (reported)", None
+    if not ml_assisted:
+        return "none", "Capacity not reported.", "n/a", "Beds", None
+    if r["ml_status"] != "ok":
+        why = r["ml_reason"] or "estimate unavailable"
+        return "withheld", f"ML capacity estimate withheld: {why}.", "withheld", "Beds (ML est.)", why
+    if require_doctors and not r["doctors_reported"]:
+        return "withheld", "ML capacity estimate withheld: no doctor count is reported for this facility (team release rule).", "withheld", "Beds (ML est.)", "no reported doctor count"
+    beds = int(round(r["ml_beds"] / 5.0) * 5)
+    gaps = ", ".join(r["ml_gaps"]) if len(r["ml_gaps"]) else "none"
+    return "ml", (f"ML estimate: about {beds} beds (tagged estimate from the saved capacity model; not a count and not evidence of any service). "
+                  f"Inputs unknown and filled with training medians: {gaps}."), f"~{beds}", "Beds (ML est.)", None
+
+
+def score_facilities(df, service, lat, lon, weights, ml_assisted, require_doctors):
+    """Every facility that lists the service (or a related one), sorted nearest-first."""
     meta = SERVICES[service]
     d = haversine_km(lat, lon, df["lat"].values, df["lon"].values)
     pool = df.assign(distance_km=d)
     today = pd.Timestamp.today()
     results = []
     for _, r in pool.iterrows():
-        have = {s.lower() for s in r["services"]}
-        if service.lower() in have:
-            match, match_note = 1.0, f"Lists **{service}** as an offered service."
+        have = set(r["service_list"])
+        if service in have:
+            match, match_note = 1.0, f"Facility text mentions **{service}** (keyword match; not a cited source)."
         else:
-            alt = [x for x in meta["related"] if x.lower() in have]
+            alt = [x for x in meta["related"] if x in have]
             if not alt:
                 continue
-            match, match_note = 0.5, f"Does not list {service} directly, but lists related service **{alt[0]}** (partial match)."
-
-        eq_f, eq_m = _covered(meta["equip"], r["equipment"])
-        st_f, st_m = _covered(meta["staff"], r["specialists"])
+            match, match_note = 0.5, f"Does not mention {service}, but mentions related service **{alt[0]}** (partial match)."
+        eq_f, eq_m = _covered(meta["equip"], r["equip_list"])
+        st_f, st_m = _covered(meta["staff"], r["staff_list"])
         capability = (len(eq_f) / max(len(meta["equip"]), 1) + len(st_f) / max(len(meta["staff"]), 1)) / 2
         availability = 1.0 if r["open_24x7"] else (0.3 if meta["urgent"] else 0.8)
-        accredited = 1.0 if r["accreditation"] else 0.5
-        rating = (r["rating"] / 5) if pd.notna(r["rating"]) else 0.6
-        quality = 0.5 * accredited + 0.5 * rating
+        quality = 0.5 * (1.0 if r["accreditation"] else 0.5) + 0.5 * ((r["rating"] / 5) if pd.notna(r["rating"]) else 0.6)
         if pd.isna(r["last_verified"]):
             age_m, confidence = None, 0.5
         else:
             age_m = (today - r["last_verified"]).days / 30
             confidence = 1.0 if age_m <= 6 else 0.8 if age_m <= 12 else 0.5
-
         comps = dict(capability=capability, availability=availability, quality=quality, confidence=confidence)
         fit = match * sum(weights[k] * v for k, v in comps.items()) / max(sum(weights.values()), 1e-9)
         occ = None if pd.isna(r["occupancy"]) else float(r["occupancy"])
+        cap_kind, cap_line, cap_value, cap_label, _ = estimate_view(r, ml_assisted, require_doctors)
 
-        why = [match_note, f"**{r['distance_km']:.1f} km** from your location ({r['city']}, {r['state']})."]
+        why = [match_note, f"**{r['distance_km']:.1f} km** straight-line from your location ({r['city'] or 'city n/a'}, {r['state'] or 'state n/a'})."]
+        why.append(cap_line)
         if occ is not None:
-            why.append(f"Current occupancy about **{occ:.0%}** ({1 - occ:.0%} spare capacity).")
+            why.append(f"Occupancy on record: **{occ:.0%}** ({1 - occ:.0%} spare capacity).")
         if eq_f:
-            why.append("Equipment on record: " + ", ".join(eq_f) + ".")
-        if st_f:
-            why.append("Specialists on record: " + ", ".join(st_f) + ".")
+            why.append("Equipment text covers: " + ", ".join(eq_f) + ".")
         if r["open_24x7"]:
-            why.append("Open 24x7" + (" (important for this time-critical service)." if meta["urgent"] else "."))
-        if r["accreditation"]:
-            why.append(f"Accredited: {r['accreditation']}.")
-        if pd.notna(r["rating"]):
-            why.append(f"Patient rating {r['rating']}/5" + (f", {int(r['beds'])} beds." if pd.notna(r["beds"]) else "."))
-
+            why.append("Text mentions 24x7 operation.")
         caveats = []
         if match < 1:
-            caveats.append("Only a related service is listed. Call to confirm.")
+            caveats.append("Only a related service is mentioned. Call to confirm.")
         if eq_m:
-            caveats.append("No record of: " + ", ".join(eq_m) + ".")
-        if st_m:
-            caveats.append("No record of: " + ", ".join(st_m) + ".")
+            caveats.append("Equipment not mentioned: " + ", ".join(eq_m) + ".")
         if meta["urgent"] and not r["open_24x7"]:
-            caveats.append("Not listed as 24x7, but this service is often time-critical.")
+            caveats.append("Round-the-clock operation is not mentioned, and this service is often time-critical.")
         if occ is None:
-            caveats.append("No occupancy data; load is unknown.")
+            caveats.append("No occupancy data; current load is unknown.")
         if age_m is None:
-            caveats.append("Data has no verification date.")
+            caveats.append("No verification date on the record.")
         elif age_m > 12:
-            caveats.append(f"Data last verified {age_m / 12:.1f} years ago and may be stale.")
-
-        results.append(dict(row=r, dist=float(r["distance_km"]), fit=round(100 * fit, 1), match=match,
-                            comps=comps, occ=occ, spare=None if occ is None else max(0.0, 1 - occ),
-                            why=why, caveats=caveats,
+            caveats.append(f"Record last verified {age_m / 12:.1f} years ago and may be stale.")
+        results.append(dict(row=r, dist=float(r["distance_km"]), fit=round(100 * fit, 1), match=match, comps=comps,
+                            occ=occ, spare=None if occ is None else max(0.0, 1 - occ), why=why, caveats=caveats,
+                            cap_kind=cap_kind, cap_value=cap_value, cap_label=cap_label,
                             verified=None if pd.isna(r["last_verified"]) else r["last_verified"].date().isoformat()))
     return sorted(results, key=lambda x: x["dist"])
 
 
 def balance_rank(ranked, extra_km, lam):
-    """Re-rank candidates within `extra_km` of the closest option, favouring spare capacity.
+    """Opt-in load spreading. Needs real load data (occupancy); returns None when no candidate has any.
 
-    balance = match * ( lam * spare_capacity + (1 - lam) * closeness )
-    where closeness = 1 at the closest option and 0 at +extra_km. Unknown load counts as 50% spare.
+    balance = match * ( lam * spare_capacity + (1 - lam) * closeness ); closeness is 1 at the closest option
+    and 0 at +extra_km. Unknown load counts as 50% spare. Model bed estimates are NOT used as load.
     """
     nearest = ranked[0]
     cands = [x for x in ranked if x["dist"] - nearest["dist"] <= extra_km]
+    if not any(x["occ"] is not None for x in cands):
+        return None, nearest
     for x in cands:
         spare = 0.5 if x["spare"] is None else x["spare"]
         closeness = 1 - (x["dist"] - nearest["dist"]) / max(extra_km, 1e-9)
@@ -352,36 +515,100 @@ def balance_rank(ranked, extra_km, lam):
         extra = x["dist"] - nearest["dist"]
         n_occ = "unknown" if nearest["occ"] is None else f"{nearest['occ']:.0%}"
         x_occ = "unknown" if x["occ"] is None else f"{x['occ']:.0%}"
-        if x is nearest:
-            x["balance_note"] = f"Load balancing: this is also the closest option (occupancy {x_occ})."
-        else:
-            x["balance_note"] = (f"Load balancing: **{extra:.1f} km farther** than the closest option "
-                                 f"({nearest['row']['name']}), with occupancy {x_occ} vs {n_occ} there.")
+        x["balance_note"] = (f"Load balancing: this is also the closest option (occupancy {x_occ})." if x is nearest else
+                             f"Load balancing: **{extra:.1f} km farther** than the closest option ({nearest['row']['name']}), "
+                             f"with occupancy {x_occ} vs {n_occ} there.")
     return sorted(cands, key=lambda x: -x["balance"]), nearest
 
 
 # ----------------------------------------------------------------------------
-# 5. UI
+# 5. MAP WITH PINS
 # ----------------------------------------------------------------------------
-df = load_data()
+def safe(value) -> str:
+    """HTML-escape and neutralise characters that could break folium's JS template strings."""
+    return html.escape(str(value)).replace("`", "&#96;").replace("$", "&#36;").replace("\\", "&#92;")
+
+
+def show_html(markup: str, height: int):
+    """st.iframe on current Streamlit; components.html on older versions (e.g. Databricks Apps' 1.38)."""
+    if hasattr(st, "iframe"):
+        st.iframe(markup, height=height)
+    else:
+        components.html(markup, height=height)
+
+
+def build_map(origin, top, label) -> str:
+    lat0, lon0 = origin
+    m = folium.Map(location=[lat0, lon0], zoom_start=11, tiles="OpenStreetMap", control_scale=True)
+    folium.Marker([lat0, lon0], tooltip=f"Your location: {safe(label)}", icon=folium.Icon(color="red", icon="home", prefix="fa")).add_to(m)
+    points = [[lat0, lon0]]
+    for i, res in enumerate(top, 1):
+        r = res["row"]
+        phone = r["phone"]
+        phone_html = f'<a href="tel:{safe(re.sub(r"[^+0-9]", "", phone))}">{safe(phone)}</a>' if phone else "Not listed"
+        hours = safe(r["hours"]) if r["hours"] else "Not listed (call to confirm)"
+        gmaps = f"https://www.google.com/maps/dir/?api=1&destination={r['lat']},{r['lon']}"
+        popup = (f'<div style="min-width:230px;font:13px/1.45 sans-serif">'
+                 f'<b>{i}. {safe(r["name"])}</b><br>'
+                 f'<b>Address:</b> {safe(r["address"] or "Not listed")}<br>'
+                 f'<b>Phone:</b> {phone_html}<br><b>Hours:</b> {hours}<br>'
+                 f'<b>Distance:</b> {res["dist"]:.1f} km (straight line)<br>'
+                 f'<b>{safe(res["cap_label"])}:</b> {safe(res["cap_value"])}<br>'
+                 f'<a href="{gmaps}" target="_blank" rel="noopener">Directions</a><br>'
+                 f'<i style="color:#666">{safe(CALL_PROMPT)}</i></div>')
+        icon = folium.DivIcon(html=(f'<div style="background:#1d70b8;color:#fff;border:2px solid #fff;border-radius:50% 50% 50% 0;'
+                                    f'transform:rotate(-45deg);width:30px;height:30px;box-shadow:0 1px 4px rgba(0,0,0,.5)">'
+                                    f'<div style="transform:rotate(45deg);text-align:center;line-height:26px;font:bold 13px sans-serif">{i}</div></div>'),
+                              icon_size=(30, 30), icon_anchor=(15, 30))
+        folium.Marker([r["lat"], r["lon"]], icon=icon, tooltip=f"{i}. {safe(r['name'])}",
+                      popup=folium.Popup(popup, max_width=320)).add_to(m)
+        points.append([r["lat"], r["lon"]])
+    if len(points) > 1:
+        m.fit_bounds(points, padding=(30, 30))
+    return m.get_root().render()
+
+
+# ----------------------------------------------------------------------------
+# 6. UI
+# ----------------------------------------------------------------------------
+st.title("🏥 Facility Finder")
+st.caption("Choose a service and a location. Facilities are listed nearest first. Capacity estimates come from the team's saved model.")
 
 with st.sidebar:
+    st.header("Capacity model")
+    models = available_models()
+    if models:
+        labels = list(models)
+        default = labels.index("enriched") if "enriched" in labels else 0
+        model_label = st.selectbox("Model", labels, index=default,
+                                   help="The enriched network adds 15 NFHS district indicators. The team's refits favoured the facilities-only (base) network; see ML/MODEL_EVALUATION.md.")
+        model_dir = str(models[model_label])
+    else:
+        model_label, model_dir = None, ""
+        st.error("No model folder found. Copy ML/notebooks/outputs_models/models/enriched next to dashboard.py as models/enriched, or set CAPACITY_MODEL_DIR.")
+    ml_assisted = st.toggle("ML-assisted: add capacity estimates where none is reported", value=True)
+    require_doctors = st.checkbox("Only estimate when a doctor count is reported", value=True,
+                                  help="The team's released count overlays were restricted to facilities with an observed companion count.")
+
+df = load_data(model_dir)
+model, model_err = load_model(model_dir) if model_dir else (None, None)
+with st.sidebar:
+    if model_err:
+        st.error(f"Model failed to load: {model_err}. The preprocessor needs scikit-learn==1.7.2.")
+    elif model:
+        st.caption(f"Loaded {model.kind} model: {model.n_features} inputs. Estimates are withheld if a continuous input is over {Z_LIMIT:.0f} SD "
+                   f"from training data or the output exceeds {MAX_BEDS:,} beds.")
     st.header("Results")
     top_n = st.slider("Results to show", 1, 10, 5)
     with st.expander("Fit-score weights"):
-        st.caption("The fit score rates each facility's ability to deliver the service. Results are ordered by distance.")
+        st.caption("The fit score rates how well each facility's own text supports delivering the service. Results are ordered by distance.")
         weights = dict(
             capability=st.slider("Equipment & staff match", 0.0, 1.0, 0.40, 0.05),
             availability=st.slider("Availability (24x7)", 0.0, 1.0, 0.25, 0.05),
             quality=st.slider("Accreditation & rating", 0.0, 1.0, 0.20, 0.05),
-            confidence=st.slider("Data freshness", 0.0, 1.0, 0.15, 0.05),
-        )
-
-st.title("🏥 Facility Finder")
-st.caption("Choose a service and a location. Facilities are listed nearest first, with the evidence behind each.")
+            confidence=st.slider("Data freshness", 0.0, 1.0, 0.15, 0.05))
 
 left, right = st.columns(2)
-
 with left:
     st.subheader("1. Service")
     by = st.radio("Browse services by", ["Specialty", "Afflicted body area"], horizontal=True)
@@ -396,23 +623,22 @@ with right:
     kind = st.selectbox("Location type", ["PIN code", "City", "District", "Coordinates (lat/lon)"])
     vals, errors, warnings = {}, [], []
     if kind == "PIN code":
-        raw = st.text_input("PIN code", max_chars=6, placeholder="e.g. 411001")
-        if raw:
-            vals["pin"], err = validate_pin(raw)
+        raw_in = st.text_input("PIN code", max_chars=6, placeholder="e.g. 411001")
+        if raw_in:
+            vals["pin"], err = validate_pin(raw_in)
             errors += [err] if err else []
     elif kind in ("City", "District"):
-        raw = st.text_input(kind, placeholder="e.g. Pune")
-        state = st.text_input("State (optional, to disambiguate)", placeholder="e.g. Maharashtra")
-        if raw:
-            vals["name"], err = validate_place(raw, kind.lower())
+        raw_in = st.text_input(kind, placeholder="e.g. Pune")
+        state_in = st.text_input("State (optional, to disambiguate)", placeholder="e.g. Maharashtra")
+        if raw_in:
+            vals["name"], err = validate_place(raw_in, kind.lower())
             errors += [err] if err else []
-        if state:
-            vals["state"], err = validate_place(state, "state")
+        if state_in:
+            vals["state"], err = validate_place(state_in, "state")
             errors += [err] if err else []
     else:
         c1, c2 = st.columns(2)
-        lat_raw = c1.text_input("Latitude", placeholder="18.5204")
-        lon_raw = c2.text_input("Longitude", placeholder="73.8567")
+        lat_raw, lon_raw = c1.text_input("Latitude", placeholder="18.5204"), c2.text_input("Longitude", placeholder="73.8567")
         if lat_raw or lon_raw:
             la, lo, err, warn = validate_coordinates(lat_raw, lon_raw)
             vals.update(lat=la, lon=lo)
@@ -431,69 +657,146 @@ if balance:
     extra_km = o1.slider("Extra travel accepted vs. the closest option (km)", 5, 150, 25, 5)
     lam = o2.slider("Favor spare capacity over closeness", 0.0, 1.0, 0.6, 0.1)
     if m["urgent"]:
-        st.warning(f"{service} is time-critical. Extra travel time can cost more than a shorter wait; "
-                   "use load balancing only when the patient is stable.")
+        st.warning(f"{service} is time-critical. Extra travel can cost more than a shorter wait; use load balancing only when the patient is stable.")
 
-ready = not errors and (
-    ("pin" in vals and vals["pin"]) or ("name" in vals and vals["name"]) or ("lat" in vals and vals["lat"] is not None))
+ready = not errors and (("pin" in vals and vals["pin"]) or ("name" in vals and vals["name"]) or ("lat" in vals and vals["lat"] is not None))
 
 if st.button("Find facilities", type="primary", disabled=not ready):
     try:
-        lat, lon, label, note = resolve_location(kind, vals, df)
+        lat, lon, label, note, state_hint = resolve_location(kind, vals, df)
     except ValueError as exc:
+        st.session_state.pop("search", None)
         st.error(str(exc))
-        st.stop()
-    if note:
-        st.info(note)
-
-    ranked = score_facilities(df, service, lat, lon, weights)
-    if not ranked:
-        st.warning(f"No facility in the data lists {service} or a related service.")
-        st.stop()
-
-    if balance:
-        pool, nearest = balance_rank(ranked, extra_km, lam)
-        top = pool[:top_n]
-        st.subheader(f"Load-balanced picks for {service} near {label}")
-        st.caption(f"Candidates: facilities within {extra_km} km of the closest option "
-                   f"({nearest['row']['name']}, {nearest['dist']:.1f} km). Ordered by balance score.")
     else:
-        top = ranked[:top_n]
-        st.subheader(f"Nearest {len(top)} for {service} near {label}")
-
-    for i, res in enumerate(top, 1):
-        r = res["row"]
-        with st.container(border=True):
-            metrics = [("Distance", f"{res['dist']:.1f} km"), ("Fit", f"{res['fit']}/100"),
-                       ("Occupancy", "n/a" if res["occ"] is None else f"{res['occ']:.0%}")]
-            if balance:
-                metrics.append(("Balance", f"{res['balance']}/100"))
-            cols = st.columns([4] + [1] * len(metrics))
-            cols[0].markdown(f"### {i}. {r['name']}")
-            cols[0].caption(f"{r['city']}, {r['district']}, {r['state']} · PIN {r['pin']} · {r['ownership'] or 'ownership n/a'}")
-            for col, (lab, val) in zip(cols[1:], metrics):
-                col.metric(lab, val)
-            st.markdown("**Why this facility**")
-            bullets = ([res["balance_note"]] if balance else []) + res["why"]
-            st.markdown("\n".join(f"- {w}" for w in bullets))
-            if res["caveats"]:
-                st.markdown("**Caveats**")
-                st.markdown("\n".join(f"- {w}" for w in res["caveats"]))
-            with st.expander("Fit breakdown and source"):
-                comp = pd.DataFrame({"component": list(res["comps"]),
-                                     "value (0-1)": [round(v, 2) for v in res["comps"].values()],
-                                     "weight": [weights[k] for k in res["comps"]]})
-                st.dataframe(comp, hide_index=True, use_container_width=True)
-                st.caption(f"Source: {r['source']} · last verified: {res['verified'] or 'unknown'}")
-
-    if balance and not any(x is nearest for x in top):
-        st.caption(f"For comparison, the closest option is {nearest['row']['name']} "
-                   f"({nearest['dist']:.1f} km, occupancy "
-                   f"{'unknown' if nearest['occ'] is None else format(nearest['occ'], '.0%')}).")
-
-    pts = pd.DataFrame([dict(lat=lat, lon=lon, color="#e63946", size=900)]
-                       + [dict(lat=x["row"]["lat"], lon=x["row"]["lon"], color="#1d70b8", size=600) for x in top])
-    st.map(pts, latitude="lat", longitude="lon", color="color", size="size")
-    st.caption("Red = your location, blue = recommended facilities.")
-elif not ready:
+        st.session_state["search"] = dict(lat=float(lat), lon=float(lon), label=label, note=note, state=state_hint, service=service)
+elif not ready and "search" not in st.session_state:
     st.caption("Enter a valid location to enable search.")
+
+search = st.session_state.get("search")
+if search:
+    lat, lon, label, svc = search["lat"], search["lon"], search["label"], search["service"]
+    if search["note"]:
+        st.info(search["note"])
+    if svc != service:
+        st.caption(f"Showing results for **{svc}**. Press Find facilities to search for {service}.")
+    ranked = score_facilities(df, svc, lat, lon, weights, ml_assisted, require_doctors)
+    if not ranked:
+        st.warning(f"No facility's text mentions {svc} or a related service.")
+    else:
+        top, nearest = ranked[:top_n], ranked[0]
+        if balance:
+            pool, nearest = balance_rank(ranked, extra_km, lam)
+            if pool is None:
+                st.info("Load balancing needs measured or scenario load data (occupancy), and none exists for these candidates. "
+                        "Showing the ordinary nearest-first ranking. Model bed estimates are not used as a stand-in for load.")
+                balance_on = False
+            else:
+                top, balance_on = pool[:top_n], True
+                st.subheader(f"Load-balanced picks for {svc} near {label}")
+                st.caption(f"Candidates: facilities within {extra_km} km of the closest option ({nearest['row']['name']}, {nearest['dist']:.1f} km).")
+        else:
+            balance_on = False
+        if not balance_on:
+            st.subheader(f"Nearest {len(top)} for {svc} near {label}")
+        st.caption("Service matches are keyword matches in each facility's own text, not cited evidence. "
+                   "The team's notebooks (04, 04b) provide cited, scope-checked service evidence.")
+
+        for i, res in enumerate(top, 1):
+            r = res["row"]
+            with st.container(border=True):
+                metrics = [("Distance", f"{res['dist']:.1f} km"), ("Fit", f"{res['fit']}/100"), (res["cap_label"], res["cap_value"])]
+                if res["occ"] is not None:
+                    metrics.append(("Occupancy", f"{res['occ']:.0%}"))
+                if balance_on:
+                    metrics.append(("Balance", f"{res['balance']}/100"))
+                cols = st.columns([4] + [1] * len(metrics))
+                cols[0].markdown(f"### {i}. {r['name']}")
+                cols[0].caption(f"{r['city'] or 'city n/a'}, {r['state'] or 'state n/a'} · PIN {r['pin'] or 'n/a'} · {r['ownership'] or 'ownership n/a'}")
+                for col, (lab, val) in zip(cols[1:], metrics):
+                    col.metric(lab, val)
+                phone = f"[{r['phone']}](tel:{re.sub(r'[^+0-9]', '', r['phone'])})" if r["phone"] else "Not listed"
+                st.markdown(f"**Address:** {r['address'] or 'Not listed'}  \n**Phone:** {phone}  \n**Hours:** {r['hours'] or 'Not listed (call to confirm)'}")
+                st.caption(CALL_PROMPT)
+                st.markdown("**Why this facility**")
+                st.markdown("\n".join(f"- {w}" for w in (([res["balance_note"]] if balance_on else []) + res["why"])))
+                if res["caveats"]:
+                    st.markdown("**Caveats**")
+                    st.markdown("\n".join(f"- {w}" for w in res["caveats"]))
+                with st.expander("Fit breakdown and source"):
+                    comp = pd.DataFrame({"component": list(res["comps"]), "value (0-1)": [round(v, 2) for v in res["comps"].values()],
+                                         "weight": [weights[k] for k in res["comps"]]})
+                    st.dataframe(comp, hide_index=True, use_container_width=True)
+                    st.caption(f"Source: {r['source']} · facility_id {r['facility_id']} · last verified: {res['verified'] or 'unknown'}")
+
+        if balance_on and not any(x is nearest for x in top):
+            st.caption(f"For comparison, the closest option is {nearest['row']['name']} ({nearest['dist']:.1f} km).")
+
+        st.subheader("Map")
+        show_html(build_map((lat, lon), top, label), 520)
+        st.caption("Click a pin for address, phone, hours and directions. Red = your location, numbered blue pins = results.")
+        contacts = pd.DataFrame([{"#": i, "Facility": x["row"]["name"], "Phone": x["row"]["phone"] or "Not listed",
+                                  "Hours": x["row"]["hours"] or "Not listed", "Address": x["row"]["address"] or "Not listed",
+                                  "Distance (km)": round(x["dist"], 1)} for i, x in enumerate(top, 1)])
+        st.dataframe(contacts, hide_index=True, use_container_width=True)
+
+# ----------------------------------------------------------------------------
+# 7. CAPACITY ESTIMATOR: dashboard inputs -> model -> output
+# ----------------------------------------------------------------------------
+st.divider()
+st.subheader("Capacity estimator")
+st.caption("Enter a facility's attributes and run them through the selected model. Location fields start from your last search.")
+if model is None:
+    st.info("Load a model to use the estimator.")
+else:
+    s = st.session_state.get("search") or {}
+    states = model.category_choices("address_stateOrRegion")
+    default_state = str(s.get("state") or "").strip().lower()
+    e1, e2, e3 = st.columns(3)
+    ftype = e1.selectbox("Facility type", model.category_choices("facilityTypeId"))
+    operator = e2.selectbox("Operator", model.category_choices("operatorTypeId"))
+    state_sel = e3.selectbox("State", states, index=states.index(default_state) if default_state in states else 0,
+                             format_func=lambda x: x.title())
+    f1, f2, f3, f4 = st.columns(4)
+    doctors_known = f1.checkbox("Doctor count known", value=True)
+    doctors = f1.number_input("Doctors", min_value=0, max_value=5000, value=10, disabled=not doctors_known)
+    year_known = f2.checkbox("Year established known", value=False)
+    year = f2.number_input("Year established", min_value=1800, max_value=2026, value=2005, disabled=not year_known)
+    e_lat = f3.number_input("Latitude", value=float(s.get("lat", 20.0)), format="%.4f")
+    e_lon = f4.number_input("Longitude", value=float(s.get("lon", 78.0)), format="%.4f")
+    t1, t2 = st.columns(2)
+    equip_txt = t1.text_area("Equipment (free text, optional)", height=70)
+    cap_txt = t2.text_area("Capabilities (free text, optional)", height=70)
+    proc_txt = t1.text_area("Procedures (free text, optional)", height=70)
+    spec_txt = t2.text_area("Specialties (free text, optional)", height=70)
+    if st.button("Estimate capacity"):
+        row = pd.DataFrame([dict(
+            numberDoctors=str(doctors) if doctors_known else None, yearEstablished=str(year) if year_known else None,
+            latitude=str(e_lat), longitude=str(e_lon), facilityTypeId=ftype, operatorTypeId=operator, address_stateOrRegion=state_sel,
+            equipment=equip_txt, capability=cap_txt, procedure=proc_txt, specialties=spec_txt)])
+        out = model.predict_detailed(row).iloc[0]
+        if out["status"] == "ok":
+            st.metric("Estimated capacity", f"~{int(round(out['beds'] / 5.0) * 5)} beds")
+        else:
+            st.warning(f"Estimate withheld: {out['reason']}.")
+        st.caption("Inputs left unknown and filled with training medians: " + (", ".join(out["gaps"]) or "none") + ". "
+                   "This is a tagged model estimate, not a count.")
+
+with st.expander("How reliable are these estimates? (from the team's evaluation)"):
+    st.markdown(
+        "- On 522 facilities with reported beds, refits of the facilities-only network had mean absolute error of about 120-125 beds, "
+        "versus 128-146 for the NFHS-enriched network (`ML/MODEL_EVALUATION.md`). The two saved artifacts scored about the same (111.4 vs 111.5), "
+        "but that comparison overlaps their training data.\n"
+        "- For hospitals with 500+ beds, errors were large and mostly underestimates (roughly 550-600 beds on average).\n"
+        "- There is no calibrated interval, and accuracy on facilities whose beds are actually missing has not been measured.\n"
+        "- With the original preprocessing, one unusual input produced a 1.47M-bed prediction. This dashboard withholds estimates when a continuous "
+        "input is far outside the training range or the output is implausible.\n"
+        "- Estimates never decide whether a facility offers a service. Call the facility to verify.")
+
+if model is not None and ml_assisted:
+    with st.expander("Export estimates for the team's pipeline (notebook 05)"):
+        st.caption("Writes an overlay in the schema notebook 05's `estimate_file` expects. Use the CLI (`python dashboard/capacity_model.py --facilities <export> --out overlay.csv`) "
+                   "on the full export so IDs match the snapshot.")
+        raw_cols = [c for c in df.columns if c in set(model.numeric + model.categorical) | {"capacity", "unique_id", "facility_id"}]
+        overlay = model.build_overlay(df[raw_cols], df["facility_id"], require_doctors=require_doctors)
+        st.write(f"{len(overlay):,} estimates (facilities with no reported capacity, within guard limits).")
+        st.download_button("Download overlay CSV", overlay.to_csv(index=False).encode("utf-8"), "ml_capacity_overlay.csv", "text/csv")
