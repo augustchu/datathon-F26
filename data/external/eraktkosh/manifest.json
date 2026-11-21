@@ -1,0 +1,765 @@
+{
+  "source": "eRaktKosh",
+  "source_url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/#/publicPages/bloodBankDirectory",
+  "started_at_utc": "2026-11-21T17:37:22.022446+00:00",
+  "method": "BeautifulSoup HTML discovery + public directory JSON used by the page",
+  "requests": [
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:05:29.935078+00:00",
+      "http_status": 200,
+      "bytes": 1155,
+      "sha256": "2f0d8cecf68f21e254290b60830b687bf24283afb3fc4712c1c118037141cbd8",
+      "raw_file": "raw/landing.html"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/master/all",
+      "method": "POST",
+      "fetched_at_utc": "2026-11-21T17:05:42.936984+00:00",
+      "http_status": 200,
+      "bytes": 45883,
+      "sha256": "faecc318537b7fdb57bc86e696105c0406084ade1c2a71ea3da587732269f920",
+      "raw_file": "raw/master.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=35&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:05:45.549519+00:00",
+      "http_status": 200,
+      "bytes": 821,
+      "sha256": "134923d0ef9fb1db401c5909d6b4ecc145215a2e9c21bca3474e2524c40c37bd",
+      "raw_file": "raw/state_35.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=28&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:05:55.339424+00:00",
+      "http_status": 200,
+      "bytes": 157762,
+      "sha256": "4684a18b67a23a35cf95039bf96b6d512888cbb764e7759b74be553fe5769bf4",
+      "raw_file": "raw/state_28.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=12&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:05:58.151042+00:00",
+      "http_status": 200,
+      "bytes": 8021,
+      "sha256": "4a1919c322a6ce781ec03420fe0917b4e97e30f8203e0eb3a1a27f0ebafb00e7",
+      "raw_file": "raw/state_12.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=18&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:06:00.237017+00:00",
+      "http_status": 200,
+      "bytes": 55583,
+      "sha256": "047fb761f4c4a40ba85e0a0390b19172ca4af8272ffda2148e7482add25d81d1",
+      "raw_file": "raw/state_18.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=10&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:06:02.656098+00:00",
+      "http_status": 200,
+      "bytes": 75206,
+      "sha256": "4e93d1a6e3b72d1863baeb97eb1ae590da479ad5ca512e0fc83f5c1af845f728",
+      "raw_file": "raw/state_10.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=94&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:06:05.227613+00:00",
+      "http_status": 200,
+      "bytes": 1733,
+      "sha256": "2c1b4938a19084484367d0c5c5eb6e992a7eecf737b0e49eb34861d1cb60b761",
+      "raw_file": "raw/state_94.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=22&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:06:07.269999+00:00",
+      "http_status": 200,
+      "bytes": 84606,
+      "sha256": "d805795f6d55d91ae31995824f05a8ed0b6ac23b4b7cbf86979ee223fad7ee6a",
+      "raw_file": "raw/state_22.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=25&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:06:09.891536+00:00",
+      "http_status": 200,
+      "bytes": 1148,
+      "sha256": "452c216300a93f443bd760093bb7f513f6a7b775caefb5cca5eae6fde9ace6a2",
+      "raw_file": "raw/state_25.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=97&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:06:11.968429+00:00",
+      "http_status": 200,
+      "bytes": 36903,
+      "sha256": "d2607e19685353df344793948aa0df0411b4e4f37ffd143e3a5054fdb1ec2747",
+      "raw_file": "raw/state_97.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=30&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:06:14.318680+00:00",
+      "http_status": 200,
+      "bytes": 2289,
+      "sha256": "5af5e3b34548e3583c978d42781af5348edd41336df11cd9943706d6f85b8971",
+      "raw_file": "raw/state_30.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:06:16.306640+00:00",
+      "error": "HTTPSConnectionPool(host='www.eraktkosh.mohfw.gov.in', port=443): Read timed out."
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=24&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:20.262642+00:00",
+      "http_status": 200,
+      "bytes": 134070,
+      "sha256": "70c0f1b03efffb97295ed08fd8fae29e7b87935d38acee4eb9e3436e4766c7ca",
+      "raw_file": "raw/state_24.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=96&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:23.113346+00:00",
+      "http_status": 200,
+      "bytes": 64824,
+      "sha256": "f617334d4a1d30c6b811391716d7f4a5e90cd678006ff359320e187b799b6037",
+      "raw_file": "raw/state_96.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=92&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:25.631631+00:00",
+      "http_status": 200,
+      "bytes": 10317,
+      "sha256": "6940b406c362e6d42039da5e1f731680408a11b80f4b428be6f69bfbf6c5cc63",
+      "raw_file": "raw/state_92.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=91&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:27.687977+00:00",
+      "http_status": 200,
+      "bytes": 24222,
+      "sha256": "6410fc9dc11b6360cd2802b8a78241260c9b9217faa088c36a1d261810ed6c59",
+      "raw_file": "raw/state_91.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=20&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:30.145797+00:00",
+      "http_status": 200,
+      "bytes": 42452,
+      "sha256": "870494ed9280fed062f7950578722ed5d83a033b624d367e8dc7d7276e9f0493",
+      "raw_file": "raw/state_20.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=29&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:33.133142+00:00",
+      "http_status": 200,
+      "bytes": 169159,
+      "sha256": "25f17d830c26498d2cc832e25292785e144f9cb55ea018e93a0121820c5818f2",
+      "raw_file": "raw/state_29.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=32&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:37.199580+00:00",
+      "http_status": 200,
+      "bytes": 114544,
+      "sha256": "ccbeca1a39be4b3543a8253ad32d9ce666e3242fa44dc163f030a4c6670965f2",
+      "raw_file": "raw/state_32.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=37&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:41.670199+00:00",
+      "http_status": 200,
+      "bytes": 1118,
+      "sha256": "33c747d4fa161255bcd7bcfbe66c03472fb8cec2916e20368b4e432ac8516e76",
+      "raw_file": "raw/state_37.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=31&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:45.243823+00:00",
+      "http_status": 200,
+      "bytes": 373,
+      "sha256": "2eb488efcf1b088c88cb33d0329d2ac9d28603cbca15c94c993df5c15754d2ef",
+      "raw_file": "raw/state_31.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=23&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:48.040059+00:00",
+      "http_status": 200,
+      "bytes": 107864,
+      "sha256": "106d0bb57f5329f780c914e32749439cd147a6f448c5fa4ed7f2e3f3bcdb3dcc",
+      "raw_file": "raw/state_23.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=27&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:51.278342+00:00",
+      "http_status": 200,
+      "bytes": 237651,
+      "sha256": "311cd72609c3c5ad97b4283467b2bad8eacb829ee56a83b542a4393252fb72ee",
+      "raw_file": "raw/state_27.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=14&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:56.613135+00:00",
+      "http_status": 200,
+      "bytes": 5436,
+      "sha256": "93155820ce03249e3ee8fa9e9446c02576e2c44a51fe6233f6a78747dab16732",
+      "raw_file": "raw/state_14.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=17&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:31:58.543044+00:00",
+      "http_status": 200,
+      "bytes": 11205,
+      "sha256": "09228bd025b6d7eac930d47bdee54a56d23956ef70cbdb10c2175d28e2c937bc",
+      "raw_file": "raw/state_17.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=15&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:03.548029+00:00",
+      "http_status": 200,
+      "bytes": 8422,
+      "sha256": "dd2bc32c519e940a46dc4dcf5bc8d0fbc2c8bd30d89073789876b03ed06364f9",
+      "raw_file": "raw/state_15.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=13&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:05.607683+00:00",
+      "http_status": 200,
+      "bytes": 3456,
+      "sha256": "1897c8fd88e7d726ca4beb87cfb3ededb24086e77f0c07ce5d54425ff7656df5",
+      "raw_file": "raw/state_13.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=21&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:22.798410+00:00",
+      "http_status": 200,
+      "bytes": 49125,
+      "sha256": "b3d03525fabba2d8047a021f312e513068ad0e15f72f4f5a0e36e63624a4dc4d",
+      "raw_file": "raw/state_21.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=34&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:25.378500+00:00",
+      "http_status": 200,
+      "bytes": 6341,
+      "sha256": "4fe988cecf8a78ab3eaa9047f0921b1f3a04530af9563a75d93ccae938bb775c",
+      "raw_file": "raw/state_34.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=93&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:28.458265+00:00",
+      "http_status": 200,
+      "bytes": 95357,
+      "sha256": "35524c9129d2efaff865529e5978a0d0b9b617ac0976337d364c2b6da908fd35",
+      "raw_file": "raw/state_93.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=98&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:31.508156+00:00",
+      "http_status": 200,
+      "bytes": 171118,
+      "sha256": "d7752be495b9c3cc0696c89cfd23035ec94233d7e0c75176a53cb2581436c09e",
+      "raw_file": "raw/state_98.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=11&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:36.984530+00:00",
+      "http_status": 200,
+      "bytes": 1925,
+      "sha256": "26278b29d3cc7b95f91a2bdd479293a1368e41ce30c4ca38716e2de422bace29",
+      "raw_file": "raw/state_11.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=33&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:39.179174+00:00",
+      "http_status": 200,
+      "bytes": 231161,
+      "sha256": "6335dc0c214efb64afe56cc6ead5b195bc8d3009bf21ab3c0d3801be22a0500c",
+      "raw_file": "raw/state_33.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=36&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:44.612701+00:00",
+      "http_status": 200,
+      "bytes": 128733,
+      "sha256": "28f723677c3febbee81d478c54076f7ffdf52ff0a01d9c0f3acf0bc42eb4cfa4",
+      "raw_file": "raw/state_36.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=16&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:48.708399+00:00",
+      "http_status": 200,
+      "bytes": 7841,
+      "sha256": "cb053614ded42bf7547e4f45739231c0a4ec59a3b028731b4f2c9e54cce1df99",
+      "raw_file": "raw/state_16.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:32:50.870826+00:00",
+      "error": "HTTPSConnectionPool(host='www.eraktkosh.mohfw.gov.in', port=443): Read timed out."
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=95&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:36:46.941466+00:00",
+      "http_status": 200,
+      "bytes": 38145,
+      "sha256": "a35008ac06ee003750877bc776dd46178835544da6581506e2e4e15eb28acbe1",
+      "raw_file": "raw/state_95.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=99&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:36:49.718558+00:00",
+      "http_status": 200,
+      "bytes": 316814,
+      "sha256": "9dc7aadca547a9c364e618182a71b7627fe68c402d932c95c53d783c9eb78ef5",
+      "raw_file": "raw/state_99.json"
+    },
+    {
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=19&districtCode=-1",
+      "method": "GET",
+      "fetched_at_utc": "2026-11-21T17:36:56.915183+00:00",
+      "http_status": 200,
+      "bytes": 89599,
+      "sha256": "d5d70ec06dce03c80326d9eceea8d1a2d46523a229010ad2cf7384a6562158f3",
+      "raw_file": "raw/state_19.json"
+    }
+  ],
+  "records": 6524,
+  "complete": true,
+  "identifier_namespaces": {
+    "state_code": "eRaktKosh UI state identifier, not assumed to be LGD",
+    "district_code": "eRaktKosh response distId; crosswalk not validated",
+    "hospital_code": "eRaktKosh hospitalCode"
+  },
+  "meaning": "Participating blood banks and BSUs; not blood-stock data or clinical verification",
+  "original_started_at_utc": "2026-11-21T17:05:26.489162+00:00",
+  "resumed_at_utc": "2026-11-21T17:37:22.023163+00:00",
+  "robots": {
+    "url": "https://www.eraktkosh.mohfw.gov.in/robots.txt",
+    "http_status": 404,
+    "fetched_at_utc": "2026-11-21T17:37:22.930899+00:00"
+  },
+  "endpoint_discovery": {
+    "asset_url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/static/js/main.4212cda9.js",
+    "sha256": "e260c18194966b7d3387d41275462bbffffa2794edf8a3366592a77cae465883",
+    "public_paths": [
+      "/eraktkosh/master/all",
+      "/eraktkosh/bloodbank/nearest",
+      "/publicPages/bloodBankDirectory"
+    ]
+  },
+  "scope": {
+    "state_count": 36,
+    "states": [
+      "Andaman and Nicobar Islands",
+      "Andhra Pradesh",
+      "Arunachal Pradesh",
+      "Assam",
+      "Bihar",
+      "Chandigarh",
+      "Chhattisgarh",
+      "Dadra And Nagar Haveli And Daman And Diu",
+      "Delhi",
+      "Goa",
+      "Gujarat",
+      "Haryana",
+      "Himachal Pradesh",
+      "Jammu and Kashmir",
+      "Jharkhand",
+      "Karnataka",
+      "Kerala",
+      "Ladakh",
+      "Lakshadweep",
+      "Madhya Pradesh",
+      "Maharashtra",
+      "Manipur",
+      "Meghalaya",
+      "Mizoram",
+      "Nagaland",
+      "Odisha",
+      "Puducherry",
+      "Punjab",
+      "Rajasthan",
+      "Sikkim",
+      "Tamil Nadu",
+      "Telangana",
+      "Tripura",
+      "Uttarakhand",
+      "Uttar Pradesh",
+      "West Bengal"
+    ],
+    "coverage": "all state options returned by public UI"
+  },
+  "state_results": [
+    {
+      "state_code": "35",
+      "state_name": "Andaman and Nicobar Islands",
+      "records": 2,
+      "distinct_hospital_codes": 2,
+      "success": true,
+      "raw_file": "raw/state_35.json",
+      "fetched_at_utc": "2026-11-21T17:05:45.549519+00:00"
+    },
+    {
+      "state_code": "28",
+      "state_name": "Andhra Pradesh",
+      "records": 414,
+      "distinct_hospital_codes": 414,
+      "success": true,
+      "raw_file": "raw/state_28.json",
+      "fetched_at_utc": "2026-11-21T17:05:55.339424+00:00"
+    },
+    {
+      "state_code": "12",
+      "state_name": "Arunachal Pradesh",
+      "records": 21,
+      "distinct_hospital_codes": 21,
+      "success": true,
+      "raw_file": "raw/state_12.json",
+      "fetched_at_utc": "2026-11-21T17:05:58.151042+00:00"
+    },
+    {
+      "state_code": "18",
+      "state_name": "Assam",
+      "records": 151,
+      "distinct_hospital_codes": 151,
+      "success": true,
+      "raw_file": "raw/state_18.json",
+      "fetched_at_utc": "2026-11-21T17:06:00.237017+00:00"
+    },
+    {
+      "state_code": "10",
+      "state_name": "Bihar",
+      "records": 205,
+      "distinct_hospital_codes": 205,
+      "success": true,
+      "raw_file": "raw/state_10.json",
+      "fetched_at_utc": "2026-11-21T17:06:02.656098+00:00"
+    },
+    {
+      "state_code": "94",
+      "state_name": "Chandigarh",
+      "records": 4,
+      "distinct_hospital_codes": 4,
+      "success": true,
+      "raw_file": "raw/state_94.json",
+      "fetched_at_utc": "2026-11-21T17:06:05.227613+00:00"
+    },
+    {
+      "state_code": "22",
+      "state_name": "Chhattisgarh",
+      "records": 220,
+      "distinct_hospital_codes": 220,
+      "success": true,
+      "raw_file": "raw/state_22.json",
+      "fetched_at_utc": "2026-11-21T17:06:07.269999+00:00"
+    },
+    {
+      "state_code": "25",
+      "state_name": "Dadra And Nagar Haveli And Daman And Diu",
+      "records": 3,
+      "distinct_hospital_codes": 3,
+      "success": true,
+      "raw_file": "raw/state_25.json",
+      "fetched_at_utc": "2026-11-21T17:06:09.891536+00:00"
+    },
+    {
+      "state_code": "97",
+      "state_name": "Delhi",
+      "records": 91,
+      "distinct_hospital_codes": 91,
+      "success": true,
+      "raw_file": "raw/state_97.json",
+      "fetched_at_utc": "2026-11-21T17:06:11.968429+00:00"
+    },
+    {
+      "state_code": "30",
+      "state_name": "Goa",
+      "records": 6,
+      "distinct_hospital_codes": 6,
+      "success": true,
+      "raw_file": "raw/state_30.json",
+      "fetched_at_utc": "2026-11-21T17:06:14.318680+00:00"
+    },
+    {
+      "state_code": "24",
+      "state_name": "Gujarat",
+      "records": 357,
+      "distinct_hospital_codes": 357,
+      "success": true,
+      "raw_file": "raw/state_24.json",
+      "fetched_at_utc": "2026-11-21T17:31:20.262642+00:00"
+    },
+    {
+      "state_code": "96",
+      "state_name": "Haryana",
+      "records": 161,
+      "distinct_hospital_codes": 161,
+      "success": true,
+      "raw_file": "raw/state_96.json",
+      "fetched_at_utc": "2026-11-21T17:31:23.113346+00:00"
+    },
+    {
+      "state_code": "92",
+      "state_name": "Himachal Pradesh",
+      "records": 27,
+      "distinct_hospital_codes": 27,
+      "success": true,
+      "raw_file": "raw/state_92.json",
+      "fetched_at_utc": "2026-11-21T17:31:25.631631+00:00"
+    },
+    {
+      "state_code": "91",
+      "state_name": "Jammu and Kashmir",
+      "records": 69,
+      "distinct_hospital_codes": 69,
+      "success": true,
+      "raw_file": "raw/state_91.json",
+      "fetched_at_utc": "2026-11-21T17:31:27.687977+00:00"
+    },
+    {
+      "state_code": "20",
+      "state_name": "Jharkhand",
+      "records": 119,
+      "distinct_hospital_codes": 119,
+      "success": true,
+      "raw_file": "raw/state_20.json",
+      "fetched_at_utc": "2026-11-21T17:31:30.145797+00:00"
+    },
+    {
+      "state_code": "29",
+      "state_name": "Karnataka",
+      "records": 442,
+      "distinct_hospital_codes": 442,
+      "success": true,
+      "raw_file": "raw/state_29.json",
+      "fetched_at_utc": "2026-11-21T17:31:33.133142+00:00"
+    },
+    {
+      "state_code": "32",
+      "state_name": "Kerala",
+      "records": 305,
+      "distinct_hospital_codes": 305,
+      "success": true,
+      "raw_file": "raw/state_32.json",
+      "fetched_at_utc": "2026-11-21T17:31:37.199580+00:00"
+    },
+    {
+      "state_code": "37",
+      "state_name": "Ladakh",
+      "records": 3,
+      "distinct_hospital_codes": 3,
+      "success": true,
+      "raw_file": "raw/state_37.json",
+      "fetched_at_utc": "2026-11-21T17:31:41.670199+00:00"
+    },
+    {
+      "state_code": "31",
+      "state_name": "Lakshadweep",
+      "records": 1,
+      "distinct_hospital_codes": 1,
+      "success": true,
+      "raw_file": "raw/state_31.json",
+      "fetched_at_utc": "2026-11-21T17:31:45.243823+00:00"
+    },
+    {
+      "state_code": "23",
+      "state_name": "Madhya Pradesh",
+      "records": 296,
+      "distinct_hospital_codes": 296,
+      "success": true,
+      "raw_file": "raw/state_23.json",
+      "fetched_at_utc": "2026-11-21T17:31:48.040059+00:00"
+    },
+    {
+      "state_code": "27",
+      "state_name": "Maharashtra",
+      "records": 602,
+      "distinct_hospital_codes": 602,
+      "success": true,
+      "raw_file": "raw/state_27.json",
+      "fetched_at_utc": "2026-11-21T17:31:51.278342+00:00"
+    },
+    {
+      "state_code": "14",
+      "state_name": "Manipur",
+      "records": 14,
+      "distinct_hospital_codes": 14,
+      "success": true,
+      "raw_file": "raw/state_14.json",
+      "fetched_at_utc": "2026-11-21T17:31:56.613135+00:00"
+    },
+    {
+      "state_code": "17",
+      "state_name": "Meghalaya",
+      "records": 31,
+      "distinct_hospital_codes": 31,
+      "success": true,
+      "raw_file": "raw/state_17.json",
+      "fetched_at_utc": "2026-11-21T17:31:58.543044+00:00"
+    },
+    {
+      "state_code": "15",
+      "state_name": "Mizoram",
+      "records": 25,
+      "distinct_hospital_codes": 25,
+      "success": true,
+      "raw_file": "raw/state_15.json",
+      "fetched_at_utc": "2026-11-21T17:32:03.548029+00:00"
+    },
+    {
+      "state_code": "13",
+      "state_name": "Nagaland",
+      "records": 10,
+      "distinct_hospital_codes": 10,
+      "success": true,
+      "raw_file": "raw/state_13.json",
+      "fetched_at_utc": "2026-11-21T17:32:05.607683+00:00"
+    },
+    {
+      "state_code": "21",
+      "state_name": "Odisha",
+      "records": 138,
+      "distinct_hospital_codes": 138,
+      "success": true,
+      "raw_file": "raw/state_21.json",
+      "fetched_at_utc": "2026-11-21T17:32:22.798410+00:00"
+    },
+    {
+      "state_code": "34",
+      "state_name": "Puducherry",
+      "records": 16,
+      "distinct_hospital_codes": 16,
+      "success": true,
+      "raw_file": "raw/state_34.json",
+      "fetched_at_utc": "2026-11-21T17:32:25.378500+00:00"
+    },
+    {
+      "state_code": "93",
+      "state_name": "Punjab",
+      "records": 255,
+      "distinct_hospital_codes": 255,
+      "success": true,
+      "raw_file": "raw/state_93.json",
+      "fetched_at_utc": "2026-11-21T17:32:28.458265+00:00"
+    },
+    {
+      "state_code": "98",
+      "state_name": "Rajasthan",
+      "records": 449,
+      "distinct_hospital_codes": 449,
+      "success": true,
+      "raw_file": "raw/state_98.json",
+      "fetched_at_utc": "2026-11-21T17:32:31.508156+00:00"
+    },
+    {
+      "state_code": "11",
+      "state_name": "Sikkim",
+      "records": 5,
+      "distinct_hospital_codes": 5,
+      "success": true,
+      "raw_file": "raw/state_11.json",
+      "fetched_at_utc": "2026-11-21T17:32:36.984530+00:00"
+    },
+    {
+      "state_code": "33",
+      "state_name": "Tamil Nadu",
+      "records": 638,
+      "distinct_hospital_codes": 638,
+      "success": true,
+      "raw_file": "raw/state_33.json",
+      "fetched_at_utc": "2026-11-21T17:32:39.179174+00:00"
+    },
+    {
+      "state_code": "36",
+      "state_name": "Telangana",
+      "records": 315,
+      "distinct_hospital_codes": 315,
+      "success": true,
+      "raw_file": "raw/state_36.json",
+      "fetched_at_utc": "2026-11-21T17:32:44.612701+00:00"
+    },
+    {
+      "state_code": "16",
+      "state_name": "Tripura",
+      "records": 21,
+      "distinct_hospital_codes": 21,
+      "success": true,
+      "raw_file": "raw/state_16.json",
+      "fetched_at_utc": "2026-11-21T17:32:48.708399+00:00"
+    },
+    {
+      "state_code": "95",
+      "state_name": "Uttarakhand",
+      "records": 100,
+      "distinct_hospital_codes": 100,
+      "success": true,
+      "raw_file": "raw/state_95.json",
+      "fetched_at_utc": "2026-11-21T17:36:46.941466+00:00"
+    },
+    {
+      "state_code": "99",
+      "state_name": "Uttar Pradesh",
+      "records": 775,
+      "distinct_hospital_codes": 775,
+      "success": true,
+      "raw_file": "raw/state_99.json",
+      "fetched_at_utc": "2026-11-21T17:36:49.718558+00:00"
+    },
+    {
+      "state_code": "19",
+      "state_name": "West Bengal",
+      "records": 233,
+      "distinct_hospital_codes": 233,
+      "success": true,
+      "raw_file": "raw/state_19.json",
+      "fetched_at_utc": "2026-11-21T17:36:56.915183+00:00"
+    }
+  ],
+  "failed_states": [],
+  "states_expected": 36,
+  "states_completed": 36,
+  "states_failed": 0,
+  "finished_at_utc": "2026-11-21T17:37:23.052693+00:00",
+  "coordinate_quality_counts": {
+    "plausible_unverified": 5267,
+    "zero_placeholder": 1257
+  },
+  "coordinate_valid_definition": "Numeric, finite, nonzero latitude/longitude within world coordinate ranges only; not verified against addresses or geography",
+  "completeness_note": "Completeness means every state option returned an array. No independent national facility total is exposed by these responses; UI counts require browser verification."
+}

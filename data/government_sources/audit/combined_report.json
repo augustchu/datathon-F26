@@ -1,0 +1,92 @@
+{
+  "built_at_utc": "2026-11-21T18:26:13.065131+00:00",
+  "rows": 2468,
+  "source_row_counts": {
+    "bis_cghs": 294,
+    "esic": 6,
+    "cmchis": 2157,
+    "rghs": 0,
+    "kerala_sha": 11
+  },
+  "source_row_offsets": {
+    "bis_cghs": {
+      "start_zero_based": 0,
+      "row_count": 294
+    },
+    "esic": {
+      "start_zero_based": 294,
+      "row_count": 6
+    },
+    "cmchis": {
+      "start_zero_based": 300,
+      "row_count": 2157
+    },
+    "rghs": {
+      "start_zero_based": 2457,
+      "row_count": 0
+    },
+    "kerala_sha": {
+      "start_zero_based": 2457,
+      "row_count": 11
+    }
+  },
+  "field_presence_counts": {
+    "bis_cghs": {
+      "facility_name": 294,
+      "phone_numbers": 287,
+      "email_addresses": 245,
+      "location": 294,
+      "services": 294,
+      "validity_dates": 294,
+      "source_links": 294
+    },
+    "esic": {
+      "facility_name": 6,
+      "phone_numbers": 6,
+      "email_addresses": 0,
+      "location": 6,
+      "services": 6,
+      "validity_dates": 6,
+      "source_links": 6
+    },
+    "cmchis": {
+      "facility_name": 2157,
+      "phone_numbers": 0,
+      "email_addresses": 0,
+      "location": 2157,
+      "services": 1960,
+      "validity_dates": 0,
+      "source_links": 2157
+    },
+    "rghs": {
+      "facility_name": 0,
+      "phone_numbers": 0,
+      "email_addresses": 0,
+      "location": 0,
+      "services": 0,
+      "validity_dates": 0,
+      "source_links": 0
+    },
+    "kerala_sha": {
+      "facility_name": 11,
+      "phone_numbers": 11,
+      "email_addresses": 11,
+      "location": 11,
+      "services": 1,
+      "validity_dates": 0,
+      "source_links": 11
+    }
+  },
+  "checks": {
+    "exact_seven_field_schema": true,
+    "list_types_valid": true,
+    "per_source_csv_jsonl_agreement": true,
+    "names_and_source_links_present": true
+  },
+  "notes": [
+    "Source records are concatenated, not matched or deduplicated across sources.",
+    "Zero rows can mean access failure; consult each source report.",
+    "Presence of a validity date does not mean the agreement is currently valid.",
+    "Services retain published scope/specialty text, not verified operational availability."
+  ]
+}

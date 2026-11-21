@@ -1,0 +1,88 @@
+{
+  "source": "Tamil Nadu CMCHIS public empanelled hospital list",
+  "processed_at_utc": "2026-11-21T18:22:48.024858+00:00",
+  "listing_url": "https://www.cmchistn.com/empanelment/hospital-list",
+  "public_export_url": "https://chtn.cmchistn.com/api/v1/tpa-hospitals-v2/?json=true",
+  "method": "requests + BeautifulSoup asset discovery; official public JSON export used by website Download Excel button",
+  "advertised_count": 2157,
+  "extracted_rows": 2157,
+  "complete_relative_to_current_export": true,
+  "unique_source_entity_codes": 2157,
+  "coverage": {
+    "facility_name": 2157,
+    "phone_numbers": 0,
+    "email_addresses": 0,
+    "location": 2157,
+    "services": 1960,
+    "validity_dates": 0,
+    "source_links": 2157
+  },
+  "source_missing_street_addresses": 4,
+  "checks": {
+    "export_matches_count": true,
+    "first_page_matches_export": true,
+    "only_requested_fields": true,
+    "services_follow_public_UI_boolean_mapping": true
+  },
+  "limitations": [
+    "No facility telephone, email or validity period is published in this directory export/profile; these fields are empty.",
+    "EDC committee dates and administrative year are not validity dates and are excluded.",
+    "Source includes hospital and non-hospital participating units, including welfare offices; names are preserved without relabeling.",
+    "Specialties are scheme-listed claims. Nephrology does not establish dialysis; empty service list does not prove absence of services.",
+    "No independent corroboration, current-availability checks or statistical validity audit was performed.",
+    "Per-record evidence URLs use the public entity-code search endpoint; human UI profiles have no separate permanent URL."
+  ],
+  "downloads": [
+    {
+      "url": "https://www.cmchistn.com/empanelment/hospital-list",
+      "path": "data/government_sources/raw/cmchis/hospital-list.html",
+      "sha256": "f36fd54067e2067b3fcc2d347392b515b845e7c9a62ecafd1359ce4970c4c63c",
+      "bytes": 1596,
+      "used_cache": true,
+      "snapshot_file_mtime_utc": "2026-11-21T18:19:49.122069+00:00"
+    },
+    {
+      "url": "https://www.cmchistn.com/assets/index-CRb-NMjH.js",
+      "path": "data/government_sources/raw/cmchis/application.js",
+      "sha256": "f693303d5d317c31515f40d29a76e7260f2d2870cd63301208a99efa5d25af11",
+      "bytes": 2915173,
+      "used_cache": true,
+      "snapshot_file_mtime_utc": "2026-11-21T18:19:57.671515+00:00"
+    },
+    {
+      "url": "https://chtn.cmchistn.com/api/v1/tpa-hospitals-v2/?page=1&page_size=10",
+      "path": "data/government_sources/raw/cmchis/page1.json",
+      "sha256": "0cfd1864234d0a959dd9d02cce6b413c8ac0f0981f927939dfa8ce1cfa512b36",
+      "bytes": 13259,
+      "used_cache": true,
+      "snapshot_file_mtime_utc": "2026-11-21T18:20:16.816488+00:00"
+    },
+    {
+      "url": "https://chtn.cmchistn.com/api/v1/tpa-hospitals-v2/?json=true",
+      "path": "data/government_sources/raw/cmchis/export.json",
+      "sha256": "3b980edf31d36d5a740fdc2a9cbd920620f9e28ff876bea90e20e82d937806ed",
+      "bytes": 2807111,
+      "used_cache": true,
+      "snapshot_file_mtime_utc": "2026-11-21T18:20:20.122448+00:00"
+    }
+  ],
+  "browser_spot_checks": [
+    {
+      "recorded_at_utc": "2026-11-21T18:22:29.964603+00:00",
+      "source_url": "https://www.cmchistn.com/empanelment/hospital-list",
+      "method": "Browser control: opened hospital profile from live table",
+      "facility_name": "Ariyalur Golden Hospital Pvt.Ltd, Ariyalur TN.",
+      "address": "81A,PERIYARNAGAR MAIN ROAD,",
+      "services": [
+        "Follow Up Procedure",
+        "General Medicine",
+        "Nephrology",
+        "Orthopedics"
+      ],
+      "directory_count": 2157,
+      "result": "Displayed name, address and all four service labels match downloaded export. Profile has no facility contact or validity fields.",
+      "scope": "One targeted UI extraction check, not a statistical sample or real-world service verification.",
+      "export_sha256": "3b980edf31d36d5a740fdc2a9cbd920620f9e28ff876bea90e20e82d937806ed"
+    }
+  ]
+}

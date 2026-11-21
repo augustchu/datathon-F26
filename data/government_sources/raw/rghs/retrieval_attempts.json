@@ -1,0 +1,22 @@
+[
+  {
+    "file": "homepage.html",
+    "url": "https://rghs.rajasthan.gov.in/RGHS/home/",
+    "error": "HTTPSConnectionPool(host='rghs.rajasthan.gov.in', port=443): Max retries exceeded with url: /RGHS/home/ (Caused by ConnectTimeoutError(<HTTPSConnection(host='rghs.rajasthan.gov.in', port=443) at 0x1023d06e0>, 'Connection to rghs.rajasthan.gov.in timed out. (connect timeout=12)'))"
+  },
+  {
+    "file": "hospitals_nov_2026.pdf",
+    "url": "https://rghs.rajasthan.gov.in/RGHS/downloadHomeDocument?filename=%2Fappdata26_02%2FRghsHome%2F2026%2F2026-11-18%2FList_of_hospitals_empaneled_under_rghs_nov_26.pdf",
+    "error": "HTTPSConnectionPool(host='rghs.rajasthan.gov.in', port=443): Max retries exceeded with url: /RGHS/downloadHomeDocument?filename=%2Fappdata26_02%2FRghsHome%2F2026%2F2026-11-18%2FList_of_hospitals_empaneled_under_rghs_nov_26.pdf (Caused by ConnectTimeoutError(<HTTPSConnection(host='rghs.rajasthan.gov.in', port=443) at 0x1023d5bd0>, 'Connection to rghs.rajasthan.gov.in timed out. (connect timeout=12)'))"
+  },
+  {
+    "file": "hospitals_legacy.pdf",
+    "url": "https://rghs.rajasthan.gov.in/List_of_empaneled_hospitals_under_RGHS.pdf",
+    "error": "HTTPSConnectionPool(host='rghs.rajasthan.gov.in', port=443): Max retries exceeded with url: /List_of_empaneled_hospitals_under_RGHS.pdf (Caused by ConnectTimeoutError(<HTTPSConnection(host='rghs.rajasthan.gov.in', port=443) at 0x1023d5a90>, 'Connection to rghs.rajasthan.gov.in timed out. (connect timeout=12)'))"
+  },
+  {
+    "url": "https://rghs.rajasthan.gov.in/List_of_empaneled_hospitals_under_RGHS.pdf",
+    "method": "web_reader",
+    "error": "Timeout fetching (400); no cached PDF content returned."
+  }
+]

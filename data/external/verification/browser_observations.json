@@ -1,0 +1,79 @@
+{
+  "method": "Live browser control: public search controls and rendered table rows. No direct API calls were used as browser verification.",
+  "date": "2026-11-21",
+  "scope": "Extraction fidelity only; not verification of real-world service availability, location truth, or source independence.",
+  "observations": [
+    {
+      "source": "nabh",
+      "key": "c76f40534c795bec55a2274b",
+      "status": "observed",
+      "checked_at_utc": "2026-11-21T17:06:43.830Z",
+      "url": "https://nabh.co/find-a-healthcare-organisation/",
+      "observed_values": {"facility_name": "Urocare Hospital LLP", "address": "VIDHYANAGAR MAIN ROAD, OPP. GOKUL HOSPITAL, RAJKOT, Rajkot, Gujarat, 360001", "accreditation_number": "PESHCO-2025-11194", "status_text": "Certified"}
+    },
+    {
+      "source": "nabh",
+      "key": "f70b92cd4cec70f8fed4847f",
+      "status": "observed",
+      "checked_at_utc": "2026-11-21T17:06:54.294Z",
+      "url": "https://nabh.co/find-a-healthcare-organisation/",
+      "observed_values": {"facility_name": "MADHULOK HOSPITAL", "address": "128/628 - 629, 'K' BLOCK, KIDWAI NAGAR, Kanpur Nagar, Uttar Pradesh, 208011", "accreditation_number": "HOS/2025/C2181", "status_text": "Empaneled"}
+    },
+    {
+      "source": "nabh",
+      "key": "d02cc11c0109786ec9ddd5f1",
+      "status": "observed",
+      "checked_at_utc": "2026-11-21T17:07:03.458Z",
+      "url": "https://nabh.co/find-a-healthcare-organisation/",
+      "observed_values": {"facility_name": "Calwin Hospitals Private Limited", "address": "108, A2/1V5, PATTAGASALIANVILAI, EATHAMOZHY ROAD, NAGERCOIL, Kanyakumari, Tamil Nadu, 629002", "accreditation_number": "SHCO-2026-1561", "status_text": "Accredited on 3rd Edition"}
+    },
+    {
+      "source": "nqas",
+      "key": "5724",
+      "status": "observed",
+      "checked_at_utc": "2026-11-21T17:30:45.325Z",
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C57",
+      "observed_values": {"source_serial": "5724", "facility_name": "TURKHA", "state": "Gujarat", "certification_status": "Certified", "validity_date_raw": "02/08/2026"}
+    },
+    {
+      "source": "nqas",
+      "key": "9206",
+      "status": "observed",
+      "checked_at_utc": "2026-11-21T17:30:54.593Z",
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C92",
+      "observed_values": {"source_serial": "9206", "facility_name": "SHC RANMALBILLOD", "state": "Madhya Pradesh", "certification_status": "Certified", "validity_date_raw": "29/12/2028"}
+    },
+    {
+      "source": "nqas",
+      "key": "17263",
+      "status": "observed",
+      "checked_at_utc": "2026-11-21T17:32:27.923Z",
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C172",
+      "observed_values": {"source_serial": "17263", "facility_name": "USREH RASULPUR", "state": "Uttar Pradesh", "certification_status": "Certified", "validity_date_raw": "17/12/2028"}
+    },
+    {
+      "source": "eraktkosh",
+      "key": "283712",
+      "status": "unverified_ui_stalled",
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/#/publicPages/bloodBankDirectory",
+      "observed_values": {},
+      "note": "Selected Rajasthan and searched Rajnish Hospital. No result row rendered; UI remained Searching... / Finding nearest blood centers... after the row wait timed out. This is not a data mismatch."
+    },
+    {
+      "source": "eraktkosh",
+      "key": "284116",
+      "status": "unverified_ui_stalled",
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/#/publicPages/bloodBankDirectory",
+      "observed_values": {},
+      "note": "Reloaded directory and selected Gujarat. Loading persisted and search button was disabled, so the sampled row could not be compared. Console reported Search logging failed with status: 500."
+    },
+    {
+      "source": "eraktkosh",
+      "key": "284709",
+      "status": "not_checked_ui_unavailable",
+      "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/#/publicPages/bloodBankDirectory",
+      "observed_values": {},
+      "note": "Sample retained without substitution. The same browser directory was stuck loading with search disabled, preventing the Kerala lookup."
+    }
+  ]
+}

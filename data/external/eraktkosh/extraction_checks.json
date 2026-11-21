@@ -1,0 +1,17 @@
+{
+  "records": 6524,
+  "states": 36,
+  "raw_field_mismatches": [],
+  "coordinate_quality_counts": {
+    "plausible_unverified": 5267,
+    "zero_placeholder": 1257
+  },
+  "facility_type_counts": {
+    "Blood Bank": 4754,
+    "BSU": 1770
+  },
+  "unique_hospital_codes": 6524,
+  "empty_facility_names": 0,
+  "row_count_matches_manifest_and_csv": true,
+  "sample_seed": 20261121
+}

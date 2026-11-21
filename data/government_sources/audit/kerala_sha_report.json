@@ -1,0 +1,27 @@
+{
+  "source": "https://sha.kerala.gov.in/?page_id=5749&lang=en",
+  "row_count": 11,
+  "capture_method": "rendered_browser_DOM_table_cells",
+  "browser_capture_date": "2026-11-21",
+  "extracted_at_utc": "2026-11-21T18:22:00.514722+00:00",
+  "snapshot_path": "data/government_sources/raw/kerala/browser_table_rows.json",
+  "snapshot_sha256": "cf93efba5c2a27e29018ff7164836b7f811f9fa9f6384f167950fd2f41684480",
+  "http_access_attempt": "403 Forbidden on direct requests; normal public browser page succeeded",
+  "field_presence": {
+    "facility_name": 11,
+    "phone_numbers": 11,
+    "email_addresses": 11,
+    "location": 11,
+    "services": 1,
+    "validity_dates": 0,
+    "source_links": 11
+  },
+  "limitations": [
+    "No validity dates are published in this table.",
+    "Only NISH has an explicit facility-specific service label; the other ten services arrays are empty.",
+    "Baby Memorial's second phone is published as O495-2777777 (letter O), preserved without guessing.",
+    "Ascent Hospital has district Malappuram but an address in Kozhikode; both source claims are preserved.",
+    "The three Government Medical College rows are different locations and remain separate.",
+    "This is a small programme list, not a census of Kerala facilities."
+  ]
+}

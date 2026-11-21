@@ -1,0 +1,2054 @@
+{
+  "source_url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate",
+  "started_at_utc": "2026-11-21T17:32:12.530581+00:00",
+  "finished_at_utc": "2026-11-21T17:32:24.436005+00:00",
+  "source_updated_through": [
+    "30-09-2026"
+  ],
+  "advertised_counts": [
+    22015
+  ],
+  "rows": 22015,
+  "unique_record_ids": 22015,
+  "page_limit": 221,
+  "pages_fetched": 221,
+  "pages_remaining_discovered": [],
+  "failures": [],
+  "coverage": "complete_displayed_listing",
+  "robots_check": {
+    "url": "https://qps.nhsrcindia.org/robots.txt",
+    "checked_at_utc": "2026-11-21T17:32:12.669188+00:00",
+    "http_status": 403
+  },
+  "previous_transient_failures": [
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C142",
+      "page": 142,
+      "fetched_at_utc": "2026-11-21T17:11:51.381370+00:00",
+      "error": "HTTPSConnectionPool(host='qps.nhsrcindia.org', port=443): Read timed out. (read timeout=60)"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C143",
+      "page": 143,
+      "fetched_at_utc": "2026-11-21T17:11:51.381509+00:00",
+      "error": "HTTPSConnectionPool(host='qps.nhsrcindia.org', port=443): Read timed out. (read timeout=60)"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C144",
+      "page": 144,
+      "fetched_at_utc": "2026-11-21T17:11:51.381810+00:00",
+      "error": "HTTPSConnectionPool(host='qps.nhsrcindia.org', port=443): Read timed out. (read timeout=60)"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C200",
+      "page": 200,
+      "fetched_at_utc": "2026-11-21T17:21:41.903091+00:00",
+      "error": "HTTPSConnectionPool(host='qps.nhsrcindia.org', port=443): Read timed out. (read timeout=60)"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C201",
+      "page": 201,
+      "fetched_at_utc": "2026-11-21T17:21:41.903258+00:00",
+      "error": "HTTPSConnectionPool(host='qps.nhsrcindia.org', port=443): Read timed out. (read timeout=60)"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C202",
+      "page": 202,
+      "fetched_at_utc": "2026-11-21T17:21:41.902833+00:00",
+      "error": "HTTPSConnectionPool(host='qps.nhsrcindia.org', port=443): Read timed out. (read timeout=60)"
+    }
+  ],
+  "identity_note": "unique_record_ids counts unique source rows including serial number, not distinct real-world facilities",
+  "interpretation": "Directory assertions only. Certification validity and status are preserved without inferring current clinical service availability.",
+  "pages": [
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate",
+      "page": 0,
+      "fetched_at_utc": "2026-11-21T17:04:51.507675+00:00",
+      "status": 200,
+      "raw_sha256": "f49f6f246a5474a0ff252bcdf5b576a033a53db62bd8100d6b3302afcc532362",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C1",
+      "page": 1,
+      "fetched_at_utc": "2026-11-21T17:04:54.436167+00:00",
+      "status": 200,
+      "raw_sha256": "3900884628fa0b71c218221375f536ca5d9fe47ed78bfad4936829bdb4603770",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C2",
+      "page": 2,
+      "fetched_at_utc": "2026-11-21T17:04:54.436533+00:00",
+      "status": 200,
+      "raw_sha256": "86dfd04cdcdd8b7cbd38c28c1b341211552f3d7b15d3b8eb99ce4b2916c713e7",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C3",
+      "page": 3,
+      "fetched_at_utc": "2026-11-21T17:04:54.436792+00:00",
+      "status": 200,
+      "raw_sha256": "45e40ead599dfdd8e852598da9c76099baff74744a6117355d5f7129f20732d4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C4",
+      "page": 4,
+      "fetched_at_utc": "2026-11-21T17:05:12.122617+00:00",
+      "status": 200,
+      "raw_sha256": "5d717187f4139f904d67013fdf4c8e748a565be3df2c3440c7b5643d0a729c1c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C5",
+      "page": 5,
+      "fetched_at_utc": "2026-11-21T17:05:12.122791+00:00",
+      "status": 200,
+      "raw_sha256": "8669045c307cc55f847a291a6245c7f6a4c08d9780d0d6d1ad483090abb550cd",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C6",
+      "page": 6,
+      "fetched_at_utc": "2026-11-21T17:05:12.122845+00:00",
+      "status": 200,
+      "raw_sha256": "b76093858705ffdf9430ce16e5689bf19e68f8c565d5f7c0b4b56715b33dec9f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C7",
+      "page": 7,
+      "fetched_at_utc": "2026-11-21T17:05:18.563193+00:00",
+      "status": 200,
+      "raw_sha256": "c751a43e42cd9f5aaf91da5cd0d9eb569f4275f708165f70998325a91d8bc7dd",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C8",
+      "page": 8,
+      "fetched_at_utc": "2026-11-21T17:05:18.563354+00:00",
+      "status": 200,
+      "raw_sha256": "0faef1ace4d1dbe656b814fbbcfd3d4de244ee37fed94da66c3f0b5e957b6105",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C9",
+      "page": 9,
+      "fetched_at_utc": "2026-11-21T17:05:18.563666+00:00",
+      "status": 200,
+      "raw_sha256": "17b760a7537dfc2bf9d22dceb814928486a9112a0d702b2ac9321bd131998eaf",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C10",
+      "page": 10,
+      "fetched_at_utc": "2026-11-21T17:05:24.136318+00:00",
+      "status": 200,
+      "raw_sha256": "617d288641ad7edbe66b342dc28ca78d21deb4c91e9f64da820a144ce8117809",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C11",
+      "page": 11,
+      "fetched_at_utc": "2026-11-21T17:05:24.136731+00:00",
+      "status": 200,
+      "raw_sha256": "984e23ddf4b35b50f10389532223c34818fb0fed7dd25fdb14df3dc80e0e89bb",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C12",
+      "page": 12,
+      "fetched_at_utc": "2026-11-21T17:05:24.137021+00:00",
+      "status": 200,
+      "raw_sha256": "48bb07cf9833d7d6b06486d71dbff5cb163f7b590e6d430118fb5d6832687b1c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C13",
+      "page": 13,
+      "fetched_at_utc": "2026-11-21T17:05:29.700865+00:00",
+      "status": 200,
+      "raw_sha256": "25e887374bf4471cb0e6a7bcab2370f43ff648b31b503bfaa103a2c326dafdf2",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C14",
+      "page": 14,
+      "fetched_at_utc": "2026-11-21T17:05:29.701596+00:00",
+      "status": 200,
+      "raw_sha256": "0859300a8e9fc1436594bf8919365d8041b42ac2a24c1d1b1d583a002d6bae6d",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C15",
+      "page": 15,
+      "fetched_at_utc": "2026-11-21T17:05:29.701116+00:00",
+      "status": 200,
+      "raw_sha256": "92bca579828a061c5919c8d4c59a7e65111278d8cb030e751c6facc34829d784",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C16",
+      "page": 16,
+      "fetched_at_utc": "2026-11-21T17:05:35.653404+00:00",
+      "status": 200,
+      "raw_sha256": "a7f99fdd47fa93018f070ff8c3c1bf6ec5cdb120774c7fe3b5825e7dd54c8dd7",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C17",
+      "page": 17,
+      "fetched_at_utc": "2026-11-21T17:05:35.653793+00:00",
+      "status": 200,
+      "raw_sha256": "fbfe140cce4e86068d2a9886ae244cb56d406541ee087e9880adce0206d68cd8",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C18",
+      "page": 18,
+      "fetched_at_utc": "2026-11-21T17:05:35.653972+00:00",
+      "status": 200,
+      "raw_sha256": "f465205add29cbe5dae05fd92dd3bab1205a37671e461c2887c27bb83cf38b90",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C19",
+      "page": 19,
+      "fetched_at_utc": "2026-11-21T17:05:41.540277+00:00",
+      "status": 200,
+      "raw_sha256": "ca1145582c7241f1b05da608d28eaccc1e76fa0d56c0212ab1bd970e52d6f003",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C20",
+      "page": 20,
+      "fetched_at_utc": "2026-11-21T17:05:41.540503+00:00",
+      "status": 200,
+      "raw_sha256": "f1d61971827a6fdc1da1ee5e2eaf9adf1132b83594d6062119dcd39f27fba64e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C21",
+      "page": 21,
+      "fetched_at_utc": "2026-11-21T17:05:41.540535+00:00",
+      "status": 200,
+      "raw_sha256": "49f2578ba7cb103da6f0d7293667cdbd6415b6a331ed5e934e4068a73e4dfdd1",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C22",
+      "page": 22,
+      "fetched_at_utc": "2026-11-21T17:05:47.239437+00:00",
+      "status": 200,
+      "raw_sha256": "5d87d446980561f57349add9b6e67b30945b5fc9167e50c7f28a3c89198f1cef",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C23",
+      "page": 23,
+      "fetched_at_utc": "2026-11-21T17:05:47.239709+00:00",
+      "status": 200,
+      "raw_sha256": "be7e18e2fca07e463c7a377a20b49609bfcd1e87f330b094e23e31865286cdf5",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C24",
+      "page": 24,
+      "fetched_at_utc": "2026-11-21T17:05:47.239882+00:00",
+      "status": 200,
+      "raw_sha256": "58f2d1ac095a73814496f6b852d68aa80f9c93acd0026810fd3464b558ce74e3",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C25",
+      "page": 25,
+      "fetched_at_utc": "2026-11-21T17:05:55.415694+00:00",
+      "status": 200,
+      "raw_sha256": "da28e44b2aadad2c0ea99f4d9044b7706573bbaadd59209b3e8aae65147bd08a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C26",
+      "page": 26,
+      "fetched_at_utc": "2026-11-21T17:05:55.416189+00:00",
+      "status": 200,
+      "raw_sha256": "31253b4d7fa5a8572166e40b4ed927d71dc78def86ff3546c9f15fd2b9d276c2",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C27",
+      "page": 27,
+      "fetched_at_utc": "2026-11-21T17:05:55.416262+00:00",
+      "status": 200,
+      "raw_sha256": "8041712cdf962c5b91850192ba8b57e4c7a53f595a89974fe564bb45069bba47",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C28",
+      "page": 28,
+      "fetched_at_utc": "2026-11-21T17:06:01.587986+00:00",
+      "status": 200,
+      "raw_sha256": "8215224a2ff18c1ff2fe3f023b246f5759af77266ee3918635bb97a7a5fdbd1a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C29",
+      "page": 29,
+      "fetched_at_utc": "2026-11-21T17:06:01.588263+00:00",
+      "status": 200,
+      "raw_sha256": "cb3ade38cf089adfaf7b2b379f5342b848e57078bb11f68c1b7c30a6bc269977",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C30",
+      "page": 30,
+      "fetched_at_utc": "2026-11-21T17:06:01.588317+00:00",
+      "status": 200,
+      "raw_sha256": "d9bce0eee7acde6803aba987c17fe9e9b28b4e25334a1d5d872f97e073b4cf91",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C31",
+      "page": 31,
+      "fetched_at_utc": "2026-11-21T17:06:17.021787+00:00",
+      "status": 200,
+      "raw_sha256": "ecf2ff926217618dacb72678c185567dffac337e548d8b98f02158a5f8110f75",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C32",
+      "page": 32,
+      "fetched_at_utc": "2026-11-21T17:06:17.021295+00:00",
+      "status": 200,
+      "raw_sha256": "81ebe772831acf4843f7245f2a567f26591110b46fef8211e5de33b3c774d48f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C33",
+      "page": 33,
+      "fetched_at_utc": "2026-11-21T17:06:17.021497+00:00",
+      "status": 200,
+      "raw_sha256": "1317eba467a8d771cb96596de742b21a9b7faa858da8a0996559cd2641274cbc",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C34",
+      "page": 34,
+      "fetched_at_utc": "2026-11-21T17:06:22.796802+00:00",
+      "status": 200,
+      "raw_sha256": "a4c3839040cbde198d0b2ccdeba2fb5d93d995d61312bde0b2a9b0f5ffdb7bb8",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C35",
+      "page": 35,
+      "fetched_at_utc": "2026-11-21T17:06:22.797152+00:00",
+      "status": 200,
+      "raw_sha256": "5169427f0882d5e3fef93c70e088949de1b9b15047cfd3133ed454da3acd199b",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C36",
+      "page": 36,
+      "fetched_at_utc": "2026-11-21T17:06:22.797203+00:00",
+      "status": 200,
+      "raw_sha256": "291879a5aa64c5fac22cd934c93c8e1d4ecb463fb99723cf9f4e70c36be41dff",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C37",
+      "page": 37,
+      "fetched_at_utc": "2026-11-21T17:06:28.080448+00:00",
+      "status": 200,
+      "raw_sha256": "c37e1afad5af54f563c450f2e34adbd899fdb6fc71e8bf8853ad33a41b71c736",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C38",
+      "page": 38,
+      "fetched_at_utc": "2026-11-21T17:06:28.081375+00:00",
+      "status": 200,
+      "raw_sha256": "bf8b94bdccc3f9bc4120776dcd757c33671321edb32c37d8c5d4c290711eea08",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C39",
+      "page": 39,
+      "fetched_at_utc": "2026-11-21T17:06:28.081530+00:00",
+      "status": 200,
+      "raw_sha256": "30eeb16df82a66879ee06013df0856e0b9f5965a72c589784b0827a72a3ae89b",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C40",
+      "page": 40,
+      "fetched_at_utc": "2026-11-21T17:06:35.273100+00:00",
+      "status": 200,
+      "raw_sha256": "3f8fdafb2e9591a981ae49ba5f3ca7ca3565bab6101ba59c7ded56e5e200b158",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C41",
+      "page": 41,
+      "fetched_at_utc": "2026-11-21T17:06:35.272870+00:00",
+      "status": 200,
+      "raw_sha256": "e7a6b348a608ff4e95e7fbdd45c93eb136207e809523fcac669c4eddf59c010d",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C42",
+      "page": 42,
+      "fetched_at_utc": "2026-11-21T17:06:35.272781+00:00",
+      "status": 200,
+      "raw_sha256": "377c597b86671275f45b93cd4f8137abefafe80fcd35414957be822e39ec7717",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C43",
+      "page": 43,
+      "fetched_at_utc": "2026-11-21T17:06:41.009890+00:00",
+      "status": 200,
+      "raw_sha256": "c43151abe7e84c4101c4b17ad8968d1fd1ff0b70a6adf40882a32928fb43930e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C44",
+      "page": 44,
+      "fetched_at_utc": "2026-11-21T17:06:41.010397+00:00",
+      "status": 200,
+      "raw_sha256": "bcdd45301fe4793c436adb0c6b0617ebdfa4d8d09226f381b1aea92b897c25eb",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C45",
+      "page": 45,
+      "fetched_at_utc": "2026-11-21T17:06:41.010095+00:00",
+      "status": 200,
+      "raw_sha256": "4e41942578c0c5d578b7dd69ff156efea0a44993ed32cdb73164857f1e98a2e3",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C46",
+      "page": 46,
+      "fetched_at_utc": "2026-11-21T17:06:46.452503+00:00",
+      "status": 200,
+      "raw_sha256": "161c14f6aac4c28c2754ebbedf7db95f6c0a80bae814612e124f3e883d8550de",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C47",
+      "page": 47,
+      "fetched_at_utc": "2026-11-21T17:06:46.452761+00:00",
+      "status": 200,
+      "raw_sha256": "9d4083b487a5f327a90abe7d065d201043fb6f41338be78eca9b3a1801f3af13",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C48",
+      "page": 48,
+      "fetched_at_utc": "2026-11-21T17:06:46.452965+00:00",
+      "status": 200,
+      "raw_sha256": "73aa47458b0d62ca89eaacf0a12fb9e4cdfda643f4e8f617f21431c719bab451",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C49",
+      "page": 49,
+      "fetched_at_utc": "2026-11-21T17:06:52.233786+00:00",
+      "status": 200,
+      "raw_sha256": "e0c37af76a6a7c7254252508e628ba4427d98f4bc3af634fafb991c923baa2d9",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C50",
+      "page": 50,
+      "fetched_at_utc": "2026-11-21T17:06:52.234043+00:00",
+      "status": 200,
+      "raw_sha256": "deb45e14fd6b596cd2036ee951938480f5355c634909d21630a92e5c38cbeb65",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C51",
+      "page": 51,
+      "fetched_at_utc": "2026-11-21T17:06:52.234212+00:00",
+      "status": 200,
+      "raw_sha256": "052a03eba1f1052dd65300e4d79775c7be60c8f95073e231f32a2b743fccf36f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C52",
+      "page": 52,
+      "fetched_at_utc": "2026-11-21T17:06:57.946378+00:00",
+      "status": 200,
+      "raw_sha256": "632cfb4223167e2c44f5bd575d94c4fddee8a3e01e62dce79a7d62149ddd3367",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C53",
+      "page": 53,
+      "fetched_at_utc": "2026-11-21T17:06:57.946965+00:00",
+      "status": 200,
+      "raw_sha256": "058dfba69193d60dcf2702adbaf0e9748495bc203e80a361195c33ab2bb2ef49",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C54",
+      "page": 54,
+      "fetched_at_utc": "2026-11-21T17:06:57.946789+00:00",
+      "status": 200,
+      "raw_sha256": "6f3a580c5ee112771061a92553eb1fbfb2a4f2581ab7600987f43fae827725d3",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C55",
+      "page": 55,
+      "fetched_at_utc": "2026-11-21T17:07:03.525025+00:00",
+      "status": 200,
+      "raw_sha256": "6f47732cd9e5c76e9be3534f479aa1a6d37431d077cb5166e0bcec6af0a9aaf2",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C56",
+      "page": 56,
+      "fetched_at_utc": "2026-11-21T17:07:03.525119+00:00",
+      "status": 200,
+      "raw_sha256": "cb83387f020aee85e85c1e210a4c230afa2caf3053e0010596f633e3d40d966b",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C57",
+      "page": 57,
+      "fetched_at_utc": "2026-11-21T17:07:03.525173+00:00",
+      "status": 200,
+      "raw_sha256": "5b0505347f930b9e69859222f8cfe400b16a78a6c2f99640153904c9a7a812e0",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C58",
+      "page": 58,
+      "fetched_at_utc": "2026-11-21T17:07:08.994318+00:00",
+      "status": 200,
+      "raw_sha256": "3945668c09a6592d72d80694dcf36693ffafc59903af8378d78226dbfcb386f8",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C59",
+      "page": 59,
+      "fetched_at_utc": "2026-11-21T17:07:08.994617+00:00",
+      "status": 200,
+      "raw_sha256": "c86a68a8a22316d74f780bf95c8fa857f85b15cf98035ef0b903afc25f7869aa",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C60",
+      "page": 60,
+      "fetched_at_utc": "2026-11-21T17:07:08.994668+00:00",
+      "status": 200,
+      "raw_sha256": "b7df3a76bc70afc996532a5275e2054ac38acae3cb498d98a3c519ccb6d98cac",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C61",
+      "page": 61,
+      "fetched_at_utc": "2026-11-21T17:07:14.969966+00:00",
+      "status": 200,
+      "raw_sha256": "a9051b1d3f30fd0a6f1275575e245f8b4644d03c227a9689f1ef015c7ea03712",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C62",
+      "page": 62,
+      "fetched_at_utc": "2026-11-21T17:07:14.969531+00:00",
+      "status": 200,
+      "raw_sha256": "1f75ae88d1163115cac956e35dfbbde076c1664e1b591d0af5bbe9f4d4dd8b86",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C63",
+      "page": 63,
+      "fetched_at_utc": "2026-11-21T17:07:14.969914+00:00",
+      "status": 200,
+      "raw_sha256": "252df0c6854560c91198ac516fe143cb4e239d6871395dfb9cc9af47c7748475",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C64",
+      "page": 64,
+      "fetched_at_utc": "2026-11-21T17:07:20.362680+00:00",
+      "status": 200,
+      "raw_sha256": "ee1a741c4d2a98098d99d0e22a434b04086b72241305f49ebd44c8514bf51792",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C65",
+      "page": 65,
+      "fetched_at_utc": "2026-11-21T17:07:20.362773+00:00",
+      "status": 200,
+      "raw_sha256": "32aa08915c16a0fb2ded548dce27a4e5e9ec109eed0c2bea96596ef981067da2",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C66",
+      "page": 66,
+      "fetched_at_utc": "2026-11-21T17:07:20.362984+00:00",
+      "status": 200,
+      "raw_sha256": "fd91984c43bbeae370edb8e841973686ae65df1b163e0d3ce7de700c317ce8ad",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C67",
+      "page": 67,
+      "fetched_at_utc": "2026-11-21T17:07:25.879484+00:00",
+      "status": 200,
+      "raw_sha256": "4fd6065c909f19999cb63859864db6800e4e1adb5d04307d300ae40daafbb8bb",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C68",
+      "page": 68,
+      "fetched_at_utc": "2026-11-21T17:07:25.879735+00:00",
+      "status": 200,
+      "raw_sha256": "354f7255932f293274c41cda3c5d02d7d504fc647a85eb98f8948c819e347315",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C69",
+      "page": 69,
+      "fetched_at_utc": "2026-11-21T17:07:25.880118+00:00",
+      "status": 200,
+      "raw_sha256": "6e1ab99a43eb9672053a92021a6280e9c9c4f7ade163cbc2a529a196c68b735c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C70",
+      "page": 70,
+      "fetched_at_utc": "2026-11-21T17:07:31.232473+00:00",
+      "status": 200,
+      "raw_sha256": "bcd0ac941b99941caed75e64f7b7191638125196c4b5b5c138d93f05571b9153",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C71",
+      "page": 71,
+      "fetched_at_utc": "2026-11-21T17:07:31.232566+00:00",
+      "status": 200,
+      "raw_sha256": "907c159546a7b73db404e9559c28e4093108e63b70e7bc62107557fd4611681e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C72",
+      "page": 72,
+      "fetched_at_utc": "2026-11-21T17:07:31.232776+00:00",
+      "status": 200,
+      "raw_sha256": "944e4e8654e8e0538a9f5e3fc8fef53af40619329520d3b972cfa6e91cf3a087",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C73",
+      "page": 73,
+      "fetched_at_utc": "2026-11-21T17:07:36.979462+00:00",
+      "status": 200,
+      "raw_sha256": "bedb5d360e0b4d58a3734f1cd92a15f43d160281363d9a88e06564b0e6b264ba",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C74",
+      "page": 74,
+      "fetched_at_utc": "2026-11-21T17:07:36.979568+00:00",
+      "status": 200,
+      "raw_sha256": "9501bfaba4e84261e6321213cb80919815e3b95142b6caf34775f707dfe0de9a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C75",
+      "page": 75,
+      "fetched_at_utc": "2026-11-21T17:07:36.979815+00:00",
+      "status": 200,
+      "raw_sha256": "f9b68b598234e473e4fb61f21dd1a3182ec5ba87b72644d1b5dc4bcabdb0433d",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C76",
+      "page": 76,
+      "fetched_at_utc": "2026-11-21T17:07:43.587095+00:00",
+      "status": 200,
+      "raw_sha256": "22e04417c21ad86d0bcec358089a108f9bfccbcd38e3d4dfdaa0284c4b52296e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C77",
+      "page": 77,
+      "fetched_at_utc": "2026-11-21T17:07:43.587187+00:00",
+      "status": 200,
+      "raw_sha256": "6ce315efd68519dbb707526a7bea782951e0d884f60ab18f9ae2f520e3f5c84f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C78",
+      "page": 78,
+      "fetched_at_utc": "2026-11-21T17:07:43.587246+00:00",
+      "status": 200,
+      "raw_sha256": "a64dd8a5ff618bc86a7fd95c758422ab6513552b25c0755354ad73ecc8202e4b",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C79",
+      "page": 79,
+      "fetched_at_utc": "2026-11-21T17:07:48.834099+00:00",
+      "status": 200,
+      "raw_sha256": "0cdd0558798db391b428eb56c36f19c503e2232092f5f7c2811d93f9a0632040",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C80",
+      "page": 80,
+      "fetched_at_utc": "2026-11-21T17:07:48.834187+00:00",
+      "status": 200,
+      "raw_sha256": "8ce778fd448ef8704d0f1406c7e7feea3bfa9f023c5e3517452ed4990d95fa26",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C81",
+      "page": 81,
+      "fetched_at_utc": "2026-11-21T17:07:48.834406+00:00",
+      "status": 200,
+      "raw_sha256": "28af2379e04c150472b4457a43c3f2006ab634c81d325e772fb93c0957ac279c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C82",
+      "page": 82,
+      "fetched_at_utc": "2026-11-21T17:07:54.310290+00:00",
+      "status": 200,
+      "raw_sha256": "184091b21a9761226899892c2d656491b6ce50e6a355be64f57db493a380ea16",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C83",
+      "page": 83,
+      "fetched_at_utc": "2026-11-21T17:07:54.310387+00:00",
+      "status": 200,
+      "raw_sha256": "deb7234d53691fb59fed12f1fd6a6d5ee56e057df96ea8019df5219fdd4c7b48",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C84",
+      "page": 84,
+      "fetched_at_utc": "2026-11-21T17:07:54.310607+00:00",
+      "status": 200,
+      "raw_sha256": "08aa0a2a7094d0cdbbcb3f417d72c396e235fb19da850193e61c60363a3077bc",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C85",
+      "page": 85,
+      "fetched_at_utc": "2026-11-21T17:07:59.985922+00:00",
+      "status": 200,
+      "raw_sha256": "206296681e2cbe2995878c6a62f5d0fb45e36b7682c08439c8b37f944c505948",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C86",
+      "page": 86,
+      "fetched_at_utc": "2026-11-21T17:07:59.986077+00:00",
+      "status": 200,
+      "raw_sha256": "eb9c79f5453125d818535f8ff4c30c4fe2fe315fbcd9601b1a73d47cff1f87cb",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C87",
+      "page": 87,
+      "fetched_at_utc": "2026-11-21T17:07:59.986128+00:00",
+      "status": 200,
+      "raw_sha256": "eb2f08c78ab3f7ea807037d33fa33fa8d449edbddb9663137db1a872823793fc",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C88",
+      "page": 88,
+      "fetched_at_utc": "2026-11-21T17:08:06.022571+00:00",
+      "status": 200,
+      "raw_sha256": "efda3f19eaf7c92a8796bcaa74c9fecdf429ccfd41316ca13209729309d2ee9a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C89",
+      "page": 89,
+      "fetched_at_utc": "2026-11-21T17:08:06.022675+00:00",
+      "status": 200,
+      "raw_sha256": "8cade061eddc71a460d918656aa051d878cdf280f23111bc7f840a7247444a64",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C90",
+      "page": 90,
+      "fetched_at_utc": "2026-11-21T17:08:06.022900+00:00",
+      "status": 200,
+      "raw_sha256": "ae20af77701aabed612a6261b40c393328a974872554220074453a98add76af5",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C91",
+      "page": 91,
+      "fetched_at_utc": "2026-11-21T17:08:11.187268+00:00",
+      "status": 200,
+      "raw_sha256": "55c617a836c0b59b86562d98c375b0706723c3b562a54f086c8a8526320e7a60",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C92",
+      "page": 92,
+      "fetched_at_utc": "2026-11-21T17:08:11.187652+00:00",
+      "status": 200,
+      "raw_sha256": "76ecf119dc3e99ea0694d0ecc53d095ab37b5b7de7019678bcc955bccf3ef567",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C93",
+      "page": 93,
+      "fetched_at_utc": "2026-11-21T17:08:11.187702+00:00",
+      "status": 200,
+      "raw_sha256": "b99961f530ec3f3a8d90d377d2c1fadb9aa86fc273a2c9f38d4b4a264313c86b",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C94",
+      "page": 94,
+      "fetched_at_utc": "2026-11-21T17:08:17.222177+00:00",
+      "status": 200,
+      "raw_sha256": "29bc509271971956cfb1668ba7c987523d1c6faccc59f41b229b56f1d9f4c135",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C95",
+      "page": 95,
+      "fetched_at_utc": "2026-11-21T17:08:17.222297+00:00",
+      "status": 200,
+      "raw_sha256": "2b1514352876adbfc22ca2d16634d6402359fa48a948709e890b931e023e10d0",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C96",
+      "page": 96,
+      "fetched_at_utc": "2026-11-21T17:08:17.222538+00:00",
+      "status": 200,
+      "raw_sha256": "bfd69a9bf7f2ab02c50b97b29f72ed4c11e4561333f584e4a52610048a356e67",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C97",
+      "page": 97,
+      "fetched_at_utc": "2026-11-21T17:08:22.765816+00:00",
+      "status": 200,
+      "raw_sha256": "395bb5f60453ed52dd1e829199a88fcf78fae578a8d0a49ddec0c0d6976258c0",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C98",
+      "page": 98,
+      "fetched_at_utc": "2026-11-21T17:08:22.766121+00:00",
+      "status": 200,
+      "raw_sha256": "514cf14fc29020518f6d04c02abdefe77eb15db84f51108d460a7e273bc5503d",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C99",
+      "page": 99,
+      "fetched_at_utc": "2026-11-21T17:08:22.766173+00:00",
+      "status": 200,
+      "raw_sha256": "8eee513f55da01946c26d7e23920a78ee1479c242d4d3baa85bd4035489ba2c5",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C100",
+      "page": 100,
+      "fetched_at_utc": "2026-11-21T17:08:29.553606+00:00",
+      "status": 200,
+      "raw_sha256": "e5c74481169c1c99c5363bb6cdb534dfa1f99e3abf3b9c681079224efd16cc74",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C101",
+      "page": 101,
+      "fetched_at_utc": "2026-11-21T17:08:29.553703+00:00",
+      "status": 200,
+      "raw_sha256": "9b5f1a4b294f1e8ab39b3e790bba1306a4dec19d0aadd4bf2bb54ca2ff3ec7b4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C102",
+      "page": 102,
+      "fetched_at_utc": "2026-11-21T17:08:29.553912+00:00",
+      "status": 200,
+      "raw_sha256": "05e529860f6d2ae81a9d6a3099d98d5f59e6402d7592013f2bcccdc9f522df29",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C103",
+      "page": 103,
+      "fetched_at_utc": "2026-11-21T17:08:35.531590+00:00",
+      "status": 200,
+      "raw_sha256": "dce70d76986167282eb6499cc58c473beb88c999150a6d0caa1a42e6153fdd56",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C104",
+      "page": 104,
+      "fetched_at_utc": "2026-11-21T17:08:35.531704+00:00",
+      "status": 200,
+      "raw_sha256": "8be914b97171e891fd0d19ea963a28bad7d83f355120eb77ca423fadc1d12de9",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C105",
+      "page": 105,
+      "fetched_at_utc": "2026-11-21T17:08:35.531896+00:00",
+      "status": 200,
+      "raw_sha256": "e5ed150a7d7b955ab9e4efcbce46d7bcff3bd8abeb7c92544c0b2ed55cea6511",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C106",
+      "page": 106,
+      "fetched_at_utc": "2026-11-21T17:10:14.005600+00:00",
+      "status": 200,
+      "raw_sha256": "d7f2c6f43a539a7a4c728f989dcd04047374dda0f4c28923d4e78a55def5ea4a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C107",
+      "page": 107,
+      "fetched_at_utc": "2026-11-21T17:10:14.009322+00:00",
+      "status": 200,
+      "raw_sha256": "bd83808762176bb49a47f29390c0e30100d478502249b46199531bcb190e1fb3",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C108",
+      "page": 108,
+      "fetched_at_utc": "2026-11-21T17:10:14.016576+00:00",
+      "status": 200,
+      "raw_sha256": "849576bfc592d2f274a9dadbcf76e847a57be62c823553141b89f56f26898b8e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C109",
+      "page": 109,
+      "fetched_at_utc": "2026-11-21T17:10:21.887526+00:00",
+      "status": 200,
+      "raw_sha256": "ec0df7f6c60e657ce793e57c978c39ea144baba361929f7005e608356dd5d4d2",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C110",
+      "page": 110,
+      "fetched_at_utc": "2026-11-21T17:10:21.887791+00:00",
+      "status": 200,
+      "raw_sha256": "02b9dd3b16c8db6b72995b79420b0c64b01048144a0417658e040b935ea99677",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C111",
+      "page": 111,
+      "fetched_at_utc": "2026-11-21T17:10:21.887960+00:00",
+      "status": 200,
+      "raw_sha256": "bee44272ee4ea0b1621d5e17aca6bd2ce3bd904f2f4ba77611fea644ab74e650",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C112",
+      "page": 112,
+      "fetched_at_utc": "2026-11-21T17:10:27.521595+00:00",
+      "status": 200,
+      "raw_sha256": "fc52592107a436ed3eb05d3293a5448f348668b8c1f857a219cd9c12c2969409",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C113",
+      "page": 113,
+      "fetched_at_utc": "2026-11-21T17:10:27.521415+00:00",
+      "status": 200,
+      "raw_sha256": "f2031a2800f68c250febb41e9942e7b902ff3f61701a05157d5c9399c2b3d2e1",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C114",
+      "page": 114,
+      "fetched_at_utc": "2026-11-21T17:10:27.520936+00:00",
+      "status": 200,
+      "raw_sha256": "236f43e2085fb4f9676a9cea2922db4b8a6774f3acea754604abb6c21e452151",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C115",
+      "page": 115,
+      "fetched_at_utc": "2026-11-21T17:10:39.055603+00:00",
+      "status": 200,
+      "raw_sha256": "21f6bf730b9d225c4fd9132987afb3de1c4332ad151ee263b8b63ffcf3434bbd",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C116",
+      "page": 116,
+      "fetched_at_utc": "2026-11-21T17:10:39.055699+00:00",
+      "status": 200,
+      "raw_sha256": "f2ef6096994e60f2f4512f0dca4047b5db427cce40e031d536f221ef2615d7e6",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C117",
+      "page": 117,
+      "fetched_at_utc": "2026-11-21T17:10:39.055907+00:00",
+      "status": 200,
+      "raw_sha256": "2d6fb3f481308248ea04b09dd888b05dbf2fa3f7abc016604357081b9ff112f9",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C118",
+      "page": 118,
+      "fetched_at_utc": "2026-11-21T17:10:45.535017+00:00",
+      "status": 200,
+      "raw_sha256": "17c900fb1fefd2e9d5bb5f33a02f461f44fdb84643c98e95a0217ddb41e4e44e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C119",
+      "page": 119,
+      "fetched_at_utc": "2026-11-21T17:10:45.535186+00:00",
+      "status": 200,
+      "raw_sha256": "71b67c87ea4b2ea41ec37cd14742a149e9ed399a8fc267ede583bf897ee4bad2",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C120",
+      "page": 120,
+      "fetched_at_utc": "2026-11-21T17:10:45.535517+00:00",
+      "status": 200,
+      "raw_sha256": "375918c7d26318b6c799a6c898cefb74255101f8c025e5035609716e3ebf805a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C121",
+      "page": 121,
+      "fetched_at_utc": "2026-11-21T17:10:51.128524+00:00",
+      "status": 200,
+      "raw_sha256": "6300a4cfcb7d3f3b7ced510d52adaf759ee90121cb681a36c4a414714959677d",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C122",
+      "page": 122,
+      "fetched_at_utc": "2026-11-21T17:10:51.128623+00:00",
+      "status": 200,
+      "raw_sha256": "766ef66eaea90952d435d41670d840a2b9b0de4ae5b2a4f926bd12edf75583c1",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C123",
+      "page": 123,
+      "fetched_at_utc": "2026-11-21T17:10:51.128675+00:00",
+      "status": 200,
+      "raw_sha256": "6eed6e1187fff3022f4bca679d0744b72bb9b54f9007f61aa89989400fe77edd",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C124",
+      "page": 124,
+      "fetched_at_utc": "2026-11-21T17:10:56.695911+00:00",
+      "status": 200,
+      "raw_sha256": "9bea80e36648e8fd79a3430e2ff1c225035d81e42844bb4f5bb3e7d03dcd3ea9",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C125",
+      "page": 125,
+      "fetched_at_utc": "2026-11-21T17:10:56.696030+00:00",
+      "status": 200,
+      "raw_sha256": "2930a3ca34dc95d5e5cd9ce30163faca4123df1ba47fced5b871ef03b362cebf",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C126",
+      "page": 126,
+      "fetched_at_utc": "2026-11-21T17:10:56.696278+00:00",
+      "status": 200,
+      "raw_sha256": "47000b36566867f0430bb15d2bb345794ce249da94ce31e4bbc0b4352fdc7681",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C127",
+      "page": 127,
+      "fetched_at_utc": "2026-11-21T17:11:11.971937+00:00",
+      "status": 200,
+      "raw_sha256": "6c3d01233f7307c46e00939c793741aba33a1cf04809f520063c14e340967b22",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C128",
+      "page": 128,
+      "fetched_at_utc": "2026-11-21T17:11:11.971626+00:00",
+      "status": 200,
+      "raw_sha256": "aec165d56182bc40377d4f3e9b6c57fab9565b214c41956c05b114e7dc5ac7f9",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C129",
+      "page": 129,
+      "fetched_at_utc": "2026-11-21T17:11:11.971883+00:00",
+      "status": 200,
+      "raw_sha256": "01b0f90630b35306fa2f14343e6653a4a3edc106747423ec2cb0320eba37dc52",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C130",
+      "page": 130,
+      "fetched_at_utc": "2026-11-21T17:11:21.844451+00:00",
+      "status": 200,
+      "raw_sha256": "d9c788651ddeeab6be453537bf6479202b80f4100d821525fc941eabdcaf94ec",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C131",
+      "page": 131,
+      "fetched_at_utc": "2026-11-21T17:11:21.845621+00:00",
+      "status": 200,
+      "raw_sha256": "fbbe5f629d85f5f4fc3e9d9230bf42dbc6283684ee9355ea32bf67a3d5e245a4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C132",
+      "page": 132,
+      "fetched_at_utc": "2026-11-21T17:11:21.845808+00:00",
+      "status": 200,
+      "raw_sha256": "67017f2e6804096aa0a47f25f0687ee8a7b4513d0f26d679db57fcdf466f3203",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C133",
+      "page": 133,
+      "fetched_at_utc": "2026-11-21T17:11:30.545875+00:00",
+      "status": 200,
+      "raw_sha256": "a63e2c4c05aef54205a021d5848dc7444c8e367a05bac5bc1df67364bb350d43",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C134",
+      "page": 134,
+      "fetched_at_utc": "2026-11-21T17:11:30.545972+00:00",
+      "status": 200,
+      "raw_sha256": "67d027d664f4b64ddff56840e4ded006dc007647ffdfd04556d37745050b9c02",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C135",
+      "page": 135,
+      "fetched_at_utc": "2026-11-21T17:11:30.546195+00:00",
+      "status": 200,
+      "raw_sha256": "90fab2360bd731cba847ecf83fc7eae598d699bea6087aa4b0ba31f9ec547539",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C136",
+      "page": 136,
+      "fetched_at_utc": "2026-11-21T17:11:39.895171+00:00",
+      "status": 200,
+      "raw_sha256": "7d0d60ff8a2974e7384f6eed42071facbc52ba82c9118c2e92e76c353052ec1e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C137",
+      "page": 137,
+      "fetched_at_utc": "2026-11-21T17:11:39.895428+00:00",
+      "status": 200,
+      "raw_sha256": "feb584535504bdad955949a1ab9aba2df2009bee3d7a8a5877d7aed4df3f1f3a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C138",
+      "page": 138,
+      "fetched_at_utc": "2026-11-21T17:11:39.895613+00:00",
+      "status": 200,
+      "raw_sha256": "4d87a3688cf4c4956c7388e89bb61e80c63f221d180461dcdedf95a5ebca6883",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C139",
+      "page": 139,
+      "fetched_at_utc": "2026-11-21T17:11:45.309562+00:00",
+      "status": 200,
+      "raw_sha256": "1a96876781da7de2b038dbd85eda8d9515edfeeddc4920133151ccde8d19afd0",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C140",
+      "page": 140,
+      "fetched_at_utc": "2026-11-21T17:11:45.309657+00:00",
+      "status": 200,
+      "raw_sha256": "d3fbc3854d734ee0ce0e8523d8c4a84404ce4c76fa25f91881b4628f5e295ee5",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C141",
+      "page": 141,
+      "fetched_at_utc": "2026-11-21T17:11:45.309871+00:00",
+      "status": 200,
+      "raw_sha256": "e8ec7f78d07902b48b8871ba14a3ff66aa9e262e9379b1665648a1f1c14772ce",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C142",
+      "page": 142,
+      "fetched_at_utc": "2026-11-21T17:32:13.784852+00:00",
+      "status": 200,
+      "raw_sha256": "b7d70ceac1d9029387a2c70a6e8e564c817485dba5de81a49f81da52a9aec5fd",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C143",
+      "page": 143,
+      "fetched_at_utc": "2026-11-21T17:32:13.785131+00:00",
+      "status": 200,
+      "raw_sha256": "663e3a1d57eb2c84ebd08d74dd32aea0125e4553ecbb01b3976775ed50fb59eb",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C144",
+      "page": 144,
+      "fetched_at_utc": "2026-11-21T17:32:17.332490+00:00",
+      "status": 200,
+      "raw_sha256": "8abc5313a69f81c14edd740cf49b465e1cb659e209131fd71d4cb856481f0053",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C145",
+      "page": 145,
+      "fetched_at_utc": "2026-11-21T17:17:38.849186+00:00",
+      "status": 200,
+      "raw_sha256": "468f0524c628b473e04c1bfad9aac78bbecc78283fa78c5ffc8a1629963c09e4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C146",
+      "page": 146,
+      "fetched_at_utc": "2026-11-21T17:17:43.452881+00:00",
+      "status": 200,
+      "raw_sha256": "c1eaca5cd3814fba9d0fa86c249a77c94371390ff0a347ed80c127a93280f0f4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C147",
+      "page": 147,
+      "fetched_at_utc": "2026-11-21T17:17:43.452972+00:00",
+      "status": 200,
+      "raw_sha256": "eacce847ee013a49d2e57cf928ae8a63d34031cd668724794eaa237bbfa93ae8",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C148",
+      "page": 148,
+      "fetched_at_utc": "2026-11-21T17:17:43.453170+00:00",
+      "status": 200,
+      "raw_sha256": "8e2cfc226a14d285c697af07a8cf8445d2309ec1e218ca23fe067699a5e0d40c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C149",
+      "page": 149,
+      "fetched_at_utc": "2026-11-21T17:17:49.486153+00:00",
+      "status": 200,
+      "raw_sha256": "3dbeb7829cee930aaccc85b13a301b0e73ea2ecbf5465eaf44c82960a159c44b",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C150",
+      "page": 150,
+      "fetched_at_utc": "2026-11-21T17:17:49.486312+00:00",
+      "status": 200,
+      "raw_sha256": "720331c3828b019b471a379efba92a5eb28be027e065840675ca5966cdee394c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C151",
+      "page": 151,
+      "fetched_at_utc": "2026-11-21T17:17:49.486606+00:00",
+      "status": 200,
+      "raw_sha256": "9a64b634ffc251f19516abbf4c942d7a14c24f450481d97c436c032d0b943e0d",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C152",
+      "page": 152,
+      "fetched_at_utc": "2026-11-21T17:17:55.263450+00:00",
+      "status": 200,
+      "raw_sha256": "41f422b7ca645f9f0f78b1c44742b9b18cd88ce8bbf2f5728256e57825afa561",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C153",
+      "page": 153,
+      "fetched_at_utc": "2026-11-21T17:17:55.264917+00:00",
+      "status": 200,
+      "raw_sha256": "95991ce4c017b913048b80b6c8d33b5e2fc0a92ae2ef2f4fe3d3a9dd39796550",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C154",
+      "page": 154,
+      "fetched_at_utc": "2026-11-21T17:17:55.265159+00:00",
+      "status": 200,
+      "raw_sha256": "6069174b89144f8ce98e6a971033388ebc9de97f0331b554d9500658ae4e40b7",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C155",
+      "page": 155,
+      "fetched_at_utc": "2026-11-21T17:18:01.733881+00:00",
+      "status": 200,
+      "raw_sha256": "54b8225ee8110144b7ecd34807758933264b0a5bff3fe5fc1fa86a184bee30ce",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C156",
+      "page": 156,
+      "fetched_at_utc": "2026-11-21T17:18:01.734018+00:00",
+      "status": 200,
+      "raw_sha256": "472b9ad19b375a9551ef934c8bb721280f58659242ef3e564aef79afb81996c7",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C157",
+      "page": 157,
+      "fetched_at_utc": "2026-11-21T17:18:01.734067+00:00",
+      "status": 200,
+      "raw_sha256": "631bc7b9d09209d6b25cf104cd2e5bc13f129e2b38f651f4285d87eeb4833d96",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C158",
+      "page": 158,
+      "fetched_at_utc": "2026-11-21T17:18:07.455741+00:00",
+      "status": 200,
+      "raw_sha256": "90b72ee76d62aabd5de4ead231a912069f525ec965c50f5483cd3de5d4242e4d",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C159",
+      "page": 159,
+      "fetched_at_utc": "2026-11-21T17:18:07.456996+00:00",
+      "status": 200,
+      "raw_sha256": "34dd493669e719b37ad09d2f1c60bba6238f137b0741a1c32179bbe99eecb4e0",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C160",
+      "page": 160,
+      "fetched_at_utc": "2026-11-21T17:18:07.456331+00:00",
+      "status": 200,
+      "raw_sha256": "98585fe107788d65dcd684238e947e75ee577b6347e4eea90d8043e41920a1b9",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C161",
+      "page": 161,
+      "fetched_at_utc": "2026-11-21T17:18:38.007717+00:00",
+      "status": 200,
+      "raw_sha256": "b4749dfceb4b1b42096817166e4d53a913080fb069d4a66a7d2226c8f523ab35",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C162",
+      "page": 162,
+      "fetched_at_utc": "2026-11-21T17:18:38.008241+00:00",
+      "status": 200,
+      "raw_sha256": "90394c2d137ea83ace68551ba0fd959644c96bbf09482164ce6f64e535d26ccf",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C163",
+      "page": 163,
+      "fetched_at_utc": "2026-11-21T17:18:38.008416+00:00",
+      "status": 200,
+      "raw_sha256": "0b08b9b6f454393d68588cce1d2e33f05ec68e82a43e19f15691cf3634bde3f1",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C164",
+      "page": 164,
+      "fetched_at_utc": "2026-11-21T17:18:43.866486+00:00",
+      "status": 200,
+      "raw_sha256": "124a7f4c60ff7293f80e596ec762b656184ca480e3f6f2e6f0e85cf301f9096c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C165",
+      "page": 165,
+      "fetched_at_utc": "2026-11-21T17:18:43.866609+00:00",
+      "status": 200,
+      "raw_sha256": "43f61ddd1e71a17c264308f93d5877c90fdfaa30a1421332cece5e38733c79d4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C166",
+      "page": 166,
+      "fetched_at_utc": "2026-11-21T17:18:43.866982+00:00",
+      "status": 200,
+      "raw_sha256": "eba896fa1a251aacb3a22e1fd28d752f783e4418fc38a49d4ddbd3f494463647",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C167",
+      "page": 167,
+      "fetched_at_utc": "2026-11-21T17:18:50.619252+00:00",
+      "status": 200,
+      "raw_sha256": "88f0be8da023d8c58e68720acb45fa0ebf99050621e6cc837955e0dee1822768",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C168",
+      "page": 168,
+      "fetched_at_utc": "2026-11-21T17:18:50.619539+00:00",
+      "status": 200,
+      "raw_sha256": "1f23f256bb17d517e81aed51834d0067c51a332565300647a45918f92392115f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C169",
+      "page": 169,
+      "fetched_at_utc": "2026-11-21T17:18:50.619602+00:00",
+      "status": 200,
+      "raw_sha256": "9aafa562610c2d50d4437420303becf2578312c0f3fcf692f1386894b671ec6f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C170",
+      "page": 170,
+      "fetched_at_utc": "2026-11-21T17:18:57.181020+00:00",
+      "status": 200,
+      "raw_sha256": "5a0987228ba650143fda849cfb0e7d6af11f01e76e65de090a06c381ac801833",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C171",
+      "page": 171,
+      "fetched_at_utc": "2026-11-21T17:18:57.181247+00:00",
+      "status": 200,
+      "raw_sha256": "fc4b8f25b3e530b12bb35dd0d1f5c1cae3d974ab2771df2369ad18a8aeca390b",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C172",
+      "page": 172,
+      "fetched_at_utc": "2026-11-21T17:18:57.181357+00:00",
+      "status": 200,
+      "raw_sha256": "085c6cb6604b639bda9459273372c9ca6c59b14ea88d401ec9cdba7edfcbd8c4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C173",
+      "page": 173,
+      "fetched_at_utc": "2026-11-21T17:19:02.919700+00:00",
+      "status": 200,
+      "raw_sha256": "362a62fb89f4f047a6c5b9dca62fe98fa53bcc6be7e5cef93b80383c12ef02f7",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C174",
+      "page": 174,
+      "fetched_at_utc": "2026-11-21T17:19:02.919434+00:00",
+      "status": 200,
+      "raw_sha256": "124a73397eedc4502b34a046cfd084ec70d8afcc48d681d10a68fdfd244be123",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C175",
+      "page": 175,
+      "fetched_at_utc": "2026-11-21T17:19:02.919292+00:00",
+      "status": 200,
+      "raw_sha256": "2852adf587dea2960be17258f20d523ae26b3bfa77688a699f8fb89b6541023c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C176",
+      "page": 176,
+      "fetched_at_utc": "2026-11-21T17:19:08.880303+00:00",
+      "status": 200,
+      "raw_sha256": "807017430c005098aee832ca51fb0ae13fc27a284ea1dd62295b52be16225bd8",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C177",
+      "page": 177,
+      "fetched_at_utc": "2026-11-21T17:19:08.880424+00:00",
+      "status": 200,
+      "raw_sha256": "554101e1bcbac8ef0b26e9f80ba47aa36700d39a25644f27c08004402ba4f6ff",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C178",
+      "page": 178,
+      "fetched_at_utc": "2026-11-21T17:19:08.880660+00:00",
+      "status": 200,
+      "raw_sha256": "2b2eaeed0aa19ba30117e44eb849b6498a7cb67b337ab093ed545007c56d8269",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C179",
+      "page": 179,
+      "fetched_at_utc": "2026-11-21T17:20:58.302130+00:00",
+      "status": 200,
+      "raw_sha256": "6a2812019c0dc48e947a8348ae19148df5fe209e069adb7e465a00e036b833e1",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C180",
+      "page": 180,
+      "fetched_at_utc": "2026-11-21T17:20:58.302241+00:00",
+      "status": 200,
+      "raw_sha256": "e5fa8fe16091415a054bd49e880a23c08dc3ce047f515100973f094d8abb541f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C181",
+      "page": 181,
+      "fetched_at_utc": "2026-11-21T17:20:58.302291+00:00",
+      "status": 200,
+      "raw_sha256": "1ad214a71311650921c74f879e72bd83a720d76a8575ad883a85e227d4627984",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C182",
+      "page": 182,
+      "fetched_at_utc": "2026-11-21T17:21:04.583810+00:00",
+      "status": 200,
+      "raw_sha256": "b801b91ed638ec07865578235bb44febd79e48675ad859ba5bc640c21ed98841",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C183",
+      "page": 183,
+      "fetched_at_utc": "2026-11-21T17:21:04.583907+00:00",
+      "status": 200,
+      "raw_sha256": "4fb78968aabac366471e372a4ed96f1952d290374059522cbd302c7b2b0db748",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C184",
+      "page": 184,
+      "fetched_at_utc": "2026-11-21T17:21:04.584116+00:00",
+      "status": 200,
+      "raw_sha256": "4142ec226b4c341c4650fe35a456e1b039df9c5287fc571cc860ae4a0790e4bc",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C185",
+      "page": 185,
+      "fetched_at_utc": "2026-11-21T17:21:10.996772+00:00",
+      "status": 200,
+      "raw_sha256": "051b7c0ba9f9e339ab95cd32479ae6297b6d9c52f4c0d5e0b1d0fff733dd9eef",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C186",
+      "page": 186,
+      "fetched_at_utc": "2026-11-21T17:21:10.997018+00:00",
+      "status": 200,
+      "raw_sha256": "dd5f85b1fcbf857e199b9af7b6d68815a9d7c1a47342e4504cf837a32959a899",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C187",
+      "page": 187,
+      "fetched_at_utc": "2026-11-21T17:21:10.997188+00:00",
+      "status": 200,
+      "raw_sha256": "db0256c53c6802053446c4c0a96aaa2a4d85d2f211d7f84c91503aaa6ea85369",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C188",
+      "page": 188,
+      "fetched_at_utc": "2026-11-21T17:21:17.960778+00:00",
+      "status": 200,
+      "raw_sha256": "c51465005edafc2814e6599b3f4e1f1d7dd94271b8a8d3c1429860000c3b6bef",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C189",
+      "page": 189,
+      "fetched_at_utc": "2026-11-21T17:21:17.960870+00:00",
+      "status": 200,
+      "raw_sha256": "0c4b27e6943df83792b29dc2a8345a9645a818e7e2b5c8e5d5de691cc2f924d1",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C190",
+      "page": 190,
+      "fetched_at_utc": "2026-11-21T17:21:17.961075+00:00",
+      "status": 200,
+      "raw_sha256": "2e1cb6a9ba50d486a2452b3224ab39db09ca263e8555cc74bebf425bfef5ce5e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C191",
+      "page": 191,
+      "fetched_at_utc": "2026-11-21T17:21:23.890022+00:00",
+      "status": 200,
+      "raw_sha256": "6b1af8aa001f2ca28a42cf97098ea2ae992558b361d3f6e2fe705b352afcd026",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C192",
+      "page": 192,
+      "fetched_at_utc": "2026-11-21T17:21:23.890111+00:00",
+      "status": 200,
+      "raw_sha256": "6e2efa50618c7aa71ad04b0fa02ed72faa0c895768147d5d68748e06fbefddce",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C193",
+      "page": 193,
+      "fetched_at_utc": "2026-11-21T17:21:23.890321+00:00",
+      "status": 200,
+      "raw_sha256": "42f9abc6f593c5dc143426871e5695051f01a17202e7b9c86edc2c718bb384a6",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C194",
+      "page": 194,
+      "fetched_at_utc": "2026-11-21T17:21:29.748983+00:00",
+      "status": 200,
+      "raw_sha256": "5719b808eea8fa23fb98fb2be04275b50dbf09be83de3f0b243bf4fe3f912da7",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C195",
+      "page": 195,
+      "fetched_at_utc": "2026-11-21T17:21:29.749079+00:00",
+      "status": 200,
+      "raw_sha256": "033945deea5479c08d7d99364a8b415115c38bb0367a0d3e74a20ba94edf1e17",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C196",
+      "page": 196,
+      "fetched_at_utc": "2026-11-21T17:21:29.749299+00:00",
+      "status": 200,
+      "raw_sha256": "cce34934137770b81e1309db5bf2fc461f934f00c62ac2cbb09df2c4cd134586",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C197",
+      "page": 197,
+      "fetched_at_utc": "2026-11-21T17:21:35.809824+00:00",
+      "status": 200,
+      "raw_sha256": "46f35123891d5e4a23d94754f9cafe6e4aff4a03bbe6b01594fc00f570e32912",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C198",
+      "page": 198,
+      "fetched_at_utc": "2026-11-21T17:21:35.810122+00:00",
+      "status": 200,
+      "raw_sha256": "f20c59704f532a1242bf39bd9826ef20789c9ef6c76361c43d04421c73a07b23",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C199",
+      "page": 199,
+      "fetched_at_utc": "2026-11-21T17:21:35.810184+00:00",
+      "status": 200,
+      "raw_sha256": "052b084e5a6523f59c14f165f53284404a8f27d35b4c641addc46bbeee5aaf8a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C200",
+      "page": 200,
+      "fetched_at_utc": "2026-11-21T17:32:17.332592+00:00",
+      "status": 200,
+      "raw_sha256": "e669b5fc7689503775b8a547610079268352863ba9de017483624663ae4beb5c",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C201",
+      "page": 201,
+      "fetched_at_utc": "2026-11-21T17:32:20.642133+00:00",
+      "status": 200,
+      "raw_sha256": "abc35305f31365c9a0c0448c32f0fe0cd483e5c671ad0d3884b559c7edad28d4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C202",
+      "page": 202,
+      "fetched_at_utc": "2026-11-21T17:32:20.642229+00:00",
+      "status": 200,
+      "raw_sha256": "56a181652090463cf69be1b57411b197bbc6e77d92db52c07b21a3e34001099f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C203",
+      "page": 203,
+      "fetched_at_utc": "2026-11-21T17:31:11.818741+00:00",
+      "status": 200,
+      "raw_sha256": "b926a0688030d670b95a05506f6c2997d9da9175a65c72a6cdb5dd1a82b26e99",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C204",
+      "page": 204,
+      "fetched_at_utc": "2026-11-21T17:31:18.478567+00:00",
+      "status": 200,
+      "raw_sha256": "0c3c64db22f0f2b0ac5819e12d9150ea9f4d0ba1ebd899d7273327bd8b9f9cb3",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C205",
+      "page": 205,
+      "fetched_at_utc": "2026-11-21T17:31:18.478498+00:00",
+      "status": 200,
+      "raw_sha256": "85a54a2793b6f10bf742fa2cc19a1b1e129451a97518631f3c205d1d228fc06b",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C206",
+      "page": 206,
+      "fetched_at_utc": "2026-11-21T17:31:18.478261+00:00",
+      "status": 200,
+      "raw_sha256": "25c5f5f13bfc77a5329e4076e63c4ad68ac9f3977e55ffad7714aa725335df11",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C207",
+      "page": 207,
+      "fetched_at_utc": "2026-11-21T17:31:26.392964+00:00",
+      "status": 200,
+      "raw_sha256": "6200f9e4eb66fc6c5aedff84020c9a6c9b3bbd040d3832298c385ebafd528e57",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C208",
+      "page": 208,
+      "fetched_at_utc": "2026-11-21T17:31:26.393268+00:00",
+      "status": 200,
+      "raw_sha256": "bbd500e1c4fdedcf17559f3e95c352eb3ece77dee267c98dac1d10b41fd94117",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C209",
+      "page": 209,
+      "fetched_at_utc": "2026-11-21T17:31:26.393437+00:00",
+      "status": 200,
+      "raw_sha256": "35a3baa5d89d8ce11f09623c7aac757134e52d621851d28db6beda9d63ead8fd",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C210",
+      "page": 210,
+      "fetched_at_utc": "2026-11-21T17:31:33.568350+00:00",
+      "status": 200,
+      "raw_sha256": "b54a347aa63877b401c64c81c7a62200f94874ef95564ef16309e7f9ee65656a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_certified_value=All&field_state_target_id=All&page=%2C211",
+      "page": 211,
+      "fetched_at_utc": "2026-11-21T17:31:33.568438+00:00",
+      "status": 200,
+      "raw_sha256": "6cce57629d982f05bcc331f6d58e14546c34f49d62f76afff0c139e3d23f871f",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C212",
+      "page": 212,
+      "fetched_at_utc": "2026-11-21T17:31:11.817855+00:00",
+      "status": 200,
+      "raw_sha256": "a789c775805ec3e553c2e30b98c0b111e2ff577284bafaca027fa7a90da6c383",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C213",
+      "page": 213,
+      "fetched_at_utc": "2026-11-21T17:31:11.817278+00:00",
+      "status": 200,
+      "raw_sha256": "8079f927ab5c4a64e16c747e8efd1e7454909f7792edf55ad1e17e478232ea17",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C214",
+      "page": 214,
+      "fetched_at_utc": "2026-11-21T17:31:33.568642+00:00",
+      "status": 200,
+      "raw_sha256": "eec06bce0a1eab161d62d9bee37e60388bc98187f44e2344b96bf5598ab097ce",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C215",
+      "page": 215,
+      "fetched_at_utc": "2026-11-21T17:31:40.988822+00:00",
+      "status": 200,
+      "raw_sha256": "f72dd7327aa6f4e0c28fc278f1a77339b7c00c30e0ca3874d14353a952d70b1e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C216",
+      "page": 216,
+      "fetched_at_utc": "2026-11-21T17:31:40.988999+00:00",
+      "status": 200,
+      "raw_sha256": "ea2eccea71ff5469bf37954b008bc886764a6922d9bc4c53d7f9c8972aad180a",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C217",
+      "page": 217,
+      "fetched_at_utc": "2026-11-21T17:31:40.989566+00:00",
+      "status": 200,
+      "raw_sha256": "c9ee5694301f7c1350b8d548777c7906ab12504297351d7aed95341939790aa4",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C218",
+      "page": 218,
+      "fetched_at_utc": "2026-11-21T17:31:48.959445+00:00",
+      "status": 200,
+      "raw_sha256": "16121c3c95358dd1f84f36357a5663c749d86a249872c63268d91ceff0a2955e",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C219",
+      "page": 219,
+      "fetched_at_utc": "2026-11-21T17:31:48.959575+00:00",
+      "status": 200,
+      "raw_sha256": "e7c85762a97937c0c64e77eab1231d137434e0513d24355cc7074a633aa6db68",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    },
+    {
+      "url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C220",
+      "page": 220,
+      "fetched_at_utc": "2026-11-21T17:17:38.849958+00:00",
+      "status": 200,
+      "raw_sha256": "a6704cb3b32738e7b0e134e7bf946de427ad4f734408f3ab172a6e74f5f75ec7",
+      "advertised_count": 22015,
+      "source_updated_through": "30-09-2026"
+    }
+  ]
+}

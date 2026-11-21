@@ -1,0 +1,19 @@
+[
+  {
+    "recorded_at_utc": "2026-11-21T18:22:29.964603+00:00",
+    "source_url": "https://www.cmchistn.com/empanelment/hospital-list",
+    "method": "Browser control: opened hospital profile from live table",
+    "facility_name": "Ariyalur Golden Hospital Pvt.Ltd, Ariyalur TN.",
+    "address": "81A,PERIYARNAGAR MAIN ROAD,",
+    "services": [
+      "Follow Up Procedure",
+      "General Medicine",
+      "Nephrology",
+      "Orthopedics"
+    ],
+    "directory_count": 2157,
+    "result": "Displayed name, address and all four service labels match downloaded export. Profile has no facility contact or validity fields.",
+    "scope": "One targeted UI extraction check, not a statistical sample or real-world service verification.",
+    "export_sha256": "3b980edf31d36d5a740fdc2a9cbd920620f9e28ff876bea90e20e82d937806ed"
+  }
+]

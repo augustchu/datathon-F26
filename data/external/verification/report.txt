@@ -1,0 +1,19 @@
+Browser verification of supplemental healthcare directories
+
+Extraction fidelity only; not verification of real-world service availability, location truth, or source independence.
+
+Seed: 20261121. Three random records per saved source extract.
+Matched: 6; mismatched: 0; unverified: 3.
+
+nabh | Urocare Hospital LLP | match
+nabh | MADHULOK HOSPITAL | match
+nabh | Calwin Hospitals Private Limited | match
+nqas | TURKHA | match
+nqas | SHC RANMALBILLOD | match
+nqas | USREH RASULPUR | match
+eraktkosh | Rajnish Hospital Blood Centre | unverified_ui_stalled
+  Selected Rajasthan and searched Rajnish Hospital. No result row rendered; UI remained Searching... / Finding nearest blood centers... after the row wait timed out. This is not a data mismatch.
+eraktkosh | Shree Voluntary Blood Centre, Himmatagar | unverified_ui_stalled
+  Reloaded directory and selected Gujarat. Loading persisted and search button was disabled, so the sampled row could not be compared. Console reported Search logging failed with status: 500.
+eraktkosh | Ansar Hospital | not_checked_ui_unavailable
+  Sample retained without substitution. The same browser directory was stuck loading with search disabled, preventing the Kerala lookup.

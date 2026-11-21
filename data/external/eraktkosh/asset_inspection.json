@@ -1,0 +1,10 @@
+{
+  "asset_url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/static/js/main.4212cda9.js",
+  "sha256": "e260c18194966b7d3387d41275462bbffffa2794edf8a3366592a77cae465883",
+  "discovered_public_paths": [
+    "/eraktkosh/master/all",
+    "/eraktkosh/bloodbank/nearest",
+    "/publicPages/bloodBankDirectory"
+  ],
+  "note": "Full third-party application code omitted; public route provenance retained."
+}

@@ -1,0 +1,148 @@
+{
+  "generated_at_utc": "2026-11-21T17:42:53.928972+00:00",
+  "validity_assessed_as_of": "2026-11-21",
+  "purpose": "Additional evidence for facility identity, location and explicitly recorded certification/blood-service type in the CMU datathon challenge.",
+  "excluded_provided_sources": [
+    "Virtue Foundation/FDR facility dataset",
+    "India Post PIN directory",
+    "NFHS-5",
+    "geoBoundaries",
+    "DataMeet"
+  ],
+  "excluded_fields": [
+    "emails",
+    "phone numbers",
+    "administrative codes other than source record IDs",
+    "web implementation endpoints",
+    "raw file paths",
+    "map UI metadata",
+    "unverified certificate-document contents"
+  ],
+  "null_representation": {
+    "jsonl": "JSON null",
+    "csv": "empty cell"
+  },
+  "row_policy": "Source rows and order are retained; no entity deduplication, cross-source joins, geography imports or clinical-specialty inference.",
+  "field_definitions": {
+    "source_record_id": "Existing source/export record identifier. NQAS uses a hash of the source row; NABH uses a name/address/accreditation hash; eRaktKosh uses its hospital code. These are not cross-source facility IDs.",
+    "facility_name": "Verbatim facility name from the saved source extract.",
+    "address": "Verbatim source address; no city, district, state or PIN inferred from it.",
+    "state": "State explicitly assigned by the source table caption or the source state-filter response. Not inferred from address text.",
+    "latitude": "Source latitude in decimal degrees, or NULL when missing, zero-placeholder, nonnumeric or outside global coordinate bounds. Not geographically verified.",
+    "longitude": "Source longitude in decimal degrees with the same NULL handling as latitude.",
+    "coordinate_quality": "source_coordinates_unverified, missing_or_ambiguous, zero_placeholder, invalid_format or invalid_range. A plausible number does not verify the facility's location.",
+    "location_verified": "Always false: no independent location verification has been performed.",
+    "accreditation_number": "Verbatim NABH directory identifier. The source may describe accreditation, certification, empanelment or renewal.",
+    "certification_status": "Exact status text asserted by NABH or NHSRC, preserved without treating all statuses as accreditation.",
+    "validity_date_text": "Exact NHSRC validity-date text in DD/MM/YYYY format.",
+    "validity_date_iso": "Parsed NHSRC date in YYYY-MM-DD format, or NULL if unavailable.",
+    "validity_expired": "True when the source's validity date is before 2026-11-21; false when on/after that date; NULL when unknown. False does not establish current certification or clinical availability.",
+    "facility_type": "Exact eRaktKosh type field: Blood Bank or BSU (blood storage unit). This is a directory claim, not a clinical capability confirmation.",
+    "evidence_text": "Exact relevant source-field excerpt: NABH status_text, NHSRC certification_status, or eRaktKosh facility_type. It is not a synthesized narrative. Name/address/date fields preserve their own source text separately.",
+    "source_url": "Public directory citation. NHSRC pagination is retained in the URL where present; NABH and eRaktKosh records can be located by name or identifier in their lookup UI.",
+    "retrieved_at_utc": "UTC retrieval timestamp from the original scrape, not the date of independent clinical verification."
+  },
+  "sources": {
+    "nabh": {
+      "row_count": 500,
+      "unique_source_record_ids": 499,
+      "fields": [
+        "source_record_id",
+        "facility_name",
+        "address",
+        "latitude",
+        "longitude",
+        "coordinate_quality",
+        "location_verified",
+        "accreditation_number",
+        "certification_status",
+        "evidence_text",
+        "source_url",
+        "retrieved_at_utc"
+      ],
+      "input_sha256": "a25d5e977cd7e54c9bde03cc13ad382a21464650b77e6b7ccd7e741b6ddfc86b",
+      "output_sha256": {
+        "nabh.jsonl": "4ce1693ce450f3990fc5b5cd3a1f26b1a84ad2dc59b11132c4b43e02f752d3a5",
+        "nabh.csv": "04ee0b488cde190f584bb3e1126824e5a53acc6b013a2e5349b7f82eb60cab86"
+      },
+      "limitations": [
+        "Partial extract: 500 rows from 20 evenly spread pages of 21,609 advertised entries at collection time.",
+        "One repeated name/address/accreditation identity is retained; rows are not guaranteed distinct facilities.",
+        "The directory includes accreditation, certification, empanelment and renewal; migration can produce incomplete or inconsistent information.",
+        "No clinical specialty is inferred from accreditation or facility name; certificate contents were not verified.",
+        "State is not separately structured in this extract, so only the full source address is retained.",
+        "Coordinates were associated by exact name and address in the source response, but their real-world accuracy remains unverified."
+      ],
+      "coordinate_quality_counts": {
+        "source_coordinates_unverified": 449,
+        "missing_or_ambiguous": 51
+      }
+    },
+    "nqas": {
+      "row_count": 22015,
+      "unique_source_record_ids": 22015,
+      "fields": [
+        "source_record_id",
+        "facility_name",
+        "state",
+        "certification_status",
+        "validity_date_text",
+        "validity_date_iso",
+        "validity_expired",
+        "evidence_text",
+        "source_url",
+        "retrieved_at_utc"
+      ],
+      "input_sha256": "f6588a8b6316734705520a66371f76b64afe531fb75673e28412c75a6bdc1f89",
+      "output_sha256": {
+        "nqas.jsonl": "9bad3a7a7ded5688b756d55a07cbe31ceca88d4d3c04b276a7e7cc575c41b32e",
+        "nqas.csv": "e8dc88ba3a23ae03edb1dd9641f287d159b93593b6950b67acf9f4f8b98e8154"
+      },
+      "limitations": [
+        "22,015 displayed certification rows were collected, not a national census of facilities or a guarantee of distinct facility identities.",
+        "Source is marked updated through 30 September 2026; includes expired and conditional entries.",
+        "Validity is checked only against the fixed as-of date. Status and date do not establish current treatment availability or service scope.",
+        "This table has no facility addresses, coordinates or specific-service evidence."
+      ],
+      "validity_expired_rows": 8274,
+      "validity_unknown_rows": 0
+    },
+    "eraktkosh": {
+      "row_count": 6524,
+      "unique_source_record_ids": 6524,
+      "fields": [
+        "source_record_id",
+        "facility_name",
+        "address",
+        "state",
+        "latitude",
+        "longitude",
+        "coordinate_quality",
+        "location_verified",
+        "facility_type",
+        "evidence_text",
+        "source_url",
+        "retrieved_at_utc"
+      ],
+      "input_sha256": "74fde66f8dc59214a475e2277d1130dfd58e7b31f02eb70ce11fccee564bd9df",
+      "output_sha256": {
+        "eraktkosh.jsonl": "4cf3efa165bb348f326b87ee74911c941a472abcf66c311c7e7b192eb070b850",
+        "eraktkosh.csv": "81fe5e6d8e5709440c74d42a035f76c94a74902cc88b928599a135c6504829d5"
+      },
+      "limitations": [
+        "6,524 directory rows across all 36 state/UT options returned by the public lookup; this does not establish coverage of every real-world blood facility.",
+        "Blood Bank and BSU are different source facility types and remain distinct.",
+        "No blood inventory, appointment availability, or hospital transfusion capability is inferred.",
+        "Zero coordinate placeholders are exported as NULL; original values remain in the external raw export."
+      ],
+      "coordinate_quality_counts": {
+        "source_coordinates_unverified": 5267,
+        "zero_placeholder": 1257
+      },
+      "facility_type_counts": {
+        "Blood Bank": 4754,
+        "BSU": 1770
+      }
+    }
+  }
+}

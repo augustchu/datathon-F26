@@ -1,0 +1,79 @@
+{
+  "source": "nqas",
+  "seed": 20261121,
+  "population_size": 22015,
+  "sample_size": 3,
+  "sampling": "uniform rows without replacement from this saved extract",
+  "universe_sha256": "f6588a8b6316734705520a66371f76b64afe531fb75673e28412c75a6bdc1f89",
+  "zero_based_row_indexes": [
+    17262,
+    5723,
+    9205
+  ],
+  "rows": [
+    {
+      "source_serial": "17263",
+      "facility_name": "USREH RASULPUR",
+      "certification_status": "Certified",
+      "validity_date_raw": "17/12/2028",
+      "state": "Uttar Pradesh",
+      "source_url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C172",
+      "source_page": 172,
+      "scraped_at_utc": "2026-11-21T17:18:57.181357+00:00",
+      "source": "NHSRC NQAS",
+      "source_fields": {
+        "Sr No.": "17263",
+        "Facility Name": "USREH RASULPUR",
+        "Certified": "Certified",
+        "Validity Till Date": "17/12/2028"
+      },
+      "raw_snapshot": "raw/page_0172.html.gz",
+      "record_id": "76f77c64e6afac7f4b1e",
+      "validity_date_iso": "2028-12-17",
+      "date_parse_error": false
+    },
+    {
+      "source_serial": "5724",
+      "facility_name": "TURKHA",
+      "certification_status": "Certified",
+      "validity_date_raw": "02/08/2026",
+      "state": "Gujarat",
+      "source_url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C57",
+      "source_page": 57,
+      "scraped_at_utc": "2026-11-21T17:07:03.525173+00:00",
+      "source": "NHSRC NQAS",
+      "source_fields": {
+        "Sr No.": "5724",
+        "Facility Name": "TURKHA",
+        "Certified": "Certified",
+        "Validity Till Date": "02/08/2026"
+      },
+      "raw_snapshot": "raw/page_0057.html.gz",
+      "record_id": "6b7235ad69fb088c7aa5",
+      "validity_date_iso": "2026-08-02",
+      "date_parse_error": false
+    },
+    {
+      "source_serial": "9206",
+      "facility_name": "SHC RANMALBILLOD",
+      "certification_status": "Certified",
+      "validity_date_raw": "29/12/2028",
+      "state": "Madhya Pradesh",
+      "source_url": "https://qps.nhsrcindia.org/quality-certification/national-level-certificate?field_state_target_id=All&field_certified_value=All&page=%2C92",
+      "source_page": 92,
+      "scraped_at_utc": "2026-11-21T17:08:11.187652+00:00",
+      "source": "NHSRC NQAS",
+      "source_fields": {
+        "Sr No.": "9206",
+        "Facility Name": "SHC RANMALBILLOD",
+        "Certified": "Certified",
+        "Validity Till Date": "29/12/2028"
+      },
+      "raw_snapshot": "raw/page_0092.html.gz",
+      "record_id": "a0d8c1f90fb9fdaacbf1",
+      "validity_date_iso": "2028-12-29",
+      "date_parse_error": false
+    }
+  ],
+  "scope_note": "A spot check of extraction fidelity; not proof of clinical accuracy, source independence, or all-row correctness."
+}
