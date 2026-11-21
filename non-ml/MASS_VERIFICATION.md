@@ -1,0 +1,54 @@
+# Mass verification
+
+Runbook for a bulk Hindi IVR check before releasing facility recommendations. The call asks whether an authorized staff member can confirm that an exact branch offers a named service. The result is a dated facility self-report. Keep service provision, today's availability, and published corroboration as separate evidence.
+
+## 1. Prepare a call list in Databricks Free Edition
+
+- Freeze the FDR snapshot and run notebooks 01, 02 and 04. Use the canonical branch ID, checked branch name and address, and the service keys candidates may be listed for. Use notebook 05's cited `contact_evidence` to choose a published facility number. Prefer a branch switchboard and keep the contact source URL and snapshot date.
+- Normalize acceptable public business numbers for the provider, keeping an ID and the original source representation in the restricted preparation table. Remove duplicate branch/service rows and flag shared numbers across branches. Group shared switchboards for scheduling. Require the staff member to confirm the named branch before accepting answers. Keep branches with no usable number or unresolved identity in a separate follow-up queue.
+- Export an approved batch with `campaign_id`, `job_id`, `facility_id`, spoken branch name and locality, destination number, contact provenance, service keys, language, and an approval or exclusion status. Keep the full source snapshot, contact export, credentials and call records in restricted storage. The FDR audit found **9,722 of 10,088 source rows** with at least one plausibly formatted phone. Track distinct callable numbers and reached branches separately. [Source audit](DATA_COMPARISON.md) · [Facility linkage](notebooks/02_facility_and_geography.ipynb) · [Cited contacts](notebooks/05_field_updates.ipynb)
+
+## 2. Approve the outreach and choose a provider
+
+The team sponsor and provider should confirm in writing how the campaign is classified, which caller ID and calling route can be used, the applicable consent and registration requirements, the automation declaration if applicable, and how to honor declines. A public listing supplies the candidate contact. Record the approved outreach basis separately. Start with facilities that agreed to participate and the approved language and recording policy. Check the effective dates of applicable TRAI changes against the launch date. [TRAI regulations and amendments](https://trai.gov.in/release-publication/regulations/amendments-page/7617) · [TRAI advice to senders](https://www.trai.gov.in/advice-to-senders) · [Plivo India calling requirements](https://www.plivo.com/docs/voice/concepts/india-calling) · [Twilio India voice guidelines](https://www.twilio.com/en-us/guidelines/in/voice)
+
+Use Databricks Free Edition for preparation, quality checks, result import and the approved release snapshot. Run the dialing job and its public HTTPS webhook on team-approved external infrastructure. It should remain available during calls, receive signed events, store call state, and stop new work on demand. Free Edition has restricted outbound internet and time-limited app runtime. [Databricks Free Edition limitations](https://docs.databricks.com/aws/en/getting-started/free-edition-limitations)
+
+## 3. Configure and pilot the Hindi flow
+
+1. Preview the local prototype. It prints a simulated transcript and responses or the current TwiML prompt. Try branch rejection, an unsure answer, silent input, and the optional note. Have a Hindi speaker check branch names, service terminology and pronunciation. Pick two to five relevant, explicitly named service questions per call to start. Preserve distinctions such as NICU level and blood bank versus blood storage unit. [Offline IVR preview](preview_hindi_ivr.py) · [Prompt and state logic](src/facility_tool/hindi_ivr.py)
+
+   ```bash
+   python non-ml/preview_hindi_ivr.py --services dialysis mri --keys 1 1 0 4
+   ```
+
+2. Map the flow to one outbound call leg through the selected provider. Confirm the branch first. For each service, **1** means offered, **2** means not offered, and **0** means unsure. Preserve unanswered and not-asked separately when a call drops. At the end, **3** consents to an optional recorded note about missing services and **4** finishes the call. Ask staff to speak only about the services. Record only after the affirmative key and disclosure. Keep recording links private and apply the agreed retention period.
+3. Validate provider signatures on every callback before updating state, using the provider SDK. Associate events with a provider call ID and the original job, handle duplicate deliveries without advancing twice, and reconcile status, billed duration and recording events. Keep a separate attempt record for each retry. [Plivo signature validation](https://www.plivo.com/docs/voice/concepts/signature-validation) · [Twilio secure webhooks](https://www.twilio.com/docs/usage/webhooks/webhooks-security)
+4. Run a staffed pilot on a small set of consenting facilities. For example, start with 20–30 branches across relevant services and contact types. Manually compare recorded keypad outcomes with what staff intended, listen to opted-in notes, verify no recording on decline, and check how wrong-branch, unanswered and partial calls reconcile. Measure connected duration, billed duration and actual TTS units against a pilot invoice. Check that the sender, purpose, and branch are recognizable before starting larger waves.
+
+## 4. Estimate and schedule the campaign
+
+The estimates below assume **10,000 answered two-minute calls**, one billable outbound leg, and one number for the month. Treat this as a cost scenario. The approved unique call list and pilot durations determine the actual invoice. For conservative retry budgeting the right column adds 2,000 entirely billed two-minute calls with the same speech usage. A ringing attempt, a picked-up switchboard, and a completed branch verification are different events.
+
+| Billing item | Base scenario | With 20% fully billed retries |
+| --- | ---: | ---: |
+| Planned billable call minutes | 20,000 | 24,000 |
+| Plivo India domestic voice plus one number | ₹7,800 | ₹9,320 |
+| Plivo with 18% GST on that subtotal | ₹9,204 | ₹10,997.60 |
+| Twilio India call charges, all mobile to all landline endpoints | US$992–1,398 | US$1,190.40–1,677.60 |
+| Twilio Neural Hindi speech, about 800–1,300 billable characters per call | US$256–416 | US$307.20–499.20 |
+| Twilio call and dynamic Neural speech subtotal | US$1,248–1,814 | US$1,497.60–2,176.80 |
+
+Plivo lists ₹0.38 per India domestic minute, 30-second pulses, and ₹200/month for a domestic number. Domestic pricing requires an eligible India-registered business and KYC approval. Its rate card includes multilingual text-to-speech and recording, with 90 days of included recording storage. Confirm the pulse for the approved route because generic Voice API billing documentation describes 60-second increments. This two-minute scenario lands on a whole minute under either pulse. Plivo bills answered voicemail and explains that unanswered calls are unbilled. [Plivo India rate card](https://www.plivo.com/voice/pricing/in/) · [Plivo calling eligibility](https://www.plivo.com/docs/voice/concepts/india-calling) · [Plivo call billing](https://www.plivo.com/docs/voice/api/calls) · [CBIC telecom GST rates](https://cbic-gst.gov.in/hindi/gst-goods-services-rates.html)
+
+Twilio lists US$0.0496 per minute to Indian mobiles and US$0.0699 for local destinations, with India outbound calls placed from non-Indian numbers. The prototype uses Neural Hindi at US$0.0032 per 100 characters, rounded per call in 100-character blocks. Example two-to-five-question prompt paths are roughly 800–1,300 billed characters. Longer branch names, a repeat, or notes can increase this. The Twilio subtotal excludes number rental, optional recording and storage, deployment costs, review labor, and applicable taxes. Frozen prerecorded prompts have different TTS usage than per-call generation. [Twilio India pricing](https://www.twilio.com/en-us/voice/pricing/in) · [Twilio India voice guidelines](https://www.twilio.com/en-us/guidelines/in/voice) · [Twilio speech billing](https://www.twilio.com/docs/voice/twiml/say/text-speech)
+
+For example, after the 20–30-branch pilot, schedule a 100-job verification wave, then a 500-job wave before expanding to batches of 500–1,000. Pace to the approved route and call windows in Indian Standard Time. Review branch-match rate, completed service questions, partials, complaints and billable minutes after each wave. Retry transient no-answer cases only within the approved rules. Suppress declined contacts, use a different verified number for wrong-branch results, and hold the next wave if the pilot assumptions fail.
+
+## 5. Import, review and release
+
+- Export two restricted JSONL files. The attempt file has one row per attempt with the job, branch and provider call IDs, snapshot date, status, branch confirmation, recording consent, completion time and billable seconds. The response file has one row per attempt and service, with the service key and answer status. Keep only a restricted reference and review status for recordings. Import both files into private Delta tables with patient data excluded from results and logs. Reconcile distinct branches planned, attempted, connected, staff-confirmed and answered by service. Count each provider call once even if the callback was repeated. [Import files into Databricks tables](https://docs.databricks.com/aws/en/ingestion/create-or-modify-table)
+- Keep `offered`, `not_offered`, `unsure`, `unanswered`, and `not_asked` distinct. Keep a partial call's answered services if the branch was confirmed. Send wrong-branch calls, unclear notes and discrepancies with documentation to review. Reviewers record service, branch, decision date, evidence class and disposition. An IVR answer remains a facility self-report, including when a reviewer accepts it as useful evidence. Only source-independent corroboration satisfies the documentary verification tier. [Review notebook](notebooks/04b_verify_services.ipynb)
+- Freeze an approved evidence snapshot and rerun the service and lookup preparation notebooks. Spot-check branch mismatches, conflicting service claims and unanswered cases against the proposed release. Report the coverage funnel and remaining unknowns by geography and service. Keep the original claims and moderation history traceable. Publish only the reviewed outputs needed by the lookup. [Prepare lookup assets](notebooks/06b_prepare_lookup.ipynb) · [Compare recommendations and feedback](notebooks/07_compare_and_feedback.ipynb)
+
+The repository prototype runs locally with fictional inputs. Live campaign dispatch, callbacks and result import need implementation and approval in the team's environment.
