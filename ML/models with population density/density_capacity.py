@@ -36,8 +36,8 @@ def _clean(series):
     return text.mask(text.isin(MISSING))
 
 
-def _features(frame, include_nfhs):
-    numeric = [*NUMERIC, *DENSITY_FEATURES, *(NFHS_FEATURES if include_nfhs else ())]
+def _features(frame, include_density, include_nfhs):
+    numeric = [*NUMERIC, *(DENSITY_FEATURES if include_density else ()), *(NFHS_FEATURES if include_nfhs else ())]
     required = {*numeric, *CATEGORICAL, *TEXT, "capacity", "unique_id"}
     if missing := required - set(frame.columns):
         raise ValueError(f"Required facility features are missing: {sorted(missing)}")
@@ -94,8 +94,11 @@ def _partitions(groups, seed):
 
 
 def _scores(actual, predicted):
+    error = np.abs(actual - predicted)
     scores = {
         "mae": float(mean_absolute_error(actual, predicted)),
+        "median_ae": float(np.median(error)),
+        "p90_ae": float(np.quantile(error, .9)),
         "rmse": float(np.sqrt(mean_squared_error(actual, predicted))),
     }
     if len(actual) > 1:
@@ -103,22 +106,26 @@ def _scores(actual, predicted):
     return scores
 
 
-def train_capacity(frame, *, include_nfhs, seed=42, epochs=300, patience=30):
+def train_capacity(frame, *, include_nfhs, include_density=True, seed=42, epochs=300, patience=30):
     """Fit preprocessing and weights on train only and use validation for early stopping."""
     frame = frame.reset_index(drop=True)
-    features, numeric = _features(frame, include_nfhs)
+    features, numeric = _features(frame, include_density, include_nfhs)
     target = pd.to_numeric(_clean(frame["capacity"]), errors="coerce").astype(float)
     groups = _facility_groups(frame)
     usable = np.isfinite(target) & (target >= 0) & (target.mod(1) == 0) & groups.notna()
     groups, features, target = (values.loc[usable].reset_index(drop=True) for values in (groups, features, target))
-    # Make seeded batching independent of source row order and keep both variants aligned.
-    common = features.drop(columns=list(NFHS_FEATURES), errors="ignore")
-    source_hash = pd.util.hash_pandas_object(common.assign(group=groups, beds=target), index=False)
+    # Use only shared source columns so join data and source row order cannot change batching.
+    common = features.drop(columns=[*DENSITY_FEATURES, *NFHS_FEATURES], errors="ignore")
+    source_ids = _clean(frame.loc[usable, "unique_id"]).reset_index(drop=True)
+    source_hash = pd.util.hash_pandas_object(
+        common.assign(source_id=source_ids, group=groups, beds=target), index=False,
+    )
     order = np.argsort(source_hash.to_numpy(), kind="stable")
     groups, features, target = (values.iloc[order].reset_index(drop=True) for values in (groups, features, target))
     (train, validation, test), fingerprint = _partitions(groups, seed)
-    density = features["population_density_per_km2"].notna().to_numpy()
-    if not (density & train).any():
+    holdout = sha256(source_hash.to_numpy(dtype="<u8")[order][test].tobytes()).hexdigest()
+    density = features[DENSITY_FEATURES[0]].notna().to_numpy() if include_density else None
+    if density is not None and not (density & train).any():
         raise ValueError("No training facilities matched a density value. Check the input keys, columns and units.")
     processor = ColumnTransformer([
         ("numeric", Pipeline([("impute", SimpleImputer(strategy="median", keep_empty_features=True)),
@@ -139,7 +146,10 @@ def train_capacity(frame, *, include_nfhs, seed=42, epochs=300, patience=30):
 
     x_train, x_val = tensor(train), tensor(validation)
     y_val = log_target(validation)
-    loader = DataLoader(TensorDataset(x_train, log_target(train)), batch_size=256, shuffle=True)
+    loader = DataLoader(
+        TensorDataset(x_train, log_target(train)), batch_size=256, shuffle=True,
+        generator=torch.Generator().manual_seed(seed),
+    )
     model = nn.Sequential(
         nn.Linear(x_train.shape[1], 128), nn.ReLU(), nn.Dropout(.2),
         nn.Linear(128, 64), nn.ReLU(), nn.Dropout(.2), nn.Linear(64, 1),
@@ -173,17 +183,18 @@ def train_capacity(frame, *, include_nfhs, seed=42, epochs=300, patience=30):
         prediction = np.maximum(0, np.rint(np.expm1(model(tensor(test)).flatten().cpu().numpy())))
     actual = target.loc[test].to_numpy()
     baseline = np.full(len(actual), round(float(target.loc[train].median())))
-    test_matched = density[test]
-    coverage = []
-    for name, mask in (("all", np.ones(len(actual), dtype=bool)),
-                       ("density matched", test_matched), ("density missing", ~test_matched)):
-        if mask.any():
-            coverage.append({"cohort": name, "rows": int(mask.sum()), **_scores(actual[mask], prediction[mask])})
+    scores = _scores(actual, prediction)
+    coverage = [{"cohort": "all", "rows": len(actual), **scores}]
+    if density is not None:
+        test_matched = density[test]
+        for name, mask in (("density matched", test_matched), ("density missing", ~test_matched)):
+            if mask.any():
+                coverage.append({"cohort": name, "rows": int(mask.sum()), **_scores(actual[mask], prediction[mask])})
     return {
         "model": model, "preprocessor": processor, "numeric_features": numeric,
-        "categorical_features": list(CATEGORICAL), "test_metrics": _scores(actual, prediction),
+        "categorical_features": list(CATEGORICAL), "test_metrics": scores,
         "baseline_metrics": _scores(actual, baseline), "test_cohorts": pd.DataFrame(coverage),
-        "split_fingerprint": fingerprint, "facility_counts": {
+        "split_fingerprint": fingerprint, "holdout_fingerprint": holdout, "facility_counts": {
             name: int(groups.loc[mask].nunique())
             for name, mask in (("train", train), ("validation", validation), ("test", test))
         },

@@ -81,11 +81,12 @@ DENSITY_VINTAGE = "Replace with the population period and boundary release"
 
 ## Run and compare
 
-1. Open `Capacity with Population Density.ipynb` for the comparison with the density feature.
-2. Open `Capacity with Population Density and NFHS.ipynb` for the comparison with density and NFHS-5 district indicators. This notebook reads the provided NFHS table. A second NFHS extract is unnecessary.
-3. Use the same facility snapshot and split seed in both notebooks. They use a seeded 60/20/20 split of facility groups and report a SHA-256 `split_fingerprint`. Compare test metrics only if the split fingerprints agree.
-4. Check join coverage. The left join keeps otherwise eligible facilities with missing density in the comparison and marks those rows. Training requires at least one matched density value in the training partition. Review MAE and RMSE for all held-out rows and the density-matched and density-missing cohorts.
+1. Run [Capacity with Facility Data Only](Capacity%20with%20Facility%20Data%20Only.ipynb) for the neural network baseline. This notebook reads the facility table and needs no density file.
+2. Run [Capacity with Population Density](Capacity%20with%20Population%20Density.ipynb) to measure the change from adding density and its missing-value flag.
+3. Run [Capacity with Population Density and NFHS](Capacity%20with%20Population%20Density%20and%20NFHS.ipynb) to measure the additional change from adding the 15 NFHS district indicators. It reads the provided NFHS table.
+4. Use the same facility snapshot and training settings in all three notebooks. They share a seeded 60/20/20 split of facility groups. Match the `split_fingerprint` for group assignments and the `holdout_fingerprint` for test rows, their source features and their recorded bed counts.
+5. Compare the **all** test cohort across the three runs. The two density runs also break out matched and missing density. The left join keeps otherwise eligible facilities with no density, so the overall scores reflect the supplied table's coverage. Training requires at least one matched density value in the training partition.
 
-The two variants test the effect of adding NFHS to a model that already includes density. Measuring the added value of density itself requires a facilities-only model on these same partitions. The earlier artifact evaluation used a different split.
+Use [the evaluation guide](../MODEL_EVALUATION.md#metrics-and-model-choice) to interpret MAE, RMSE, and R². Rerun both density notebooks with the updated shared trainer before comparing. The earlier artifact evaluation used a different split.
 
 The notebooks use the provided facility table and, for district linkage, the provided India Post PIN directory. They read those tables without writing enriched values back to them. W&B tracking defaults to offline.

@@ -2,7 +2,7 @@
 
 Open the model notebooks from the Databricks Git folder so their shared files are available. Run the dependency cell before training. The [model evaluation](MODEL_EVALUATION.md) records the comparison on 522 facilities and why the facilities-only neural network is the next candidate to validate.
 
-The [population density notebooks](models%20with%20population%20density/) accept the same teammate-supplied density table. Compare the density-only feature set with density plus NFHS on matching split fingerprints. The [data handoff](models%20with%20population%20density/CLAUDE_HANDOFF.md) explains district and PIN formats and Databricks configuration.
+The [population density notebooks](models%20with%20population%20density/) compare three MLPs on matching split and holdout fingerprints. Run the facilities-only baseline, then the density and density-plus-NFHS models. The [data handoff](models%20with%20population%20density/CLAUDE_HANDOFF.md) explains district and PIN formats and Databricks configuration.
 
 ## Experiment tracking
 
