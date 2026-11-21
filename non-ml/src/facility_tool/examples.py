@@ -68,6 +68,19 @@ def demo_overlays(entities, as_of):
     return pd.DataFrame(updates), load
 
 
+def demo_reviewed_services(as_of):
+    """Add a separate fictional publisher so the quality trade-off is visible."""
+    return [{
+        'facility_name': 'Fictional Jaipur Facility 12', 'pin': '302001',
+        'address_contains': '23 Example Road', 'service': 'dialysis',
+        'source_url': 'https://fictional-review.invalid/dialysis/branch-12',
+        'publisher': 'Fictional service directory', 'publisher_key': 'fictional_directory',
+        'excerpt': 'This branch provides dialysis.',
+        'scope': 'Fictional independently published service listing',
+        'reviewed_on': as_of, 'stance': 'supports',
+    }]
+
+
 def demo_pressure(entities):
     """An illustrative service-day scenario, independent of the count estimates."""
     ids = entities.set_index('name')['facility_id'].to_dict()

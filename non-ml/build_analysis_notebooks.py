@@ -386,11 +386,12 @@ def main():
         code('''
             import json
 
+            from facility_tool.examples import demo_reviewed_services
             from facility_tool.reviewed_claims import attach_reviewed_claims
             from facility_tool.verification import verify_services
 
             claims = STORE.read("claims")
-            entries = [] if MODE == "demo" else json.loads(
+            entries = demo_reviewed_services(config["as_of"]) if MODE == "demo" else json.loads(
                 (ROOT / "non-ml/config/reviewed_service_evidence.json").read_text(encoding="utf-8")
             )
             reviewed, decisions = attach_reviewed_claims(
@@ -403,6 +404,56 @@ def main():
             STORE.write("service_verification", verification)
             show(decisions)
             show(verification.groupby(["service", "verification_status"]).size().rename("branches").reset_index(), limit=60)
+        '''),
+    ])
+
+    notebook("04c_facility_quality", "Audit the facility assessment evidence", '''
+        Use the branch linkage and service verification checkpoints to prepare dated,
+        scope-aware evidence about external assessment and patient experience before lookup.
+    ''', [
+        markdown('''
+            ## What an assessment can establish
+
+            India's NQAS measures service provision, patient rights, inputs, support services,
+            clinical care, infection control, quality management and outcomes. The saved
+            directory gives certification status and dates. NABH has different accreditation
+            programs and supports the named branch and scope on a current certificate.
+            Record these signals separately from clinical outcomes and service readiness.
+            The WHO HHFA measures availability, readiness and quality independently.
+            [NQAS standards](https://qps.nhsrcindia.org/national-quality-assurance-standards) ·
+            [NABH hospital accreditation](https://nabh.co/programmes/hospitals-accreditation-programme-hco/) ·
+            [WHO facility assessment](https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction)
+        '''),
+        code('''
+            from facility_tool.quality import build_quality_profiles
+
+            evidence, profiles = build_quality_profiles(
+                STORE.read("records"), STORE.read("links"), STORE.read("verified_claims"),
+                STORE.read("service_verification"), config["as_of"],
+            )
+            STORE.write("assessment_evidence", evidence)
+            STORE.write("quality_profiles", profiles)
+            show(evidence.groupby(["programme", "assessment_status", "link_status"]).size().rename("records").reset_index())
+            show(profiles.groupby(["service", "quality_assessment_status"]).size().rename("branches").reset_index(), limit=35)
+            show(profiles.loc[profiles["quality_assessed"].eq(True)], limit=10)
+        '''),
+        markdown('''
+            ## Attach patient feedback to the exact branch
+
+            Optionally provide a permitted source export of linked aggregates. A rated branch
+            keeps its original metric, reporting window, sample size and source. Missing ratings
+            stay unknown. Read the source and scope before comparing them. The branch review
+            search link works independently of the ratings import.
+            [How to find and use patient feedback](../QUALITY_METHOD.md)
+        '''),
+        code('''
+            from facility_tool.patient_experience import prepare_patient_experience
+
+            rating_path = os.environ.get("DATATHON_PATIENT_RATINGS")
+            ratings = pd.read_csv(rating_path, dtype={"facility_id": str}) if rating_path and MODE != "demo" else pd.DataFrame()
+            patient_experience = prepare_patient_experience(STORE.read("entities"), ratings, config["as_of"])
+            STORE.write("patient_experience", patient_experience)
+            show(patient_experience["patient_experience_status"].value_counts().rename("branches").reset_index())
         '''),
     ])
 

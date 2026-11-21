@@ -11,7 +11,7 @@ python -m pip install "pandas>=2.2" "numpy>=1.26" matplotlib jupyterlab
 jupyter lab
 ```
 
-Run notebooks 01, 02, 04, 04b, 05, 06b, and 07 in order for the same evidence date. For fitted overlays, run 03 and 09 after 02 and before 05. Notebook 09 needs scikit-learn. Notebook 06 is optional district context after 02. Notebook 08 exercises the selector using the same checkpoints as 07. The generators are only needed when changing notebook source through code.
+Run notebooks 01, 02, 04, 04b, 04c, 05, 06b, and 07 in order for the same evidence date. For fitted overlays, run 03 and 09 after 02 and before 05. Notebook 09 needs scikit-learn. Notebook 06 is optional district context after 02. Notebook 08 exercises the selector using the same checkpoints as 07. The generators are only needed when changing notebook source through code.
 
 - **`demo`** is the default. Facilities, contacts, and estimates are fictional. TravelTime stays off.
 - **`public`** reads the saved public extracts. Start Jupyter with `DATATHON_MODE=public`. The default search in 07 is for the demo, so change the location and service to ones covered by the selected public sources.
@@ -29,6 +29,7 @@ Set `DATATHON_REPO_ROOT` if the notebook cannot find the repository. Checkpoints
 | [03 · Count EDA](notebooks/03_count_field_eda.ipynb) | Bed/doctor label quality, reporting gaps, supported predictors after `countries`, interactions and group splits |
 | [04 · Service evidence](notebooks/04_service_evidence.ipynb) | Quoted service text, branch, validity, scheme scope, ambiguous matches and contradictions |
 | [04b · Service verification](notebooks/04b_verify_services.ipynb) | Independent published corroboration, exact branch matching, disagreement checks and reviewed links |
+| [04c · Facility assessment and patient feedback](notebooks/04c_facility_quality.ipynb) | Current assessment scope, optional permitted rating aggregates, and branch review search links |
 | [05 · Field updates](notebooks/05_field_updates.ipynb) | Cited reported fields, contact provenance, optional model overlays, and separate load inputs |
 | [06 · District context](notebooks/06_district_context.ipynb) | Optional NFHS indicators, unique district joins, suppressed values and small-sample flags |
 | [06b · Prepare lookup snapshots](notebooks/06b_prepare_lookup.ipynb) | Stored city, district and PIN origins, per-service evidence decisions and candidates, scored leads, and cited contacts |
@@ -41,6 +42,8 @@ Notebook 02 exports `location_records`, `location_entity_review`, and `location_
 Notebook 06b consumes those decisions and saves the service evidence as of the snapshot date. It builds approximate city, district and PIN origins, resolves known ambiguities, selects cited contacts, attaches prior field estimates, and partitions the candidates and load inputs by service. Refresh 06b after changing the evidence date, upstream records, contacts, eligibility rules, or model overlays. The search reads the prepared service and place tables. Distance from the request, time-dependent routes or slot age, opt-in ranking, and call feedback are computed per search.
 
 Notebook 04b checks for explicit corroboration across independent publishers for the same facility branch and service. The [reviewed evidence registry](config/reviewed_service_evidence.json) stores the primary-source statements, dates and branch identifiers for manually checked cases. The notebook records unsuccessful attachments and applicable contradictions. It distinguishes a single direct listing from corroboration. Both are published service evidence with a scope and review date. A call is still needed for current service availability.
+
+Notebook 04c attaches NQAS and NABH assessment evidence with exact branch, validity, and scope checks. It can also import approved branch-level patient ratings through `DATATHON_PATIENT_RATINGS`. See [Facility assessment and ranking](QUALITY_METHOD.md) for the score, the ratings format, and where to find patient feedback. Rating and assessment evidence stay distinct.
 
 ## Compare a single search
 
@@ -56,7 +59,7 @@ Notebook 07 displays a cited phone when available and a fit score with the facto
 
 ## Travel settings and load balancing
 
-Within each evidence tier, the default ranking uses distance along TravelTime's estimated driving routes. Set `TRANSPORT_MODE` to `walking`, `cycling`, or `public_transport` in 07 to view or sort the same search by that mode. Driving, walking, and cycling can sort by route distance or estimated time. Public transport sorts by estimated time and coverage is partial in India. A route is estimated for the selected mode and departure time. [TravelTime matrix documentation](https://docs.traveltime.com/api/reference/travel-time-distance-matrix) · [Coverage by country](https://docs.traveltime.com/api/overview/supported-countries)
+Within each evidence tier, the default ranking combines distance along TravelTime's estimated driving route with bounded credits for documentation and comparable patient feedback. Use `FACILITY_SORT = "closest"` for travel-only ordering within those tiers. Set `TRANSPORT_MODE` to `walking`, `cycling`, or `public_transport` in 07 to view or sort the same search by that mode. Driving, walking, and cycling can sort by route distance or estimated time. Public transport sorts by estimated time and coverage is partial in India. A route is estimated for the selected mode and departure time. [TravelTime matrix documentation](https://docs.traveltime.com/api/reference/travel-time-distance-matrix) · [Coverage by country](https://docs.traveltime.com/api/overview/supported-countries)
 
 Live routing requires `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` in the environment. The request sends the origin and shortlisted candidate coordinates. Set `USE_TRAVELTIME=False` to use the local distance calculation. When route coverage is incomplete for the comparison, the ranking records its straight-line fallback separately from any displayed route estimates. The local verification used mocked route data.
 
@@ -77,6 +80,8 @@ Moderation records review decisions. Changes to shared evidence or model trainin
 ## Pre-deployment facility verification in Hindi
 
 Run this check on the facility branches and services the team plans to publish. Review each staff response or voice note alongside the published evidence before finalizing the recommendation snapshot. The lookup and patient follow-up workflow use their existing paths.
+
+The [Mass verification runbook](MASS_VERIFICATION.md) covers preparing the call batch in Databricks, live provider requirements, cost scenarios, and staged review.
 
 [Preview the keypad flow](preview_hindi_ivr.py) with Python and fictional facility details. The first key confirms the branch. The next two describe dialysis and MRI. The final key requests a recording.
 

@@ -102,5 +102,19 @@
     "valid_from": "2024-06-10",
     "valid_through": "2028-06-09",
     "stance": "supports"
+  },
+  {
+    "facility_name": "Santokba Durlabhji Memorial Hospital Cum Medical Research Institute Campus",
+    "address_contains": "Bhawani Singh Marg, Bapu Nagar",
+    "service": "blood_bank",
+    "source_url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2015-0272_5th%20Edition.pdf",
+    "publisher": "National Accreditation Board for Hospitals & Healthcare Providers",
+    "publisher_key": "nabh",
+    "excerpt": "Blood Bank",
+    "scope": "NABH accredited hospital scope of services, certificate H-2015-0272",
+    "reviewed_on": "2026-11-21",
+    "valid_from": "2024-02-17",
+    "valid_through": "2028-02-16",
+    "stance": "supports"
   }
 ]

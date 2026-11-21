@@ -29,6 +29,14 @@ IDENTITY_COLUMNS = (
 LOCATION_AUDIT_COLUMNS = (
     "location_routing_eligible", "location_hold_reason", "location_source_urls", "location_review_flags",
 )
+QUALITY_EVIDENCE_COLUMNS = ("quality_corroborated", "quality_assessed")
+PATIENT_EVIDENCE_COLUMNS = ("patient_experience_value", "patient_comparison_key", "patient_experience_status")
+QUALITY_RANK_COLUMNS = (
+    "travel_only_rank", "ranking_policy", "ranking_policy_reason",
+    "corroboration_credit", "assessment_credit", "quality_credit", "quality_credit_unit", "balanced_travel_score",
+    "patient_experience_credit", "total_quality_experience_credit", "patient_ranking_status", "patient_ranking_reason",
+    "patient_tier_eligible", "patient_tier_candidates",
+)
 CLAIM_COLUMNS = (
     "facility_id", "record_id", "service", "stance", "excerpt", "source_url",
     "source", "scope", "validity",
@@ -50,7 +58,9 @@ FIELD_COLUMNS = (
 )
 RESULT_COLUMNS = (
     "mode", "service", "kind", "decision", "selected", "rank", "baseline_rank",
-    *IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS, "evidence_as_of", *REASON_COLUMNS, *FIELD_COLUMNS,
+    *IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS, *QUALITY_EVIDENCE_COLUMNS, *PATIENT_EVIDENCE_COLUMNS,
+    *QUALITY_RANK_COLUMNS,
+    "evidence_as_of", *REASON_COLUMNS, *FIELD_COLUMNS,
     "model_lead_score", "model_lead_provenance", "model_lead_detail",
     "load_status", "load_available_units", "load_unit", "load_as_of", "load_source_url",
     "extra_km_vs_baseline", "route_distance_km", "travel_minutes", "travel_mode",
@@ -60,11 +70,12 @@ RESULT_COLUMNS = (
     "travel_penalty", "pressure_penalty", "travel_weight", "pressure_weight", "weighted_score",
     "weighted_travel_metric", "weighted_extra_travel", "weighted_detour_limit", "weighted_status",
 )
-PREPARED_COLUMNS = (
+_REQUIRED_PREPARED_COLUMNS = (
     "service", *IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS, "site_lat", "site_lon",
     "evidence_as_of", "evidence_tier", "evidence_hold_reason", "service_contradiction",
     "claim", "claims_json", "mode_fields", "model_leads", "snapshot_entity_count", "snapshot_model_methods",
 )
+PREPARED_COLUMNS = (*_REQUIRED_PREPARED_COLUMNS, *QUALITY_EVIDENCE_COLUMNS, *PATIENT_EVIDENCE_COLUMNS)
 _DEFAULT_LOCATION_HOLD = "Facility coordinates are missing, ambiguous, or too coarse"
 
 
@@ -158,6 +169,20 @@ def _checkpoint_value(value):
         if isinstance(value, Real):
             return float(value) if isfinite(value) else None
     return value
+
+
+def _quality_flag(value):
+    return bool(value) if pd.api.types.is_bool(value) else None
+
+
+def _patient_fields(row):
+    value = _number(row.get("patient_experience_value"))
+    key = row.get("patient_comparison_key")
+    return {
+        "patient_experience_value": value if value is not None and 0 <= value <= 1 else None,
+        "patient_comparison_key": (key.strip() or None) if isinstance(key, str) else None,
+        "patient_experience_status": _text(row.get("patient_experience_status")) or None,
+    }
 
 
 def _record_groups(frame, key):
@@ -339,6 +364,8 @@ def prepare_service_candidates(
         lat, lon = coords if coords is not None else (None, None)
         candidates.append({
             "service": service, **{key: _checkpoint_value(entity.get(key)) for key in IDENTITY_COLUMNS},
+            **{key: _quality_flag(entity.get(key)) for key in QUALITY_EVIDENCE_COLUMNS},
+            **_patient_fields(entity),
             "location_routing_eligible": coords is not None,
             "location_hold_reason": "" if coords is not None else hold_reason or _DEFAULT_LOCATION_HOLD,
             "location_source_urls": _checkpoint_value(entity.get("location_source_urls")) or [],
@@ -442,6 +469,129 @@ def _travel_value(site, routes, metric):
     if metric == DISTANCE_METRIC:
         return site["distance_km"]
     return routes[site["facility_id"]][ROUTE_VALUE_FIELDS[metric]]
+
+
+def _quality_policy_values(policy):
+    if policy is None:
+        return None
+    if not isinstance(policy, dict):
+        raise ValueError("Provide quality_policy as a dictionary.")
+    share, kilometers, minutes = (
+        _number(policy.get(key)) for key in ("corroboration_share", "max_credit_km", "max_credit_minutes")
+    )
+    if share is None or not 0 <= share <= 1 or kilometers is None or minutes is None or min(kilometers, minutes) < 0:
+        raise ValueError("Provide a corroboration share from 0 to 1 and nonnegative kilometer and minute credits.")
+    experience_km, experience_minutes = (
+        _number(policy.get(key, 0)) for key in ("max_experience_credit_km", "max_experience_credit_minutes")
+    )
+    if (
+        experience_km is None or experience_minutes is None or min(experience_km, experience_minutes) < 0
+        or not isfinite(kilometers + experience_km) or not isfinite(minutes + experience_minutes)
+    ):
+        raise ValueError("Provide nonnegative patient-experience caps and finite total ranking credits.")
+    return share, kilometers, minutes, experience_km, experience_minutes
+
+
+def _patient_tier_ranking(rows, experience_cap, emergency):
+    candidates = {}
+    for row in rows:
+        fields = _patient_fields(row)
+        if (
+            fields["patient_experience_status"] == "eligible" and fields["patient_experience_value"] is not None
+            and fields["patient_comparison_key"]
+        ):
+            candidates[row["facility_id"]] = fields
+    coverage = f"{len(candidates)} of {len(rows)} eligible facilities in this evidence tier have usable ratings."
+    if emergency:
+        status, cause = "emergency_travel_only", "Emergency and trauma searches prioritize travel."
+    elif not experience_cap:
+        status, cause = "off", "Patient-experience credit is off."
+    elif len(rows) < 2:
+        status, cause = "held_insufficient_candidates", "Rating-based ordering requires at least two eligible facilities."
+    elif len(candidates) != len(rows):
+        status, cause = "held_incomplete_coverage", "Rating-based ordering requires coverage of every eligible facility."
+    elif len({fields["patient_comparison_key"] for fields in candidates.values()}) != 1:
+        status, cause = "held_incomparable", "Rating-based ordering requires a shared source, metric, scale and time window."
+    else:
+        status, cause = "applied", "Every eligible facility has ratings from the same source, metric, scale and time window."
+    return candidates, {
+        "patient_ranking_status": status, "patient_ranking_reason": f"{coverage} {cause}",
+        "patient_tier_eligible": len(candidates), "patient_tier_candidates": len(rows),
+    }
+
+
+def _quality_order(travel_only, distances, metric, policy, emergency):
+    share, kilometers, minutes, experience_km, experience_minutes = policy or (0.0, 0.0, 0.0, 0.0, 0.0)
+    unit = "minutes" if metric == ROUTE_METRIC else "km"
+    cap = 0.0 if emergency else minutes if unit == "minutes" else kilometers
+    experience_cap = 0.0 if emergency else experience_minutes if unit == "minutes" else experience_km
+    details = {}
+    by_tier = {}
+    for row in travel_only:
+        by_tier.setdefault(row["evidence_tier"], []).append(row)
+    tier_reviews = {
+        tier: _patient_tier_ranking(rows, experience_cap, emergency)
+        for tier, rows in by_tier.items()
+    }
+    for row in travel_only:
+        ident = row["facility_id"]
+        patients, review = tier_reviews[row["evidence_tier"]]
+        corroboration = cap * share if _quality_flag(row.get("quality_corroborated")) else 0.0
+        assessment = cap * (1 - share) if _quality_flag(row.get("quality_assessed")) else 0.0
+        credit = min(cap, corroboration + assessment)
+        experience_credit = (
+            experience_cap * patients[ident]["patient_experience_value"]
+            if review["patient_ranking_status"] == "applied" else 0.0
+        )
+        total_credit = credit + experience_credit
+        details[ident] = {
+            "corroboration_credit": corroboration, "assessment_credit": assessment,
+            "quality_credit": credit, "quality_credit_unit": unit,
+            "patient_experience_credit": experience_credit, "total_quality_experience_credit": total_credit,
+            "balanced_travel_score": distances[ident] - total_credit,
+            **review,
+        }
+    reviews = [review for _, review in tier_reviews.values()]
+    applied = sum(review["patient_ranking_status"] == "applied" for review in reviews)
+    held = sum(review["patient_ranking_status"].startswith("held_") for review in reviews)
+    documentation_applied = any(row["quality_credit"] > 0 for row in details.values())
+    if emergency:
+        rule = "emergency_travel_only"
+        reason = "Emergency and trauma searches prioritize travel within each evidence tier."
+    elif documentation_applied or applied:
+        terms = []
+        if documentation_applied:
+            terms.append(f"up to {cap:g} {unit} for documented corroboration and assessment")
+        if applied:
+            terms.append(f"up to {experience_cap:g} {unit} for comparable patient experience")
+        rule = (
+            "documented_quality_and_experience_and_travel" if documentation_applied and applied
+            else "documented_quality_and_travel" if documentation_applied else "patient_experience_and_travel"
+        )
+        reason = f"Within an evidence tier, subtract {' and '.join(terms)} from travel. Equal scores favor shorter travel."
+    else:
+        rule = "travel_only"
+        reason = "Travel determines the order within each evidence tier."
+    ordered = sorted(
+        travel_only, key=lambda row: (row["evidence_tier"], details[row["facility_id"]]["balanced_travel_score"]),
+    ) if documentation_applied or applied else travel_only
+    patient_status = (
+        "emergency_travel_only" if emergency else "off" if not experience_cap
+        else "partially_applied" if applied and held else "applied" if applied else "held" if held else "no_candidates"
+    )
+    patient_reason = " ".join(review["patient_ranking_reason"] for review in reviews) or "No eligible evidence tiers."
+    summary = {
+        "ranking_policy": rule, "ranking_policy_reason": reason, "quality_max_credit": cap,
+        "patient_experience_max_credit": experience_cap, "quality_total_max_credit": cap + experience_cap,
+        "quality_credit_unit": unit,
+        "quality_corroboration_share": share if policy else None,
+        "quality_assessment_share": 1 - share if policy else None,
+        "patient_ranking_status": patient_status, "patient_ranking_reason": patient_reason,
+        "patient_applied_tiers": applied, "patient_held_tiers": held,
+        "patient_eligible_candidates": sum(review["patient_tier_eligible"] for review in reviews),
+        "patient_comparison_candidates": len(travel_only),
+    }
+    return ordered, details, summary
 
 
 def _route_difference(route, reference, metric):
@@ -652,6 +802,8 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
     route = ranking["routes"].get(ident, {})
     load = ranking["measured"].get(ident, {})
     pressure = ranking["weighted"].get(ident, {})
+    quality = ranking["quality"].get(ident, {})
+    rank_policy = ranking["quality_policy"]
     chosen = candidate["claim"]
     record = {key: candidate[key] for key in (*IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS)}
     record.update({
@@ -661,7 +813,13 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
     reason = candidate["reason"]
     if decision == "eligible":
         travel_label = TRAVEL_LABELS[ranking["travel_metric"]]
-        reason = f"Sourced service, then validity and {travel_label}"
+        credits = []
+        if rank_policy["ranking_policy"] in ("documented_quality_and_travel", "documented_quality_and_experience_and_travel"):
+            credits.append("documented quality credit")
+        if quality.get("patient_ranking_status") == "applied":
+            credits.append("comparable patient-experience credit")
+        ordering = f"{travel_label} with {' and '.join(credits)}" if credits else travel_label
+        reason = f"Sourced service, then validity and {ordering}"
         if rank == 1 and baseline_rank != 1 and ranking["load_status"] == "measured_availability_rerank":
             reason = "More measured service availability within your detour limits"
         if rank == 1 and baseline_rank != 1 and ranking["load_status"] == "weighted_pressure_rerank":
@@ -671,6 +829,8 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
     record.update(
         mode=mode, service=service, kind="recommendation" if decision == "eligible" else decision,
         decision=decision, selected=selected, rank=rank, baseline_rank=baseline_rank,
+        travel_only_rank=ranking["travel_positions"].get(ident), ranking_policy=rank_policy["ranking_policy"],
+        ranking_policy_reason=rank_policy["ranking_policy_reason"],
         distance_km=candidate["distance_km"], distance_metric=DISTANCE_METRIC,
         evidence_tier=candidate["evidence_tier"], evidence_as_of=candidate["evidence_as_of"], reason=reason,
         review_reason=candidate["reason"], claims_json=candidate["claims_json"],
@@ -689,6 +849,9 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
         extra_route_km_vs_baseline=_route_difference(route, refs, ROUTE_DISTANCE_METRIC),
         extra_minutes_vs_baseline=_route_difference(route, refs, ROUTE_METRIC),
         **route,
+        **{key: _quality_flag(candidate.get(key)) for key in QUALITY_EVIDENCE_COLUMNS},
+        **_patient_fields(candidate),
+        **quality,
         **pressure,
     )
     record.update(candidate["mode_fields"][mode])
@@ -734,6 +897,7 @@ def compare_prepared_modes(
     pressure_inputs: pd.DataFrame | None = None,
     travel_times: pd.DataFrame | None = None,
     route_sort: str = "time",
+    quality_policy: dict | None = None,
     as_of=None,
     max_radius_km: float = 50,
     top_k: int = 5,
@@ -752,7 +916,10 @@ def compare_prepared_modes(
     optional query as_of evaluates measured load age. The checkpoint keeps its
     original date for service evidence validity. Use the requested route
     measure when comparable across eligible sites inside the straight-line
-    radius. Balancing enforces both detour limits when the pair has routes.
+    radius. Documentation and comparable patient-experience credits can change
+    the order within a non-emergency evidence tier. Balancing enforces both
+    detour limits when the pair has routes, measured from the top recommendation
+    before balancing.
     """
     origin = _coordinate_pair(lat, lon)
     if origin is None:
@@ -776,8 +943,9 @@ def compare_prepared_modes(
         raise ValueError("Provide a nonnegative minutes detour limit and travel weight from 0 to 1.")
     if threshold is None or not 0 <= threshold <= 1:
         raise ValueError("lead_threshold must be between 0 and 1.")
+    policy = _quality_policy_values(quality_policy)
     as_of = _check_as_of(as_of)
-    _require(prepared, PREPARED_COLUMNS, "prepared")
+    _require(prepared, _REQUIRED_PREPARED_COLUMNS, "prepared")
     prepared = prepared.loc[prepared["service"].eq(service)]
     if prepared["facility_id"].duplicated().any():
         raise ValueError("Use one prepared row per facility and service.")
@@ -799,11 +967,14 @@ def compare_prepared_modes(
     eligible = [r for r in candidates if r["eligible"]]
     baseline_metric = _travel_metric(eligible, routes, route_sort)
     travel_reason = _ranking_travel_reason(baseline_metric, route_sort, eligible, routes_supplied)
-    baseline = sorted(
+    distances = {r["facility_id"]: _travel_value(r, routes, baseline_metric) for r in eligible}
+    travel_only = sorted(
         eligible,
-        key=lambda r: (r["evidence_tier"], _travel_value(r, routes, baseline_metric), r["distance_km"], r["facility_id"]),
+        key=lambda r: (r["evidence_tier"], distances[r["facility_id"]], r["distance_km"], r["facility_id"]),
     )
-    if spread_demand and _clear_emergency_service(service):
+    emergency = _clear_emergency_service(service)
+    baseline, quality, rank_policy = _quality_order(travel_only, distances, baseline_metric, policy, emergency)
+    if spread_demand and emergency:
         ranked, load, weighted = baseline, {}, {}
         load_status = weighted_status = "non_emergency_only"
     else:
@@ -820,6 +991,8 @@ def compare_prepared_modes(
     ranking = {
         "reference": baseline[0] if baseline else None, "routes": routes,
         "travel_metric": baseline_metric, "travel_reason": travel_reason, "route_sort": route_sort,
+        "travel_positions": {row["facility_id"]: index for index, row in enumerate(travel_only, start=1)},
+        "quality": quality, "quality_policy": rank_policy,
         "measured": load, "weighted": weighted,
         "load_status": load_status, "weighted_status": weighted_status,
     }
@@ -862,6 +1035,7 @@ def compare_prepared_modes(
             weighted_status=weighted_status,
             weighted_travel_metric=next(iter(weighted.values()))["weighted_travel_metric"] if weighted else None,
             max_extra_minutes=minutes_cap, travel_weight=weight, pressure_weight=1 - weight,
+            **rank_policy,
         ))
     trace_frame = pd.DataFrame(trace, columns=RESULT_COLUMNS)
     rows = trace_frame.loc[trace_frame["selected"].astype(bool)].copy()

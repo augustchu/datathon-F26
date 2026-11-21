@@ -5,7 +5,7 @@ from build_analysis_notebooks import code, markdown, notebook
 
 def build():
     notebook('06b_prepare_lookup', 'Prepare lookup snapshots', '''
-        Run this after the branch audit, service evidence, and field updates. Search uses
+        Run this after the branch audit, service and assessment evidence, and field updates. Search uses
         prepared place and service checkpoints. It reads the existing routing flags and
         recommendations use the service evidence available on the configured snapshot date.
     ''', [
@@ -13,7 +13,8 @@ def build():
             ## Materialize the stable decisions
 
             The data preparation resolves eligible place centers and known ambiguity,
-            attaches citable contacts and service corroboration from 04b, and organizes each
+            attaches cited contacts, service corroboration from 04b and assessment evidence
+            from 04c, and organizes each
             service's quotes, field estimates and load inputs. Review the candidate totals
             before running a search. Refresh these checkpoints when upstream data or rules change.
         '''),
@@ -48,6 +49,7 @@ def build():
             USE_TRAVELTIME = config['traveltime']['enabled']  # Uses credentials if configured; sends coordinates.
             TRANSPORT_MODE = config['traveltime']['mode']  # driving, public_transport, walking, cycling
             ROUTE_SORT = None  # Default distance, or time for public transport. Can also choose 'time'.
+            FACILITY_SORT = config['lookup']['facility_sort']  # balanced or closest
             TRAVEL_WEIGHT = config['lookup']['travel_weight']
             MAX_EXTRA_KM = config['lookup']['max_extra_km']
             MAX_EXTRA_MINUTES = config['lookup']['max_extra_minutes']
@@ -56,12 +58,13 @@ def build():
 
             settings = dict(concern=CONCERN, location=LOCATION, spread_demand=SPREAD_DEMAND,
                             traveltime_enabled=USE_TRAVELTIME, travel_mode=TRANSPORT_MODE, route_sort=ROUTE_SORT,
-                            travel_weight=TRAVEL_WEIGHT,
+                            facility_sort=FACILITY_SORT, travel_weight=TRAVEL_WEIGHT,
                             max_extra_km=MAX_EXTRA_KM, max_extra_minutes=MAX_EXTRA_MINUTES,
                             pressure_inputs=pd.read_csv(PRESSURE_CSV) if PRESSURE_CSV else None)
             result = lookup(STORE, config, **settings)
             print(f"{result['service']} | {result['origin'].label} | {result['origin'].basis}")
             print(f"Transport: {result['transport_mode']} | Requested sort: {result['route_sort']}")
+            print(f"Facility preference: {result['facility_sort']}")
             if MODE == 'demo':
                 print('Fictional facilities, values, and contacts. Do not use them for care decisions.')
             show(result['summary'])
@@ -71,15 +74,25 @@ def build():
             ## Reasons, contacts and travel
             Driving uses estimated route distance by default. Select walking, cycling or public
             transport to compare the same search. Public transport uses estimated travel time.
-            Straight-line kilometers remain visible as a separate fallback. Check the recorded
-            ranking metric and reason when routes are missing. The fit score uses
+            Straight-line kilometers remain visible as a separate fallback. Within the same
+            service evidence tier, balanced ranking gives limited travel credit for independent
+            service corroboration and a current external assessment. Compare `travel_only_rank`
+            with `baseline_rank` before considering opt-in load balancing. These credits are
+            ranking preferences in travel units. Clinical outcomes remain unknown. The fit score uses
             the accepted service citation, validity, precision of the origin, and proximity.
             A listed phone can be outdated. Call the branch to verify the requested service
             and availability before traveling. Inspect the complete `trace` for excluded candidates.
         '''),
         code('''
-            summary_columns = ['mode', 'kind', 'rank', 'name', 'distance_km', 'route_distance_km', 'travel_minutes',
+            summary_columns = ['mode', 'kind', 'rank', 'baseline_rank', 'travel_only_rank', 'name',
+                               'distance_km', 'route_distance_km', 'travel_minutes',
                                'travel_mode', 'travel_source_url', 'ranking_travel_metric', 'ranking_travel_reason',
+                               'ranking_policy_reason', 'corroboration_credit', 'assessment_credit',
+                               'quality_credit_unit', 'balanced_travel_score', 'quality_assessment_status',
+                               'quality_evidence',
+                               'patient_rating', 'patient_rating_min', 'patient_rating_max', 'patient_rating_response_count',
+                               'patient_rating_source_url', 'patient_reviews_search_url',
+                               'patient_ranking_reason', 'patient_experience_credit',
                                'location_source_urls', 'location_review_flags',
                                'fit_score', 'fit_score_basis', 'phone_number',
                                'phone_source_urls', 'call_to_verify', 'call_response', 'excerpt',

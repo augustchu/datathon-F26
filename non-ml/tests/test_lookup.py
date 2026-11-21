@@ -4,12 +4,16 @@ import json
 import unittest
 from unittest.mock import patch
 
+import pandas as pd
+
 from facility_tool.data import extract_claims, link_entities, load_records
 from facility_tool.examples import demo_inputs, demo_overlays, demo_pressure
 from facility_tool.geo_audit import attach_routing_review, audit_locations
 from facility_tool.geography import build_postal_areas
 from facility_tool.lookup import lookup
 from facility_tool.moderation import ModerationStack
+from facility_tool.patient_experience import prepare_patient_experience
+from facility_tool.quality import build_quality_profiles
 from facility_tool.query_assets import prepare_lookup_assets
 from facility_tool.response import new_alternatives, record_call, report_unconfirmed_call
 from facility_tool.updates import contact_evidence, load_estimates
@@ -56,11 +60,14 @@ class LookupWorkflowTest(unittest.TestCase):
         entities = attach_routing_review(entities, locations)
         estimates, _ = demo_overlays(entities, config['as_of'])
         claims = extract_claims(records, links, config['service_aliases'], config['as_of'])
+        verification = verify_services(claims, config['as_of'])
+        _, profiles = build_quality_profiles(records, links, claims, verification, config['as_of'])
         with TemporaryDirectory() as tmp:
             store = Store(ROOT, 'demo', config['as_of'], tmp)
             sources = {
                 'entities': entities, 'postal_areas': postal, 'location_entity_review': locations,
-                'verified_claims': claims, 'service_verification': verify_services(claims, config['as_of']),
+                'verified_claims': claims, 'service_verification': verification, 'quality_profiles': profiles,
+                'patient_experience': prepare_patient_experience(entities, pd.DataFrame(), config['as_of']),
                 'field_updates': estimates, 'contact_evidence': contact_evidence(records, links),
                 'pressure_scenarios': demo_pressure(entities),
             }
@@ -75,6 +82,8 @@ class LookupWorkflowTest(unittest.TestCase):
                 result = lookup(store, config, **settings)
                 routing.assert_not_called()
                 self.assertEqual((result['transport_mode'], result['route_sort']), ('driving', 'distance'))
+                self.assertEqual(result['facility_sort'], 'balanced')
+                self.assertEqual(lookup(store, config, **settings, facility_sort='closest')['facility_sort'], 'closest')
                 transit = lookup(store, config, **settings, travel_mode='public_transport')
                 self.assertEqual((transit['transport_mode'], transit['route_sort']), ('public_transport', 'time'))
                 with self.assertRaisesRegex(ValueError, 'Choose time'):
@@ -85,6 +94,9 @@ class LookupWorkflowTest(unittest.TestCase):
             self.assertTrue(with_phone['location_source_urls'][0].startswith('https://example.invalid/'))
             self.assertIn('Heuristic fit score', with_phone['fit_score_basis'])
             self.assertEqual(with_phone['verification_status'], 'single_direct_source')
+            self.assertEqual(with_phone['quality_assessment_status'], 'unknown')
+            self.assertEqual(with_phone['patient_experience_status'], 'unknown')
+            self.assertTrue(with_phone['patient_reviews_search_url'].startswith('https://www.google.com/maps/search/'))
 
             first = recommended.iloc[0]['facility_id']
             feedback = record_call((), 'dialysis', first, confirmed=False)
@@ -104,6 +116,24 @@ class LookupWorkflowTest(unittest.TestCase):
             positive = record_call(feedback, 'dialysis', first, confirmed=True)
             with self.assertRaises(ValueError):
                 report_unconfirmed_call(positive, 'dialysis', first, moderation_stack=stack)
+
+            dialysis_ids = claims.loc[claims['service'].eq('dialysis') & claims['stance'].eq('supports'),
+                                      'facility_id'].drop_duplicates()
+            ratings = pd.DataFrame([
+                {'facility_id': facility, 'source': 'Example survey',
+                 'source_url': 'https://survey.example.invalid/clinics', 'metric': 'Overall satisfaction',
+                 'period_start': '2026-01-01', 'period_end': '2026-06-30',
+                 'rating': 4.5, 'rating_min': 1, 'rating_max': 5, 'response_count': 70}
+                for facility in dialysis_ids
+            ])
+            sources['patient_experience'] = prepare_patient_experience(entities, ratings, config['as_of'])
+            for key, frame in sources.items():
+                store.write(key, frame)
+            prepare_lookup_assets(store, config)
+            rated = lookup(store, config, **settings)['rows'].query("mode == 'confirmed' and kind == 'recommendation'")
+            self.assertTrue(rated['patient_ranking_status'].eq('applied').all())
+            self.assertTrue(rated['patient_experience_credit'].gt(0).all())
+            self.assertTrue(rated['patient_rating_response_count'].eq(70).all())
 
 
 if __name__ == '__main__':

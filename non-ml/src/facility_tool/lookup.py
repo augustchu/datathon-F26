@@ -7,7 +7,8 @@ import pandas as pd
 
 from .geography import place_key
 from .origin_index import resolve_prepared_origin
-from .query_assets import LOOKUP_VERIFICATION_FIELDS
+from .patient_experience import PATIENT_EXPERIENCE_COLUMNS
+from .query_assets import LOOKUP_QUALITY_FIELDS, LOOKUP_VERIFICATION_FIELDS
 from .recommend import compare_prepared_modes
 from .response import CONTACT_FIELDS, format_recommendations
 from .travel import MODES as TRANSPORT_MODES, estimate_travel
@@ -36,7 +37,7 @@ def resolve_service(concern, aliases):
 
 
 def lookup(store, config, *, concern, location, spread_demand=False, traveltime_enabled=None,
-           travel_mode=None, route_sort=None, travel_weight=None, max_extra_km=None,
+           travel_mode=None, route_sort=None, facility_sort=None, travel_weight=None, max_extra_km=None,
            max_extra_minutes=None, pressure_inputs=None, feedback=()):
     """Return all three modes from one snapshot and one optional routing request."""
     service = resolve_service(concern, config['service_aliases'])
@@ -46,6 +47,10 @@ def lookup(store, config, *, concern, location, spread_demand=False, traveltime_
     if excluded:
         candidates = candidates.loc[~candidates['facility_id'].isin(excluded)]
     limits = config['lookup']
+    facility_sort = limits.get('facility_sort', 'balanced') if facility_sort is None else facility_sort
+    if facility_sort not in {'balanced', 'closest'}:
+        raise ValueError('Choose balanced or closest for facility sorting.')
+    quality_policy = config.get('quality_ranking') if facility_sort == 'balanced' else None
     routing = config['traveltime']
     travel_mode = routing['mode'] if travel_mode is None else travel_mode
     if travel_mode not in TRANSPORT_MODES:
@@ -81,17 +86,22 @@ def lookup(store, config, *, concern, location, spread_demand=False, traveltime_
         )
     result = compare_prepared_modes(candidates, origin.lat, origin.lon, service, **parameters,
                                     route_sort=route_sort, spread_demand=spread_demand, pressure_inputs=pressure_inputs,
-                                    measured_load=measured, travel_times=routing_results)
+                                    measured_load=measured, travel_times=routing_results, quality_policy=quality_policy)
     result['route_status'] = routing_results
     result['transport_mode'] = travel_mode
     result['route_sort'] = route_sort
+    result['facility_sort'] = facility_sort
     result['origin'] = origin
     result['service'] = service
     result['excluded_by_caller'] = sorted(excluded)
-    checks = candidates[['facility_id', *LOOKUP_VERIFICATION_FIELDS]]
+    fields = (*LOOKUP_VERIFICATION_FIELDS, *LOOKUP_QUALITY_FIELDS,
+              *(key for key in PATIENT_EXPERIENCE_COLUMNS if key != 'facility_id'))
     for table in ('rows', 'trace'):
+        display_columns = [key for key in fields if key not in result[table].columns]
+        checks = candidates.reindex(columns=['facility_id', *display_columns])
         result[table] = result[table].merge(checks, how='left', on='facility_id', validate='m:1')
         result[table]['verification_status'] = result[table]['verification_status'].fillna('insufficient')
+        result[table]['quality_assessment_status'] = result[table]['quality_assessment_status'].fillna('unknown')
     contact_choices = candidates[['facility_id', *CONTACT_FIELDS]]
     result['rows'] = format_recommendations(result['rows'], contact_choices, origin, limits['max_radius_km'], feedback)
     return result

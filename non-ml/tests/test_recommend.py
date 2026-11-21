@@ -10,6 +10,8 @@ from facility_tool.workspace import Store
 
 SERVICE = "dialysis"
 AS_OF = "2026-11-21T12:00:00Z"
+QUALITY_POLICY = {"corroboration_share": 0.6, "max_credit_km": 3, "max_credit_minutes": 5}
+EXPERIENCE_POLICY = dict(QUALITY_POLICY, max_experience_credit_km=3, max_experience_credit_minutes=2)
 
 
 def entity(branch, lon, quality="source_coordinates_unverified"):
@@ -60,6 +62,10 @@ def driving_routes(**estimates):
              travel_mode="driving", travel_source="Synthetic road route", travel_source_url="https://example.org/route")
         for branch, (kilometers, minutes) in estimates.items()
     ])
+
+
+def rated(site, value, key="Example survey, overall experience, 1–5, 2026 Q3", status="eligible"):
+    return dict(site, patient_experience_value=value, patient_comparison_key=key, patient_experience_status=status)
 
 
 def query(entities, claims, updates=None, measurements=None, **kwargs):
@@ -294,6 +300,141 @@ class RecommendationTests(unittest.TestCase):
         self.assertEqual(set(self.first_rows(result)["facility_id"]), {"near"})
         self.assertEqual(set(self.first_rows(result)["ranking_travel_metric"]), {"route_minutes"})
 
+    def test_documented_quality_can_promote_a_nearby_facility_with_explicit_credit(self):
+        entities = [
+            self.entities[0],
+            dict(self.entities[1], quality_corroborated=True, quality_assessed=True),
+            self.entities[2],
+        ]
+        ordinary = query(entities, self.claims)
+        quality_ranked = query(entities, self.claims, quality_policy=QUALITY_POLICY)
+        self.assertEqual(set(self.first_rows(ordinary)["facility_id"]), {"first"})
+        winner = self.first_rows(quality_ranked).iloc[0]
+        self.assertEqual(winner["facility_id"], "near")
+        self.assertEqual(winner["travel_only_rank"], 2)
+        self.assertEqual(winner["baseline_rank"], 1)
+        self.assertEqual(winner["ranking_policy"], "documented_quality_and_travel")
+        self.assertEqual(winner["quality_credit_unit"], "km")
+        self.assertAlmostEqual(winner["corroboration_credit"], 1.8)
+        self.assertAlmostEqual(winner["assessment_credit"], 1.2)
+        self.assertAlmostEqual(winner["balanced_travel_score"], winner["distance_km"] - 3)
+
+    def test_documented_quality_never_crosses_evidence_gates_or_credit_limit(self):
+        entities = [
+            self.entities[0],
+            dict(self.entities[1], quality_corroborated=True, quality_assessed=True),
+            dict(self.entities[2], quality_corroborated=True, quality_assessed=True),
+        ]
+        only_far_eligible = query(entities, [claim("first"), claim("near", "weak"), claim("far")], quality_policy=QUALITY_POLICY)
+        self.assertEqual(set(self.first_rows(only_far_eligible)["facility_id"]), {"first"})
+        near = only_far_eligible["trace"].loc[only_far_eligible["trace"]["facility_id"].eq("near")]
+        self.assertTrue(near["rank"].isna().all())
+        lower_tier = query(
+            entities, [claim("first"), claim("near", validity="unknown"), claim("far", "weak")],
+            quality_policy=QUALITY_POLICY,
+        )
+        self.assertEqual(set(self.first_rows(lower_tier)["facility_id"]), {"first"})
+        self.assertTrue(lower_tier["trace"]["quality_credit"].dropna().le(3).all())
+
+    def test_route_credit_uses_minutes_and_breaks_equal_scores_by_travel(self):
+        entities = [self.entities[0], dict(self.entities[1], quality_corroborated=True, quality_assessed=True)]
+        claims = self.claims[:2]
+        tie = query(
+            entities, claims, travel_times=routes(first=20, near=25),
+            route_sort="time", quality_policy=QUALITY_POLICY,
+        )
+        earlier = query(
+            entities, claims, travel_times=routes(first=20, near=24),
+            route_sort="time", quality_policy=QUALITY_POLICY,
+        )
+        self.assertEqual(set(self.first_rows(tie)["facility_id"]), {"first"})
+        winner = self.first_rows(earlier).iloc[0]
+        self.assertEqual(winner["facility_id"], "near")
+        self.assertEqual(winner["quality_credit_unit"], "minutes")
+        self.assertEqual(winner["quality_credit"], 5)
+
+    def test_unknown_quality_flags_add_no_credit_and_preserve_travel_order(self):
+        entities = [dict(row, quality_corroborated="true", quality_assessed=None) for row in self.entities]
+        result = query(entities, self.claims, quality_policy=QUALITY_POLICY)
+        self.assertEqual(set(self.first_rows(result)["facility_id"]), {"first"})
+        self.assertEqual(set(result["trace"]["quality_credit"]), {0})
+        self.assertEqual(set(result["summary"]["ranking_policy"]), {"travel_only"})
+        self.assertTrue(result["trace"][["quality_corroborated", "quality_assessed"]].isna().all().all())
+
+    def test_opted_in_load_remains_final_after_quality_ranking(self):
+        entities = [
+            self.entities[0], dict(self.entities[1], quality_corroborated=True, quality_assessed=True), self.entities[2],
+        ]
+        balanced = query(
+            entities, self.claims, measurements=[load("first", 8), load("near", 2), load("far", 100)],
+            quality_policy=QUALITY_POLICY, spread_demand=True, max_extra_km=5,
+        )
+        winner = self.first_rows(balanced).iloc[0]
+        self.assertEqual(winner["facility_id"], "first")
+        self.assertEqual(winner["baseline_rank"], 2)
+        self.assertEqual(winner["travel_only_rank"], 1)
+        self.assertEqual(winner["load_status"], "measured_availability_rerank")
+
+    def test_comparable_experience_contributes_a_separate_bounded_credit(self):
+        entities = [rated(self.entities[0], 0), rated(self.entities[1], 0.9)]
+        result = query(entities, self.claims[:2], quality_policy=EXPERIENCE_POLICY)
+        winner = self.first_rows(result).iloc[0]
+        self.assertEqual(winner["facility_id"], "near")
+        self.assertEqual(winner["travel_only_rank"], 2)
+        self.assertEqual(winner["patient_ranking_status"], "applied")
+        self.assertEqual(winner["ranking_policy"], "patient_experience_and_travel")
+        self.assertEqual(winner["patient_tier_eligible"], 2)
+        self.assertAlmostEqual(winner["patient_experience_credit"], 2.7)
+        self.assertEqual(winner["quality_credit"], 0)
+        self.assertAlmostEqual(winner["balanced_travel_score"], winner["distance_km"] - 2.7)
+        self.assertEqual(set(result["summary"]["quality_total_max_credit"]), {6})
+        closest = query(entities, self.claims[:2])
+        self.assertEqual(set(self.first_rows(closest)["facility_id"]), {"first"})
+        self.assertEqual(set(closest["trace"]["patient_experience_credit"]), {0})
+
+    def test_experience_coverage_uses_full_eligible_radius_before_top_k(self):
+        entities = [rated(self.entities[0], 0), rated(self.entities[1], 1), self.entities[2]]
+        incomplete = query(entities, self.claims, quality_policy=EXPERIENCE_POLICY, top_k=1)
+        complete = query(entities, self.claims, quality_policy=EXPERIENCE_POLICY, top_k=1, max_radius_km=5)
+        first = self.first_rows(incomplete).iloc[0]
+        self.assertEqual(first["facility_id"], "first")
+        self.assertEqual(first["patient_ranking_status"], "held_incomplete_coverage")
+        self.assertEqual((first["patient_tier_eligible"], first["patient_tier_candidates"]), (2, 3))
+        self.assertEqual(set(incomplete["trace"]["patient_experience_credit"]), {0})
+        self.assertEqual(set(self.first_rows(complete)["facility_id"]), {"near"})
+        self.assertEqual(set(self.first_rows(complete)["patient_tier_candidates"]), {2})
+
+    def test_experience_holds_incomparable_windows_and_undersized_tiers(self):
+        entities = [rated(self.entities[0], 0), rated(self.entities[1], 1, key="Example survey, overall, 1–5, 2025 Q3")]
+        incomparable = query(entities, self.claims[:2], quality_policy=EXPERIENCE_POLICY)
+        self.assertEqual(set(self.first_rows(incomparable)["facility_id"]), {"first"})
+        self.assertEqual(set(incomparable["trace"]["patient_ranking_status"]), {"held_incomparable"})
+        self.assertEqual(set(incomparable["trace"]["patient_experience_credit"]), {0})
+        sparse = query(entities, [claim("first"), claim("near", validity="unknown")], quality_policy=EXPERIENCE_POLICY)
+        self.assertEqual(set(sparse["trace"]["patient_ranking_status"]), {"held_insufficient_candidates"})
+        self.assertEqual(set(sparse["trace"]["patient_experience_credit"]), {0})
+        self.assertEqual(set(sparse["summary"]["patient_held_tiers"]), {2})
+
+    def test_patient_experience_uses_route_minutes_and_load_still_runs_last(self):
+        entities = [
+            rated(self.entities[0], 0),
+            rated(dict(self.entities[1], quality_corroborated=True), 1),
+        ]
+        common = dict(travel_times=routes(first=20, near=21), quality_policy=EXPERIENCE_POLICY)
+        ordinary = query(entities, self.claims[:2], **common)
+        winner = self.first_rows(ordinary).iloc[0]
+        self.assertEqual(winner["facility_id"], "near")
+        self.assertEqual(winner["quality_credit_unit"], "minutes")
+        self.assertEqual(winner["patient_experience_credit"], 2)
+        self.assertEqual(winner["quality_credit"], 3)
+        self.assertEqual(winner["total_quality_experience_credit"], 5)
+        balanced = query(
+            entities, self.claims[:2], measurements=[load("first", 7), load("near", 1)],
+            spread_demand=True, **common,
+        )
+        self.assertEqual(set(self.first_rows(balanced)["facility_id"]), {"first"})
+        self.assertEqual(set(balanced["summary"]["load_status"]), {"measured_availability_rerank"})
+
     def test_mixed_routes_use_one_score_basis_and_honor_known_time_cap(self):
         pressures = pd.DataFrame([pressure("first", 100, 100), pressure("near", 0, 100), pressure("far", 10, 100)])
         result = query(
@@ -324,9 +465,11 @@ class RecommendationTests(unittest.TestCase):
     def test_explicit_emergency_request_stays_on_normal_order(self):
         service = "emergency_c_section"
         result = compare_modes(
-            pd.DataFrame(self.entities),
+            pd.DataFrame([rated(self.entities[0], 0),
+                          rated(dict(self.entities[1], quality_corroborated=True, quality_assessed=True), 1),
+                          rated(self.entities[2], 1)]),
             pd.DataFrame(self.claims).assign(service=service),
-            28, 77, service, as_of=AS_OF, spread_demand=True,
+            28, 77, service, as_of=AS_OF, spread_demand=True, quality_policy=EXPERIENCE_POLICY,
             pressure_inputs=pd.DataFrame([pressure("first", 100, 100), pressure("near", 1, 100)]).assign(
                 service=service, unit="obstetric admissions"
             ),
@@ -336,6 +479,9 @@ class RecommendationTests(unittest.TestCase):
         )
         self.assertEqual(set(self.first_rows(result)["facility_id"]), {"first"})
         self.assertEqual(set(result["summary"]["load_status"]), {"non_emergency_only"})
+        self.assertEqual(set(result["summary"]["ranking_policy"]), {"emergency_travel_only"})
+        self.assertEqual(set(result["trace"]["quality_credit"]), {0})
+        self.assertEqual(set(result["trace"]["patient_experience_credit"]), {0})
 
     def test_simulation_retains_total_and_distance_cap(self):
         trace = query(self.entities, self.claims)["trace"]
