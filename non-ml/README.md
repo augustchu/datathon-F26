@@ -52,7 +52,7 @@ Notebook 04c attaches NQAS and NABH assessment evidence with exact branch, valid
 
 ## Compare a single search
 
-Enter one recognized service and a city, district, PIN, or latitude and longitude. All modes use the same rules for documented services.
+Enter one recognized service and a city, district, PIN, or latitude and longitude as the starting point. Each mode returns up to five ranked recommendations. All modes use the same rules for documented services.
 
 - **Confirmed** uses cited service listings and reported or recovered facility fields. It shows scope, validity and source text to help the caller verify the result.
 - **ML-assisted** adds imported ML estimates for missing fields. A model-only service estimate appears as a lead for verification.
@@ -66,9 +66,23 @@ Notebook 07 displays a cited phone when available and a fit score with the facto
 
 Within each evidence tier, the default ranking combines distance along TravelTime's estimated driving route with bounded credits for documentation and comparable patient feedback. Use `FACILITY_SORT = "closest"` for travel-only ordering within those tiers. Set `TRANSPORT_MODE` to `walking`, `cycling`, or `public_transport` in 07 to view or sort the same search by that mode. Driving, walking, and cycling can sort by route distance or estimated time. Public transport sorts by estimated time and coverage is partial in India. A route is estimated for the selected mode and departure time. [TravelTime matrix documentation](https://docs.traveltime.com/api/reference/travel-time-distance-matrix) · [Coverage by country](https://docs.traveltime.com/api/overview/supported-countries)
 
-Live routing requires `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` in the environment. The request sends the origin and shortlisted candidate coordinates. Set `USE_TRAVELTIME=False` to use the local distance calculation. When route coverage is incomplete for the comparison, the ranking records its straight-line fallback separately from any displayed route estimates. The local verification used mocked route data.
+Live routing requires `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` in the environment. It sends the origin and all evidence-eligible branch coordinates in batches, across city and district boundaries. The standard API covers journeys of up to four hours. The selected-mode ranking uses available routes with the requested measure. The routing summary identifies unavailable estimates. Set `USE_TRAVELTIME=False` for an explicit offline comparison by straight-line distance. The fictional demo uses that offline calculation. [TravelTime matrix limits](https://docs.traveltime.com/api/reference/travel-time-distance-matrix)
+
+For walking, cycling, or public transport, the top driving option can take one of the five slots when it lacks a route for the selected transport. If the selected transport yields no routes, the list can show up to five driving alternatives. Each tagged alternative shows its actual travel mode and whether TravelTime reported the selected transport as unreachable or whether its estimate was unavailable.
 
 The non-emergency load setting starts off. When enabled, the selector can trade extra travel against condition-specific demand divided by equivalent service capacity. Evidence and detour limits apply before the weighted selection. Demand and capacity need the same unit and period across compared facilities, with provenance. Total bed counts are resource estimates. Measured current service slots and historical or simulated pressure have different labels and a separate input table.
+
+### Run the live TravelTime check
+
+Prepare the real-data lookup assets through notebook 06b. Set `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` in the runner's environment. The checkpoint root is the directory above `export/<as-of>` when running from a local facility export. Use the mode and date from the prepared assets.
+
+```sh
+python non-ml/check_traveltime_live.py \
+  --checkpoint-root /path/to/checkpoints --mode export --as-of 2026-11-21 \
+  --output /path/to/receipts/traveltime-live.json
+```
+
+The check sends real TravelTime requests for blood banks from Jaipur and Gadchiroli. It uses the travel-only sort within the existing evidence tiers so the expected order can be reconstructed from the returned route data. It checks that all eligible branches were submitted, that the top five match the provider-backed rank order, and that any car-only label matches the provider's response for the selected mode. A case without enough usable evidence or routes to demonstrate the target behavior is inconclusive. Use `--case jaipur-driving`, `--case gadchiroli-driving`, or `--case gadchiroli-walking` to run individual cases. The JSON receipt records the outcome and route counts for the working report. [Live check script](check_traveltime_live.py)
 
 ## Moderation stack
 

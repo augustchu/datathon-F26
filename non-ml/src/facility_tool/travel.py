@@ -14,9 +14,6 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 import pandas as pd
 
-from .recommend import haversine_km
-
-
 ENDPOINT = "https://api.traveltimeapp.com/v4/time-filter"
 SOURCE = "TravelTime time-filter"
 SOURCE_URL = "https://docs.traveltime.com/api/reference/travel-time-distance-matrix"
@@ -28,6 +25,8 @@ BLOCKED_QUALITIES = (
     "approximate", "unresolved",
 )
 MAX_RESPONSE_BYTES = 2_000_000
+MAX_DESTINATIONS_PER_SEARCH = 2_000
+MAX_TRAVEL_MINUTES = 240
 
 
 class _NoRedirects(HTTPRedirectHandler):
@@ -146,6 +145,22 @@ def _response_estimates(response, window_seconds, include_distance):
     return estimates, unreachable - seen
 
 
+def _request_routes(payload, window_seconds, include_distance, *, app_id, api_key, timeout):
+    try:
+        response = _post_json(payload, app_id=app_id, api_key=api_key, timeout=timeout)
+        estimates, unreachable = _response_estimates(response, window_seconds, include_distance)
+        return estimates, unreachable, "missing_result"
+    except HTTPError as error:
+        statuses = {401: "credential_or_plan_rejected", 403: "credential_or_plan_rejected", 429: "rate_limited"}
+        status = statuses.get(error.code, "provider_unavailable" if 500 <= error.code <= 599 else "request_rejected")
+        error.close()
+    except (OSError, HTTPException):
+        status = "network_error"
+    except (ValueError, TypeError):
+        status = "invalid_response"
+    return {}, set(), status
+
+
 def estimate_travel(
     origin,
     facilities: pd.DataFrame,
@@ -153,18 +168,18 @@ def estimate_travel(
     enabled: bool = False,
     mode: str = "driving",
     departure_time=None,
-    max_travel_minutes: int = 90,
-    max_destinations: int = 50,
+    max_travel_minutes: int = MAX_TRAVEL_MINUTES,
+    max_destinations: int = MAX_DESTINATIONS_PER_SEARCH,
     app_id: str | None = None,
     api_key: str | None = None,
     timeout: float = 12,
 ) -> pd.DataFrame:
-    """Request a single, bounded matrix for one origin and travel mode.
+    """Request comparable routes for all eligible destinations from one origin.
 
     ``origin`` is ``(latitude, longitude)`` and facility rows require unique IDs
-    and ``lat`` and ``lon`` columns. The closest routeable points by great-circle
-    distance enter the matrix first, breaking ties by facility ID. The returned
-    table preserves all input IDs and their order. A missing estimate remains
+    and ``lat`` and ``lon`` columns. ``max_destinations`` sets the batch size per
+    provider request. The returned table preserves all input IDs and their order.
+    A missing estimate remains
     null, including destinations the provider lists as unreachable within the
     search window. Distance in kilometers refers to the same returned route
     as time in minutes. The matrix supports distance for driving, walking and
@@ -174,8 +189,9 @@ def estimate_travel(
     The opt-in request sends coordinates, a departure timestamp, transport
     mode, a search window, and temporary destination IDs to TravelTime. The
     caller can provide credentials or set TRAVELTIME_APP_ID and
-    TRAVELTIME_API_KEY. Destinations omitted or unreachable within this search
-    window may still have viable routes.
+    TRAVELTIME_API_KEY. The provider's journey window applies across batches.
+    The status distinguishes explicitly unreachable destinations from incomplete
+    or failed requests.
     """
     required = {"facility_id", "lat", "lon"}
     if not required.issubset(facilities.columns):
@@ -199,10 +215,12 @@ def estimate_travel(
         return result
     if mode not in MODES:
         raise ValueError(f"mode must be one of {', '.join(MODES)}.")
-    if pd.api.types.is_bool(max_destinations) or not isinstance(max_destinations, Integral) or not 1 <= max_destinations <= 200:
-        raise ValueError("max_destinations must be a whole number from 1 through 200.")
-    if pd.api.types.is_bool(max_travel_minutes) or not isinstance(max_travel_minutes, Integral) or not 1 <= max_travel_minutes <= 240:
-        raise ValueError("max_travel_minutes must be a whole number from 1 through 240.")
+    if (pd.api.types.is_bool(max_destinations) or not isinstance(max_destinations, Integral)
+            or not 1 <= max_destinations <= MAX_DESTINATIONS_PER_SEARCH):
+        raise ValueError(f"max_destinations must be a whole number from 1 through {MAX_DESTINATIONS_PER_SEARCH}.")
+    if (pd.api.types.is_bool(max_travel_minutes) or not isinstance(max_travel_minutes, Integral)
+            or not 1 <= max_travel_minutes <= MAX_TRAVEL_MINUTES):
+        raise ValueError(f"max_travel_minutes must be a whole number from 1 through {MAX_TRAVEL_MINUTES}.")
     if type(timeout) not in (int, float) or not isfinite(timeout) or not 0 < timeout <= 30:
         raise ValueError("timeout must be a positive number of seconds up to 30.")
 
@@ -223,60 +241,51 @@ def estimate_travel(
     for position, row in enumerate(facilities.to_dict("records")):
         point = _site_point(row)
         if point is not None:
-            result.at[position, "travel_status"] = "outside_request_limit"
-            candidates.append((haversine_km(*origin, *point), str(row["facility_id"]), position, point))
+            candidates.append((str(row["facility_id"]), position, point))
     if not candidates:
         return result
 
     departure = _departure_timestamp(departure_time)
     window_seconds = int(max_travel_minutes) * 60
-    locations = [{"id": "origin", "coords": {"lat": origin[0], "lng": origin[1]}}]
-    destination_positions = {}
-    for offset, (_, _, position, (lat, lon)) in enumerate(sorted(candidates)[:max_destinations], start=1):
-        key = f"destination-{offset}"
-        locations.append({"id": key, "coords": {"lat": lat, "lng": lon}})
-        destination_positions[key] = position
-    chosen = list(destination_positions.values())
-    result.loc[chosen, "departure_time"] = departure
-    result.loc[chosen, "travel_status"] = "missing_result"
     include_distance = mode in DISTANCE_MODES
-    payload = {
-        "locations": locations,
-        "departure_searches": [{
-            "id": SEARCH_ID,
-            "departure_location_id": "origin",
-            "arrival_location_ids": list(destination_positions),
-            "departure_time": departure,
-            "transportation": {"type": mode},
-            "travel_time": window_seconds,
-            "properties": ["travel_time", "distance"] if include_distance else ["travel_time"],
-        }],
-    }
-    try:
-        response = _post_json(payload, app_id=app_id, api_key=api_key, timeout=timeout)
-        estimates, unreachable = _response_estimates(response, window_seconds, include_distance)
-    except HTTPError as error:
-        status = {401: "credential_or_plan_rejected", 403: "credential_or_plan_rejected", 429: "rate_limited"}
-        result.loc[chosen, "travel_status"] = status.get(
-            error.code, "provider_unavailable" if 500 <= error.code <= 599 else "request_rejected",
+    candidates.sort()
+    result.loc[[position for _, position, _ in candidates], "travel_status"] = "not_requested"
+    for start in range(0, len(candidates), max_destinations):
+        locations = [{"id": "origin", "coords": {"lat": origin[0], "lng": origin[1]}}]
+        destination_positions = {}
+        batch = candidates[start:start + max_destinations]
+        for offset, (_, position, (lat, lon)) in enumerate(batch, start=1):
+            key = f"destination-{offset}"
+            locations.append({"id": key, "coords": {"lat": lat, "lng": lon}})
+            destination_positions[key] = position
+        chosen = list(destination_positions.values())
+        result.loc[chosen, "departure_time"] = departure
+        payload = {
+            "locations": locations,
+            "departure_searches": [{
+                "id": SEARCH_ID,
+                "departure_location_id": "origin",
+                "arrival_location_ids": list(destination_positions),
+                "departure_time": departure,
+                "transportation": {"type": mode},
+                "travel_time": window_seconds,
+                "properties": ["travel_time", "distance"] if include_distance else ["travel_time"],
+            }],
+        }
+        estimates, unreachable, status = _request_routes(
+            payload, window_seconds, include_distance, app_id=app_id, api_key=api_key, timeout=timeout,
         )
-        error.close()
-        return result
-    except (OSError, HTTPException):
-        result.loc[chosen, "travel_status"] = "network_error"
-        return result
-    except (ValueError, TypeError):
-        result.loc[chosen, "travel_status"] = "invalid_response"
-        return result
-
-    for key, position in destination_positions.items():
-        if key in estimates:
-            minutes, kilometers = estimates[key]
-            result.at[position, "travel_minutes"] = minutes
-            result.at[position, "route_distance_km"] = kilometers
-            result.at[position, "travel_source"] = SOURCE
-            result.at[position, "travel_source_url"] = SOURCE_URL
-            result.at[position, "travel_status"] = "estimated"
-        elif key in unreachable:
-            result.at[position, "travel_status"] = "not_routed_within_limit"
+        result.loc[chosen, "travel_status"] = status
+        for key, position in destination_positions.items():
+            if key in estimates:
+                minutes, kilometers = estimates[key]
+                result.at[position, "travel_minutes"] = minutes
+                result.at[position, "route_distance_km"] = kilometers
+                result.at[position, "travel_source"] = SOURCE
+                result.at[position, "travel_source_url"] = SOURCE_URL
+                result.at[position, "travel_status"] = "estimated"
+            elif key in unreachable:
+                result.at[position, "travel_status"] = "not_routed_within_limit"
+        if status in {"credential_or_plan_rejected", "rate_limited"}:
+            break
     return result

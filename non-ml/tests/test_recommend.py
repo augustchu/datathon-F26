@@ -5,6 +5,7 @@ import unittest
 import pandas as pd
 
 from facility_tool.recommend import PREPARED_COLUMNS, compare_modes, compare_prepared_modes, prepare_service_candidates, simulate_spread
+from facility_tool.travel import SOURCE as TRAVELTIME_SOURCE
 from facility_tool.workspace import Store
 
 
@@ -62,6 +63,11 @@ def driving_routes(**estimates):
              travel_mode="driving", travel_source="Synthetic road route", travel_source_url="https://example.org/route")
         for branch, (kilometers, minutes) in estimates.items()
     ])
+
+
+def provider_route(branch, kilometers=None, minutes=None, *, status="estimated", mode="driving"):
+    return dict(facility_id=branch, route_distance_km=kilometers, travel_minutes=minutes,
+                travel_mode=mode, travel_source=TRAVELTIME_SOURCE, travel_status=status)
 
 
 def rated(site, value, key="Example survey, overall experience, 1–5, 2026 Q3", status="eligible"):
@@ -273,6 +279,59 @@ class RecommendationTests(unittest.TestCase):
                 self.assertEqual(set(first["ranking_travel_metric"]), {"straight_line_km"})
                 self.assertEqual(set(first["route_distance_km"]), {6})
                 self.assertTrue(first["ranking_travel_reason"].str.contains("unavailable for the full set").all())
+
+    def test_required_route_excludes_failures_without_a_straight_line_fallback(self):
+        entities = self.entities + [entity("distant", 77.9), entity("failed", 77.002),
+                                   entity("wrong-mode", 77.004), entity("held", 77.003)]
+        claims = [claim(row["facility_id"], validity="expired" if row["facility_id"] == "held" else "active")
+                  for row in entities]
+        matrix = pd.DataFrame([
+            provider_route("first", minutes=5),
+            provider_route("near", status="not_routed_within_limit"),
+            provider_route("far", 140, 110),
+            provider_route("distant", 103, 90),
+            provider_route("failed", status="network_error"),
+            provider_route("wrong-mode", 0.5, 2, mode="cycling"),
+            provider_route("held", 0.4, 2),
+        ])
+        result = query(entities, claims, travel_times=matrix, route_sort="distance",
+                       required_travel_mode="driving", max_radius_km=None)
+        recommendations = result["rows"].loc[result["rows"]["mode"].eq("confirmed")]
+        self.assertEqual(recommendations["facility_id"].tolist(), ["distant", "far"])
+        self.assertGreater(recommendations.iloc[0]["distance_km"], 50)
+        self.assertEqual(set(recommendations["ranking_travel_metric"]), {"route_distance_km"})
+        summary = result["summary"].iloc[0]
+        self.assertEqual((summary.n_documented_candidates, summary.n_eligible, summary.n_route_unreachable,
+                          summary.n_route_unavailable, summary.routing_comparison_status), (6, 2, 1, 3, "partial"))
+        trace = result["trace"].loc[result["trace"]["mode"].eq("confirmed")].set_index("facility_id")
+        self.assertEqual(trace.loc["first", "travel_status"], "missing_requested_metric")
+        self.assertEqual(trace.loc["near", "travel_status"], "not_routed_within_limit")
+        self.assertEqual(trace.loc["failed", "travel_status"], "network_error")
+        self.assertEqual(trace.loc["wrong-mode", "travel_status"], "mismatched_transport_mode")
+        self.assertIn("expired", trace.loc["held", "review_reason"])
+
+    def test_required_route_top_five_ties_use_measured_time_then_id(self):
+        entities = [entity(f"facility-{i}", 77 + i / 4) for i in range(7)]
+        claims = [claim(row["facility_id"]) for row in entities]
+        # TravelTime distances tie. The near facility takes longer than several farther options.
+        matrix = pd.DataFrame([provider_route(f"facility-{i}", 210, 125 - i // 2) for i in range(7)])
+        result = query(entities, claims, travel_times=matrix, route_sort="distance",
+                       required_travel_mode="driving", max_radius_km=None)
+        recommendations = result["rows"].loc[result["rows"]["mode"].eq("confirmed")]
+        self.assertEqual(recommendations["facility_id"].tolist(),
+                         ["facility-6", "facility-4", "facility-5", "facility-2", "facility-3"])
+        self.assertEqual(recommendations["rank"].tolist(), [1, 2, 3, 4, 5])
+        self.assertEqual(set(result["summary"]["routing_comparison_status"]), {"complete"})
+
+    def test_required_route_holds_load_reranking_when_detour_time_is_unknown(self):
+        matrix = pd.DataFrame([provider_route("first", 20, 20), provider_route("near", 22),
+                               provider_route("far", 23, 40)])
+        pressures = pd.DataFrame([pressure("first", 100, 100), pressure("near", 0, 100), pressure("far", 0, 100)])
+        result = query(self.entities, self.claims, travel_times=matrix, route_sort="distance",
+                       required_travel_mode="driving", max_radius_km=None, pressure_inputs=pressures,
+                       spread_demand=True, max_extra_minutes=10, travel_weight=0)
+        self.assertEqual(set(self.first_rows(result)["facility_id"]), {"first"})
+        self.assertEqual(set(result["summary"]["weighted_status"]), {"no_comparable_alternative_within_detour"})
 
     def test_load_detour_enforces_both_driving_distance_and_minutes(self):
         matrix = driving_routes(first=(20, 20), near=(32, 21), far=(22, 60))
