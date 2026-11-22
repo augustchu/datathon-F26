@@ -9,7 +9,7 @@ This file records the implementation choices made for the first Databricks proto
 3. The app lives in this folder and imports only code shipped in this folder. No original project files are modified.
 4. Prepared output tables use a configurable catalog and schema, defaulting to `main.first_prototype`. The preparation notebook creates the schema if the workspace permits it.
 5. The source tables use catalog `databricks_virtue_foundation_dataset_dais_2026`, schema `virtue_foundation_dataset`, and the facilities, PIN directory, and NFHS district indicator table names. The catalog was corrected after the first Databricks run returned `TABLE_OR_VIEW_NOT_FOUND`; the notebook prints schemas/row counts so any further workspace-specific name changes are visible.
-6. The supplied polygon archive is read from `/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip`. GeoPandas reads its contained vector dataset. If the archive has multiple layers or an unexpected internal file name, the notebook displays available layers and the path can be changed in its configuration cell.
+6. The supplied polygon archive is read from `/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip`. The notebook reads its full GeoJSON member using `zipfile` and `json`, then does a WGS84 point-in-polygon join in Python. This avoids adding a GIS dependency to serverless compute. If no GeoJSON member is present, preparation stops with the archive member names in the error.
 
 ## Facility identity, service evidence, and citations
 

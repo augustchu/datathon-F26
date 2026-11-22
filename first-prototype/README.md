@@ -26,10 +26,10 @@ Run all cells in `prepare_snapshot.py`. The notebook:
 2. Collects the facility table into pandas for the prototype's row-wise text processing.
 3. Extracts structured service text, URLs, coordinates, and reported bed counts.
 4. Attempts inference with the bundled enriched bed-count MLP for missing capacities that pass the existing model guard and doctor-count policy. A model loading error is reported and does not block preparation.
-5. Reads the ADM2 boundaries from the Volume and maps facility points to polygons. It then joins district/state names to NFHS only on normalized exact names; unresolved matches remain labeled.
+5. Reads the full GeoJSON member from the ADM2 archive in the Volume using the Python standard library, maps facility points to polygons, and joins district/state names to NFHS only on normalized exact names; unresolved matches remain labeled. This avoids requiring GeoPandas in the serverless notebook runtime.
 6. Writes `main.first_prototype.facilities`, `main.first_prototype.pin_directory`, `main.first_prototype.nfhs_district_indicators`, and `main.first_prototype.snapshot_metadata` as Delta tables.
 
-Inspect the printed samples, region-match counts, and metadata. If `geopandas` is unavailable in the notebook runtime, install it using a notebook-scoped library in the workspace before rerunning. If reading the archive fails, inspect the listed layers and set a specific layer in `prepare_snapshot.py`.
+Inspect the printed samples, region-match counts, and metadata. If the archive does not contain a `.geojson` member, the notebook reports its member names; update `read_geojson_archive` to select the correct member if the filename differs.
 
 ## 4. Create and configure the Databricks App
 

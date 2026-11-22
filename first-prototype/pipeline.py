@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import math
 import re
+import zipfile
 from urllib.parse import urlparse
 
 import numpy as np
@@ -159,6 +160,58 @@ def _service_key(service):
     return re.sub(r"[^a-z0-9]+", "_", service.casefold()).strip("_")
 
 
+def read_geojson_archive(filename):
+    """Read the GeoJSON member from the provided GeoBoundaries ZIP without GIS packages."""
+    with zipfile.ZipFile(filename) as archive:
+        names = [n for n in archive.namelist() if n.casefold().endswith(".geojson")]
+        names = [n for n in names if "simplified" not in n.casefold()] or names
+        if not names:
+            raise ValueError(f"No GeoJSON member found in {filename}; ZIP members: {archive.namelist()[:20]}")
+        # The archive contains a full ADM2 GeoJSON and a simplified copy; prefer the full version.
+        member = next((n for n in names if "-adm2.geojson" in n.casefold()), names[0])
+        return json.loads(archive.read(member))
+
+
+def _point_in_ring(lon, lat, ring):
+    inside = False
+    if len(ring) < 3:
+        return False
+    x1, y1 = ring[-1][0], ring[-1][1]
+    for point in ring:
+        x2, y2 = point[0], point[1]
+        if ((y1 > lat) != (y2 > lat)) and lon < (x2 - x1) * (lat - y1) / (y2 - y1) + x1:
+            inside = not inside
+        x1, y1 = x2, y2
+    return inside
+
+
+def _coord_pairs(value):
+    if isinstance(value, (list, tuple)):
+        if len(value) >= 2 and isinstance(value[0], (int, float)) and isinstance(value[1], (int, float)):
+            yield value[0], value[1]
+        else:
+            for child in value:
+                yield from _coord_pairs(child)
+
+
+def _feature_bounds(feature):
+    points = list(_coord_pairs(feature.get("geometry", {}).get("coordinates", [])))
+    if not points:
+        return None
+    return min(x for x, _ in points), min(y for _, y in points), max(x for x, _ in points), max(y for _, y in points)
+
+
+def _geometry_contains(lon, lat, geometry):
+    if not geometry:
+        return False
+    kind, coordinates = geometry.get("type"), geometry.get("coordinates", [])
+    polygons = [coordinates] if kind == "Polygon" else coordinates if kind == "MultiPolygon" else []
+    for polygon in polygons:
+        if polygon and _point_in_ring(lon, lat, polygon[0]) and not any(_point_in_ring(lon, lat, hole) for hole in polygon[1:]):
+            return True
+    return False
+
+
 def haversine_km(lat1, lon1, lat2, lon2):
     p1, p2 = math.radians(lat1), math.radians(lat2)
     dp, dl = math.radians(lat2 - lat1), math.radians(lon2 - lon1)
@@ -248,44 +301,58 @@ def resolve_location(frame, location_text="", lat=None, lon=None):
 
 def attach_regions(facilities, boundaries, nfhs):
     """Point-in-polygon ADM2 match followed by conservative exact district/state join."""
-    import geopandas as gpd
     import unicodedata
 
     def norm(value):
         value = unicodedata.normalize("NFKD", str(value or "")).casefold()
         return re.sub(r"[^a-z0-9]+", "", value)
 
-    boundary_frame = boundaries.copy()
-    geom_col = boundary_frame.geometry.name
-    candidates = [c for c in boundary_frame.columns if c != geom_col]
-    district_col = next((c for c in candidates if str(c).casefold() in {"shapename", "adm2_en", "district", "name_2", "name"}), None)
-    state_col = next((c for c in candidates if str(c).casefold() in {"shapegroup", "adm1_en", "state", "name_1"}), None)
-    if district_col is None:
-        raise ValueError(f"Could not identify ADM2 district-name field in boundary archive. Fields: {candidates}")
     original_columns = facilities.columns.tolist()
-    pts = facilities.dropna(subset=["latitude", "longitude"]).copy()
-    pts = pts[pts.latitude.between(-90, 90) & pts.longitude.between(-180, 180)]
-    points = gpd.GeoDataFrame(pts, geometry=gpd.points_from_xy(pts.longitude, pts.latitude), crs="EPSG:4326")
-    rename = {district_col: "_adm2_name"}
-    if state_col:
-        rename[state_col] = "_adm2_state"
-    polygons = boundary_frame[[district_col, *([state_col] if state_col else []), geom_col]].rename(columns=rename).copy()
-    polygons = polygons.to_crs("EPSG:4326") if polygons.crs else polygons.set_crs("EPSG:4326")
-    joined = gpd.sjoin(points, polygons, how="left", predicate="within")
-    counts = joined.groupby("facility_id")["_adm2_name"].count()
-    joined["adm2_district"] = joined["_adm2_name"].fillna("").astype(str)
-    joined["adm2_state"] = joined["_adm2_state"].fillna("").astype(str) if state_col else ""
-    joined["region_match_status"] = joined.facility_id.map(counts).fillna(0).map(lambda n: "matched_adm2" if n == 1 else ("ambiguous_boundary" if n > 1 else "outside_or_missing"))
-    # NFHS names differ from boundary vintages. Join only normalized exact district + state matches.
+    # This archive's GeoJSON coordinates are WGS84. It contains shapeName but only
+    # country-level shapeGroup, so the facility's state is used for the NFHS join.
+    features = boundaries.get("features", []) if isinstance(boundaries, dict) else boundaries
+    polygons = []
+    for feature in features:
+        props = feature.get("properties", {})
+        district = next((props[k] for k in ("shapeName", "ADM2_EN", "district", "name") if k in props), "")
+        if district:
+            polygons.append({"district": str(district), "geometry": feature.get("geometry"), "bounds": _feature_bounds(feature)})
+    if not polygons:
+        raise ValueError("No district features with polygon geometry were found in the GeoJSON archive.")
+
+    joined = facilities.copy()
+    region_names, region_status = [], []
+    for row in joined.itertuples():
+        try:
+            lon, lat = float(row.longitude), float(row.latitude)
+            valid = math.isfinite(lon) and math.isfinite(lat) and -180 <= lon <= 180 and -90 <= lat <= 90
+        except (TypeError, ValueError):
+            valid = False
+        if not valid:
+            region_names.append("")
+            region_status.append("invalid_or_missing_coordinates")
+            continue
+        hits = []
+        for polygon in polygons:
+            bounds = polygon["bounds"]
+            if bounds and bounds[0] <= lon <= bounds[2] and bounds[1] <= lat <= bounds[3]:
+                if _geometry_contains(lon, lat, polygon["geometry"]):
+                    hits.append(polygon["district"])
+        region_names.append(hits[0] if len(hits) == 1 else "")
+        region_status.append("matched_adm2" if len(hits) == 1 else ("ambiguous_boundary" if len(hits) > 1 else "outside_or_missing"))
+    joined["adm2_district"] = region_names
+    joined["adm2_state"] = joined["state"].fillna("").astype(str) if "state" in joined else ""
+    joined["region_match_status"] = region_status
+
+    # NFHS names differ from boundary vintages. Join only normalized exact district/state names.
     nfhs_district = _col(nfhs, ["district_name", "district", "districtname"])
     nfhs_state = _col(nfhs, ["state_ut", "state", "state_name"])
     if nfhs_district and nfhs_state:
         lookup = {}
         for _, row in nfhs.iterrows():
             lookup[(norm(row[nfhs_district]), norm(row[nfhs_state]))] = (str(row[nfhs_district]), str(row[nfhs_state]))
-        def nfhs_pair(row):
-            return lookup.get((norm(row.adm2_district), norm(row.adm2_state)), ("", ""))
-        pairs = joined.apply(nfhs_pair, axis=1)
+        pairs = [lookup.get((norm(row.adm2_district), norm(row.adm2_state)), ("", ""))
+                 for row in joined.itertuples()]
         joined["nfhs_district"] = [p[0] for p in pairs]
         joined["nfhs_state"] = [p[1] for p in pairs]
         joined.loc[joined.nfhs_district.eq(""), "region_match_status"] = joined.loc[joined.nfhs_district.eq(""), "region_match_status"].replace("matched_adm2", "nfhs_name_unmatched")
@@ -322,24 +389,16 @@ def attach_regions(facilities, boundaries, nfhs):
                 if raw_value is None or national_mean <= 0:
                     return 1.0
                 return min(2.0, max(0.5, raw_value / national_mean))
-            joined[burden_col] = joined.apply(relative_burden, axis=1)
+            joined[burden_col] = [relative_burden(row) for row in joined.itertuples()]
             joined[basis_col] = ",".join(str(c) for c in indicator_cols)
         else:
             joined[burden_col] = 1.0
             joined[basis_col] = "no mapped NFHS indicator; neutral factor"
-    joined = pd.DataFrame(joined.drop(columns=[geom_col, "geometry", "index_right", "_adm2_name", "_adm2_state"], errors="ignore"))
-    joined_ids = set(joined.facility_id)
-    missing_points = facilities.loc[~facilities.facility_id.isin(joined_ids)].copy()
-    if not missing_points.empty:
-        missing_points["adm2_district"] = ""
-        missing_points["adm2_state"] = ""
-        missing_points["nfhs_district"] = ""
-        missing_points["nfhs_state"] = ""
-        missing_points["region_match_status"] = "invalid_or_missing_coordinates"
-        for service_key in NFHS_HINTS:
-            missing_points[f"nfhs_burden_{service_key}"] = 1.0
-            missing_points[f"nfhs_burden_basis_{service_key}"] = "region unavailable; neutral factor"
-        joined = pd.concat([joined, missing_points], ignore_index=True, sort=False)
+    for service_key in NFHS_HINTS:
+        burden_col, basis_col = f"nfhs_burden_{service_key}", f"nfhs_burden_basis_{service_key}"
+        if burden_col not in joined:
+            joined[burden_col] = 1.0
+            joined[basis_col] = "region unavailable; neutral factor"
     region_cols = ["adm2_district", "adm2_state", "nfhs_district", "nfhs_state", "region_match_status"]
     burden_cols = [c for service_key in NFHS_HINTS for c in (f"nfhs_burden_{service_key}", f"nfhs_burden_basis_{service_key}")]
     return joined.reindex(columns=list(dict.fromkeys(original_columns + region_cols + burden_cols)))

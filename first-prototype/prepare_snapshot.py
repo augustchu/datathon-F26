@@ -23,10 +23,10 @@ repo_root = "/Workspace" + str(Path(current).parent)
 if repo_root not in sys.path:
     sys.path.insert(0, repo_root)
 try:
-    from pipeline import SERVICE_TERMS, attach_regions, prepare_facilities
+    from pipeline import SERVICE_TERMS, attach_regions, prepare_facilities, read_geojson_archive
 except ImportError:
     # For Git folders where only the workspace path is on sys.path, add this notebook's folder.
-    from pipeline import SERVICE_TERMS, attach_regions, prepare_facilities
+    from pipeline import SERVICE_TERMS, attach_regions, prepare_facilities, read_geojson_archive
 
 # COMMAND ----------
 # Validate access and inspect schemas before collecting the modest facility table to pandas.
@@ -61,16 +61,11 @@ except Exception as exc:
     model_status = f"not applied; {type(exc).__name__}: {exc}"
     print("Capacity model unavailable; reported capacity and missing values are retained.", model_status)
 
-# Read geoBoundaries from the supplied Unity Catalog Volume and attach conservative ADM2/NFHS joins.
-import geopandas as gpd
-
+# Read the GeoJSON member from the supplied Unity Catalog Volume ZIP with Python's
+# standard library. No geopandas/geospatial package is needed in serverless compute.
 if not Path(BOUNDARY_ZIP).exists():
     raise FileNotFoundError(f"Boundary archive not found at {BOUNDARY_ZIP}")
-try:
-    boundaries = gpd.read_file(BOUNDARY_ZIP)
-except Exception as exc:
-    print("Archive layers:", gpd.list_layers(BOUNDARY_ZIP))
-    raise RuntimeError("Could not read the ADM2 archive. Choose the correct layer and set BOUNDARY_ZIP above.") from exc
+boundaries = read_geojson_archive(BOUNDARY_ZIP)
 prepared = attach_regions(prepared, boundaries, nfhs)
 
 # Include source-row traceability and a stable timestamp with each preparation run.
