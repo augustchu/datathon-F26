@@ -5,6 +5,7 @@
 
 import os
 import sys
+import importlib
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -22,11 +23,22 @@ current = dbutils.notebook.entry_point.getDbutils().notebook().getContext().note
 repo_root = "/Workspace" + str(Path(current).parent)
 if repo_root not in sys.path:
     sys.path.insert(0, repo_root)
-try:
-    from pipeline import SERVICE_TERMS, attach_regions, prepare_facilities, read_geojson_archive
-except ImportError:
-    # For Git folders where only the workspace path is on sys.path, add this notebook's folder.
-    from pipeline import SERVICE_TERMS, attach_regions, prepare_facilities, read_geojson_archive
+pipeline_module = importlib.import_module("pipeline")
+# Notebook kernels retain imported modules after Git folders are refreshed. Reload so this
+# notebook picks up helpers added in the current first-prototype/pipeline.py file.
+pipeline_module = importlib.reload(pipeline_module)
+required_helpers = ("SERVICE_TERMS", "attach_regions", "prepare_facilities", "read_geojson_archive")
+missing_helpers = [name for name in required_helpers if not hasattr(pipeline_module, name)]
+if missing_helpers:
+    raise ImportError(
+        "The workspace copy of first-prototype/pipeline.py is out of date; "
+        f"it is missing {missing_helpers}. Pull/sync the first-prototype folder in the Databricks Git folder, "
+        "then restart Python and rerun this notebook. Loaded: " + str(pipeline_module.__file__)
+    )
+SERVICE_TERMS = pipeline_module.SERVICE_TERMS
+attach_regions = pipeline_module.attach_regions
+prepare_facilities = pipeline_module.prepare_facilities
+read_geojson_archive = pipeline_module.read_geojson_archive
 
 # COMMAND ----------
 # Validate access and inspect schemas before collecting the modest facility table to pandas.

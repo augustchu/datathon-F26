@@ -31,6 +31,8 @@ Run all cells in `prepare_snapshot.py`. The notebook:
 
 Inspect the printed samples, region-match counts, and metadata. If the archive does not contain a `.geojson` member, the notebook reports its member names; update `read_geojson_archive` to select the correct member if the filename differs.
 
+If a helper import reports that `pipeline.py` is missing `read_geojson_archive`, pull/sync the entire `first-prototype` folder in the Databricks Git folder, restart the notebook's Python process, and rerun. Databricks notebook kernels can keep an older imported module cached after files change; the notebook now reloads the module when it starts.
+
 ## 4. Create and configure the Databricks App
 
 Create a Databricks App with this folder as its source and choose the Streamlit framework. The launch command is in `app.yaml`. The App runtime needs the packages in `requirements.txt`.
