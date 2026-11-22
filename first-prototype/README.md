@@ -16,7 +16,7 @@ The user running preparation needs `SELECT` on the three source tables and read 
 
 `/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip`
 
-The notebook configuration at its top contains the corrected Marketplace catalog (`databricks_virtue_foundation_dataset_dais_2026`), source table names, and output schema. It discovers a writable catalog, preferring `workspace`; set `DATATHON_OUTPUT_CATALOG` in the notebook configuration if you want to choose one explicitly.
+The notebook configuration uses the corrected Marketplace catalog (`databricks_virtue_foundation_dataset_dais_2026`) and writes to the existing `additional_india_data.default` schema, which is the catalog/schema shown by your Volumes browser. It does not create a schema. Change `OUTPUT_CATALOG` / `OUTPUT_SCHEMA` at the top if your team has another writable target.
 
 ## 3. Prepare the snapshot
 
@@ -27,7 +27,7 @@ Run all cells in `prepare_snapshot.py`. The notebook:
 3. Extracts structured service text, URLs, coordinates, and reported bed counts.
 4. Attempts inference with the bundled enriched bed-count MLP for missing capacities that pass the existing model guard and doctor-count policy. A model loading error is reported and does not block preparation.
 5. Reads the full GeoJSON member from the ADM2 archive in the Volume using the Python standard library, maps facility points to polygons, and joins district/state names to NFHS only on normalized exact names; unresolved matches remain labeled. This avoids requiring GeoPandas in the serverless notebook runtime.
-6. Writes `facilities`, `pin_directory`, `nfhs_district_indicators`, and `snapshot_metadata` as Delta tables under the catalog/schema it prints (usually `workspace.first_prototype`).
+6. Writes `first_prototype_facilities`, `first_prototype_pin_directory`, `first_prototype_nfhs_district_indicators`, and `first_prototype_snapshot_metadata` as Delta tables under `additional_india_data.default`.
 
 Inspect the printed samples, region-match counts, and metadata. If the archive does not contain a `.geojson` member, the notebook reports its member names; update `read_geojson_archive` to select the correct member if the filename differs.
 
@@ -40,16 +40,16 @@ Create a Databricks App with this folder as its source and choose the Streamlit 
 Add these resources in the Databricks Apps UI using the resource keys referenced by `app.yaml`:
 
 - SQL warehouse key `sql-warehouse`, permission **Can use**.
-- Unity Catalog table key `facilities-table`, table `<printed_catalog>.first_prototype.facilities`, permission **Can select**.
-- Unity Catalog table key `snapshot-table`, table `<printed_catalog>.first_prototype.snapshot_metadata`, permission **Can select**.
+- Unity Catalog table key `facilities-table`, table `additional_india_data.default.first_prototype_facilities`, permission **Can select**.
+- Unity Catalog table key `snapshot-table`, table `additional_india_data.default.first_prototype_snapshot_metadata`, permission **Can select**.
 
 The app manifest receives the warehouse ID and constructs the SQL HTTP path. The app identity also needs `USE CATALOG` and `USE SCHEMA` privileges as required by your workspace's Unity Catalog setup. Change the table resource targets if you chose a different output catalog/schema.
 
 Set these table variables in `app.yaml` if the curated tables are in a different location:
 
 ```text
-FACILITY_SNAPSHOT_TABLE=<printed_catalog>.first_prototype.facilities
-SNAPSHOT_METADATA_TABLE=<printed_catalog>.first_prototype.snapshot_metadata
+FACILITY_SNAPSHOT_TABLE=additional_india_data.default.first_prototype_facilities
+SNAPSHOT_METADATA_TABLE=additional_india_data.default.first_prototype_snapshot_metadata
 ```
 
 The app queries facilities and metadata; the PIN/NFHS copies are retained for next iterations. Deploy. Free Edition Apps require authenticated workspace/account access and stop after 24 hours, so restart the app when needed.

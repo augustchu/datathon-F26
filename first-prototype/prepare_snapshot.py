@@ -7,6 +7,7 @@
 # Run this file as a notebook from the Databricks Git folder (Run all).
 
 import os
+import re
 import sys
 import importlib
 from datetime import datetime, timezone
@@ -19,8 +20,9 @@ FACILITIES_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_found
 PINS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory"
 NFHS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.nfhs_5_district_health_indicators"
 BOUNDARY_ZIP = "/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip"
-OUTPUT_CATALOG = "main"
-OUTPUT_SCHEMA = "first_prototype"
+OUTPUT_CATALOG = "additional_india_data"
+OUTPUT_SCHEMA = "default"
+OUTPUT_PREFIX = "first_prototype"
 
 current = dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get()
 repo_root = "/Workspace" + str(Path(current).parent)
@@ -92,9 +94,14 @@ prepared["capacity_model_status"] = model_status
 
 # COMMAND ----------
 
-# Create the prototype schema and publish the prepared output as a Delta table.
+# Publish into the existing catalog/schema confirmed in the Databricks Volumes browser.
+# This avoids `main` (which is absent in this workspace) and avoids CREATE SCHEMA.
+for identifier in (OUTPUT_CATALOG, OUTPUT_SCHEMA, OUTPUT_PREFIX):
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", identifier):
+        raise ValueError(f"Invalid Unity Catalog identifier: {identifier!r}")
 output_schema = f"{OUTPUT_CATALOG}.{OUTPUT_SCHEMA}"
-spark.sql(f"CREATE SCHEMA IF NOT EXISTS {output_schema}")
+spark.sql(f"DESCRIBE SCHEMA `{OUTPUT_CATALOG}`.`{OUTPUT_SCHEMA}`").show(truncate=False)
+print(f"Publishing prototype tables under {output_schema}")
 
 # Use explicit scalar types so nullable model outputs and claim flags stay consistent in Delta.
 numeric_cols = {"latitude", "longitude", "beds_for_scenario"}
@@ -109,11 +116,15 @@ for col in prepared.columns:
         prepared[col] = prepared[col].map(lambda value: None if value is None else str(value))
 
 facility_sdf = spark.createDataFrame(prepared)
-facility_sdf.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{output_schema}.facilities")
+facility_table = f"{output_schema}.{OUTPUT_PREFIX}_facilities"
+pin_table = f"{output_schema}.{OUTPUT_PREFIX}_pin_directory"
+nfhs_table = f"{output_schema}.{OUTPUT_PREFIX}_nfhs_district_indicators"
+metadata_table = f"{output_schema}.{OUTPUT_PREFIX}_snapshot_metadata"
+facility_sdf.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(facility_table)
 
 # Keep the supplemental source snapshots available for downstream iteration and auditing.
-pins_spark.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{output_schema}.pin_directory")
-nfhs_spark.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{output_schema}.nfhs_district_indicators")
+pins_spark.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(pin_table)
+nfhs_spark.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(nfhs_table)
 
 metadata = spark.createDataFrame([{
     "prepared_at": datetime.now(timezone.utc).isoformat(),
@@ -127,8 +138,9 @@ metadata = spark.createDataFrame([{
         "trauma_emergency", "maternity_delivery", "general_care"])),
     "capacity_model_status": model_status,
 }])
-metadata.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(f"{output_schema}.snapshot_metadata")
+metadata.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(metadata_table)
 
 display(prepared[["facility_name", "city", "state", "adm2_district", "nfhs_district", "region_match_status", "beds_for_scenario", "beds_provenance"]].head(20))
-display(spark.table(f"{output_schema}.snapshot_metadata"))
-print(f"Published {len(prepared):,} facility rows to {output_schema}.facilities")
+display(spark.table(metadata_table))
+print(f"Published {len(prepared):,} facility rows to {facility_table}")
+print(f"App tables: {facility_table}, {metadata_table}")

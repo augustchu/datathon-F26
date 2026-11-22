@@ -13,8 +13,8 @@ from databricks.sdk.core import Config
 from pipeline import SERVICE_TERMS, rank_candidates, resolve_location
 
 st.set_page_config(page_title="Find the right care", page_icon="🏥", layout="wide")
-FACILITY_TABLE = os.getenv("FACILITY_SNAPSHOT_TABLE", "workspace.first_prototype.facilities")
-SNAPSHOT_TABLE = os.getenv("SNAPSHOT_METADATA_TABLE", "workspace.first_prototype.snapshot_metadata")
+FACILITY_TABLE = os.getenv("FACILITY_SNAPSHOT_TABLE", "additional_india_data.default.first_prototype_facilities")
+SNAPSHOT_TABLE = os.getenv("SNAPSHOT_METADATA_TABLE", "additional_india_data.default.first_prototype_snapshot_metadata")
 
 
 @st.cache_data(ttl=300, show_spinner="Loading the prepared facility snapshot...")
