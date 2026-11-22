@@ -13,7 +13,23 @@ from unittest.mock import patch
 
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[1]
+def repository_root():
+    configured = os.environ.get('DATATHON_REPO_ROOT')
+    script = globals().get('__file__')
+    if configured:
+        start = Path(configured).expanduser()
+    elif script:
+        start = Path(script).parent
+    else:
+        start = Path.cwd()
+    start = start.resolve()
+    for directory in (start, *start.parents):
+        if (directory / 'non-ml' / 'config' / 'project.json').is_file():
+            return directory
+    raise SystemExit('Set DATATHON_REPO_ROOT to the datathon-F26 Git checkout or run from that checkout.')
+
+
+ROOT = repository_root()
 sys.path.insert(0, str(ROOT / 'non-ml' / 'src'))
 
 from facility_tool import travel
@@ -170,7 +186,7 @@ def check_case(store, config, case):
     }
 
 
-def main():
+def main(argv=None):
     config = read_config(ROOT)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--checkpoint-root', type=Path, help='Prepared DATATHON_OUTPUT_DIR containing <mode>/<as-of>.')
@@ -178,7 +194,7 @@ def main():
     parser.add_argument('--as-of', default=config['as_of'], help='Date used when preparing the lookup checkpoint.')
     parser.add_argument('--case', action='append', choices=CASES, help='Repeat to select cases. The default runs all three.')
     parser.add_argument('--output', type=Path, default=Path('traveltime-live-receipt.json'))
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     credentials = ('TRAVELTIME_APP_ID', 'TRAVELTIME_API_KEY')
     if any(not os.environ.get(name, '').strip() for name in credentials):
         parser.error('Set TRAVELTIME_APP_ID and TRAVELTIME_API_KEY before running the live test.')
@@ -214,4 +230,6 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    if globals().get('__file__'):
+        sys.exit(main())
+    print('TravelTime did not run. Open non-ml/notebooks/10_check_traveltime_live.ipynb to run it in Databricks.')
