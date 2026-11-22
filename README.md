@@ -1,3 +1,5 @@
+**[FINAL PROJECT REPORT: PLEASE READ](FINAL%20PROJECT%20REPORT%20-%20PLEASE%20READ.md)**
+
 # CMU Datathon · Find the right care
 
 Search for a named service near a location. The notebook logic compares published evidence, ML-assisted field estimates, and interpretable regression estimates. It returns source excerpts, location and contact provenance, and the reasons a facility was selected or held for review.
