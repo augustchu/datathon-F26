@@ -1,5 +1,8 @@
 # Databricks notebook source
-# COMMAND ----------
+# /// script
+# [tool.databricks.environment]
+# environment_version = "6"
+# ///
 # Prepare the facility snapshot once, then let the Streamlit App query its output.
 # Run this file as a notebook from the Databricks Git folder (Run all).
 
@@ -41,6 +44,7 @@ prepare_facilities = pipeline_module.prepare_facilities
 read_geojson_archive = pipeline_module.read_geojson_archive
 
 # COMMAND ----------
+
 # Validate access and inspect schemas before collecting the modest facility table to pandas.
 for source_name in (FACILITIES_SOURCE, PINS_SOURCE, NFHS_SOURCE):
     print(f"{source_name}: {spark.table(source_name).count():,} rows")
@@ -53,6 +57,7 @@ nfhs_spark = spark.table(NFHS_SOURCE)
 nfhs = nfhs_spark.toPandas()
 
 # COMMAND ----------
+
 # Apply the saved enriched bed-count model when present. A model failure is non-fatal;
 # service eligibility never comes from a bed-count prediction.
 prepared = prepare_facilities(raw)
@@ -86,6 +91,7 @@ prepared["facility_source_table"] = FACILITIES_SOURCE
 prepared["capacity_model_status"] = model_status
 
 # COMMAND ----------
+
 # Create the prototype schema and publish the prepared output as a Delta table.
 output_schema = f"{OUTPUT_CATALOG}.{OUTPUT_SCHEMA}"
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {output_schema}")
