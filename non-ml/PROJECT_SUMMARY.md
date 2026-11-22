@@ -44,6 +44,10 @@ Examples of evidence with distinct meanings include dialysis in the Delhi DGEHS 
 
 The [mass verification runbook](MASS_VERIFICATION.md) gives the pre-launch call workflow, Databricks responsibilities, provider setup and budget scenarios.
 
+We shelved the use of the saved government extracts to verify capacity labels for modeling. Matching a branch and its listed services still leaves its total bed count unverified. [Dead end and rationale](DATA_COMPARISON.md#dead-end-for-capacity-verification-using-the-saved-government-extracts)
+
+The follow-up found bed and doctor counts in insurer disclosures, and approved or sanctioned beds in two government registers. The conservative join linked 696 branches and identified dated count candidates and discrepancies for review. [Coverage, provenance and browser evidence](../data/recovery/capacity-evidence/README.md)
+
 ## Analysis before fitting
 
 The project began with a random forest for the missing capacity column. The earlier notebook and GPU experiments are under [`ML/`](../ML/). The new work in [`non-ml/notebooks/`](notebooks/) starts with source coverage and a separate facility-level count audit, then proceeds to service evidence, provenance, optional district context, mode comparison, and load scenarios. Checkpoints let the team rerun each step with revised inputs or rules. The new count audit covers capacity and doctor counts, checks raw ranges and units, excludes conflicting labels, and compares coverage by geography, source and facility type. Each candidate predictor must occur strictly after `countries` in the original FDR schema. Leakage checks flag repeated target text. The notebook uses a structured subset for relationships and interactions, including facility type, operator, and established year when eligible.
