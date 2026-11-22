@@ -75,7 +75,11 @@ The non-emergency load setting starts off. When enabled, the selector can trade 
 
 ### Run the live TravelTime check
 
-Prepare the real-data lookup assets through notebook 06b. In Databricks, open [notebook 10](notebooks/10_check_traveltime_live.ipynb) from the Git folder and run its first cell to load the settings. Match the mode, date and checkpoint root used by 06b. Use `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` from the environment, or enter the name of a Databricks secret scope containing those keys. Run the second cell. It prints the case outcomes and full JSON, and saves `traveltime-live.json` in the snapshot directory by default. Set `receipt_path` to an absolute writable path to save it elsewhere. [Databricks file locations](https://docs.databricks.com/aws/en/files)
+In the Databricks Git folder, open [notebook 10](notebooks/10_check_traveltime_live.ipynb) and select **Run all**. It uses the project's evidence date and reuses the corresponding real-data lookup checkpoints when present. Otherwise it builds the blood-bank routing snapshot directly from the Marketplace tables and saved public evidence. The automatic snapshot includes the reviewed location and service evidence. Models, optional recovery releases and load overlays are absent from that baseline.
+
+The notebook uses the environment's `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` or discovers the same pair in one readable Databricks secret scope. Hyphenated secret names also work. A workspace with multiple matching scopes can select one through the existing environment using `TRAVELTIME_SECRET_SCOPE`. If credentials are unavailable, the notebook saves a receipt explaining the blocker. Keep the API values in the environment or Databricks secrets. [Databricks secrets utilities](https://docs.databricks.com/aws/en/dev-tools/databricks-utils#secrets-utility-dbutilssecrets)
+
+Each run prints the full JSON and saves a timestamped `traveltime-live.json` under the team's `additional_india_data` volume when writable. Otherwise it saves a temporary driver file and prints the JSON in the notebook. [Databricks file locations](https://docs.databricks.com/aws/en/files)
 
 For a terminal run, set `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` in the environment. The checkpoint root is the directory above `export/<as-of>` when running from a local facility export. Use the mode and date from the prepared assets.
 

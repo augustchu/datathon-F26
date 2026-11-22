@@ -8,7 +8,7 @@ from math import isfinite
 import os
 from pathlib import Path
 import sys
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, TemporaryDirectory, mkdtemp
 from unittest.mock import patch
 
 import pandas as pd
@@ -23,9 +23,9 @@ def repository_root():
     else:
         start = Path.cwd()
     start = start.resolve()
-    for directory in (start, *start.parents):
+    for directory in (start, *start.parents, *(Path(path) for path in sys.path if path)):
         if (directory / 'non-ml' / 'config' / 'project.json').is_file():
-            return directory
+            return directory.resolve()
     raise SystemExit('Set DATATHON_REPO_ROOT to the datathon-F26 Git checkout or run from that checkout.')
 
 
@@ -47,6 +47,9 @@ OLD_RADIUS_KM = 50
 LIMIT = 5
 SERVICE = 'blood bank'
 STOP_STATUSES = {'credential_or_plan_rejected', 'rate_limited'}
+CREDENTIALS = ('TRAVELTIME_APP_ID', 'TRAVELTIME_API_KEY')
+REQUIRED_CHECKPOINTS = ('origin_index', 'lookup_candidates_blood_bank')
+PROJECT_VOLUME = Path('/Volumes/additional_india_data/default/additional_india_data')
 
 
 def coordinates(rows):
@@ -186,6 +189,114 @@ def check_case(store, config, case):
     }
 
 
+def new_report(as_of, mode):
+    return {'started_at': datetime.now(timezone.utc).isoformat(), 'checkpoint_date': as_of,
+            'checkpoint_mode': mode, 'facility_sort': 'closest', 'cases': []}
+
+
+def run_cases(store, config, cases, report):
+    for index, case in enumerate(cases):
+        try:
+            record = check_case(store, config, case)
+        except (OSError, ValueError) as error:
+            record = {'case': case, 'outcome': 'inconclusive', 'blockers': [str(error)]}
+        report['cases'].append(record)
+        print(f"{case} — {record['outcome']}", flush=True)
+        for note in record.get('failures', []) + record.get('blockers', []):
+            print(f'  {note}')
+        if STOP_STATUSES & record.get('provider_status_counts', {}).keys():
+            report['skipped_cases'] = cases[index + 1:]
+            break
+    return int(any(row['outcome'] != 'pass' for row in report['cases']))
+
+
+def write_receipt(report, output):
+    content = json.dumps(report, indent=2) + '\n'
+    output.write_text(content, encoding='utf-8')
+    print(f'Receipt written to {output}')
+    return content
+
+
+def databricks_credentials(dbutils):
+    """Find credentials in the process or a readable scope with both keys."""
+    environment = {name: os.environ.get(name, '').strip() for name in CREDENTIALS}
+    if all(environment.values()):
+        return environment
+
+    scope_hint = os.environ.get('TRAVELTIME_SECRET_SCOPE', '').strip()
+    choices = []
+    try:
+        scopes = [scope_hint] if scope_hint else [scope.name for scope in dbutils.secrets.listScopes()]
+        for scope in scopes:
+            try:
+                keys = {secret.key.upper().replace('-', '_'): secret.key for secret in dbutils.secrets.list(scope)}
+                if all(name in keys for name in CREDENTIALS):
+                    choices.append((scope, keys))
+            except Exception:
+                # Scope names can be listed even when this principal cannot read their keys.
+                continue
+    except Exception:
+        raise RuntimeError('Databricks could not list the accessible TravelTime secret scopes.') from None
+    if not choices:
+        raise RuntimeError('TravelTime credentials are missing. No readable Databricks scope contains both API keys.')
+    if len(choices) > 1:
+        raise RuntimeError('Multiple Databricks scopes contain TravelTime credentials. The workspace must select a scope.')
+    scope, keys = choices[0]
+    try:
+        credentials = {name: dbutils.secrets.get(scope=scope, key=keys[name]).strip() for name in CREDENTIALS}
+    except Exception:
+        raise RuntimeError('The notebook could not read the TravelTime credentials from the Databricks scope.') from None
+    if not all(credentials.values()):
+        raise RuntimeError('The TravelTime credential pair in the Databricks scope contains an empty value.')
+    return credentials
+
+
+def write_databricks_receipt(report):
+    # Put the shareable receipt on the existing project volume when it is writable.
+    try:
+        if PROJECT_VOLUME.is_dir():
+            timestamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+            folder = PROJECT_VOLUME / 'traveltime-checks' / timestamp
+            folder.mkdir(parents=True)
+            return write_receipt(report, folder / 'traveltime-live.json')
+    except OSError:
+        pass
+    print('Project volume is unavailable for writes. The JSON is saved on the driver and printed below.')
+    return write_receipt(report, Path(mkdtemp(prefix='datathon-traveltime-')) / 'traveltime-live.json')
+
+
+def run_databricks(spark, dbutils):
+    """Run the three cases from a single Databricks notebook cell."""
+    from facility_tool.routing_snapshot import prepare_blood_bank_snapshot
+
+    config = read_config(ROOT)
+    as_of = config['as_of']
+    report = new_report(as_of, 'databricks')
+    try:
+        credentials = databricks_credentials(dbutils)
+        with patch.dict(os.environ, credentials), TemporaryDirectory(prefix='datathon-routing-') as scratch:
+            for mode in ('databricks', 'export'):
+                store = Store(ROOT, mode, as_of)
+                if all((store.path / f'{name}.jsonl').is_file() for name in REQUIRED_CHECKPOINTS):
+                    report.update(checkpoint_mode=mode, snapshot_source='prepared_checkpoint')
+                    print(f'Using prepared {mode} snapshot for {as_of}.', flush=True)
+                    break
+            else:
+                store = Store(ROOT, 'databricks', as_of, scratch)
+                report['snapshot_source'] = 'marketplace_tables'
+                print('Preparing the blood-bank routing snapshot from Marketplace data.', flush=True)
+                prepare_blood_bank_snapshot(ROOT, store, config, spark=spark)
+            print('Running the three live TravelTime checks.', flush=True)
+            status = run_cases(store, config, list(CASES), report)
+    except Exception as error:
+        report['run_error'] = str(error)
+        raise
+    finally:
+        print(write_databricks_receipt(report))
+    if status:
+        raise RuntimeError('At least one case failed or was inconclusive. See the saved receipt above.')
+
+
 def main(argv=None):
     config = read_config(ROOT)
     parser = argparse.ArgumentParser(description=__doc__)
@@ -195,13 +306,12 @@ def main(argv=None):
     parser.add_argument('--case', action='append', choices=CASES, help='Repeat to select cases. The default runs all three.')
     parser.add_argument('--output', type=Path, default=Path('traveltime-live-receipt.json'))
     args = parser.parse_args(argv)
-    credentials = ('TRAVELTIME_APP_ID', 'TRAVELTIME_API_KEY')
-    if any(not os.environ.get(name, '').strip() for name in credentials):
+    if any(not os.environ.get(name, '').strip() for name in CREDENTIALS):
         parser.error('Set TRAVELTIME_APP_ID and TRAVELTIME_API_KEY before running the live test.')
     try:
         store = Store(ROOT, args.mode, args.as_of, args.checkpoint_root)
-        store.read('origin_index')
-        store.read('lookup_candidates_blood_bank')
+        for name in REQUIRED_CHECKPOINTS:
+            store.read(name)
         if args.output.is_dir():
             raise ValueError('Choose a file path for the JSON receipt.')
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -209,27 +319,16 @@ def main(argv=None):
             pass
     except (ValueError, OSError) as error:
         parser.error(str(error))
-    report = {'started_at': datetime.now(timezone.utc).isoformat(), 'checkpoint_date': args.as_of,
-              'checkpoint_mode': args.mode, 'facility_sort': 'closest', 'cases': []}
-    cases = list(dict.fromkeys(args.case or CASES))
-    for index, case in enumerate(cases):
-        try:
-            record = check_case(store, config, case)
-        except (OSError, ValueError) as error:
-            record = {'case': case, 'outcome': 'inconclusive', 'blockers': [str(error)]}
-        report['cases'].append(record)
-        print(f"{case} — {record['outcome']}")
-        for note in record.get('failures', []) + record.get('blockers', []):
-            print(f'  {note}')
-        if STOP_STATUSES & record.get('provider_status_counts', {}).keys():
-            report['skipped_cases'] = cases[index + 1:]
-            break
-    args.output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
-    print(f'Receipt written to {args.output}')
-    return 1 if any(row['outcome'] != 'pass' for row in report['cases']) else 0
+    report = new_report(args.as_of, args.mode)
+    status = run_cases(store, config, list(dict.fromkeys(args.case or CASES)), report)
+    write_receipt(report, args.output)
+    return status
 
 
 if __name__ == '__main__':
-    if globals().get('__file__'):
+    if 'dbutils' in globals() and 'spark' in globals():
+        run_databricks(spark, dbutils)
+    elif globals().get('__file__'):
         sys.exit(main())
-    print('TravelTime did not run. Open non-ml/notebooks/10_check_traveltime_live.ipynb to run it in Databricks.')
+    else:
+        print('TravelTime did not run. Call main([...]) to run the terminal check from Python.')
