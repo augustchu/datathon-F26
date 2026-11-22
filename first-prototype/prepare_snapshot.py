@@ -11,9 +11,9 @@ from pathlib import Path
 import pandas as pd
 
 # If you rename Marketplace objects or move the uploaded geography volume, change these values.
-FACILITIES_SOURCE = "databricks_virtue_foundation_dataset.virtue_foundation_dataset.facilities"
-PINS_SOURCE = "databricks_virtue_foundation_dataset.virtue_foundation_dataset.india_post_pincode_directory"
-NFHS_SOURCE = "databricks_virtue_foundation_dataset.virtue_foundation_dataset.nfhs_5_district_health_indicators"
+FACILITIES_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.facilities"
+PINS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory"
+NFHS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.nfhs_5_district_health_indicators"
 BOUNDARY_ZIP = "/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip"
 OUTPUT_CATALOG = "main"
 OUTPUT_SCHEMA = "first_prototype"

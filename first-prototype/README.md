@@ -16,7 +16,7 @@ The user running preparation needs `SELECT` on the three source tables and read 
 
 `/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip`
 
-The notebook configuration at its top contains the source table names and output catalog/schema. Change them there if the workspace object names differ or `main.first_prototype` is not writable.
+The notebook configuration at its top contains the corrected Marketplace catalog (`databricks_virtue_foundation_dataset_dais_2026`), source table names, and output catalog/schema. Change them there if the PIN/NFHS object names differ in your workspace or `main.first_prototype` is not writable.
 
 ## 3. Prepare the snapshot
 

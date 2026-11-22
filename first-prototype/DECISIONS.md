@@ -8,7 +8,7 @@ This file records the implementation choices made for the first Databricks proto
 2. Data preparation runs separately in a Databricks notebook against Unity Catalog. The app reads a prepared Unity Catalog snapshot through a Databricks SQL warehouse. The app does not start a Spark session or rerun the full preparation pipeline after every UI interaction.
 3. The app lives in this folder and imports only code shipped in this folder. No original project files are modified.
 4. Prepared output tables use a configurable catalog and schema, defaulting to `main.first_prototype`. The preparation notebook creates the schema if the workspace permits it.
-5. The source tables default to the Marketplace names already recorded in the project config: facilities, PIN directory, and NFHS district indicators. The notebook checks for the sources, reports their columns, and lets the team adjust table names at the top if the workspace uses different names.
+5. The source tables use catalog `databricks_virtue_foundation_dataset_dais_2026`, schema `virtue_foundation_dataset`, and the facilities, PIN directory, and NFHS district indicator table names. The catalog was corrected after the first Databricks run returned `TABLE_OR_VIEW_NOT_FOUND`; the notebook prints schemas/row counts so any further workspace-specific name changes are visible.
 6. The supplied polygon archive is read from `/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip`. GeoPandas reads its contained vector dataset. If the archive has multiple layers or an unexpected internal file name, the notebook displays available layers and the path can be changed in its configuration cell.
 
 ## Facility identity, service evidence, and citations
