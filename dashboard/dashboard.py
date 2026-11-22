@@ -1,17 +1,14 @@
 """Facility Finder dashboard.
 
-Inputs (service + location, plus optional facility attributes) -> saved capacity model -> outputs on screen.
+Inputs (service + location) -> facility matches, fit scores, and reported data.
 
 Run:  streamlit run dashboard/dashboard.py
 Data: synthetic demo, a private facilities export (original table columns), or a CSV in this
-      dashboard's own schema. Model estimates follow the team's docs (non-ml/PROJECT_SUMMARY.md,
-      ML/MODEL_EVALUATION.md): they are tagged ML estimates, fill missing capacity only, never decide
-      whether a facility offers a service, and are withheld when inputs fall outside the training range.
+      dashboard's own schema. Only source-reported capacity is displayed; no model predictions are used.
 """
 import html
 import os
 import re
-import sys
 from pathlib import Path
 
 import folium
@@ -20,8 +17,6 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from capacity_model import CapacityModel, MAX_BEDS, Z_LIMIT, available_models  # noqa: E402
 
 st.set_page_config(page_title="Facility Finder", page_icon="🏥", layout="wide")
 CALL_PROMPT = "Call this facility before traveling to verify the service, branch, and current availability."
@@ -263,7 +258,7 @@ def _text(df, col):
 
 
 def from_facility_table(raw: pd.DataFrame) -> pd.DataFrame:
-    """Original facilities-table columns -> dashboard columns. Raw columns are kept for the model."""
+    """Original facilities-table columns -> dashboard columns."""
     for need in ("name", "latitude", "longitude"):
         if need not in raw.columns:
             raise ValueError(f"The facilities table needs a '{need}' column.")
@@ -381,34 +376,18 @@ def demo_table() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-@st.cache_resource(show_spinner=False)
-def load_model(folder: str):
-    try:
-        return CapacityModel(folder), None
-    except Exception as exc:  # noqa: BLE001 - surfaced to the user
-        return None, f"{type(exc).__name__}: {exc}"
+@st.cache_data(show_spinner=False)
+def prepare(raw: pd.DataFrame, kind: str) -> pd.DataFrame:
+    """Normalize facility data for the dashboard; no capacity model is loaded or run."""
+    return from_dashboard_csv(raw) if kind == "csv" else from_facility_table(raw)
 
 
-@st.cache_data(show_spinner="Running the capacity model on every facility...")
-def prepare(raw: pd.DataFrame, kind: str, model_dir: str) -> pd.DataFrame:
-    df = from_dashboard_csv(raw) if kind == "csv" else from_facility_table(raw)
-    model, err = load_model(model_dir) if model_dir else (None, "no model folder selected")
-    if model is None:
-        df["ml_beds"], df["ml_status"], df["ml_reason"] = np.nan, "model_unavailable", err or ""
-        df["ml_gaps"], df["doctors_reported"] = [[] for _ in range(len(df))], False
-    else:
-        pred = model.predict_detailed(df)
-        df["ml_beds"], df["ml_status"], df["ml_reason"] = pred["beds"], pred["status"], pred["reason"]
-        df["ml_gaps"], df["doctors_reported"] = pred["gaps"], pred["doctors_reported"]
-    return df
-
-
-def load_data(model_dir: str):
+def load_data():
     st.sidebar.header("Data")
     mode = st.sidebar.radio("Facility data", ["Demo (synthetic)", "Facilities table export", "Dashboard-schema CSV"])
     if mode == "Demo (synthetic)":
         st.sidebar.warning("Demo data is synthetic. Do not use it for real decisions.")
-        return prepare(demo_table(), "table", model_dir)
+        return prepare(demo_table(), "table")
     if mode == "Facilities table export":
         path = st.sidebar.text_input("Path to export (CSV or Parquet)", value=os.environ.get("DATATHON_FACILITY_EXPORT", ""))
         up = st.sidebar.file_uploader("...or upload it", type=["csv", "parquet"])
@@ -423,7 +402,7 @@ def load_data(model_dir: str):
         else:
             st.info("Give the path to the private facilities export (the same file as DATATHON_FACILITY_EXPORT), or upload it.")
             st.stop()
-        df = prepare(raw, "table", model_dir)
+        df = prepare(raw, "table")
     else:
         up = st.sidebar.file_uploader("CSV file", type="csv")
         st.sidebar.caption("Required: name, city, district, state, pin, lat, lon, services (';'-separated). "
@@ -431,7 +410,7 @@ def load_data(model_dir: str):
         if up is None:
             st.info("Upload a CSV in the sidebar, or switch to demo data.")
             st.stop()
-        df = prepare(pd.read_csv(up, dtype="string"), "csv", model_dir)
+        df = prepare(pd.read_csv(up, dtype="string"), "csv")
     if df.attrs.get("dropped_no_point"):
         st.sidebar.caption(f"{df.attrs['dropped_no_point']:,} rows without a usable India coordinate are excluded from distance ranking.")
     return df
@@ -483,25 +462,16 @@ def _covered(required, have):
     return found, [r for r in required if r not in found]
 
 
-def estimate_view(r, ml_assisted: bool, require_doctors: bool):
-    """What the dashboard may show about capacity for one facility: (kind, headline, value, note)."""
+def reported_capacity_view(r):
+    """Display only capacity values present in the source data; never infer or predict beds."""
     if r["capacity_present"]:
         num = r["capacity_num"]
-        return "reported", f"Reported capacity: {r['capacity_text']}", (f"{num:.0f}" if pd.notna(num) else r["capacity_text"][:12]), "Beds (reported)", None
-    if not ml_assisted:
-        return "none", "Capacity not reported.", "n/a", "Beds", None
-    if r["ml_status"] != "ok":
-        why = r["ml_reason"] or "estimate unavailable"
-        return "withheld", f"ML capacity estimate withheld: {why}.", "withheld", "Beds (ML est.)", why
-    if require_doctors and not r["doctors_reported"]:
-        return "withheld", "ML capacity estimate withheld: no doctor count is reported for this facility (team release rule).", "withheld", "Beds (ML est.)", "no reported doctor count"
-    beds = int(round(r["ml_beds"] / 5.0) * 5)
-    gaps = ", ".join(r["ml_gaps"]) if len(r["ml_gaps"]) else "none"
-    return "ml", (f"ML estimate: about {beds} beds (tagged estimate from the saved capacity model; not a count and not evidence of any service). "
-                  f"Inputs unknown and filled with training medians: {gaps}."), f"~{beds}", "Beds (ML est.)", None
+        value = f"{num:.0f}" if pd.notna(num) else r["capacity_text"][:12]
+        return f"Reported capacity: {r['capacity_text']}", value, "Beds (reported)"
+    return "Capacity not reported.", "n/a", "Beds"
 
 
-def score_facilities(df, service, lat, lon, weights, ml_assisted, require_doctors):
+def score_facilities(df, service, lat, lon, weights):
     """Every facility that lists the service (or a related one), sorted nearest-first."""
     meta = SERVICES[service]
     d = haversine_km(lat, lon, df["lat"].values, df["lon"].values)
@@ -530,7 +500,7 @@ def score_facilities(df, service, lat, lon, weights, ml_assisted, require_doctor
         comps = dict(capability=capability, availability=availability, quality=quality, confidence=confidence)
         fit = match * sum(weights[k] * v for k, v in comps.items()) / max(sum(weights.values()), 1e-9)
         occ = None if pd.isna(r["occupancy"]) else float(r["occupancy"])
-        cap_kind, cap_line, cap_value, cap_label, _ = estimate_view(r, ml_assisted, require_doctors)
+        cap_line, cap_value, cap_label = reported_capacity_view(r)
 
         why = [match_note, f"**{r['distance_km']:.1f} km** straight-line from your location ({r['city'] or 'city n/a'}, {r['state'] or 'state n/a'})."]
         why.append(cap_line)
@@ -555,7 +525,7 @@ def score_facilities(df, service, lat, lon, weights, ml_assisted, require_doctor
             caveats.append(f"Record last verified {age_m / 12:.1f} years ago and may be stale.")
         results.append(dict(row=r, dist=float(r["distance_km"]), fit=round(100 * fit, 1), match=match, comps=comps,
                             occ=occ, spare=None if occ is None else max(0.0, 1 - occ), why=why, caveats=caveats,
-                            cap_kind=cap_kind, cap_value=cap_value, cap_label=cap_label,
+                            cap_value=cap_value, cap_label=cap_label,
                             verified=None if pd.isna(r["last_verified"]) else r["last_verified"].date().isoformat()))
     return sorted(results, key=lambda x: x["dist"])
 
@@ -564,7 +534,7 @@ def balance_rank(ranked, extra_km, lam):
     """Opt-in load spreading. Needs real load data (occupancy); returns None when no candidate has any.
 
     balance = match * ( lam * spare_capacity + (1 - lam) * closeness ); closeness is 1 at the closest option
-    and 0 at +extra_km. Unknown load counts as 50% spare. Model bed estimates are NOT used as load.
+    and 0 at +extra_km. Unknown load counts as 50% spare. Bed counts are not used as load.
     """
     nearest = ranked[0]
     cands = [x for x in ranked if x["dist"] - nearest["dist"] <= extra_km]
@@ -659,32 +629,11 @@ def build_map(origin, top, label) -> str:
 # 6. UI
 # ----------------------------------------------------------------------------
 st.title("🏥 Facility Finder")
-st.caption("Choose a service and a location. Facilities are listed nearest first. Capacity estimates come from the team's saved model.")
+st.caption("Choose a service and a location. Facilities are ranked by distance and fit; bed counts are shown only when reported by the source.")
+
+df = load_data()
 
 with st.sidebar:
-    st.header("Capacity model")
-    models = available_models()
-    if models:
-        labels = list(models)
-        default = labels.index("enriched") if "enriched" in labels else 0
-        model_label = st.selectbox("Model", labels, index=default,
-                                   help="The enriched network adds 15 NFHS district indicators. The team's refits favoured the facilities-only (base) network; see ML/MODEL_EVALUATION.md.")
-        model_dir = str(models[model_label])
-    else:
-        model_label, model_dir = None, ""
-        st.error("No model folder found. Copy ML/notebooks/outputs_models/models/enriched next to dashboard.py as models/enriched, or set CAPACITY_MODEL_DIR.")
-    ml_assisted = st.toggle("ML-assisted: add capacity estimates where none is reported", value=True)
-    require_doctors = st.checkbox("Only estimate when a doctor count is reported", value=True,
-                                  help="The team's released count overlays were restricted to facilities with an observed companion count.")
-
-df = load_data(model_dir)
-model, model_err = load_model(model_dir) if model_dir else (None, None)
-with st.sidebar:
-    if model_err:
-        st.error(f"Model failed to load: {model_err}. The preprocessor needs scikit-learn==1.7.2.")
-    elif model:
-        st.caption(f"Loaded {model.kind} model: {model.n_features} inputs. Estimates are withheld if a continuous input is over {Z_LIMIT:.0f} SD "
-                   f"from training data or the output exceeds {MAX_BEDS:,} beds.")
     st.header("Results")
     top_n = st.slider("Results to show", 1, 10, 5)
     with st.expander("Fit-score weights"):
@@ -697,55 +646,55 @@ with st.sidebar:
 
 left, right = st.columns(2)
 with left:
-    st.subheader("1. Service")
-    by = st.radio("Browse services by", ["Specialty", "Afflicted body area"], horizontal=True)
-    groups = group_services("Specialty" if by == "Specialty" else "Area")
-    group = st.selectbox(by, list(groups))
-    service = st.selectbox("Service", groups[group])
-    m = SERVICES[service]
-    st.caption(f"{m['specialty']} · {m['area']}" + (" · time-critical" if m["urgent"] else ""))
-
+    with st.container(height=360, border=True):
+        st.subheader("1. Service")
+        by = st.radio("Browse services by", ["Specialty", "Afflicted body area"], horizontal=True)
+        groups = group_services("Specialty" if by == "Specialty" else "Area")
+        group = st.selectbox(by, list(groups))
+        service = st.selectbox("Service", groups[group])
+        m = SERVICES[service]
+        st.caption(f"{m['specialty']} · {m['area']}" + (" · time-critical" if m["urgent"] else ""))
 with right:
-    st.subheader("2. Location")
-    kind = st.selectbox("Location type", ["PIN code", "City", "District", "Coordinates (lat/lon)"])
-    vals, errors, warnings = {}, [], []
-    if kind == "PIN code":
-        raw_in = st.text_input("PIN code", max_chars=6, placeholder="e.g. 411001")
-        if raw_in:
-            vals["pin"], err = validate_pin(raw_in)
-            errors += [err] if err else []
-    elif kind in ("City", "District"):
-        raw_in = st.text_input(kind, placeholder="e.g. Pune")
-        state_in = st.text_input("State (optional, to disambiguate)", placeholder="e.g. Maharashtra")
-        if raw_in:
-            vals["name"], err = validate_place(raw_in, kind.lower())
-            errors += [err] if err else []
-        if state_in:
-            vals["state"], err = validate_place(state_in, "state")
-            errors += [err] if err else []
-    else:
-        c1, c2 = st.columns(2)
-        lat_raw, lon_raw = c1.text_input("Latitude", placeholder="18.5204"), c2.text_input("Longitude", placeholder="73.8567")
-        if lat_raw or lon_raw:
-            la, lo, err, warn = validate_coordinates(lat_raw, lon_raw)
-            vals.update(lat=la, lon=lo)
-            errors += [err] if err else []
-            warnings += [warn] if warn else []
-    for e in errors:
-        st.error(e)
-    for w in warnings:
-        st.warning(w)
-
-st.subheader("3. Options")
-balance = st.toggle("⚖️ Balance load: also consider farther facilities with more spare capacity", value=False)
-extra_km, lam = 25, 0.6
-if balance:
-    o1, o2 = st.columns(2)
-    extra_km = o1.slider("Extra travel accepted vs. the closest option (km)", 5, 150, 25, 5)
-    lam = o2.slider("Favor spare capacity over closeness", 0.0, 1.0, 0.6, 0.1)
-    if m["urgent"]:
-        st.warning(f"{service} is time-critical. Extra travel can cost more than a shorter wait; use load balancing only when the patient is stable.")
-
+    with st.container(height=360, border=True):
+        st.subheader("2. Location")
+        kind = st.selectbox("Location type", ["PIN code", "City", "District", "Coordinates (lat/lon)"])
+        vals, errors, warnings = {}, [], []
+        if kind == "PIN code":
+            raw_in = st.text_input("PIN code", max_chars=6, placeholder="e.g. 411001")
+            if raw_in:
+                vals["pin"], err = validate_pin(raw_in)
+                errors += [err] if err else []
+        elif kind in ("City", "District"):
+            raw_in = st.text_input(kind, placeholder="e.g. Pune")
+            state_in = st.text_input("State (optional, to disambiguate)", placeholder="e.g. Maharashtra")
+            if raw_in:
+                vals["name"], err = validate_place(raw_in, kind.lower())
+                errors += [err] if err else []
+            if state_in:
+                vals["state"], err = validate_place(state_in, "state")
+                errors += [err] if err else []
+        else:
+            c1, c2 = st.columns(2)
+            lat_raw, lon_raw = c1.text_input("Latitude", placeholder="18.5204"), c2.text_input("Longitude", placeholder="73.8567")
+            if lat_raw or lon_raw:
+                la, lo, err, warn = validate_coordinates(lat_raw, lon_raw)
+                vals.update(lat=la, lon=lo)
+                errors += [err] if err else []
+                warnings += [warn] if warn else []
+        for e in errors:
+            st.error(e)
+        for w in warnings:
+            st.warning(w)
+with st.container(border=True):
+    st.subheader("3. Options")
+    balance = st.toggle("⚖️ Balance load: also consider farther facilities with more spare capacity", value=False)
+    extra_km, lam = 25, 0.6
+    if balance:
+        o1, o2 = st.columns(2)
+        extra_km = o1.slider("Extra travel accepted vs. the closest option (km)", 5, 150, 25, 5)
+        lam = o2.slider("Favor spare capacity over closeness", 0.0, 1.0, 0.6, 0.1)
+        if m["urgent"]:
+            st.warning(f"{service} is time-critical. Extra travel can cost more than a shorter wait; use load balancing only when the patient is stable.")
 ready = not errors and (("pin" in vals and vals["pin"]) or ("name" in vals and vals["name"]) or ("lat" in vals and vals["lat"] is not None))
 
 if st.button("Find facilities", type="primary", disabled=not ready):
@@ -766,33 +715,114 @@ if search:
         st.info(search["note"])
     if svc != service:
         st.caption(f"Showing results for **{svc}**. Press Find facilities to search for {service}.")
-    ranked = score_facilities(df, svc, lat, lon, weights, ml_assisted, require_doctors)
+    ranked = score_facilities(df, svc, lat, lon, weights)
+    sort_options = ["Distance (nearest first)",
+                    "Fit (highest first)",
+                    "Beds (most first)",
+                    "Occupancy (lowest first)",]
     if not ranked:
         st.warning(f"No facility's text mentions {svc} or a related service.")
     else:
-        top, nearest = ranked[:top_n], ranked[0]
+        nearest = min(ranked, key=lambda x: x["dist"])
+
         if balance:
             pool, nearest = balance_rank(ranked, extra_km, lam)
+
             if pool is None:
-                st.info("Load balancing needs measured or scenario load data (occupancy), and none exists for these candidates. "
-                        "Showing the ordinary nearest-first ranking. Model bed estimates are not used as a stand-in for load.")
+                st.info(
+                    "Load balancing needs measured or scenario load data "
+                    "(occupancy), and none exists for these candidates. "
+                    "Showing the ordinary ranking."
+                )
                 balance_on = False
+                candidates = ranked
             else:
-                top, balance_on = pool[:top_n], True
+                balance_on = True
+                candidates = pool
+
                 st.subheader(f"Load-balanced picks for {svc} near {label}")
-                st.caption(f"Candidates: facilities within {extra_km} km of the closest option ({nearest['row']['name']}, {nearest['dist']:.1f} km).")
+                st.caption(
+                    f"Candidates: facilities within {extra_km} km of "
+                    f"the closest option ({nearest['row']['name']}, "
+                    f"{nearest['dist']:.1f} km)."
+                )
         else:
             balance_on = False
-        if not balance_on:
-            st.subheader(f"Nearest {len(top)} for {svc} near {label}")
+            candidates = ranked
+
+
+        # Sort by source-reported bed count only; missing values stay last.
+        def bed_sort_value(res):
+            value = res["row"]["capacity_num"]
+            return float(value) if pd.notna(value) else None
+
+
+        # Create the facility-results and map columns
+        results_col, map_col = st.columns([1, 1], gap="medium")
+
+        # Put the header and sort dropdown inside the facility-results column
+        with results_col:
+            header_col, sort_col = st.columns([3, 2])
+
+            with header_col:
+                st.subheader("Facility options")
+
+            with sort_col:
+                sort_by = st.selectbox(
+                    "Sort by",
+                    [
+                        "Distance (nearest first)",
+                        "Fit (highest first)",
+                        "Beds (most first)",
+                        "Occupancy (lowest first)",
+                    ],
+                    key="facility_sort_by",
+                    label_visibility="collapsed",
+                )
+            
+        # Sort all candidates, placing missing values last.
+        if sort_by == "Distance (nearest first)":
+            candidates = sorted(
+                candidates,
+                key=lambda x: x["dist"]
+            )
+
+        elif sort_by == "Fit (highest first)":
+            candidates = sorted(
+                candidates,
+                key=lambda x: x["fit"],
+                reverse=True
+            )
+
+        elif sort_by == "Beds (most first)":
+            candidates = sorted(
+                candidates,
+                key=lambda x: (
+                    bed_sort_value(x) is None,
+                    -(bed_sort_value(x) or 0)
+                )
+            )
+
+        elif sort_by == "Occupancy (lowest first)":
+            candidates = sorted(
+                candidates,
+                key=lambda x: (
+                    x["occ"] is None,
+                    x["occ"] if x["occ"] is not None else 0
+                )
+            )
+
+        top = candidates[:top_n]
+
+        st.caption(
+            "Service matches are keyword matches in each facility's own text, "
+            "not cited evidence. The team's notebooks (04, 04b) provide "
+            "cited, scope-checked service evidence."
+        )
         st.caption("Service matches are keyword matches in each facility's own text, not cited evidence. "
                    "The team's notebooks (04, 04b) provide cited, scope-checked service evidence.")
 
-        results_col, map_col = st.columns([1, 1], gap="medium")
-
         with results_col:
-            st.subheader("Facility options")
-
             # Fixed-height container with independent scrolling
             with st.container(height=720, border=False):
                 for i, res in enumerate(top, 1):
@@ -916,7 +946,7 @@ st.markdown("""
 div[data-testid="stMetricValue"],
 div[data-testid="stMetricValue"] *,
 [data-testid="stMetricValue"] span {
-    font-size: 1.9rem !important;
+    font-size: 1.7rem !important;
     line-height: 1.25 !important;
     font-weight: 600 !important;
     white-space: nowrap !important;
@@ -929,66 +959,4 @@ div[data-testid="stMetricLabel"] * {
     line-height: 1.2 !important;
 }
 </style>
-""", unsafe_allow_html=True) 
-
-# ----------------------------------------------------------------------------
-# 7. CAPACITY ESTIMATOR: dashboard inputs -> model -> output
-# ----------------------------------------------------------------------------
-st.divider()
-st.subheader("Capacity estimator")
-st.caption("Enter a facility's attributes and run them through the selected model. Location fields start from your last search.")
-if model is None:
-    st.info("Load a model to use the estimator.")
-else:
-    s = st.session_state.get("search") or {}
-    states = model.category_choices("address_stateOrRegion")
-    default_state = str(s.get("state") or "").strip().lower()
-    e1, e2, e3 = st.columns(3)
-    ftype = e1.selectbox("Facility type", model.category_choices("facilityTypeId"))
-    operator = e2.selectbox("Operator", model.category_choices("operatorTypeId"))
-    state_sel = e3.selectbox("State", states, index=states.index(default_state) if default_state in states else 0,
-                             format_func=lambda x: x.title())
-    f1, f2, f3, f4 = st.columns(4)
-    doctors_known = f1.checkbox("Doctor count known", value=True)
-    doctors = f1.number_input("Doctors", min_value=0, max_value=5000, value=10, disabled=not doctors_known)
-    year_known = f2.checkbox("Year established known", value=False)
-    year = f2.number_input("Year established", min_value=1800, max_value=2026, value=2005, disabled=not year_known)
-    e_lat = f3.number_input("Latitude", value=float(s.get("lat", 20.0)), format="%.4f")
-    e_lon = f4.number_input("Longitude", value=float(s.get("lon", 78.0)), format="%.4f")
-    t1, t2 = st.columns(2)
-    equip_txt = t1.text_area("Equipment (free text, optional)", height=70)
-    cap_txt = t2.text_area("Capabilities (free text, optional)", height=70)
-    proc_txt = t1.text_area("Procedures (free text, optional)", height=70)
-    spec_txt = t2.text_area("Specialties (free text, optional)", height=70)
-    if st.button("Estimate capacity"):
-        row = pd.DataFrame([dict(
-            numberDoctors=str(doctors) if doctors_known else None, yearEstablished=str(year) if year_known else None,
-            latitude=str(e_lat), longitude=str(e_lon), facilityTypeId=ftype, operatorTypeId=operator, address_stateOrRegion=state_sel,
-            equipment=equip_txt, capability=cap_txt, procedure=proc_txt, specialties=spec_txt)])
-        out = model.predict_detailed(row).iloc[0]
-        if out["status"] == "ok":
-            st.metric("Estimated capacity", f"~{int(round(out['beds'] / 5.0) * 5)} beds")
-        else:
-            st.warning(f"Estimate withheld: {out['reason']}.")
-        st.caption("Inputs left unknown and filled with training medians: " + (", ".join(out["gaps"]) or "none") + ". "
-                   "This is a tagged model estimate, not a count.")
-
-with st.expander("How reliable are these estimates? (from the team's evaluation)"):
-    st.markdown(
-        "- On 522 facilities with reported beds, refits of the facilities-only network had mean absolute error of about 120-125 beds, "
-        "versus 128-146 for the NFHS-enriched network (`ML/MODEL_EVALUATION.md`). The two saved artifacts scored about the same (111.4 vs 111.5), "
-        "but that comparison overlaps their training data.\n"
-        "- For hospitals with 500+ beds, errors were large and mostly underestimates (roughly 550-600 beds on average).\n"
-        "- There is no calibrated interval, and accuracy on facilities whose beds are actually missing has not been measured.\n"
-        "- With the original preprocessing, one unusual input produced a 1.47M-bed prediction. This dashboard withholds estimates when a continuous "
-        "input is far outside the training range or the output is implausible.\n"
-        "- Estimates never decide whether a facility offers a service. Call the facility to verify.")
-
-if model is not None and ml_assisted:
-    with st.expander("Export estimates for the team's pipeline (notebook 05)"):
-        st.caption("Writes an overlay in the schema notebook 05's `estimate_file` expects. Use the CLI (`python dashboard/capacity_model.py --facilities <export> --out overlay.csv`) "
-                   "on the full export so IDs match the snapshot.")
-        raw_cols = [c for c in df.columns if c in set(model.numeric + model.categorical) | {"capacity", "unique_id", "facility_id"}]
-        overlay = model.build_overlay(df[raw_cols], df["facility_id"], require_doctors=require_doctors)
-        st.write(f"{len(overlay):,} estimates (facilities with no reported capacity, within guard limits).")
-        st.download_button("Download overlay CSV", overlay.to_csv(index=False).encode("utf-8"), "ml_capacity_overlay.csv", "text/csv")
+""", unsafe_allow_html=True)
