@@ -1,0 +1,224 @@
+[
+  {
+    "case_id": "scrape-audit-12-Q01",
+    "name": "Shreya Hospital",
+    "pin": "560060",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Shreya%20Hospital",
+    "evidence_urls": [
+      "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Shreya%20Hospital",
+      "https://swr.indianrailways.gov.in/uploads/files/1740983117328-ZMP%202025_NEW.pdf",
+      "https://www.practo.com/bangalore/hospital/shreya-hospital-kengeri"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "unclear",
+    "rationale": "IFFCO shows 45 for Kengeri, Bengaluru. The FDR address also says Kengeri, but its own description puts the hospital in Harihar. A Kengeri directory also shows 20. The branch provenance of the FDR count remains unclear."
+  },
+  {
+    "case_id": "scrape-audit-12-Q02",
+    "name": "Neelkanth Hospital",
+    "pin": "122002",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Neelkanth%20Hospital",
+    "evidence_urls": [
+      "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Neelkanth%20Hospital",
+      "https://www.neelkanthhospital.com/contact/",
+      "https://www.credihealth.com/hospital/neelkanth-hospital-gurgaon"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "published disagreement",
+    "rationale": "IFFCO shows 55. An undated directory shows 50 for the DLF Phase III branch. The operator confirms that branch at PIN 122002. The evidence does not establish a same-date total."
+  },
+  {
+    "case_id": "scrape-audit-12-Q03",
+    "name": "Manian Medical Centre",
+    "pin": "638001",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=183",
+    "evidence_urls": [
+      "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=183",
+      "https://www.bajajfinservhealth.in/hospitals/erode/manian-medical-centre-power-house-road"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "published disagreement",
+    "rationale": "SBI row 13512 shows 25 for 100 Power House Road. A directory names the same address and labels 23 as total beds. The directory provides no observation date."
+  },
+  {
+    "case_id": "scrape-audit-12-Q04",
+    "name": "Sanjiban Hospital",
+    "pin": "711316",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=233",
+    "evidence_urls": [
+      "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=233",
+      "https://www.wbpcb.gov.in/files/Fr-06-2023-06-15-28Sanjiban%20Hospital%20%28%20A%20unit%20of%20Chikitsabrati%20Udyog%29.pdf",
+      "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2024-1381_5th%20Edition.pdf"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "published disagreement",
+    "rationale": "SBI row 17125 shows 100 as of March 2022. The West Bengal pollution board describes 500 beds for the same Fuleswar branch in a report referring to its November 2022 visit. A separate accreditation record specifies 512 sanctioned beds and has different scope.",
+    "additional_reported_observations": [
+      {
+        "value": 500,
+        "observation_date": null,
+        "scope": "whole_facility_reported_total",
+        "source_url": "https://www.wbpcb.gov.in/files/Fr-06-2023-06-15-28Sanjiban%20Hospital%20%28%20A%20unit%20of%20Chikitsabrati%20Udyog%29.pdf",
+        "time_note": "The board report describes 500 beds and refers to a 2022-11-10 inspection. It does not directly date the count."
+      },
+      {
+        "value": 512,
+        "observation_date": null,
+        "scope": "sanctioned_beds",
+        "source_url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2024-1381_5th%20Edition.pdf",
+        "time_note": "Accreditation is valid from 2024-05-24; the count has no separate observation date."
+      }
+    ]
+  },
+  {
+    "case_id": "scrape-audit-12-Q05",
+    "name": "Vijaya Super Speciality Hospital",
+    "pin": "520002",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Vijaya%20Super%20Speciality%20Hospital",
+    "evidence_urls": [
+      "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Vijaya%20Super%20Speciality%20Hospital",
+      "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=14",
+      "https://portal.nabh.co/Documents/AccreditedList/Entry-Level%20Hospitals/PEH-2019-0796.pdf"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "published disagreement",
+    "rationale": "The two insurer whole-hospital columns explicitly give 40 in 2022 and 100 in 2025 for the same Boyapativari Street address. NABH confirms the address. The dates differ."
+  },
+  {
+    "case_id": "scrape-audit-12-Q06",
+    "name": "B. M. Shah Hospital & Medical Research Centre",
+    "pin": "490023",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=B.M%20Shah%20Hospital%20%26%20Medical%20Research%20Centre",
+    "evidence_urls": [
+      "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=B.M%20Shah%20Hospital%20%26%20Medical%20Research%20Centre",
+      "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=21",
+      "https://www.bmshah.in/welcome-to-bmshah-hospital/"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "published disagreement",
+    "rationale": "SBI shows 120 in 2022, IFFCO 125 in 2025 and the Bhilai hospital operator page describes 100 beds without an observation date. All three describe published totals for the branch.",
+    "additional_reported_observations": [
+      {
+        "value": 100,
+        "observation_date": null,
+        "scope": "whole_facility_reported_total",
+        "source_url": "https://www.bmshah.in/welcome-to-bmshah-hospital/",
+        "time_note": "Operator description gives no observation date."
+      }
+    ]
+  },
+  {
+    "case_id": "scrape-audit-12-Q07",
+    "name": "Tridev Hospital",
+    "pin": "814112",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Tridev%20Hospital",
+    "evidence_urls": [
+      "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Tridev%20Hospital"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "unclear",
+    "rationale": "IFFCO reports 3 for the Castairs Town listing. The FDR count of 8 has no exact roster statement, inclusion rule or date in the saved record. A different-located facility listing does not resolve this branch headcount."
+  },
+  {
+    "case_id": "scrape-audit-12-Q08",
+    "name": "Kirti Hospital",
+    "pin": "136027",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Kirti%20Hospital",
+    "evidence_urls": [
+      "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Kirti%20Hospital",
+      "https://ipc.gov.in/images/1050_AMC_Details_As_on_date_27.05.2025.pdf",
+      "https://www.lybrate.com/kaithal/clinic/kirti-hospital-aggarsen-puram"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "unclear",
+    "rationale": "IFFCO reports 5 for Park Road, Kaithal. FDR describes one doctor listed in a clinic directory, and the directory displays one named physician. The Indian Pharmacopoeia Commission entry identifies the Kaithal facility but gives no entire staff count."
+  },
+  {
+    "case_id": "scrape-audit-12-Q09",
+    "name": "Amcare Hospital",
+    "pin": "140603",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=163",
+    "evidence_urls": [
+      "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=163",
+      "https://amcarehospital.com/contact-us/"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "unclear",
+    "rationale": "SBI reports 29 doctors in 2022. FDR lists 6 without a whole-branch roster or date in the saved record, and the operator contact page confirms identity but supplies no doctor total."
+  },
+  {
+    "case_id": "scrape-audit-12-Q10",
+    "name": "Neighbourhood Hospital",
+    "pin": "560078",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=77",
+    "evidence_urls": [
+      "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=77"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "unclear",
+    "rationale": "SBI reports 48 for the JP Nagar branch. The FDR count of 19 lacks a traceable whole-branch roster, definition and date in the saved record. Individual clinician listings cannot resolve the total."
+  },
+  {
+    "case_id": "scrape-audit-12-Q11",
+    "name": "Pasricha Medicare Centre",
+    "pin": "143001",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Pasricha%20Medicare%20Centre",
+    "evidence_urls": [
+      "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Pasricha%20Medicare%20Centre",
+      "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=156",
+      "https://amritsar.nic.in/public-utility/pasricha-medicare-centre/"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "published disagreement",
+    "rationale": "The insurers explicitly report 3 in 2022 and 15 in 2025 for the Haripura Main Road branch. The district confirms the branch. Staffing inclusion rules and dates leave a comparable current total unresolved."
+  },
+  {
+    "case_id": "scrape-audit-12-Q12",
+    "name": "Sree Vasantham Hospital",
+    "pin": "636006",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Sree%20Vasantham%20Hospital",
+    "evidence_urls": [
+      "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Sree%20Vasantham%20Hospital",
+      "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=190"
+    ],
+    "reviewed_on": "2026-11-21",
+    "review_outcome": "published disagreement",
+    "rationale": "SBI explicitly reports 35 in 2022 and IFFCO 17 in 2025 for 52/1 Sankagiri Main Road. The counts are published for different years and the documents do not align staffing inclusion rules."
+  }
+]

@@ -1,8 +1,11 @@
 """Build a frozen, source-attributed supplement for each original facility row."""
 
 import argparse
+from calendar import monthrange
 from collections import Counter, defaultdict
 import csv
+from datetime import date
+from fractions import Fraction
 import json
 from pathlib import Path
 import re
@@ -12,6 +15,9 @@ import xgboost as xgb
 
 from model_sources import (AS_OF, FIELDS, PUBLISHERS, best_index, read_json, read_reviews,
                            score_candidates, write_json)
+
+
+TOTAL_SCOPE = 'whole_facility_reported_total'
 
 
 def read_csv(path):
@@ -72,21 +78,93 @@ def count_references(branches, count_path):
     claims = defaultdict(list)
     for row in read_csv(count_path):
         identity, field, source = row['facility_id'], row['field'], row['source']
-        if identity not in branches or row['scope'] != 'whole_facility_reported_total':
-            continue
-        if source not in PUBLISHERS or row['fdr_publisher_overlap'] != 'publisher_not_listed_for_fdr_branch':
+        if identity not in branches or field not in FIELDS:
             continue
         value = int_count(row['external_value'])
         if value is not None:
-            claims[(identity, field)].append({'source': source, 'value': value, 'date': row['source_date'],
-                                              'url': row['source_url'], 'record_id': row['source_record_id']})
+            claims[(identity, field)].append({
+                'source': source, 'value': value, 'date': row['source_date'], 'scope': row['scope'],
+                'reporting_period': row['reporting_period'], 'url': row['source_url'],
+                'record_id': row['source_record_id'], 'publisher_family': row['publisher_family'],
+                'fdr_publisher_overlap': row['fdr_publisher_overlap'],
+            })
     return claims
 
 
-def numeric_selection(field, audit, candidates, manual, recovered, desc, routable, model, use_model, priors):
+def eligible_count_claims(claims):
+    return [claim for claim in claims if claim['scope'] == TOTAL_SCOPE and claim['source'] in PUBLISHERS[1:]
+            and claim['fdr_publisher_overlap'] == 'publisher_not_listed_for_fdr_branch']
+
+
+def recent_choice(candidates, priors, policy):
+    dated = [claim for claim in candidates if claim.get('date')]
+    if not dated:
+        return prefer_claim(candidates, priors), ()
+    newest = max(date.fromisoformat(claim['date']) for claim in dated)
+    cutoff = newest
+    if policy == 'latest_year_mean':
+        cutoff = date(newest.year, 1, 1)
+    elif policy == 'recent_two_year_mean':
+        year = newest.year - 2
+        cutoff = newest.replace(year=year, day=min(newest.day, monthrange(year, newest.month)[1]))
+    by_publisher = defaultdict(list)
+    for claim in dated:
+        if date.fromisoformat(claim['date']) >= cutoff:
+            by_publisher[claim.get('publisher_family') or claim['source']].append(claim)
+    latest = []
+    for reports in by_publisher.values():
+        publisher_date = max(claim['date'] for claim in reports)
+        newest_reports = [claim for claim in reports if claim['date'] == publisher_date]
+        if len({claim['value'] for claim in newest_reports}) != 1:
+            return None, tuple(newest_reports)
+        latest.append(prefer_claim(newest_reports, priors))
+    if len(latest) == 1:
+        return latest[0], ()
+    if policy == 'newest':
+        return prefer_claim(latest, priors), ()
+    mean = Fraction(sum(claim['value'] for claim in latest), len(latest))
+    return {'value': int(mean + Fraction(1, 2)), 'date': newest.isoformat(), 'source': 'Recent publisher mean',
+            'url': None}, tuple(latest)
+
+
+def read_field_reviews(path, branches):
+    if path is None:
+        return {}
+    by_name_pin = defaultdict(list)
+    for identity, branch in branches.items():
+        by_name_pin[(branch['name'], str(branch.get('pin') or ''))].append(identity)
+    reviews, case_ids = {}, set()
+    for review in read_json(path):
+        case_id, field = review['case_id'], review['field']
+        matches = by_name_pin[(review['name'], str(review['pin']))]
+        if len(matches) != 1 or field not in FIELDS or not case_id or case_id in case_ids:
+            raise ValueError(f'Invalid or ambiguous count review {case_id}')
+        key = (matches[0], field)
+        if key in reviews:
+            raise ValueError(f'Duplicate review for a branch and field in {case_id}')
+        status, value = review['status'], review['verified_value']
+        if (status not in {'supported', 'unresolved'} or (status == 'unresolved' and value is not None)
+                or (status == 'supported' and (type(value) is not int or int_count(value) is None
+                                               or review.get('scope') != TOTAL_SCOPE))):
+            raise ValueError(f'Invalid reviewed count or scope in {case_id}')
+        if not public_url(review['evidence_url']) or not str(review.get('rationale') or '').strip():
+            raise ValueError(f'Count review {case_id} needs a source URL and rationale')
+        if review.get('evidence_date'):
+            date.fromisoformat(review['evidence_date'])
+        case_ids.add(case_id)
+        reviews[key] = review
+    return reviews
+
+
+def numeric_selection(field, audit, claims, manual, recovered, desc, routable, model, use_model, priors,
+                      count_policy='saved_selector'):
     original = int_count(audit.get('value')) if audit.get('status') == 'reported' else None
+    reported_values = {claim['value'] for claim in claims if claim['scope'] == TOTAL_SCOPE}
+    if original is not None:
+        reported_values.add(original)
     record = {'original_reported': original, 'original_audit_status': audit.get('status', 'unlinked'),
-              'value': None, 'method': 'missing', 'source': None, 'source_url': None, 'source_date': None}
+              'value': None, 'method': 'missing', 'source': None, 'source_url': None, 'source_date': None,
+              'source_value_disagreement': len(reported_values) > 1}
     if not routable:
         return {**record, 'method': 'branch_identity_hold'}
     if manual:
@@ -95,7 +173,7 @@ def numeric_selection(field, audit, candidates, manual, recovered, desc, routabl
         return {**record, 'value': manual['verified_value'], 'method': 'direct_review', 'source': 'review evidence',
                 'source_url': manual['evidence_url'], 'source_date': manual.get('evidence_date') or None}
 
-    candidates = list(candidates)
+    candidates = eligible_count_claims(claims)
     if original is not None:
         candidates.append({'source': 'FDR', 'value': original, 'date': '', 'url': None,
                            'candidate_source_urls': audit.get('candidate_source_urls', [])})
@@ -108,8 +186,18 @@ def numeric_selection(field, audit, candidates, manual, recovered, desc, routabl
     if audit.get('status') not in {'reported', 'missing', 'unparseable'}:
         return {**record, 'method': 'original_count_hold'}
 
-    pick = prefer_claim(candidates, priors)
     selection = 'publisher_default'
+    if count_policy in {'newest', 'latest_year_mean', 'recent_two_year_mean'}:
+        pick, used = recent_choice(candidates, priors, count_policy)
+        if used:
+            record['count_policy_claims'] = list(used)
+            if pick is None:
+                return {**record, 'method': 'review_unresolved', 'source_url': used[0]['url']}
+            return {**record, 'value': pick['value'], 'method': count_policy, 'source': pick['source'],
+                    'source_date': pick['date'], 'selection': count_policy}
+        selection = count_policy
+    else:
+        pick = prefer_claim(candidates, priors)
     if len({candidate['value'] for candidate in candidates}) > 1 and model:
         scores = score_candidates(model, field, candidates)
         trial = candidates[best_index(scores, candidates, priors)]
@@ -187,11 +275,12 @@ def build(args):
     report = read_json(args.model_dir / 'model_evaluation.json')
     priors = {source: row['smoothed_hit_rate'] for source, row in report['pooled_publisher_scores'].items()}
     models = {}
-    for field, result in report['fields'].items():
-        if result['xgboost_trained']:
-            model = xgb.Booster()
-            model.load_model(args.model_dir / f'{field}_selector.json')
-            models[field] = model
+    if args.count_policy == 'saved_selector':
+        for field, result in report['fields'].items():
+            if result['xgboost_trained']:
+                model = xgb.Booster()
+                model.load_model(args.model_dir / f'{field}_selector.json')
+                models[field] = model
 
     reviews = read_reviews(args.reviews)
     reviewed = {(sample['identity'], sample['field']): reviews[sample['case_id']]
@@ -210,6 +299,8 @@ def build(args):
         value = decision.get('supported_beds')
         reviewed.setdefault((matches[0], 'capacity'), {'status': 'supported' if value else 'unresolved',
                                                        'verified_value': value, 'evidence_url': decision['source_url']})
+    release_reviews = read_field_reviews(args.field_reviews, branches)
+    reviewed.update(release_reviews)
     claims = count_references(branches, args.count_links)
     audits = {field: {row['facility_id']: row for row in read_checkpoint(args.snapshot / path)}
               for field, path in zip(FIELDS, ('capacity_target_audit.jsonl', 'number_doctors_target_audit.jsonl'))}
@@ -235,7 +326,9 @@ def build(args):
                                          claims[(identity, field)], reviewed.get((identity, field)),
                                          recoveries.get((identity, field)), descriptions.get(identity),
                                          branch.get('location_routing_eligible') is True, models.get(field),
-                                         report['fields'][field]['default'] == 'xgboost', priors)
+                                         report['fields'][field]['default'] == 'xgboost', priors, args.count_policy)
+            if release_review := release_reviews.get((identity, field)):
+                decision['release_review'] = release_review
             decisions[(identity, field)] = decision
             selection_counts[field][decision['method']] += 1
 
@@ -249,7 +342,7 @@ def build(args):
                          'routing_eligible', 'latitude', 'longitude', 'capacity', 'capacity_status', 'capacity_source',
                          'capacity_source_url', 'numberDoctors', 'doctor_status', 'doctor_source', 'doctor_source_url',
                          'yearEstablished', 'website', 'published_phone', 'phone_source_url', 'published_email',
-                         'documented_services'))
+                         'documented_services', 'capacity_source_disagreement', 'doctor_source_disagreement'))
         for index, row in enumerate(raw):
             anchor = anchors[index]
             if str(row.get('unique_id')) != str(anchor.get('source_record_id')):
@@ -304,13 +397,15 @@ def build(args):
                 csv_row.extend((decision['value'], decision['method'], decision.get('source'), decision.get('source_url')))
             csv_row.extend((year, website['value'] if website else None, phones[0]['value'] if phones else None,
                             phones[0]['source_url'] if phones else None, emails[0]['value'] if emails else None,
-                            ' | '.join(item['service'] for item in record['service_evidence'])))
+                            ' | '.join(item['service'] for item in record['service_evidence']),
+                            *(count_fields[field].get('source_value_disagreement', False) for field in FIELDS)))
             writer.writerow(["'" + value if isinstance(value, str) and value.startswith(('=', '+', '@', '-')) else value
                              for value in csv_row])
     with provenance_path.open('w', encoding='utf-8') as output:
         for (identity, field), decision in sorted(decisions.items()):
             output.write(json.dumps({'facility_id': identity, 'field': field, **decision,
-                                     'eligible_external_claims': claims[(identity, field)]},
+                                     'external_count_history': claims[(identity, field)],
+                                     'eligible_external_claims': eligible_count_claims(claims[(identity, field)])},
                                     ensure_ascii=False, allow_nan=False) + '\n')
     outside = [row for row in read_csv(args.unlinked_fields) if row['source'] != 'IFFCO Tokio']
     with (args.output_dir / 'unlinked_public_evidence.jsonl').open('w', encoding='utf-8') as output:
@@ -318,6 +413,11 @@ def build(args):
             output.write(json.dumps(row, ensure_ascii=False) + '\n')
     summary = {'fdr_rows_preserved': len(raw), 'linked_branches': len(branches),
                'unlinked_public_claims_kept_separately': len(outside), 'other_field_coverage': ancillary,
+               'source_value_disagreements_by_field': {
+                   field: sum(row['source_value_disagreement'] for (_, name), row in decisions.items() if name == field)
+                   for field in FIELDS},
+               'release_field_reviews': len(release_reviews),
+               'count_policy': args.count_policy,
                'count_methods_by_linked_branch': selection_counts,
                'effective_count_nonmissing_by_linked_branch': {
                    field: sum(row['value'] is not None for (identity, name), row in decisions.items() if name == field)
@@ -336,4 +436,9 @@ if __name__ == '__main__':
                 'description-capacity', 'previous-reviews',
                 'sample', 'reviews', 'model-dir', 'output-dir'):
         parser.add_argument(f'--{arg}', type=Path, required=True)
+    parser.add_argument('--field-reviews', type=Path,
+                        help='Branch-and-field review decisions applied after the frozen model sample.')
+    parser.add_argument('--count-policy', choices=('saved_selector', 'ranked', 'latest_year_mean', 'newest',
+                                                  'recent_two_year_mean'),
+                        default='saved_selector', help='Deterministic rules are available for count supplementation.')
     build(parser.parse_args())

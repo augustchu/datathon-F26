@@ -1,0 +1,2186 @@
+{
+  "checkpoint_evidence": {
+    "iteration_01": {
+      "artifact_sha256": "6d7503db2eb6ddc6a842052a16fe60960e3dff8b8211a7bbfc67649dfd8bea98",
+      "original_grouped_oof": {
+        "newest": {
+          "cases_with_correct_candidate": 4,
+          "hits": 0,
+          "hits_when_candidate_exists": 0,
+          "mean_candidate_brier": null,
+          "reviewed_cases": 5
+        },
+        "pooled_publisher": {
+          "cases_with_correct_candidate": 4,
+          "hits": 4,
+          "hits_when_candidate_exists": 4,
+          "mean_candidate_brier": 0.14351851851851855,
+          "reviewed_cases": 5
+        },
+        "xgboost": {
+          "cases_with_correct_candidate": 4,
+          "hits": 4,
+          "hits_when_candidate_exists": 4,
+          "mean_candidate_brier": 0.2457222203669943,
+          "reviewed_cases": 5
+        }
+      },
+      "training_supported_cases": 5
+    },
+    "iteration_02": {
+      "artifact_sha256": "3cfcf55d27623c3222ffb81c817d64bed856f43868c14490d1b67208231bc7d0",
+      "original_grouped_oof": {
+        "newest": {
+          "cases_with_correct_candidate": 5,
+          "hits": 1,
+          "hits_when_candidate_exists": 1,
+          "mean_candidate_brier": null,
+          "reviewed_cases": 7
+        },
+        "pooled_publisher": {
+          "cases_with_correct_candidate": 5,
+          "hits": 4,
+          "hits_when_candidate_exists": 4,
+          "mean_candidate_brier": 0.2630026455026455,
+          "reviewed_cases": 7
+        },
+        "xgboost": {
+          "cases_with_correct_candidate": 5,
+          "hits": 4,
+          "hits_when_candidate_exists": 4,
+          "mean_candidate_brier": 0.23655900120375445,
+          "reviewed_cases": 7
+        }
+      },
+      "training_supported_cases": 7
+    }
+  },
+  "dataset_diagnostics": {
+    "branch_capacity_rows": 10073,
+    "by_candidate_availability": {
+      "dual_agree": {
+        "checkpoint_source_disagreements": 0,
+        "checkpoint_value_disagreements": 0,
+        "n": 12,
+        "population_methods": {
+          "iteration_01": {
+            "FDR": 12
+          },
+          "iteration_02": {
+            "FDR": 12
+          },
+          "newest": {
+            "IFFCO Tokio": 12
+          },
+          "publisher_fallback": {
+            "FDR": 12
+          }
+        }
+      },
+      "dual_disagree": {
+        "checkpoint_source_disagreements": 0,
+        "checkpoint_value_disagreements": 0,
+        "n": 31,
+        "population_methods": {
+          "iteration_01": {
+            "FDR": 9,
+            "IFFCO Tokio": 22
+          },
+          "iteration_02": {
+            "FDR": 9,
+            "IFFCO Tokio": 22
+          },
+          "newest": {
+            "IFFCO Tokio": 31
+          },
+          "publisher_fallback": {
+            "FDR": 9,
+            "IFFCO Tokio": 22
+          }
+        }
+      },
+      "iffco_only": {
+        "checkpoint_source_disagreements": 0,
+        "checkpoint_value_disagreements": 0,
+        "n": 15,
+        "population_methods": {
+          "iteration_01": {
+            "FDR": 15
+          },
+          "iteration_02": {
+            "FDR": 15
+          },
+          "newest": {
+            "IFFCO Tokio": 15
+          },
+          "publisher_fallback": {
+            "FDR": 15
+          }
+        }
+      },
+      "sbi_only": {
+        "checkpoint_source_disagreements": 0,
+        "checkpoint_value_disagreements": 0,
+        "n": 136,
+        "population_methods": {
+          "iteration_01": {
+            "FDR": 136
+          },
+          "iteration_02": {
+            "FDR": 136
+          },
+          "newest": {
+            "sbi_general_archived_quality_disclosure": 136
+          },
+          "publisher_fallback": {
+            "FDR": 136
+          }
+        }
+      }
+    },
+    "selected_sources": {
+      "iteration_01": {
+        "FDR": 172,
+        "IFFCO Tokio": 22
+      },
+      "iteration_02": {
+        "FDR": 172,
+        "IFFCO Tokio": 22
+      },
+      "newest": {
+        "IFFCO Tokio": 58,
+        "sbi_general_archived_quality_disclosure": 136
+      },
+      "publisher_fallback": {
+        "FDR": 172,
+        "IFFCO Tokio": 22
+      }
+    },
+    "skip_counts": {
+      "held_or_reviewed": 549,
+      "no_conflicting_numeric_candidates": 9330
+    },
+    "unlabeled_conflicting_cases_scored": 194,
+    "value_disagreements": {
+      "iteration_01__vs__iteration_02": 0,
+      "iteration_01__vs__newest": 169,
+      "iteration_01__vs__publisher_fallback": 0,
+      "iteration_02__vs__newest": 169,
+      "iteration_02__vs__publisher_fallback": 0,
+      "newest__vs__publisher_fallback": 169
+    }
+  },
+  "extension_holdout_iteration_01_only": {
+    "by_candidate_availability": {
+      "dual_agree": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.4855066282175648,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": 1.1997679914616142,
+            "mae_beds": 105,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 105
+          },
+          "newest": {
+            "brier": null,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": null,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "IFFCO Tokio": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "publisher_fallback": {
+            "brier": 0.5967346938775511,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": 1.4905462644545229,
+            "mae_beds": 105,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 105
+          }
+        }
+      },
+      "sbi_only": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 0,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.23239209739434985,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": 0.6491502615619369,
+            "mae_beds": 60,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 60
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": null,
+            "mae_beds": 129,
+            "n": 1,
+            "selected_sources": {
+              "sbi_general_archived_quality_disclosure": 1
+            },
+            "worst_absolute_error_beds": 129
+          },
+          "publisher_fallback": {
+            "brier": 0.27510204081632655,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": 0.7379532599047889,
+            "mae_beds": 60,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 60
+          }
+        }
+      }
+    },
+    "by_candidate_ceiling": {
+      "exact_candidate": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.4855066282175648,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": 1.1997679914616142,
+            "mae_beds": 105,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 105
+          },
+          "newest": {
+            "brier": null,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": null,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "IFFCO Tokio": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "publisher_fallback": {
+            "brier": 0.5967346938775511,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": 1.4905462644545229,
+            "mae_beds": 105,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 105
+          }
+        }
+      },
+      "no_exact_candidate": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 0,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.23239209739434985,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": 0.6491502615619369,
+            "mae_beds": 60,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 60
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": null,
+            "mae_beds": 129,
+            "n": 1,
+            "selected_sources": {
+              "sbi_general_archived_quality_disclosure": 1
+            },
+            "worst_absolute_error_beds": 129
+          },
+          "publisher_fallback": {
+            "brier": 0.27510204081632655,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": 0.7379532599047889,
+            "mae_beds": 60,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 60
+          }
+        }
+      }
+    },
+    "by_reference_bed_band": {
+      "100_to_299": {
+        "cases_with_evidence": 2,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.35894936280595735,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": 0.9244591265117755,
+            "mae_beds": 82.5,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 105
+          },
+          "newest": {
+            "brier": null,
+            "exact": 1,
+            "exact_rate": 0.5,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": null,
+            "mae_beds": 64.5,
+            "n": 2,
+            "selected_sources": {
+              "IFFCO Tokio": 1,
+              "sbi_general_archived_quality_disclosure": 1
+            },
+            "worst_absolute_error_beds": 129
+          },
+          "publisher_fallback": {
+            "brier": 0.4359183673469388,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": 1.1142497621796559,
+            "mae_beds": 82.5,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 105
+          }
+        }
+      }
+    },
+    "cases_with_evidence": 2,
+    "cases_with_exact_candidate": 1,
+    "methods": {
+      "iteration_01": {
+        "brier": 0.35894936280595735,
+        "exact": 0,
+        "exact_rate": 0.0,
+        "exact_rate_when_candidate_exists": 0.0,
+        "log_loss": 0.9244591265117755,
+        "mae_beds": 82.5,
+        "n": 2,
+        "selected_sources": {
+          "FDR": 2
+        },
+        "worst_absolute_error_beds": 105
+      },
+      "newest": {
+        "brier": null,
+        "exact": 1,
+        "exact_rate": 0.5,
+        "exact_rate_when_candidate_exists": 1.0,
+        "log_loss": null,
+        "mae_beds": 64.5,
+        "n": 2,
+        "selected_sources": {
+          "IFFCO Tokio": 1,
+          "sbi_general_archived_quality_disclosure": 1
+        },
+        "worst_absolute_error_beds": 129
+      },
+      "publisher_fallback": {
+        "brier": 0.4359183673469388,
+        "exact": 0,
+        "exact_rate": 0.0,
+        "exact_rate_when_candidate_exists": 0.0,
+        "log_loss": 1.1142497621796559,
+        "mae_beds": 82.5,
+        "n": 2,
+        "selected_sources": {
+          "FDR": 2
+        },
+        "worst_absolute_error_beds": 105
+      }
+    }
+  },
+  "independent_holdout": {
+    "by_candidate_availability": {
+      "prior_review_anchor": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.10653081027734546,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.39189919068298507,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.15406173687599223,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4944224967671017,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 36,
+            "n": 1,
+            "selected_sources": {
+              "IFFCO Tokio": 1
+            },
+            "worst_absolute_error_beds": 36
+          },
+          "publisher_fallback": {
+            "brier": 0.15432098765432098,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4966258865051416,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      },
+      "sbi_only": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.10653081027734546,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.39189919068298507,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.15406173687599223,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4944224967671017,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 250,
+            "n": 1,
+            "selected_sources": {
+              "sbi_general_archived_quality_disclosure": 1
+            },
+            "worst_absolute_error_beds": 250
+          },
+          "publisher_fallback": {
+            "brier": 0.13958175862937766,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4621294507616659,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      }
+    },
+    "by_candidate_ceiling": {
+      "exact_candidate": {
+        "cases_with_evidence": 2,
+        "cases_with_exact_candidate": 2,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.10653081027734546,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.39189919068298507,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.15406173687599223,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4944224967671017,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 143,
+            "n": 2,
+            "selected_sources": {
+              "IFFCO Tokio": 1,
+              "sbi_general_archived_quality_disclosure": 1
+            },
+            "worst_absolute_error_beds": 250
+          },
+          "publisher_fallback": {
+            "brier": 0.1469513731418493,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.47937766863340375,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      },
+      "no_exact_candidate": {
+        "cases_with_evidence": 0,
+        "cases_with_exact_candidate": 0,
+        "methods": {}
+      }
+    },
+    "by_reference_bed_band": {
+      "100_to_299": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.10653081027734546,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.39189919068298507,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.15406173687599223,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4944224967671017,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 36,
+            "n": 1,
+            "selected_sources": {
+              "IFFCO Tokio": 1
+            },
+            "worst_absolute_error_beds": 36
+          },
+          "publisher_fallback": {
+            "brier": 0.15432098765432098,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4966258865051416,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      },
+      "300_and_above": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.10653081027734546,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.39189919068298507,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.15406173687599223,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4944224967671017,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 250,
+            "n": 1,
+            "selected_sources": {
+              "sbi_general_archived_quality_disclosure": 1
+            },
+            "worst_absolute_error_beds": 250
+          },
+          "publisher_fallback": {
+            "brier": 0.13958175862937766,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.4621294507616659,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      }
+    },
+    "cases_with_evidence": 2,
+    "cases_with_exact_candidate": 2,
+    "methods": {
+      "iteration_01": {
+        "brier": 0.10653081027734546,
+        "exact": 2,
+        "exact_rate": 1.0,
+        "exact_rate_when_candidate_exists": 1.0,
+        "log_loss": 0.39189919068298507,
+        "mae_beds": 0,
+        "n": 2,
+        "selected_sources": {
+          "FDR": 2
+        },
+        "worst_absolute_error_beds": 0
+      },
+      "iteration_02": {
+        "brier": 0.15406173687599223,
+        "exact": 2,
+        "exact_rate": 1.0,
+        "exact_rate_when_candidate_exists": 1.0,
+        "log_loss": 0.4944224967671017,
+        "mae_beds": 0,
+        "n": 2,
+        "selected_sources": {
+          "FDR": 2
+        },
+        "worst_absolute_error_beds": 0
+      },
+      "newest": {
+        "brier": null,
+        "exact": 0,
+        "exact_rate": 0.0,
+        "exact_rate_when_candidate_exists": 0.0,
+        "log_loss": null,
+        "mae_beds": 143,
+        "n": 2,
+        "selected_sources": {
+          "IFFCO Tokio": 1,
+          "sbi_general_archived_quality_disclosure": 1
+        },
+        "worst_absolute_error_beds": 250
+      },
+      "publisher_fallback": {
+        "brier": 0.1469513731418493,
+        "exact": 2,
+        "exact_rate": 1.0,
+        "exact_rate_when_candidate_exists": 1.0,
+        "log_loss": 0.47937766863340375,
+        "mae_beds": 0,
+        "n": 2,
+        "selected_sources": {
+          "FDR": 2
+        },
+        "worst_absolute_error_beds": 0
+      }
+    },
+    "reviewed": 10,
+    "unresolved": 8
+  },
+  "native_cross_fit": {
+    "iteration_01": {
+      "by_candidate_availability": {
+        "dual_agree": {
+          "cases_with_evidence": 1,
+          "cases_with_exact_candidate": 1,
+          "methods": {
+            "iteration_01": {
+              "brier": 0.2234199855413559,
+              "exact": 1,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6394056241843614,
+              "mae_beds": 0,
+              "n": 1,
+              "selected_sources": {
+                "FDR": 1
+              },
+              "worst_absolute_error_beds": 0
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 1,
+              "n": 1,
+              "selected_sources": {
+                "IFFCO Tokio": 1
+              },
+              "worst_absolute_error_beds": 1
+            },
+            "publisher_fallback": {
+              "brier": 0.0787037037037037,
+              "exact": 1,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.32694308433724206,
+              "mae_beds": 0,
+              "n": 1,
+              "selected_sources": {
+                "FDR": 1
+              },
+              "worst_absolute_error_beds": 0
+            }
+          }
+        },
+        "iffco_only": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 1,
+          "methods": {
+            "iteration_01": {
+              "brier": 0.24273870249664364,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6788040710431807,
+              "mae_beds": 5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 10
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 29.5,
+              "n": 2,
+              "selected_sources": {
+                "IFFCO Tokio": 2
+              },
+              "worst_absolute_error_beds": 49
+            },
+            "publisher_fallback": {
+              "brier": 0.23263888888888892,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6931471805599454,
+              "mae_beds": 5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 10
+            }
+          }
+        },
+        "sbi_only": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 2,
+          "methods": {
+            "iteration_01": {
+              "brier": 0.25985685565016414,
+              "exact": 2,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.7132600493228503,
+              "mae_beds": 0,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 0
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 31,
+              "n": 2,
+              "selected_sources": {
+                "sbi_general_archived_quality_disclosure": 2
+              },
+              "worst_absolute_error_beds": 50
+            },
+            "publisher_fallback": {
+              "brier": 0.08680555555555557,
+              "exact": 2,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.3465735902799727,
+              "mae_beds": 0,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 0
+            }
+          }
+        }
+      },
+      "by_candidate_ceiling": {
+        "exact_candidate": {
+          "cases_with_evidence": 4,
+          "cases_with_exact_candidate": 4,
+          "methods": {
+            "iteration_01": {
+              "brier": 0.2507476381229621,
+              "exact": 4,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6947964430382281,
+              "mae_beds": 0,
+              "n": 4,
+              "selected_sources": {
+                "FDR": 4
+              },
+              "worst_absolute_error_beds": 0
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 28,
+              "n": 4,
+              "selected_sources": {
+                "IFFCO Tokio": 2,
+                "sbi_general_archived_quality_disclosure": 2
+              },
+              "worst_absolute_error_beds": 50
+            },
+            "publisher_fallback": {
+              "brier": 0.0847800925925926,
+              "exact": 4,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.34166596379429004,
+              "mae_beds": 0,
+              "n": 4,
+              "selected_sources": {
+                "FDR": 4
+              },
+              "worst_absolute_error_beds": 0
+            }
+          }
+        },
+        "no_exact_candidate": {
+          "cases_with_evidence": 1,
+          "cases_with_exact_candidate": 0,
+          "methods": {
+            "iteration_01": {
+              "brier": 0.22562054934312314,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": null,
+              "log_loss": 0.6443480927635112,
+              "mae_beds": 10,
+              "n": 1,
+              "selected_sources": {
+                "FDR": 1
+              },
+              "worst_absolute_error_beds": 10
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": null,
+              "log_loss": null,
+              "mae_beds": 10,
+              "n": 1,
+              "selected_sources": {
+                "IFFCO Tokio": 1
+              },
+              "worst_absolute_error_beds": 10
+            },
+            "publisher_fallback": {
+              "brier": 0.37847222222222227,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": null,
+              "log_loss": 1.039720770839918,
+              "mae_beds": 10,
+              "n": 1,
+              "selected_sources": {
+                "FDR": 1
+              },
+              "worst_absolute_error_beds": 10
+            }
+          }
+        }
+      },
+      "by_reference_bed_band": {
+        "100_to_299": {
+          "cases_with_evidence": 1,
+          "cases_with_exact_candidate": 1,
+          "methods": {
+            "iteration_01": {
+              "brier": 0.25985685565016414,
+              "exact": 1,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.7132600493228503,
+              "mae_beds": 0,
+              "n": 1,
+              "selected_sources": {
+                "FDR": 1
+              },
+              "worst_absolute_error_beds": 0
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 49,
+              "n": 1,
+              "selected_sources": {
+                "IFFCO Tokio": 1
+              },
+              "worst_absolute_error_beds": 49
+            },
+            "publisher_fallback": {
+              "brier": 0.08680555555555557,
+              "exact": 1,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.3465735902799727,
+              "mae_beds": 0,
+              "n": 1,
+              "selected_sources": {
+                "FDR": 1
+              },
+              "worst_absolute_error_beds": 0
+            }
+          }
+        },
+        "300_and_above": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 1,
+          "methods": {
+            "iteration_01": {
+              "brier": 0.24273870249664364,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6788040710431807,
+              "mae_beds": 5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 10
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 30,
+              "n": 2,
+              "selected_sources": {
+                "IFFCO Tokio": 1,
+                "sbi_general_archived_quality_disclosure": 1
+              },
+              "worst_absolute_error_beds": 50
+            },
+            "publisher_fallback": {
+              "brier": 0.23263888888888892,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6931471805599454,
+              "mae_beds": 5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 10
+            }
+          }
+        },
+        "under_100": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 2,
+          "methods": {
+            "iteration_01": {
+              "brier": 0.24163842059576002,
+              "exact": 2,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6763328367536059,
+              "mae_beds": 0,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 0
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 6.5,
+              "n": 2,
+              "selected_sources": {
+                "IFFCO Tokio": 1,
+                "sbi_general_archived_quality_disclosure": 1
+              },
+              "worst_absolute_error_beds": 12
+            },
+            "publisher_fallback": {
+              "brier": 0.08275462962962964,
+              "exact": 2,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.3367583373086074,
+              "mae_beds": 0,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 0
+            }
+          }
+        }
+      },
+      "cases_with_evidence": 5,
+      "cases_with_exact_candidate": 4,
+      "methods": {
+        "iteration_01": {
+          "brier": 0.2457222203669943,
+          "exact": 4,
+          "exact_rate": 0.8,
+          "exact_rate_when_candidate_exists": 1.0,
+          "log_loss": 0.6847067729832846,
+          "mae_beds": 2,
+          "n": 5,
+          "selected_sources": {
+            "FDR": 5
+          },
+          "worst_absolute_error_beds": 10
+        },
+        "newest": {
+          "brier": null,
+          "exact": 0,
+          "exact_rate": 0.0,
+          "exact_rate_when_candidate_exists": 0.0,
+          "log_loss": null,
+          "mae_beds": 24.4,
+          "n": 5,
+          "selected_sources": {
+            "IFFCO Tokio": 3,
+            "sbi_general_archived_quality_disclosure": 2
+          },
+          "worst_absolute_error_beds": 50
+        },
+        "publisher_fallback": {
+          "brier": 0.14351851851851855,
+          "exact": 4,
+          "exact_rate": 0.8,
+          "exact_rate_when_candidate_exists": 1.0,
+          "log_loss": 0.48127692520341564,
+          "mae_beds": 2,
+          "n": 5,
+          "selected_sources": {
+            "FDR": 5
+          },
+          "worst_absolute_error_beds": 10
+        }
+      }
+    },
+    "iteration_02": {
+      "by_candidate_availability": {
+        "dual_agree": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 2,
+          "methods": {
+            "iteration_02": {
+              "brier": 0.32247336824145173,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 0.5,
+              "log_loss": 0.8587605212445102,
+              "mae_beds": 52.5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 105
+            },
+            "newest": {
+              "brier": null,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 0.5,
+              "log_loss": null,
+              "mae_beds": 0.5,
+              "n": 2,
+              "selected_sources": {
+                "IFFCO Tokio": 2
+              },
+              "worst_absolute_error_beds": 1
+            },
+            "publisher_fallback": {
+              "brier": 0.374363425925926,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 0.5,
+              "log_loss": 0.998577424517997,
+              "mae_beds": 52.5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 105
+            }
+          }
+        },
+        "iffco_only": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 1,
+          "methods": {
+            "iteration_02": {
+              "brier": 0.20711298378718457,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6034594001404878,
+              "mae_beds": 5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 10
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 29.5,
+              "n": 2,
+              "selected_sources": {
+                "IFFCO Tokio": 2
+              },
+              "worst_absolute_error_beds": 49
+            },
+            "publisher_fallback": {
+              "brier": 0.24015625000000002,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6739069202759131,
+              "mae_beds": 5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 10
+            }
+          }
+        },
+        "sbi_only": {
+          "cases_with_evidence": 3,
+          "cases_with_exact_candidate": 2,
+          "methods": {
+            "iteration_02": {
+              "brier": 0.19891343478966958,
+              "exact": 2,
+              "exact_rate": 0.6666666666666666,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.5868710751590852,
+              "mae_beds": 20,
+              "n": 3,
+              "selected_sources": {
+                "FDR": 3
+              },
+              "worst_absolute_error_beds": 60
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 63.666666666666664,
+              "n": 3,
+              "selected_sources": {
+                "sbi_general_archived_quality_disclosure": 3
+              },
+              "worst_absolute_error_beds": 129
+            },
+            "publisher_fallback": {
+              "brier": 0.20399305555555555,
+              "exact": 2,
+              "exact_rate": 0.6666666666666666,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.5972531564093516,
+              "mae_beds": 20,
+              "n": 3,
+              "selected_sources": {
+                "FDR": 3
+              },
+              "worst_absolute_error_beds": 60
+            }
+          }
+        }
+      },
+      "by_candidate_ceiling": {
+        "exact_candidate": {
+          "cases_with_evidence": 5,
+          "cases_with_exact_candidate": 5,
+          "methods": {
+            "iteration_02": {
+              "brier": 0.23849794937336444,
+              "exact": 4,
+              "exact_rate": 0.8,
+              "exact_rate_when_candidate_exists": 0.8,
+              "log_loss": 0.675720863615572,
+              "mae_beds": 21,
+              "n": 5,
+              "selected_sources": {
+                "FDR": 5
+              },
+              "worst_absolute_error_beds": 105
+            },
+            "newest": {
+              "brier": null,
+              "exact": 1,
+              "exact_rate": 0.2,
+              "exact_rate_when_candidate_exists": 0.2,
+              "log_loss": null,
+              "mae_beds": 22.4,
+              "n": 5,
+              "selected_sources": {
+                "IFFCO Tokio": 3,
+                "sbi_general_archived_quality_disclosure": 2
+              },
+              "worst_absolute_error_beds": 50
+            },
+            "publisher_fallback": {
+              "brier": 0.2629675925925926,
+              "exact": 4,
+              "exact_rate": 0.8,
+              "exact_rate_when_candidate_exists": 0.8,
+              "log_loss": 0.7395507079734143,
+              "mae_beds": 21,
+              "n": 5,
+              "selected_sources": {
+                "FDR": 5
+              },
+              "worst_absolute_error_beds": 105
+            }
+          }
+        },
+        "no_exact_candidate": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 0,
+          "methods": {
+            "iteration_02": {
+              "brier": 0.23171163077972956,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": null,
+              "log_loss": 0.6532243750846958,
+              "mae_beds": 35,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 60
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": null,
+              "log_loss": null,
+              "mae_beds": 69.5,
+              "n": 2,
+              "selected_sources": {
+                "IFFCO Tokio": 1,
+                "sbi_general_archived_quality_disclosure": 1
+              },
+              "worst_absolute_error_beds": 129
+            },
+            "publisher_fallback": {
+              "brier": 0.2630902777777778,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": null,
+              "log_loss": 0.7194873094744019,
+              "mae_beds": 35,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 60
+            }
+          }
+        }
+      },
+      "by_reference_bed_band": {
+        "100_to_299": {
+          "cases_with_evidence": 3,
+          "cases_with_exact_candidate": 2,
+          "methods": {
+            "iteration_02": {
+              "brier": 0.29989250975546194,
+              "exact": 1,
+              "exact_rate": 0.3333333333333333,
+              "exact_rate_when_candidate_exists": 0.5,
+              "log_loss": 0.8057817979750345,
+              "mae_beds": 55,
+              "n": 3,
+              "selected_sources": {
+                "FDR": 3
+              },
+              "worst_absolute_error_beds": 105
+            },
+            "newest": {
+              "brier": null,
+              "exact": 1,
+              "exact_rate": 0.3333333333333333,
+              "exact_rate_when_candidate_exists": 0.5,
+              "log_loss": null,
+              "mae_beds": 59.333333333333336,
+              "n": 3,
+              "selected_sources": {
+                "IFFCO Tokio": 2,
+                "sbi_general_archived_quality_disclosure": 1
+              },
+              "worst_absolute_error_beds": 129
+            },
+            "publisher_fallback": {
+              "brier": 0.34363040123456795,
+              "exact": 1,
+              "exact_rate": 0.3333333333333333,
+              "exact_rate_when_candidate_exists": 0.5,
+              "log_loss": 0.918603042538069,
+              "mae_beds": 55,
+              "n": 3,
+              "selected_sources": {
+                "FDR": 3
+              },
+              "worst_absolute_error_beds": 105
+            }
+          }
+        },
+        "300_and_above": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 1,
+          "methods": {
+            "iteration_02": {
+              "brier": 0.20711298378718457,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6034594001404878,
+              "mae_beds": 5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 10
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 30,
+              "n": 2,
+              "selected_sources": {
+                "IFFCO Tokio": 1,
+                "sbi_general_archived_quality_disclosure": 1
+              },
+              "worst_absolute_error_beds": 50
+            },
+            "publisher_fallback": {
+              "brier": 0.22793402777777777,
+              "exact": 1,
+              "exact_rate": 0.5,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.6475667913614567,
+              "mae_beds": 5,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 10
+            }
+          }
+        },
+        "under_100": {
+          "cases_with_evidence": 2,
+          "cases_with_exact_candidate": 2,
+          "methods": {
+            "iteration_02": {
+              "brier": 0.17100475579276314,
+              "exact": 2,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.5303944370205862,
+              "mae_beds": 0,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 0
+            },
+            "newest": {
+              "brier": null,
+              "exact": 0,
+              "exact_rate": 0.0,
+              "exact_rate_when_candidate_exists": 0.0,
+              "log_loss": null,
+              "mae_beds": 6.5,
+              "n": 2,
+              "selected_sources": {
+                "IFFCO Tokio": 1,
+                "sbi_general_archived_quality_disclosure": 1
+              },
+              "worst_absolute_error_beds": 12
+            },
+            "publisher_fallback": {
+              "brier": 0.17712962962962964,
+              "exact": 2,
+              "exact_rate": 1.0,
+              "exact_rate_when_candidate_exists": 1.0,
+              "log_loss": 0.5428927242393775,
+              "mae_beds": 0,
+              "n": 2,
+              "selected_sources": {
+                "FDR": 2
+              },
+              "worst_absolute_error_beds": 0
+            }
+          }
+        }
+      },
+      "cases_with_evidence": 7,
+      "cases_with_exact_candidate": 5,
+      "methods": {
+        "iteration_02": {
+          "brier": 0.23655900120375448,
+          "exact": 4,
+          "exact_rate": 0.5714285714285714,
+          "exact_rate_when_candidate_exists": 0.8,
+          "log_loss": 0.669293295463893,
+          "mae_beds": 25,
+          "n": 7,
+          "selected_sources": {
+            "FDR": 7
+          },
+          "worst_absolute_error_beds": 105
+        },
+        "newest": {
+          "brier": null,
+          "exact": 1,
+          "exact_rate": 0.14285714285714285,
+          "exact_rate_when_candidate_exists": 0.2,
+          "log_loss": null,
+          "mae_beds": 35.857142857142854,
+          "n": 7,
+          "selected_sources": {
+            "IFFCO Tokio": 4,
+            "sbi_general_archived_quality_disclosure": 3
+          },
+          "worst_absolute_error_beds": 129
+        },
+        "publisher_fallback": {
+          "brier": 0.2630026455026455,
+          "exact": 4,
+          "exact_rate": 0.5714285714285714,
+          "exact_rate_when_candidate_exists": 0.8,
+          "log_loss": 0.7338183084022679,
+          "mae_beds": 25,
+          "n": 7,
+          "selected_sources": {
+            "FDR": 7
+          },
+          "worst_absolute_error_beds": 105
+        }
+      }
+    }
+  },
+  "paired_common_cross_fit": {
+    "by_candidate_availability": {
+      "dual_agree": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.2234199855413559,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6394056241843614,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.15949517479088668,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.5070944488448926,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 1,
+            "n": 1,
+            "selected_sources": {
+              "IFFCO Tokio": 1
+            },
+            "worst_absolute_error_beds": 1
+          },
+          "publisher_fallback": {
+            "brier": 0.17370370370370372,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.5364793041447001,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      },
+      "iffco_only": {
+        "cases_with_evidence": 2,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.24273870249664364,
+            "exact": 1,
+            "exact_rate": 0.5,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6788040710431807,
+            "mae_beds": 5,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 10
+          },
+          "iteration_02": {
+            "brier": 0.20711298378718457,
+            "exact": 1,
+            "exact_rate": 0.5,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6034594001404878,
+            "mae_beds": 5,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 10
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 29.5,
+            "n": 2,
+            "selected_sources": {
+              "IFFCO Tokio": 2
+            },
+            "worst_absolute_error_beds": 49
+          },
+          "publisher_fallback": {
+            "brier": 0.24015625000000002,
+            "exact": 1,
+            "exact_rate": 0.5,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6739069202759131,
+            "mae_beds": 5,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 10
+          }
+        }
+      },
+      "sbi_only": {
+        "cases_with_evidence": 2,
+        "cases_with_exact_candidate": 2,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.25985685565016414,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.7132600493228503,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.18251433679463958,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.5536944251962799,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 31,
+            "n": 2,
+            "selected_sources": {
+              "sbi_general_archived_quality_disclosure": 2
+            },
+            "worst_absolute_error_beds": 50
+          },
+          "publisher_fallback": {
+            "brier": 0.18055555555555555,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.5493061443340548,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      }
+    },
+    "by_candidate_ceiling": {
+      "exact_candidate": {
+        "cases_with_evidence": 4,
+        "cases_with_exact_candidate": 4,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.2507476381229621,
+            "exact": 4,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6947964430382281,
+            "mae_beds": 0,
+            "n": 4,
+            "selected_sources": {
+              "FDR": 4
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.17675954629370136,
+            "exact": 4,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.542044431108433,
+            "mae_beds": 0,
+            "n": 4,
+            "selected_sources": {
+              "FDR": 4
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 28,
+            "n": 4,
+            "selected_sources": {
+              "IFFCO Tokio": 2,
+              "sbi_general_archived_quality_disclosure": 2
+            },
+            "worst_absolute_error_beds": 50
+          },
+          "publisher_fallback": {
+            "brier": 0.1849537037037037,
+            "exact": 4,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.5592694987439444,
+            "mae_beds": 0,
+            "n": 4,
+            "selected_sources": {
+              "FDR": 4
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      },
+      "no_exact_candidate": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 0,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.22562054934312314,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": 0.6443480927635112,
+            "mae_beds": 10,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 10
+          },
+          "iteration_02": {
+            "brier": 0.23171163077972956,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": 0.6532243750846958,
+            "mae_beds": 10,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 10
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": null,
+            "mae_beds": 10,
+            "n": 1,
+            "selected_sources": {
+              "IFFCO Tokio": 1
+            },
+            "worst_absolute_error_beds": 10
+          },
+          "publisher_fallback": {
+            "brier": 0.2753125,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": null,
+            "log_loss": 0.7458274383888585,
+            "mae_beds": 10,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 10
+          }
+        }
+      }
+    },
+    "by_reference_bed_band": {
+      "100_to_299": {
+        "cases_with_evidence": 1,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.25985685565016414,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.7132600493228503,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.18251433679463958,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.5536944251962799,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 49,
+            "n": 1,
+            "selected_sources": {
+              "IFFCO Tokio": 1
+            },
+            "worst_absolute_error_beds": 49
+          },
+          "publisher_fallback": {
+            "brier": 0.20500000000000002,
+            "exact": 1,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.601986402162968,
+            "mae_beds": 0,
+            "n": 1,
+            "selected_sources": {
+              "FDR": 1
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      },
+      "300_and_above": {
+        "cases_with_evidence": 2,
+        "cases_with_exact_candidate": 1,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.24273870249664364,
+            "exact": 1,
+            "exact_rate": 0.5,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6788040710431807,
+            "mae_beds": 5,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 10
+          },
+          "iteration_02": {
+            "brier": 0.20711298378718457,
+            "exact": 1,
+            "exact_rate": 0.5,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6034594001404878,
+            "mae_beds": 5,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 10
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 30,
+            "n": 2,
+            "selected_sources": {
+              "IFFCO Tokio": 1,
+              "sbi_general_archived_quality_disclosure": 1
+            },
+            "worst_absolute_error_beds": 50
+          },
+          "publisher_fallback": {
+            "brier": 0.22793402777777777,
+            "exact": 1,
+            "exact_rate": 0.5,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6475667913614567,
+            "mae_beds": 5,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 10
+          }
+        }
+      },
+      "under_100": {
+        "cases_with_evidence": 2,
+        "cases_with_exact_candidate": 2,
+        "methods": {
+          "iteration_01": {
+            "brier": 0.24163842059576002,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.6763328367536059,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "iteration_02": {
+            "brier": 0.17100475579276314,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.5303944370205862,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          },
+          "newest": {
+            "brier": null,
+            "exact": 0,
+            "exact_rate": 0.0,
+            "exact_rate_when_candidate_exists": 0.0,
+            "log_loss": null,
+            "mae_beds": 6.5,
+            "n": 2,
+            "selected_sources": {
+              "IFFCO Tokio": 1,
+              "sbi_general_archived_quality_disclosure": 1
+            },
+            "worst_absolute_error_beds": 12
+          },
+          "publisher_fallback": {
+            "brier": 0.17712962962962964,
+            "exact": 2,
+            "exact_rate": 1.0,
+            "exact_rate_when_candidate_exists": 1.0,
+            "log_loss": 0.5428927242393775,
+            "mae_beds": 0,
+            "n": 2,
+            "selected_sources": {
+              "FDR": 2
+            },
+            "worst_absolute_error_beds": 0
+          }
+        }
+      }
+    },
+    "cases_with_evidence": 5,
+    "cases_with_exact_candidate": 4,
+    "methods": {
+      "iteration_01": {
+        "brier": 0.2457222203669943,
+        "exact": 4,
+        "exact_rate": 0.8,
+        "exact_rate_when_candidate_exists": 1.0,
+        "log_loss": 0.6847067729832846,
+        "mae_beds": 2,
+        "n": 5,
+        "selected_sources": {
+          "FDR": 5
+        },
+        "worst_absolute_error_beds": 10
+      },
+      "iteration_02": {
+        "brier": 0.187749963190907,
+        "exact": 4,
+        "exact_rate": 0.8,
+        "exact_rate_when_candidate_exists": 1.0,
+        "log_loss": 0.5642804199036856,
+        "mae_beds": 2,
+        "n": 5,
+        "selected_sources": {
+          "FDR": 5
+        },
+        "worst_absolute_error_beds": 10
+      },
+      "newest": {
+        "brier": null,
+        "exact": 0,
+        "exact_rate": 0.0,
+        "exact_rate_when_candidate_exists": 0.0,
+        "log_loss": null,
+        "mae_beds": 24.4,
+        "n": 5,
+        "selected_sources": {
+          "IFFCO Tokio": 3,
+          "sbi_general_archived_quality_disclosure": 2
+        },
+        "worst_absolute_error_beds": 50
+      },
+      "publisher_fallback": {
+        "brier": 0.20302546296296298,
+        "exact": 4,
+        "exact_rate": 0.8,
+        "exact_rate_when_candidate_exists": 1.0,
+        "log_loss": 0.5965810866729272,
+        "mae_beds": 2,
+        "n": 5,
+        "selected_sources": {
+          "FDR": 5
+        },
+        "worst_absolute_error_beds": 10
+      }
+    }
+  },
+  "shared_tie_break_publisher_priors": {
+    "FDR": 0.5555555555555556,
+    "IFFCO Tokio": 0.3333333333333333,
+    "sbi_general_archived_quality_disclosure": 0.2857142857142857
+  },
+  "xgboost_version": "3.4.1"
+}

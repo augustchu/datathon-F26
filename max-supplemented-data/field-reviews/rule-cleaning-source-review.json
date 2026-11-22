@@ -1,0 +1,151 @@
+[
+  {
+    "case_id": "rule-source-01",
+    "name": "MGM Healthcare",
+    "pin": "600029",
+    "field": "capacity",
+    "status": "supported",
+    "verified_value": 400,
+    "scope": "whole_facility_reported_total",
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://mgmhealthcare.in/about/",
+    "evidence_urls": [
+      "https://mgmhealthcare.in/about/",
+      "https://mgmhealthcare.in/contact-us/"
+    ],
+    "rationale": "The operator lists 400 hospital beds separately from its ICU subset. Its contact page confirms the hospital address and PIN. Observation date unspecified."
+  },
+  {
+    "case_id": "rule-source-02",
+    "name": "MGM Healthcare",
+    "pin": "600029",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "scope": null,
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://mgmhealthcare.in/about/",
+    "evidence_urls": [
+      "https://mgmhealthcare.in/about/",
+      "https://mgmhealthcare.in/contact-us/"
+    ],
+    "rationale": "The operator supplies a lower bound. The original listed count does not resolve a whole-branch roster."
+  },
+  {
+    "case_id": "rule-source-03",
+    "name": "Paras Hospital",
+    "pin": "134109",
+    "field": "capacity",
+    "status": "supported",
+    "verified_value": 284,
+    "scope": "whole_facility_reported_total",
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://www.parashospitals.com/panchkula",
+    "evidence_urls": [
+      "https://www.parashospitals.com/panchkula"
+    ],
+    "rationale": "The operator gives an exact 284-bed figure for Sector 22, Panchkula and gives PIN 134109 on the same page. Observation date unspecified."
+  },
+  {
+    "case_id": "rule-source-04",
+    "name": "Paras Hospital",
+    "pin": "134109",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "scope": null,
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://www.parashospitals.com/panchkula",
+    "evidence_urls": [
+      "https://www.parashospitals.com/panchkula"
+    ],
+    "rationale": "The operator lists a minimum for experienced doctors. It gives no comparable exact whole-hospital count."
+  },
+  {
+    "case_id": "rule-source-05",
+    "name": "Jorhat Medical College and Hospital",
+    "pin": "785001",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "scope": null,
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://jorhatmch.assam.gov.in/sites/default/files/public_utility/CITIZEN%20CHARTER%20OF%20JMCH.pdf#page=1",
+    "evidence_urls": [
+      "https://jorhatmch.assam.gov.in/sites/default/files/public_utility/CITIZEN%20CHARTER%20OF%20JMCH.pdf#page=1",
+      "https://jorhatmch.assam.gov.in/about-us/about-us",
+      "https://jorhatmch.assam.gov.in/contact-us"
+    ],
+    "rationale": "The charter lists 952 and the official About page lists 964. Both describe the branch. Their exact observation periods could not be aligned."
+  },
+  {
+    "case_id": "rule-source-06",
+    "name": "Jorhat Medical College and Hospital",
+    "pin": "785001",
+    "field": "numberDoctors",
+    "status": "supported",
+    "verified_value": 165,
+    "scope": "whole_facility_reported_total",
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://jorhatmch.assam.gov.in/sites/default/files/public_utility/CITIZEN%20CHARTER%20OF%20JMCH.pdf#page=1",
+    "evidence_urls": [
+      "https://jorhatmch.assam.gov.in/sites/default/files/public_utility/CITIZEN%20CHARTER%20OF%20JMCH.pdf#page=1",
+      "https://jorhatmch.assam.gov.in/contact-us"
+    ],
+    "rationale": "The hospital charter explicitly states 165 doctors under hospital information, with no listed staff exclusion. The official contact page confirms the campus and PIN. The count observation date is unspecified."
+  },
+  {
+    "case_id": "rule-source-07",
+    "name": "Tinsukia Medical College, Tinsukia",
+    "pin": "786146",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "scope": null,
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://tinsukiamch.assam.gov.in/sites/default/files/public_utility/Citizen%20Charter_TMCH.pdf#page=1",
+    "evidence_urls": [
+      "https://tinsukiamch.assam.gov.in/sites/default/files/public_utility/Citizen%20Charter_TMCH.pdf#page=1"
+    ],
+    "rationale": "The government charter confirms the PIN and reports a lower bound. It cannot establish an exact capacity."
+  },
+  {
+    "case_id": "rule-source-08",
+    "name": "Tinsukia Medical College, Tinsukia",
+    "pin": "786146",
+    "field": "numberDoctors",
+    "status": "unresolved",
+    "verified_value": null,
+    "scope": null,
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://tinsukiamch.assam.gov.in/sites/default/files/public_utility/Citizen%20Charter_TMCH.pdf#page=1",
+    "evidence_urls": [
+      "https://tinsukiamch.assam.gov.in/sites/default/files/public_utility/Citizen%20Charter_TMCH.pdf#page=1"
+    ],
+    "rationale": "The charter explicitly excludes two categories. The number is a staffing subset."
+  },
+  {
+    "case_id": "rule-source-09",
+    "name": "Silchar Medical College & Hospital",
+    "pin": "788014",
+    "field": "capacity",
+    "status": "unresolved",
+    "verified_value": null,
+    "scope": null,
+    "evidence_date": null,
+    "reviewed_on": "2026-11-21",
+    "evidence_url": "https://silchar-mch.assam.gov.in/department-highlights-level-three/hospital-beds/statistics/hospital",
+    "evidence_urls": [
+      "https://silchar-mch.assam.gov.in/department-highlights-level-three/hospital-beds/statistics/hospital"
+    ],
+    "rationale": "The hospital page gives 1,350 as the whole total, while its stated components sum to 1,352. The inconsistency is unresolved."
+  }
+]

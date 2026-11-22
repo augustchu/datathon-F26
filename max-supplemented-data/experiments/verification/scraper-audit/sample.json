@@ -1,0 +1,428 @@
+{
+  "seed": "scraper-fidelity-20261121-v1",
+  "rows_per_stratum": 6,
+  "publishers": {
+    "IFFCO Tokio": {
+      "source_rows": 7380,
+      "scraped_rows": 7380,
+      "frames": {
+        "precision_beds": 7380,
+        "precision_doctors": 6458,
+        "recall_beds": 7380,
+        "recall_doctors": 6459
+      },
+      "source_snapshot": {
+        "file": "iffco.html",
+        "sha256": "d3be4ed333858bef644f7bba548d052bf78f05e1fbbe4d31357f2c701279e028"
+      },
+      "scraper_output": {
+        "file": "iffco.csv",
+        "sha256": "713cb506d4c57e91e27a313ea3a87bfa0f95ccd62f5f7f316a125fa6a0816280"
+      }
+    },
+    "SBI General 2022": {
+      "source_rows": 17529,
+      "scraped_rows": 17529,
+      "frames": {
+        "precision_beds": 14653,
+        "precision_doctors": 10547,
+        "recall_beds": 14653,
+        "recall_doctors": 10547
+      },
+      "source_snapshot": {
+        "file": "sbi-2022.pdf",
+        "sha256": "625fcd136d9367a4c768e8f0604b051d8b62ed5ce0b38e3f72907ce9b0a4adb1"
+      },
+      "scraper_output": {
+        "file": "sbi-2022.csv",
+        "sha256": "25a65f1e9a32a3bf5d12bcc36902431110ce86f9cabc8e8ea3e9cd416b8e083d"
+      }
+    }
+  },
+  "sample": [
+    {
+      "case_id": "A01",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "8900080148383:410",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Centre%20For%20Sight%20-%20Vijay%20Nagar%20Indore%20%28%20A%20Unit%20Of%20New%20Delhi%20Centre%20For%20Sight%20Ltd%29"
+    },
+    {
+      "case_id": "A02",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "8900080599918:2313",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Maa%20Maternity%20And%20Nursing%20Home"
+    },
+    {
+      "case_id": "A03",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "8900080205383:7334",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Sugam%20Hospital"
+    },
+    {
+      "case_id": "A04",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "8900080204492:6098",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Dr.%20Agarwal%27S%20Eye%20Hospital%20Ltd.%2A%2A"
+    },
+    {
+      "case_id": "A05",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "8900080329836:5972",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Ankura%20Hospital%20For%20Women%20Children%20%28Ankura%20Hospitals%20Madinaguda%20Llp%29"
+    },
+    {
+      "case_id": "A06",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "8900080082700:1808",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Paras%20Surgical%20Hospital"
+    },
+    {
+      "case_id": "A07",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "8900080113602:4500",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Dr%20Godboles%20Heart%20Care%20Centre%20Pvt%20Ltd"
+    },
+    {
+      "case_id": "A08",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "8900080327573:602",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Vrund%20Eye%20Hospital"
+    },
+    {
+      "case_id": "A09",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "8900080429109:4746",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Holy%20Heart%20Super%20Speciality%20%26%20Trauma%20Centre"
+    },
+    {
+      "case_id": "A10",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "8900080350175:838",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Fernandez%20Foundation"
+    },
+    {
+      "case_id": "A11",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "8900080462151:5361",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Jindal%20Eye%20Care%20Hospital"
+    },
+    {
+      "case_id": "A12",
+      "publisher": "IFFCO Tokio",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "8900080517011:7351",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Shree%20Sai%20Seva%20Multispecilaity%20Hospital"
+    },
+    {
+      "case_id": "A13",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "8900080203389:6556",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=A%20V%20Hospital"
+    },
+    {
+      "case_id": "A14",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "8900080184206:6339",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Mangal%27S%20Nursing%20Home"
+    },
+    {
+      "case_id": "A15",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "8900080170810:50",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Apollo%20Hospitals"
+    },
+    {
+      "case_id": "A16",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "8900080221833:2536",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=CSR%20Nurisng%20Home"
+    },
+    {
+      "case_id": "A17",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "8900080459502:4886",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Saiamrut%20Multispeciality%20Hospital%20Llp"
+    },
+    {
+      "case_id": "A18",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "8900080162877:4709",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Gbr%20Hospital"
+    },
+    {
+      "case_id": "A19",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "8900080193376:3454",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Pallava%20Hospital%20Pvt%20Ltd"
+    },
+    {
+      "case_id": "A20",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "8900080512702:7125",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Parasmoni%20Multi%20Speciality%20Hospital"
+    },
+    {
+      "case_id": "A21",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "8900080360389:5871",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Aarupadai%20Veedu%20Medical%20College%20And%20Hospital"
+    },
+    {
+      "case_id": "A22",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "8900080018020:5496",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Rajasthan%20Medical%20Centre"
+    },
+    {
+      "case_id": "A23",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "8900080150706:370",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Rainbow%20Children%20Hospital"
+    },
+    {
+      "case_id": "A24",
+      "publisher": "IFFCO Tokio",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "8900080327764:3117",
+      "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=Delhi%20Heart%20Institute%20%26%20Multispeciality%20Hospital"
+    },
+    {
+      "case_id": "A25",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "8111",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=109"
+    },
+    {
+      "case_id": "A26",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "14319",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=193"
+    },
+    {
+      "case_id": "A27",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "13799",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=187"
+    },
+    {
+      "case_id": "A28",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "2587",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=35"
+    },
+    {
+      "case_id": "A29",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "14258",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=193"
+    },
+    {
+      "case_id": "A30",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "beds",
+      "record_id": "15015",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=204"
+    },
+    {
+      "case_id": "A31",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "8446",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=114"
+    },
+    {
+      "case_id": "A32",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "12377",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=168"
+    },
+    {
+      "case_id": "A33",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "4473",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=62"
+    },
+    {
+      "case_id": "A34",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "5484",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=75"
+    },
+    {
+      "case_id": "A35",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "12207",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=166"
+    },
+    {
+      "case_id": "A36",
+      "publisher": "SBI General 2022",
+      "metric": "precision",
+      "field": "doctors",
+      "record_id": "4064",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=57"
+    },
+    {
+      "case_id": "A37",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "16181",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=220"
+    },
+    {
+      "case_id": "A38",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "16287",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=222"
+    },
+    {
+      "case_id": "A39",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "7184",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=97"
+    },
+    {
+      "case_id": "A40",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "11115",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=153"
+    },
+    {
+      "case_id": "A41",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "4205",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=58"
+    },
+    {
+      "case_id": "A42",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "beds",
+      "record_id": "17425",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=236"
+    },
+    {
+      "case_id": "A43",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "17272",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=234"
+    },
+    {
+      "case_id": "A44",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "12415",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=169"
+    },
+    {
+      "case_id": "A45",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "13044",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=177"
+    },
+    {
+      "case_id": "A46",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "15402",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=210"
+    },
+    {
+      "case_id": "A47",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "2950",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=40"
+    },
+    {
+      "case_id": "A48",
+      "publisher": "SBI General 2022",
+      "metric": "recall",
+      "field": "doctors",
+      "record_id": "11522",
+      "source_url": "https://content.sbigeneral.in/uploads/f22596609234455e8b24df7859027ce6.pdf#page=158"
+    }
+  ]
+}

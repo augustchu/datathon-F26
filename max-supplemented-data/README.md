@@ -2,6 +2,10 @@
 
 This offline pipeline keeps the 51 original Virtue Foundation fields for every input row and adds a source-attributed value where the evidence supports one. It reuses the prepared branch, location, contact and service tables from the Datathon. It also compares IFFCO Tokio and SBI General as possible sources for missing or disputed whole-facility counts. [Earlier source audit](../data/recovery/capacity-evidence/README.md)
 
+## Capacity release
+
+Download the newest-source capacity dataset and its one-column confidence CSV together. Both preserve the original order of 10,088 source rows. The release report explains the 542 withheld capacity cells, the confidence formula, the source and prediction fields, and the reproduction steps. [Release report](experiments/capacity/NEWEST_CAPACITY_RELEASE.md) · [Download both CSVs](https://github.com/augustchu/datathon-F26/releases/tag/capacity-newest-2026-11-22)
+
 ## Separate iterations
 
 | Iteration | Design | Results and local files |
@@ -10,6 +14,8 @@ This offline pipeline keeps the 51 original Virtue Foundation fields for every i
 | 02 | Twelve additional count checks, preserving the first 36 | [Results and comparison](iterations/02-extension.md) · `local/iteration-02/` |
 
 Each local iteration has its own frozen sample, trained model, held-out predictions, review ledger and dataset. The [initial](review/initial/) and [extension](review/extension/) directories store each public review once. The first audit's two browser checks are outside the training sample and apply to the export as separately recorded decisions. The input snapshot and FDR-derived outputs stay in local authorized storage.
+
+The [follow-up experiments](experiments/README.md) compare the saved selectors, record a new browser review in In The Loop, and use the two frozen supplements to train six capacity models on matched cohorts.
 
 ## Labels and source selection
 

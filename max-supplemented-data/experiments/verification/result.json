@@ -1,0 +1,13 @@
+{
+  "cases": 10,
+  "candidate_rows": 20,
+  "status_counts": {
+    "inconclusive": 16,
+    "rejected": 2,
+    "accepted": 2
+  },
+  "reviewer": "Codex desk review of public primary evidence",
+  "export": "capacity-review-queue-reviewed.csv",
+  "completed_in_app": true,
+  "screenshot_loaded_for_every_candidate": true
+}

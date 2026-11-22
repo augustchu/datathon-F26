@@ -1,0 +1,100 @@
+{
+  "design": {
+    "salt": "selector-independent-challenge-v1",
+    "per_stratum": 3,
+    "reviewed_on": "2026-11-21",
+    "rule": "Exclude branches sampled in either iteration, unresolved or identity-held records, and previous direct reviews. Require named branch, PIN, differing numeric claims, and an eligible outside source. Take the first three branch hashes within each IFFCO-only, SBI-only and differing-dual-insurer stratum. Add Holy Family as a separately identified historical review anchor."
+  },
+  "challenge": [
+    {
+      "case_id": "C01",
+      "name": "Girdhar Hospital",
+      "pin": "131001",
+      "stratum": "dual_disagree",
+      "supported_beds": null,
+      "sources": ["https://www.girdharhospital.com/about.php", "https://www.girdharhospital.com/contact.php", "https://divyawastemanagement.in/picture/180625114342SONIPAT_HCF_LIST.pdf"],
+      "reason": "The operator confirms the Sonipat branch and lists a three-bed general ward, a unit rather than a facility total. The waste contractor list supplies a bed figure without enough evidence of whole-facility observation scope."
+    },
+    {
+      "case_id": "C02",
+      "name": "Usha Hospital",
+      "pin": "842001",
+      "stratum": "dual_disagree",
+      "supported_beds": null,
+      "sources": ["https://ushahospital.co.in/", "https://www.adityabirlahealthinsurance.com/assets/pdf/20200930T103848.pdf", "https://hospitaldoor.in/f/hfr-IN1010014135"],
+      "reason": "The operator confirms Juran Chhapra Road but does not give an exact total. An older insurer report and a secondary registry display have different figures. They do not adjudicate the candidate dates."
+    },
+    {
+      "case_id": "C03",
+      "name": "BHS Lakeview Hospital",
+      "pin": "590016",
+      "stratum": "dual_disagree",
+      "supported_beds": null,
+      "sources": ["https://lakeviewhospitals.in/about/", "https://belagavi.nic.in/en/public-utility/lakeview-hospital/", "https://www.godigit.com/content/dam/godigit/general/financials/public-disclosure/disclosure-of-quality-parameter-of-network-hospitals-march-25.pdf#page=32"],
+      "reason": "The operator and district identify the Fort Lake branch. A separate insurer lists an exact total observed on July 17, 2021. The two candidate disclosures come from different years, and that older record alone cannot resolve the later values."
+    },
+    {
+      "case_id": "C04",
+      "name": "Bhagwan Das Hospital",
+      "pin": "131001",
+      "stratum": "iffco_only",
+      "supported_beds": null,
+      "sources": ["https://bhagwandashospital.com/about-us/", "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2021-0831_5th%20Edition_RA%2C%20SA%2C%20Focus%20%26%20Scope%20Correction.pdf"],
+      "reason": "The exact branch's operator describes 200+ beds, a lower bound. The certificate's 250 explicitly counts sanctioned beds. Neither identifies a comparable exact reported total."
+    },
+    {
+      "case_id": "C05",
+      "name": "Noble Heart & Super Speciality Hospital, Rohtak",
+      "pin": "124001",
+      "stratum": "iffco_only",
+      "supported_beds": null,
+      "sources": ["https://noblehearthospital.com/about-us/", "https://roharyana.esic.gov.in/attachments/sstfile/819ffbdc56dfcfe90bd56bd821f13440.pdf", "https://hryesi.gov.in/location-of-empanelled-hospitals/"],
+      "reason": "No exact total on the owner page or in the government row. The owner's branch and a government directory also use different street descriptions in Rohtak."
+    },
+    {
+      "case_id": "C06",
+      "name": "Narayan Swaroop Hospital",
+      "pin": "211011",
+      "stratum": "iffco_only",
+      "supported_beds": null,
+      "sources": ["https://www.narayanswaroop.com/about"],
+      "reason": "The site confirms the address and describes 20 beds at launch in 2007 and 200 beds when the new hospital was established in 2018. Those are historical milestones, so the case remains unscored."
+    },
+    {
+      "case_id": "C07",
+      "name": "Peoples Trauma And Emergency Hospital",
+      "pin": "522001",
+      "stratum": "sbi_only",
+      "supported_beds": null,
+      "sources": ["https://peoplestraumahospital.com/", "https://apmsidc.ap.nic.in/wingshtml/ftp/Clarifications%20for%20T%20No%2011%208%20Insurance%20NTRVS.pdf"],
+      "reason": "The owner confirms Old Club Road. A state procurement roster lists a Guntur facility of the same name and a numeric bed strength but supplies no branch street address or observation date in that row."
+    },
+    {
+      "case_id": "C08",
+      "name": "Amritdhara- My Hospital",
+      "pin": "132001",
+      "stratum": "sbi_only",
+      "supported_beds": null,
+      "sources": ["https://hospitalamritdhara.com/", "https://karnal.gov.in/public-utility/amritdhara-my-hospital/"],
+      "reason": "The hospital and district identify ITI Chowk. The owner's 154+ is a lower bound and the 50 critical-care beds are a subset. A precise total remains unresolved."
+    },
+    {
+      "case_id": "C09",
+      "name": "National Hospital",
+      "pin": "673001",
+      "stratum": "sbi_only",
+      "supported_beds": 400,
+      "sources": ["https://www.nationalhospitals.com/", "https://www.nationalhospitals.com/about-us/", "https://kozhikode.nic.in/en/public-utility/national-hospital/"],
+      "reason": "The owner's site states an exact whole-facility figure at the Mavoor Road Junction branch. The district directory confirms the address and domain. It is a point-in-time public assertion without an observation date, so the score is source agreement rather than validation of historical or current operational capacity."
+    },
+    {
+      "case_id": "A01",
+      "name": "Holy Family Hospital",
+      "pin": "400050",
+      "stratum": "prior_review_anchor",
+      "supported_beds": 268,
+      "sources": ["https://holyfamilyhospital.in/about-us"],
+      "reason": "The prior independent review records the Bandra branch's exact operator-published total. The observation date is unspecified. This branch never appears in either selector's training sample."
+    }
+  ]
+}

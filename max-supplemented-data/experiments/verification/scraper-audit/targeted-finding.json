@@ -1,0 +1,17 @@
+{
+  "publisher": "IFFCO Tokio",
+  "source_date": "2025-03-31",
+  "facility": "Suraksha Hospital**",
+  "pin": "590011",
+  "record_id": "8900080583832:4271",
+  "source_url": "https://www.iffcotokio.co.in/health-insurance/network-hospital-quality-parameters#:~:text=8900080583832",
+  "field": "doctors",
+  "published_text": "04",
+  "published_count": 4,
+  "scraped_count": null,
+  "decision": "false_negative",
+  "source_positive_frame_size": 6459,
+  "emitted_positive_frame_size": 6458,
+  "reason": "The extractor's positive-integer pattern requires the first digit to be nonzero.",
+  "part_of_random_sample": false
+}

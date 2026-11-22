@@ -26,7 +26,7 @@ def cells(row):
 
 def positive_integer(value):
     token = value.replace(',', '')
-    return int(token) if re.fullmatch(r'[1-9][0-9]*', token) else None
+    return (int(token) or None) if re.fullmatch(r'[0-9]+', token) else None
 
 
 def address_keys(address):

@@ -5,7 +5,7 @@ import csv
 from hashlib import sha256
 from pathlib import Path
 
-from build_dataset import read_checkpoint
+from build_dataset import TOTAL_SCOPE, read_checkpoint
 from model_sources import FIELDS, read_json, write_json
 
 
@@ -31,11 +31,26 @@ def validate(iteration, raw_path):
             assert row['source_url'] and row['value'] > 0
             if row['method'] == 'dated_external_report':
                 assert row['source_date']
+        if 'external_count_history' in row:
+            counts = {claim['value'] for claim in row['external_count_history'] if claim['scope'] == TOTAL_SCOPE}
+            if row['original_reported'] is not None:
+                counts.add(row['original_reported'])
+            assert row['source_value_disagreement'] == (len(counts) > 1)
+            assert all(claim in row['external_count_history'] and claim['scope'] == TOTAL_SCOPE
+                       and claim['fdr_publisher_overlap'] == 'publisher_not_listed_for_fdr_branch'
+                       for claim in row['eligible_external_claims'])
+        if review := row.get('release_review'):
+            assert row['method'] in {'review_unresolved', 'direct_review', 'branch_identity_hold'}
+            if row['method'] != 'branch_identity_hold':
+                assert row['value'] == review['verified_value']
+                assert row['method'] == ('review_unresolved' if review['status'] == 'unresolved' else 'direct_review')
 
     for case in sample:
         if case['field'] in FIELDS:
             decision = releases[(case['identity'], case['field'])]
-            review = adjudications[case['case_id']]
+            review = decision.get('release_review', adjudications[case['case_id']])
+            if decision.get('release_review') and decision['method'] == 'branch_identity_hold':
+                continue
             assert decision['value'] == review['verified_value']
 
     n_rows = 0
@@ -54,6 +69,7 @@ def validate(iteration, raw_path):
         assert summary['effective_count_nonmissing_by_linked_branch'][field] == sum(
             row['value'] is not None for row in releases.values() if row['field'] == field)
     assert len(releases) == len(FIELDS) * summary['linked_branches']
+    assert summary.get('release_field_reviews', 0) == sum('release_review' in row for row in releases.values())
 
     model_eval = read_json(model / 'model_evaluation.json')
     assert sum(row['sampled'] for row in model_eval['field_review_coverage'].values()) == len(sample)
