@@ -1,0 +1,504 @@
+[
+  {
+    "query_id": "urban-01",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Soni Hospital",
+          "Soni Hospital JLN Marg"
+        ],
+        "pin": "302004",
+        "facility_ids": [
+          "fdr:ebb4d2d3-4c1d-436d-b270-2e0f4498cfaa",
+          "ebb4d2d3-4c1d-436d-b270-2e0f4498cfaa"
+        ],
+        "reason": "The operator and NABH name dialysis at 38 Kanota Bagh on JLN Marg. Bagru and other Soni locations require their own attribution.",
+        "sources": [
+          {
+            "url": "https://www.sonihospitals.com/soni-dialysis-centres/",
+            "excerpt": "Dialysis Centre Soni Hospital, JLN Marg"
+          },
+          {
+            "url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2013-0191_5th%20Edition.pdf",
+            "excerpt": "Nephrology including Pediatric Nephrology and Dialysis"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "urban-02",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Safdarjung Hospital Blood Bank",
+          "VMMC & Safdarjung Hospital"
+        ],
+        "pin": "110029",
+        "facility_ids": [
+          "eraktkosh:97104"
+        ],
+        "reason": "The hospital identifies the CSSR Building blood bank in New Delhi and the frozen government directory independently classifies source record 97104 as a blood bank.",
+        "sources": [
+          {
+            "url": "https://vmmc-sjh.mohfw.gov.in/pathology",
+            "excerpt": "Blood Bank and Transfusion Medicine, CSSR Building, 2nd floor."
+          },
+          {
+            "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=97&districtCode=-1",
+            "excerpt": "Safdarjung Hospital Blood Bank"
+          },
+          {
+            "url": "https://vmmc-sjh.mohfw.gov.in/index.php/contact-us",
+            "excerpt": "New Delhi - 110 029"
+          }
+        ]
+      },
+      {
+        "label": "unsupported",
+        "facility_ids": [
+          "eraktkosh:283575"
+        ],
+        "reason": "This exact source row's frozen coordinate near Delhi conflicts with the documented Kotkapura Road, Faridkot, Punjab branch. It must not be recommended as a Delhi result. The judgment concerns the held row and point only.",
+        "sources": [
+          {
+            "url": "https://github.com/augustchu/datathon-F26/blob/01b2a3e/non-ml/config/reviewed_location_holds.json",
+            "excerpt": "This source point is outside the district's published coordinate range."
+          },
+          {
+            "url": "https://www.dasmeshinstitutes.com/dirds/wp-content/uploads/sites/7/2025/01/MOU-Blood-centre-2024.pdf",
+            "excerpt": "Kotkapura Road, Faridkot"
+          },
+          {
+            "url": "https://faridkot.nic.in/about-district/",
+            "excerpt": "Faridkot district"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "urban-03",
+    "judgments": [
+      {
+        "label": "unresolved",
+        "names": [
+          "Star Hospitals",
+          "Star Hospitals Banjara Hills"
+        ],
+        "pin": "500034",
+        "facility_ids": [
+          "fdr:ede7be8d-fae7-436f-8010-5b59f675a36a",
+          "ede7be8d-fae7-436f-8010-5b59f675a36a"
+        ],
+        "reason": "The Banjara Hills branch has documented cardiac surgery, but the original FDR branch point is held. A supported service does not resolve that route location.",
+        "sources": [
+          {
+            "url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2011-0078_5th%20Edition_Scope%20Correction.pdf",
+            "excerpt": "Cardiothoracic and Vascular Surgery"
+          },
+          {
+            "url": "https://starhospitals.in/locations/banjara-hills",
+            "excerpt": "Star Hospitals in Banjara Hills, Hyderabad"
+          },
+          {
+            "url": "https://github.com/augustchu/datathon-F26/blob/01b2a3e/non-ml/LOCATION_AUDIT.md",
+            "excerpt": "The audit holds the original point."
+          }
+        ]
+      },
+      {
+        "label": "supported",
+        "names": [
+          "Apollo Health City, Jubilee Hills",
+          "Apollo Hospitals Jubilee Hills"
+        ],
+        "pin": "500033",
+        "reason": "The branch-specific provider profile lists cardiac surgery at Apollo Health City, Jubilee Hills. No clinical availability inference is made.",
+        "sources": [
+          {
+            "url": "https://www.apollohospitals.com/hospitals/apollo-health-city-jubilee-hills",
+            "excerpt": "MICS (Minimally Invasive Cardiac Surgery)"
+          },
+          {
+            "url": "https://www.apollohospitals.com/hyderabad/jubilee-hills/cardiology",
+            "excerpt": "Cardiac surgeries performed at our hospital include bypass surgery"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "urban-04",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Breach Candy Hospital, Mumbai, India",
+          "Breach Candy Hospital Trust",
+          "Breach Candy Hospital"
+        ],
+        "pin": "400026",
+        "facility_ids": [
+          "fdr:7788feca-a218-4eab-85aa-51476de90e79",
+          "7788feca-a218-4eab-85aa-51476de90e79"
+        ],
+        "reason": "The hospital's MRI procedure page describes scans at 60-A Bhulabhai Desai Road, Mumbai, matching this FDR branch.",
+        "sources": [
+          {
+            "url": "https://www.breachcandyhospital.org/mri",
+            "excerpt": "MRI SCAN As you arrive for your appointment"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "urban-05",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Rainbow Children's Hospital & BirthRight, Anna Nagar",
+          "Rainbow Children's Hospital & BirthRight, Anna Nagar Chennai"
+        ],
+        "pin": "600040",
+        "reason": "The operator's Anna Nagar branch page explicitly names Level III NICU at the same Chennai address.",
+        "sources": [
+          {
+            "url": "https://www.rainbowhospitals.in/our-centre/chennai/annanagar",
+            "excerpt": "The hospital boasts a level III Neonatal Intensive Care Unit (NICU)"
+          }
+        ]
+      },
+      {
+        "label": "unresolved",
+        "names": [
+          "Apollo Cradle & Children's Hospital Karapakkam",
+          "Apollo Cradle & Children's Hospital in Karapakkam, Chennai"
+        ],
+        "pin": "600097",
+        "reason": "The exact branch page names Level I. A chain-level or generic NICU mention is not sufficient evidence of Level III for this branch. Additional exact branch evidence could change this judgment.",
+        "sources": [
+          {
+            "url": "https://www.apollocradle.com/chennai/karapakkam/our-hospitals/maternity-hospital-in-karapakkam",
+            "excerpt": "level I NICU (Neonatal Intensive Care Unit)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "urban-06",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Manipal Hospital Transfusion Services",
+          "Manipal Hospital Old Airport Road"
+        ],
+        "pin": "560017",
+        "facility_ids": [
+          "eraktkosh:15153"
+        ],
+        "reason": "The frozen government directory identifies the Old Airport Road blood bank and NABH H-2008-0012 lists Blood Bank at the same branch. This neither validates the separate FDR point nor reports stock.",
+        "sources": [
+          {
+            "url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2008-0012_5th%20Edition.pdf",
+            "excerpt": "Blood Bank"
+          },
+          {
+            "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=29&districtCode=-1",
+            "excerpt": "Manipal Hospital Transfusion Services"
+          }
+        ]
+      },
+      {
+        "label": "unsupported",
+        "facility_ids": [
+          "eraktkosh:284658"
+        ],
+        "reason": "This exact Hebbal directory record is explicitly a Blood Storage Unit. Do not count the row as Blood Bank evidence or generalize the decision to other records for the hospital.",
+        "sources": [
+          {
+            "url": "https://www.eraktkosh.mohfw.gov.in/eraktkoshPortal/eraktkosh/bloodbank/nearest?stateCode=29&districtCode=-1",
+            "excerpt": "Manipal Hospital Blood Storage Centre Hebbal Bangalore"
+          },
+          {
+            "url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2007-0011_5th%20Edition_SA%20Correction.pdf",
+            "excerpt": "Blood Transfusions Services"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "urban-07",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Apollo Gleneagles Hospitals",
+          "Apollo Multispeciality Hospitals, EM Bypass, Kolkata"
+        ],
+        "pin": "700054",
+        "facility_ids": [
+          "fdr:fb4d070b-884b-4714-b494-f7a9408e7e74",
+          "fb4d070b-884b-4714-b494-f7a9408e7e74"
+        ],
+        "reason": "The provider identifies dialysis at the Canal Circular Road EM Bypass campus. The original coordinate needs separate validation and the claim does not extend to Narendrapur or Gariahat.",
+        "sources": [
+          {
+            "url": "https://www.apollohospitals.com/region/kolkata/departments/nephrology/treatments/",
+            "excerpt": "24-hour Dialysis Unit (Hemodialysis & Peritoneal)"
+          },
+          {
+            "url": "https://www.apollohospitals.com/kolkata",
+            "excerpt": "Apollo Multispeciality Hospitals, EM Bypass, Kolkata"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "urban-08",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Apollomedics Super Speciality Hospital",
+          "Apollo Hospitals Lucknow"
+        ],
+        "pin": "226012",
+        "reason": "The Lucknow provider explicitly documents emergency Caesarean for its Apollomedics branch, corroborating the exact subtype wording required by this query.",
+        "sources": [
+          {
+            "url": "https://www.apollohospitals.com/lucknow/procedures/c-section",
+            "excerpt": "an emergency Caesarean can be started at any hour"
+          },
+          {
+            "url": "https://www.apollohospitals.com/hospitals/apollo-hospitals-lucknow",
+            "excerpt": "LDA Colony, Lucknow, Uttar Pradesh 226012"
+          }
+        ]
+      },
+      {
+        "label": "supported",
+        "names": [
+          "Charak Hospital And Research Centre",
+          "Charak Hospital"
+        ],
+        "pin": "226003",
+        "facility_ids": [
+          "fdr:a45cac41-6d27-41ab-878b-7dfb89ec8f33",
+          "a45cac41-6d27-41ab-878b-7dfb89ec8f33",
+          "fdr:2b5d4240-8105-4e60-adb7-01f8cee3a622",
+          "2b5d4240-8105-4e60-adb7-01f8cee3a622"
+        ],
+        "reason": "The operator's department-informed page names emergency caesarean at Hardoi Road, Dubagga. The two FDR records refer to the same branch and should count once.",
+        "sources": [
+          {
+            "url": "https://www.charakhospital.org/lscs-c-section",
+            "excerpt": "Planned and emergency caesarean delivery, Lucknow"
+          },
+          {
+            "url": "https://www.charakhospital.org/contactus",
+            "excerpt": "Hardoi Road, Dubagga, Lucknow, Uttar Pradesh 226003"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "rural-01",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Eskag Sanjeevani Dialysis Center Khunti",
+          "Eskag Sanjeevani Dialysis Centre Khunti"
+        ],
+        "pin": "835210",
+        "facility_ids": [],
+        "reason": "The dialysis operator lists its exact Khunti centre at MCH Hospital, Jannat Nagar. It does not establish that Sadar Hospital is the same branch. The page is marked under development and does not verify current appointment availability.",
+        "sources": [
+          {
+            "url": "https://www.eskagsanjeevanidialysis.com/state/jharkhand/khunti/",
+            "excerpt": "Eskag Sanjeevani Dialysis Center Khunti … MCH HOSPITAL, Jannat Nagar, Khunti, Jharkhand 835210"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "rural-02",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Civil Surgeon, General Hospital Blood Centre, Gadchiroli",
+          "General Hospital Blood Bank Gadchiroli",
+          "Blood Bank District General Hospital Gadchiroli"
+        ],
+        "pin": "442605",
+        "facility_ids": [
+          "eraktkosh:18089"
+        ],
+        "reason": "The Maharashtra State AIDS Control Society identifies the General Hospital blood bank and the district government names the same unit in a 2025 recruitment notice. Neither establishes present stock, hours or walking reachability.",
+        "sources": [
+          {
+            "url": "https://mahasacs.org/files/tenders-documents/1430392169NACO_assisted_blood_banks_in_Maharashtra1.pdf",
+            "excerpt": "Blood Bank, General Hospital, Medical Complex, Chandrapur road, Gadchiroli-442605"
+          },
+          {
+            "url": "https://gadchiroli.gov.in/past-notices/recruitment/",
+            "excerpt": "Blood Bank District General Hospital Gadchiroli Lab-Tech & Counselor Eligible & Not Eligible Candidate List"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "rural-03",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "Dharanidhar Medical College and Hospital, Keonjhar",
+          "Dharanidhar Medical College & Hospital, Keonjhar",
+          "Government Medical College, Keonjhar",
+          "Government Medical College and Hospital, Kendujhar"
+        ],
+        "pin": "758001",
+        "facility_ids": [],
+        "reason": "The Odisha government hospital’s inpatient unit inventory explicitly lists a NICU. The dean’s pro forma confirms the former name and branch geography. NICU level, staffing, and bed availability are unverified.",
+        "sources": [
+          {
+            "url": "https://gmchkeonjhar.odisha.gov.in/ipd_departments_unit_wise_bed_distribution_details/",
+            "excerpt": "NICU-9"
+          },
+          {
+            "url": "https://gmchkeonjhar.odisha.gov.in/wp-content/uploads/2024/08/Year-of-Inception.pdf",
+            "excerpt": "Dharanidhar Medical College & Hospital (DDMCH), Keonjhar (Previously called- Government Medical College, Keonjhar)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "rural-04",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "District Hospital, Dindori",
+          "District Hospital Blood Bank, Dindori"
+        ],
+        "pin": "481880",
+        "facility_ids": [
+          "eraktkosh:23157"
+        ],
+        "reason": "The Madhya Pradesh state regulator lists the Dindori district hospital as a licensed government blood bank for whole blood. The district government identifies this branch near the bus stand. Duration of licence, current stock and hours are unverified.",
+        "sources": [
+          {
+            "url": "https://cfdamp.nic.in/pdf/ListofBloodBanks.pdf",
+            "excerpt": "44. | Dindori | District Hospital, Dindori | 28C/1/2013 | Govt. | Whole Human Blood I P"
+          },
+          {
+            "url": "https://dindori.nic.in/en/public-utility-category/hospitals/",
+            "excerpt": "District Hospital … Near Bus Stand, Main Road, Dindori, 481880"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "rural-05",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "B. Lal Hospital & Research Center",
+          "B. Lal Hospital and Research Center"
+        ],
+        "pin": "343041",
+        "facility_ids": [],
+        "reason": "NABH scope H-2024-1356 lists MRI at the Sanchore branch, NH 68, Kamalpura, Barmer Road, Rajasthan, and shows 4 April 2024 to 3 April 2028 validity. Barmer Road is the street, not the city. This is published scope rather than present appointment availability.",
+        "sources": [
+          {
+            "url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2024-1356.pdf",
+            "excerpt": "B. Lal Hospital & Research Center … NH 68, Kamalpura, Barmer Road, Sanchore … Diagnostic Services … MRI"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "rural-06",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "B.D. Pandey District Hospital, Pithoragarh",
+          "B.D Pandey District Hospital, Pithoragarh",
+          "District Hospital Pithoragarh",
+          "B.D. Pandey District Male Hospital, Pithoragarh"
+        ],
+        "pin": "262501",
+        "facility_ids": [],
+        "reason": "Uttarakhand NHM explicitly records the dialysis centre at District Hospital Pithoragarh. The district hospital directory identifies B.D. Pandey District Hospital on Hospital Road. Current slots, hours and payment eligibility remain unverified.",
+        "sources": [
+          {
+            "url": "https://nhm.uk.gov.in/division/national-program-for-cancer-diabetes-cardiovascular-diseases-stroke-npcdcs/",
+            "excerpt": "Two new Dialysis Centres are made functional in District Hospital Pithoragarh and Rudraprayag"
+          },
+          {
+            "url": "https://pithoragarh.nic.in/public-utility-category/hospitals/",
+            "excerpt": "B.D Pandey District Hospital, Pithoragarh … Hospital Road Pithoragarh"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "rural-07",
+    "judgments": [
+      {
+        "label": "supported",
+        "names": [
+          "District Hospital Churachandpur Blood Bank",
+          "Churachandpur District Hospital",
+          "District Hospital Churachandpur"
+        ],
+        "pin": "795128",
+        "facility_ids": [
+          "eraktkosh:14101"
+        ],
+        "reason": "The Manipur State Blood Transfusion Council identifies DH Churachandpur among licensed government blood centres reporting collection in FY 2025–26. State Health Agency identifies the branch on IB Road, Hiangtam Lamka. The report does not establish current inventory, hours or a licence renewal date.",
+        "sources": [
+          {
+            "url": "https://assembly.mn.gov.in/user/pages/files/administrative-reports/AA%20Report%20H%20%26%20FW%202025-26.pdf#page=62",
+            "excerpt": "Report on status of blood collection from 5 licensed Government Blood Centre (RIMS, JNIMS, DH Churachandpur, DH Thoubal and DH Tamenglong)"
+          },
+          {
+            "url": "https://shamanipur.mn.gov.in/Static/StateEmpanelledHosp",
+            "excerpt": "Churachandpur District Hospital … IB Rd, Hiangtam Lamka, Churachandpur, Manipur 795128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "query_id": "rural-08",
+    "judgments": [],
+    "note": "The official PM-JAY list for the exact district hospital includes general surgery but does not document cardiac surgery. This is a limited scheme source and does not establish that cardiac surgery is absent.",
+    "review_leads": [
+      {
+        "url": "https://nha.gov.in/img/resources/PMJAY-Hospital-List.pdf",
+        "excerpt": "DANTEWADA … District Hospital Dantewada … General Surgery"
+      }
+    ]
+  }
+]

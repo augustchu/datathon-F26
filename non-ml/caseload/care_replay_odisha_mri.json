@@ -1,0 +1,35 @@
+{
+  "sources": {
+    "scb_investigation_2019_20": {
+      "title": "SCB Medical College & Hospital investigation services",
+      "url": "https://scbmch.odisha.gov.in/en/light/sub-subpage/investigation",
+      "locator": "Investigation done (2019–20) table, row 8 MRI"
+    }
+  },
+  "sites": {
+    "scb_cuttack": {
+      "facility": "SCB Medical College & Hospital, Cuttack",
+      "facility_id": "fdr:92dd37f1-293c-4b0b-bcb3-91cf8aa3e951",
+      "release_pin": "753001",
+      "state": "Odisha",
+      "identity_url": "https://scbmch.odisha.gov.in/en/light/page/contact-us",
+      "identity_basis": "Exact SCB Medical College and Hospital name and Mangalabag campus in Cuttack. The campus contact lists PIN 753007 and the reviewed release lists 753001."
+    }
+  },
+  "series": [
+    {
+      "id": "scb_mri_annual",
+      "site": "scb_cuttack",
+      "service": "MRI",
+      "scope": "MRI examinations in the SCB Medical College & Hospital investigation table",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "observations": [
+        {"start": "2019-04", "counts": [6579], "source": "scb_investigation_2019_20"}
+      ],
+      "targets": [
+        {"period": "2019-04", "basis": "Publisher's FY2019–20 activity table, evaluated with the same-period AIIMS Bhubaneswar MRI total"}
+      ]
+    }
+  ]
+}

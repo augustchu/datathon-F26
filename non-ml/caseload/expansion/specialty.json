@@ -1,0 +1,1414 @@
+{
+  "sources": {
+    "sgrd_oct_26": {
+      "title": "Sri Guru Ram Das Institute of Medical Sciences and Research October 2026 clinical material",
+      "url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "locator": "October 2026 month heading, OPD counts, Major & Minor Operations, and Radio Diagnosis & Imaging; campus address in site footer."
+    },
+    "its_2026": {
+      "title": "I.T.S. Centre for Dental Studies & Research, Murad Nagar, OPD Patient Statistics – 2026",
+      "url": "https://itsdentalcollege.com/opd-patients",
+      "locator": "2026 Jan–Oct columns; General Information Total CPR registrations (row 4) and Dept. of Oral and Maxillofacial Surgery Minor Surgeries and Major Surgeries (rows 2 + 3)."
+    },
+    "zydus_oct_26": {
+      "title": "Zydus Medical College and Hospital Dahod October 2026 clinical material",
+      "url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+      "locator": "October 2026 signed report; casualty, normal deliveries plus Caesarian sections, and CT/MRI Total O.P.D. plus Total I.P.D. columns."
+    },
+    "unmehta_ayushman": {
+      "title": "U. N. Mehta Institute of Cardiology & Research Centre statistics",
+      "url": "https://www.unmicrc.org/Statistics",
+      "locator": "Ayushman Bharat Yojana table, Year (April to March), Cardiac Surgeries column. These are scheme-reported cardiac surgeries; the neighboring Cardiovascular Thoracic Surgery totals cover calendar years and different scope."
+    },
+    "himalayan_2024_01": {
+      "title": "Himalayan Hospital January 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/1.-NMC-Website-Clinical-Data-Jan-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_02": {
+      "title": "Himalayan Hospital February 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/2.-NMC-Website-Clinical-Data-Feb-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_03": {
+      "title": "Himalayan Hospital March 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/3.-NMC-Website-Clinical-Data-Mar-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_04": {
+      "title": "Himalayan Hospital April 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/4.-NMC-Website-Clinical-Data-Apr-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_05": {
+      "title": "Himalayan Hospital May 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/5.-NMC-Website-Clinical-Data-May-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_06": {
+      "title": "Himalayan Hospital June 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/6.-NMC-Website-Clinical-Data-Jun-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_07": {
+      "title": "Himalayan Hospital July 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/7.-NMC-Website-Clinical-Data-Jul-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_08": {
+      "title": "Himalayan Hospital August 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/8.-NMC-Website-Clinical-Data-Aug-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_09": {
+      "title": "Himalayan Hospital September 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/9.-NMC-Website-Clinical-Data-Sep-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_10": {
+      "title": "Himalayan Hospital October 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/10.-NMC-Website-Clinical-Data-Oct-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_11": {
+      "title": "Himalayan Hospital November 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/11.-NMC-Website-Clinical-Data-Nov-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2024_12": {
+      "title": "Himalayan Hospital December 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/12.-NMC-Website-Clinical-Data-Dec-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2025_01": {
+      "title": "Himalayan Hospital January 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/1.-NMC-Website-Clinical-Data-Jan-2025-R.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2025_02": {
+      "title": "Himalayan Hospital February 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2025_03": {
+      "title": "Himalayan Hospital March 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2025_04": {
+      "title": "Himalayan Hospital April 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2025_08": {
+      "title": "Himalayan Hospital August 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2025_10": {
+      "title": "Himalayan Hospital October 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/10.-NMC-Website-Clinical-Data-October-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2025_11": {
+      "title": "Himalayan Hospital November 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/12/11.-NMC-Website-Clinical-Data-November-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2025_12": {
+      "title": "Himalayan Hospital December 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/01/12.-NMC-Website-Clinical-Data-December-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2026_01": {
+      "title": "Himalayan Hospital January 2026 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/02/1.-NMC-Website-Clinical-Data-January-2026.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_2026_03": {
+      "title": "Himalayan Hospital March 2026 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/05/3.-NMC-Website-Clinical-Data-March-2026.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "himalayan_sep_gap": {
+      "title": "Himalayan Hospital September 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/9.-NMC-Website-Clinical-Data-September-2025.pdf",
+      "locator": "NMC Clinical Material Details index September 2025 link. Repeated PDF retrieval returned an error; no counts extracted."
+    },
+    "himalayan_feb_gap": {
+      "title": "Himalayan Hospital February 2026 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/06/2.-NMC-Website-Clinical-Data-February-2026.pdf",
+      "locator": "NMC Clinical Material Details index February 2026 link. Repeated PDF retrieval timed out; no counts extracted."
+    },
+    "vishnu_dental_dept_2026": {
+      "title": "Vishnu Dental College Digital Clinical Dashboard, department-wise number of patients",
+      "url": "https://vdc.edu.in/department-wise-number-of-patients/",
+      "locator": "Oral & Maxillofacial Surgery, September and October 2026 columns. Minor and Major Surgeries rows: September 91 + 9; October 78 + 18. Exodontia, implants, and inpatient counts are separate rows."
+    },
+    "lok_nayak_2025": {
+      "title": "Lok Nayak Hospital annual OPD, IPD, and Emergency Department census, January to December 2025",
+      "url": "https://lnjp.delhi.gov.in/lnjp/annual-report-opd-jan-2025-dec-2025",
+      "locator": "OPD table: PEDS MEDICINE and PEDS CARDIOLOGY CLINIC, Grand Total column. ED Census Report: Casualty, monthly Total Patient column, January–December 2025."
+    }
+  },
+  "sites": {
+    "sgrd": {
+      "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+      "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+      "release_pin": "143501",
+      "state": "Punjab",
+      "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "identity_basis": "Exact institute name and Vallah–Mehta Road, Amritsar campus PIN 143501 agree with the site footer and facility release; release website uses sgrdimsr.in."
+    },
+    "its_muradnagar": {
+      "facility": "I.T.S. Centre for Dental Studies & Research, Murad Nagar",
+      "facility_id": "fdr:2bd7a9fd-1b70-4c82-a743-5064667cf075",
+      "release_pin": "201206",
+      "state": "Uttar Pradesh",
+      "identity_url": "https://itsdentalcollege.com/contact",
+      "identity_basis": "Official contact of the publisher names Delhi–Meerut Road, Murad Nagar, Ghaziabad 201206. That exact campus is the facility release I.T.S Dental College, Ghaziabad row. The similarly named Greater Noida operator uses a different website and address."
+    },
+    "zydus_dahod": {
+      "facility": "Zydus Medical College and Hospital, Dahod",
+      "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+      "release_pin": "389151",
+      "state": "Gujarat",
+      "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+      "identity_basis": "The signed hospital report and the facility release give the same hospital name, Dahod, Bhagini Samaj/Naheru Baug landmark and PIN 389151. Other Zydus hospitals in Gujarat use different locations."
+    },
+    "himalayan": {
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "release_pin": "249201",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+    },
+    "unmehta": {
+      "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+      "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+      "release_pin": "380016",
+      "state": "Gujarat",
+      "identity_url": "https://www.unmicrc.org/Statistics",
+      "identity_basis": "Exact institute name, Ahmedabad, PIN 380016 and unchanged unmicrc.org domain agree; source tab is headed with the Ahmedabad institute, separate from links to satellite centres."
+    },
+    "vishnu_dental": {
+      "facility": "Vishnu Dental College",
+      "facility_id": "fdr:3872ea66-d8f6-4175-a177-4bd66852cb4d",
+      "release_pin": "534202",
+      "state": "Andhra Pradesh",
+      "identity_url": "https://vdc.edu.in/contact-us/",
+      "identity_basis": "The release and publisher share the exact institution name and domain, Vishnupur at Bhimavaram, and PIN 534202. The contact page places Vishnu Dental College and Vishnu Dental Hospital at that address."
+    },
+    "lok_nayak_delhi": {
+      "facility": "LNJP Hospital",
+      "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+      "release_pin": "110002",
+      "state": "Delhi",
+      "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+      "identity_basis": "This FDR release row names LNJP Hospital, New Delhi 110002 and links the Delhi government LNJP site. Its Ahilaya Bai College of Nursing Building address corresponds to the publisher’s Ahilya Bai College of Nursing at Lok Nayak Hospital, New Delhi 110002."
+    }
+  },
+  "series": [
+    {
+      "id": "sgrd_pediatric",
+      "site": "sgrd",
+      "service": "Pediatric care",
+      "scope": "Paediatrics outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            3977
+          ],
+          "source": "sgrd_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "Official October Pediatric total in OPD Patients table."
+        }
+      ]
+    },
+    {
+      "id": "sgrd_dental",
+      "site": "sgrd",
+      "service": "Dental care",
+      "scope": "Dental outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            206
+          ],
+          "source": "sgrd_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "Official October Dental total in OPD Patients table."
+        }
+      ]
+    },
+    {
+      "id": "sgrd_emergency",
+      "site": "sgrd",
+      "service": "Trauma / emergency",
+      "scope": "Emergency outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            2721
+          ],
+          "source": "sgrd_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "Official October Emergency total in OPD Patients table; covers emergency visits from any cause."
+        }
+      ]
+    },
+    {
+      "id": "sgrd_ortho",
+      "site": "sgrd",
+      "service": "Orthopedic surgery",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            199
+          ],
+          "source": "sgrd_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "Official October Orthopedics Major Operation count; excludes 102 separately reported minor operations."
+        }
+      ]
+    },
+    {
+      "id": "sgrd_mri",
+      "site": "sgrd",
+      "service": "MRI",
+      "scope": "MRI examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            798
+          ],
+          "source": "sgrd_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "Official October MRI total in Radio Diagnosis & Imaging table."
+        }
+      ]
+    },
+    {
+      "id": "sgrd_ct",
+      "site": "sgrd",
+      "service": "CT scan",
+      "scope": "CT examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            1144
+          ],
+          "source": "sgrd_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "Official October CT Scan total in Radio Diagnosis & Imaging table."
+        }
+      ]
+    },
+    {
+      "id": "zydus_dahod_emergency",
+      "site": "zydus_dahod",
+      "service": "Trauma / emergency",
+      "scope": "Casualty attendance",
+      "unit": "visits",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            5546
+          ],
+          "source": "zydus_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "Signed October report's total monthly Casualty attendance."
+        }
+      ]
+    },
+    {
+      "id": "zydus_dahod_delivery",
+      "site": "zydus_dahod",
+      "service": "Maternity / delivery",
+      "scope": "Normal and caesarean delivery procedures",
+      "unit": "deliveries",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            498
+          ],
+          "source": "zydus_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "October report lists 321 normal deliveries and 177 Caesarian sections; sum across those two reported delivery modes."
+        }
+      ]
+    },
+    {
+      "id": "zydus_dahod_mri",
+      "site": "zydus_dahod",
+      "service": "MRI",
+      "scope": "MRI examinations in outpatient and inpatient columns",
+      "unit": "scans",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            375
+          ],
+          "source": "zydus_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "October report's MRI column has 162 total OPD examinations and 213 total IPD examinations."
+        }
+      ]
+    },
+    {
+      "id": "zydus_dahod_ct",
+      "site": "zydus_dahod",
+      "service": "CT scan",
+      "scope": "CT examinations in outpatient and inpatient columns",
+      "unit": "scans",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-10",
+          "counts": [
+            874
+          ],
+          "source": "zydus_oct_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "October report's C.T. row has 81 total OPD examinations and 793 total IPD examinations."
+        }
+      ]
+    },
+    {
+      "id": "its_muradnagar_dental",
+      "site": "its_muradnagar",
+      "service": "Dental care",
+      "scope": "Whole-college central dental OPD registrations, new and repeat",
+      "unit": "registrations",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-01",
+          "counts": [
+            15437,
+            14479,
+            13109,
+            16144,
+            16527,
+            18193,
+            17971,
+            12735,
+            18953,
+            16439
+          ],
+          "source": "its_2026"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "October total CPR registrations, 3,692 new plus 12,747 repeat visits."
+        }
+      ]
+    },
+    {
+      "id": "its_muradnagar_oral",
+      "site": "its_muradnagar",
+      "service": "Oral surgery",
+      "scope": "Major and minor oral and maxillofacial surgeries",
+      "unit": "operations",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-01",
+          "counts": [
+            140,
+            152,
+            140,
+            146,
+            132,
+            154,
+            80,
+            89,
+            99,
+            122
+          ],
+          "source": "its_2026"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "October total of 111 minor plus 11 major surgeries; independent exodontia, implant and other procedures excluded."
+        }
+      ]
+    },
+    {
+      "id": "unmehta_ayushman_surgery",
+      "site": "unmehta",
+      "service": "Cardiac surgery",
+      "scope": "Cardiac surgeries recorded in the institute's Ayushman Bharat Yojana table",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2018-04",
+          "counts": [
+            92,
+            712,
+            1398,
+            2705,
+            3648,
+            4788,
+            5308,
+            5772
+          ],
+          "source": "unmehta_ayushman"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "The completed 2025–26 fiscal-year scheme row reports 5,772 cardiac surgeries. Institution-wide calendar-year total is a different series."
+        }
+      ]
+    },
+    {
+      "id": "himalayan_expanded_pediatric",
+      "site": "himalayan",
+      "service": "Pediatric care",
+      "scope": "Paediatrics outpatient visits",
+      "unit": "visits",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2024-01",
+          "counts": [
+            4904
+          ],
+          "source": "himalayan_2024_01"
+        },
+        {
+          "start": "2024-02",
+          "counts": [
+            4865
+          ],
+          "source": "himalayan_2024_02"
+        },
+        {
+          "start": "2024-03",
+          "counts": [
+            4947
+          ],
+          "source": "himalayan_2024_03"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            4641
+          ],
+          "source": "himalayan_2024_04"
+        },
+        {
+          "start": "2024-05",
+          "counts": [
+            4875
+          ],
+          "source": "himalayan_2024_05"
+        },
+        {
+          "start": "2024-06",
+          "counts": [
+            4411
+          ],
+          "source": "himalayan_2024_06"
+        },
+        {
+          "start": "2024-07",
+          "counts": [
+            4594
+          ],
+          "source": "himalayan_2024_07"
+        },
+        {
+          "start": "2024-08",
+          "counts": [
+            4982
+          ],
+          "source": "himalayan_2024_08"
+        },
+        {
+          "start": "2024-09",
+          "counts": [
+            5258
+          ],
+          "source": "himalayan_2024_09"
+        },
+        {
+          "start": "2024-10",
+          "counts": [
+            5087
+          ],
+          "source": "himalayan_2024_10"
+        },
+        {
+          "start": "2024-11",
+          "counts": [
+            4608
+          ],
+          "source": "himalayan_2024_11"
+        },
+        {
+          "start": "2024-12",
+          "counts": [
+            5744
+          ],
+          "source": "himalayan_2024_12"
+        },
+        {
+          "start": "2025-01",
+          "counts": [
+            5970
+          ],
+          "source": "himalayan_2025_01"
+        },
+        {
+          "start": "2025-02",
+          "counts": [
+            4970
+          ],
+          "source": "himalayan_2025_02"
+        },
+        {
+          "start": "2025-03",
+          "counts": [
+            5010
+          ],
+          "source": "himalayan_2025_03"
+        },
+        {
+          "start": "2025-04",
+          "counts": [
+            5098
+          ],
+          "source": "himalayan_2025_04"
+        },
+        {
+          "start": "2025-08",
+          "counts": [
+            5020
+          ],
+          "source": "himalayan_2025_08"
+        },
+        {
+          "start": "2025-10",
+          "counts": [
+            5259
+          ],
+          "source": "himalayan_2025_10"
+        },
+        {
+          "start": "2025-11",
+          "counts": [
+            5218
+          ],
+          "source": "himalayan_2025_11"
+        },
+        {
+          "start": "2025-12",
+          "counts": [
+            5788
+          ],
+          "source": "himalayan_2025_12"
+        },
+        {
+          "start": "2026-01",
+          "counts": [
+            5690
+          ],
+          "source": "himalayan_2026_01"
+        },
+        {
+          "start": "2026-03",
+          "counts": [
+            5385
+          ],
+          "source": "himalayan_2026_03"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-09",
+          "basis": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_sep_gap"
+        },
+        {
+          "period": "2026-02",
+          "basis": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_feb_gap"
+        }
+      ]
+    },
+    {
+      "id": "himalayan_expanded_cardiology",
+      "site": "himalayan",
+      "service": "Cardiology consultation",
+      "scope": "Cardiology outpatient visits",
+      "unit": "visits",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2025-08",
+          "counts": [
+            2511
+          ],
+          "source": "himalayan_2025_08"
+        },
+        {
+          "start": "2025-10",
+          "counts": [
+            2421
+          ],
+          "source": "himalayan_2025_10"
+        },
+        {
+          "start": "2025-11",
+          "counts": [
+            2322
+          ],
+          "source": "himalayan_2025_11"
+        },
+        {
+          "start": "2025-12",
+          "counts": [
+            2809
+          ],
+          "source": "himalayan_2025_12"
+        },
+        {
+          "start": "2026-01",
+          "counts": [
+            2444
+          ],
+          "source": "himalayan_2026_01"
+        },
+        {
+          "start": "2026-03",
+          "counts": [
+            2604
+          ],
+          "source": "himalayan_2026_03"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-09",
+          "basis": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_sep_gap"
+        },
+        {
+          "period": "2026-02",
+          "basis": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_feb_gap"
+        }
+      ]
+    },
+    {
+      "id": "himalayan_expanded_ortho",
+      "site": "himalayan",
+      "service": "Orthopedic surgery",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2024-01",
+          "counts": [
+            169
+          ],
+          "source": "himalayan_2024_01"
+        },
+        {
+          "start": "2024-02",
+          "counts": [
+            197
+          ],
+          "source": "himalayan_2024_02"
+        },
+        {
+          "start": "2024-03",
+          "counts": [
+            153
+          ],
+          "source": "himalayan_2024_03"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            135
+          ],
+          "source": "himalayan_2024_04"
+        },
+        {
+          "start": "2024-05",
+          "counts": [
+            240
+          ],
+          "source": "himalayan_2024_05"
+        },
+        {
+          "start": "2024-06",
+          "counts": [
+            192
+          ],
+          "source": "himalayan_2024_06"
+        },
+        {
+          "start": "2024-07",
+          "counts": [
+            138
+          ],
+          "source": "himalayan_2024_07"
+        },
+        {
+          "start": "2024-08",
+          "counts": [
+            124
+          ],
+          "source": "himalayan_2024_08"
+        },
+        {
+          "start": "2024-09",
+          "counts": [
+            260
+          ],
+          "source": "himalayan_2024_09"
+        },
+        {
+          "start": "2024-10",
+          "counts": [
+            160
+          ],
+          "source": "himalayan_2024_10"
+        },
+        {
+          "start": "2024-11",
+          "counts": [
+            170
+          ],
+          "source": "himalayan_2024_11"
+        },
+        {
+          "start": "2024-12",
+          "counts": [
+            171
+          ],
+          "source": "himalayan_2024_12"
+        },
+        {
+          "start": "2025-01",
+          "counts": [
+            200
+          ],
+          "source": "himalayan_2025_01"
+        },
+        {
+          "start": "2025-02",
+          "counts": [
+            186
+          ],
+          "source": "himalayan_2025_02"
+        },
+        {
+          "start": "2025-03",
+          "counts": [
+            145
+          ],
+          "source": "himalayan_2025_03"
+        },
+        {
+          "start": "2025-04",
+          "counts": [
+            206
+          ],
+          "source": "himalayan_2025_04"
+        },
+        {
+          "start": "2025-08",
+          "counts": [
+            153
+          ],
+          "source": "himalayan_2025_08"
+        },
+        {
+          "start": "2025-10",
+          "counts": [
+            146
+          ],
+          "source": "himalayan_2025_10"
+        },
+        {
+          "start": "2025-11",
+          "counts": [
+            120
+          ],
+          "source": "himalayan_2025_11"
+        },
+        {
+          "start": "2025-12",
+          "counts": [
+            134
+          ],
+          "source": "himalayan_2025_12"
+        },
+        {
+          "start": "2026-01",
+          "counts": [
+            141
+          ],
+          "source": "himalayan_2026_01"
+        },
+        {
+          "start": "2026-03",
+          "counts": [
+            184
+          ],
+          "source": "himalayan_2026_03"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-09",
+          "basis": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_sep_gap"
+        },
+        {
+          "period": "2026-02",
+          "basis": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_feb_gap"
+        }
+      ]
+    },
+    {
+      "id": "himalayan_expanded_mri",
+      "site": "himalayan",
+      "service": "MRI",
+      "scope": "MRI examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2024-01",
+          "counts": [
+            589
+          ],
+          "source": "himalayan_2024_01"
+        },
+        {
+          "start": "2024-02",
+          "counts": [
+            656
+          ],
+          "source": "himalayan_2024_02"
+        },
+        {
+          "start": "2024-03",
+          "counts": [
+            718
+          ],
+          "source": "himalayan_2024_03"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            769
+          ],
+          "source": "himalayan_2024_04"
+        },
+        {
+          "start": "2024-05",
+          "counts": [
+            928
+          ],
+          "source": "himalayan_2024_05"
+        },
+        {
+          "start": "2024-06",
+          "counts": [
+            742
+          ],
+          "source": "himalayan_2024_06"
+        },
+        {
+          "start": "2024-07",
+          "counts": [
+            753
+          ],
+          "source": "himalayan_2024_07"
+        },
+        {
+          "start": "2024-08",
+          "counts": [
+            699
+          ],
+          "source": "himalayan_2024_08"
+        },
+        {
+          "start": "2024-09",
+          "counts": [
+            755
+          ],
+          "source": "himalayan_2024_09"
+        },
+        {
+          "start": "2024-10",
+          "counts": [
+            646
+          ],
+          "source": "himalayan_2024_10"
+        },
+        {
+          "start": "2024-11",
+          "counts": [
+            1262
+          ],
+          "source": "himalayan_2024_11"
+        },
+        {
+          "start": "2024-12",
+          "counts": [
+            616
+          ],
+          "source": "himalayan_2024_12"
+        },
+        {
+          "start": "2025-01",
+          "counts": [
+            660
+          ],
+          "source": "himalayan_2025_01"
+        },
+        {
+          "start": "2025-02",
+          "counts": [
+            613
+          ],
+          "source": "himalayan_2025_02"
+        },
+        {
+          "start": "2025-03",
+          "counts": [
+            658
+          ],
+          "source": "himalayan_2025_03"
+        },
+        {
+          "start": "2025-04",
+          "counts": [
+            714
+          ],
+          "source": "himalayan_2025_04"
+        },
+        {
+          "start": "2025-08",
+          "counts": [
+            737
+          ],
+          "source": "himalayan_2025_08"
+        },
+        {
+          "start": "2025-10",
+          "counts": [
+            651
+          ],
+          "source": "himalayan_2025_10"
+        },
+        {
+          "start": "2025-11",
+          "counts": [
+            577
+          ],
+          "source": "himalayan_2025_11"
+        },
+        {
+          "start": "2025-12",
+          "counts": [
+            656
+          ],
+          "source": "himalayan_2025_12"
+        },
+        {
+          "start": "2026-01",
+          "counts": [
+            581
+          ],
+          "source": "himalayan_2026_01"
+        },
+        {
+          "start": "2026-03",
+          "counts": [
+            626
+          ],
+          "source": "himalayan_2026_03"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-09",
+          "basis": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_sep_gap"
+        },
+        {
+          "period": "2026-02",
+          "basis": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_feb_gap"
+        }
+      ]
+    },
+    {
+      "id": "himalayan_expanded_ct",
+      "site": "himalayan",
+      "service": "CT scan",
+      "scope": "CT examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2024-01",
+          "counts": [
+            1189
+          ],
+          "source": "himalayan_2024_01"
+        },
+        {
+          "start": "2024-02",
+          "counts": [
+            1276
+          ],
+          "source": "himalayan_2024_02"
+        },
+        {
+          "start": "2024-03",
+          "counts": [
+            1382
+          ],
+          "source": "himalayan_2024_03"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            1303
+          ],
+          "source": "himalayan_2024_04"
+        },
+        {
+          "start": "2024-05",
+          "counts": [
+            1429
+          ],
+          "source": "himalayan_2024_05"
+        },
+        {
+          "start": "2024-06",
+          "counts": [
+            1435
+          ],
+          "source": "himalayan_2024_06"
+        },
+        {
+          "start": "2024-07",
+          "counts": [
+            1516
+          ],
+          "source": "himalayan_2024_07"
+        },
+        {
+          "start": "2024-08",
+          "counts": [
+            1479
+          ],
+          "source": "himalayan_2024_08"
+        },
+        {
+          "start": "2024-09",
+          "counts": [
+            1338
+          ],
+          "source": "himalayan_2024_09"
+        },
+        {
+          "start": "2024-10",
+          "counts": [
+            1271
+          ],
+          "source": "himalayan_2024_10"
+        },
+        {
+          "start": "2024-11",
+          "counts": [
+            3113
+          ],
+          "source": "himalayan_2024_11"
+        },
+        {
+          "start": "2024-12",
+          "counts": [
+            1232
+          ],
+          "source": "himalayan_2024_12"
+        },
+        {
+          "start": "2025-01",
+          "counts": [
+            1340
+          ],
+          "source": "himalayan_2025_01"
+        },
+        {
+          "start": "2025-02",
+          "counts": [
+            1167
+          ],
+          "source": "himalayan_2025_02"
+        },
+        {
+          "start": "2025-03",
+          "counts": [
+            1352
+          ],
+          "source": "himalayan_2025_03"
+        },
+        {
+          "start": "2025-04",
+          "counts": [
+            1404
+          ],
+          "source": "himalayan_2025_04"
+        },
+        {
+          "start": "2025-08",
+          "counts": [
+            1317
+          ],
+          "source": "himalayan_2025_08"
+        },
+        {
+          "start": "2025-10",
+          "counts": [
+            1315
+          ],
+          "source": "himalayan_2025_10"
+        },
+        {
+          "start": "2025-11",
+          "counts": [
+            1296
+          ],
+          "source": "himalayan_2025_11"
+        },
+        {
+          "start": "2025-12",
+          "counts": [
+            1143
+          ],
+          "source": "himalayan_2025_12"
+        },
+        {
+          "start": "2026-01",
+          "counts": [
+            1337
+          ],
+          "source": "himalayan_2026_01"
+        },
+        {
+          "start": "2026-03",
+          "counts": [
+            1517
+          ],
+          "source": "himalayan_2026_03"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-09",
+          "basis": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_sep_gap"
+        },
+        {
+          "period": "2026-02",
+          "basis": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+          "gap_source": "himalayan_feb_gap"
+        }
+      ]
+    },
+    {
+      "id": "vishnu_dental_oral_surgery",
+      "site": "vishnu_dental",
+      "service": "Oral surgery",
+      "scope": "Reported minor plus major Oral & Maxillofacial Surgery department operations, excluding the separately reported extraction and implant rows",
+      "unit": "procedures",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2026-09",
+          "counts": [
+            100,
+            96
+          ],
+          "source": "vishnu_dental_dept_2026"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-10",
+          "basis": "The university dashboard reports a complete October column and distinguishes minor and major surgical activity from exodontia and implants."
+        }
+      ]
+    },
+    {
+      "id": "lok_nayak_casualty",
+      "site": "lok_nayak_delhi",
+      "service": "Trauma / emergency",
+      "scope": "Reported all-cause Emergency Department casualty attendances",
+      "unit": "visits",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2025-01",
+          "counts": [
+            15059,
+            15302,
+            16351,
+            17919,
+            18800,
+            16416,
+            18236,
+            22691,
+            21926,
+            20528,
+            16126,
+            17995
+          ],
+          "source": "lok_nayak_2025"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-12",
+          "basis": "Latest month in the 2025 Emergency Department census; the separate December census confirms the same casualty attendance."
+        },
+        {
+          "period": "2026-01",
+          "basis": "The complete 2025 Emergency Department census ends in December. No January 2026 casualty census surfaced on the hospital site. This is the first month after the published monthly series, a historical estimate candidate."
+        }
+      ]
+    },
+    {
+      "id": "lok_nayak_pediatrics",
+      "site": "lok_nayak_delhi",
+      "service": "Pediatric care",
+      "scope": "New and follow-up outpatient visits recorded under PEDS MEDICINE",
+      "unit": "visits",
+      "grain": "calendar_year",
+      "observations": [
+        {
+          "start": "2025-01",
+          "counts": [
+            80429
+          ],
+          "source": "lok_nayak_2025"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-01",
+          "basis": "Published full calendar-year 2025 pediatric medicine outpatient census. The hospital reports surgery and subspecialty clinics separately."
+        }
+      ]
+    },
+    {
+      "id": "lok_nayak_pediatric_cardiology",
+      "site": "lok_nayak_delhi",
+      "service": "Cardiology consultation",
+      "scope": "New and follow-up outpatient visits at the pediatric cardiology clinic only",
+      "unit": "visits",
+      "grain": "calendar_year",
+      "observations": [
+        {
+          "start": "2025-01",
+          "counts": [
+            199
+          ],
+          "source": "lok_nayak_2025"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-01",
+          "basis": "Published full calendar-year 2025 outpatient census for the pediatric cardiology clinic."
+        }
+      ]
+    }
+  ]
+}

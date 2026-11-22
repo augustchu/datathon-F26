@@ -8,7 +8,9 @@ def build():
         Run notebook 03 first for the same snapshot. This optional comparison reads its
         saved facility-held partitions and executes on CPU with scikit-learn 1.2 or later.
         It fits resource-count models and writes no changes to source data. Facility-level
-        estimates that pass the release checks are saved to a private checkpoint for notebook 05.
+        estimates that pass the release checks are saved to a private checkpoint for notebook 05
+        and a CSV with the same fields for review or import. Fitted models and aggregate scores
+        are saved as offline Weights & Biases artifacts by default.
     ''', [
         markdown('''
             ## Check the inputs and the labels
@@ -28,9 +30,12 @@ def build():
             Every exact held-out value remains in both evaluations.
         '''),
         code('''
-            from facility_tool.count_models import fit_count_models
+            from facility_tool.count_models import CATEGORY_NAMES, fit_count_models
+            from facility_tool.eda import COUNT_UNITS
             from facility_tool.updates import empty_updates
 
+            SEED = 42
+            LOG_MODEL_TO_WANDB = os.environ.get('DATATHON_LOG_COUNT_MODELS', '1') != '0'
             original = STORE.read('raw_facilities').columns.tolist()
             fields = {'capacity': 'capacity', 'numberDoctors': 'number_doctors'}
             audits = {field: STORE.read(f'{prefix}_target_audit', optional=True) for field, prefix in fields.items()}
@@ -73,7 +78,7 @@ def build():
                     print(f'{field}: too few labeled facilities in at least one partition, as expected on the small demo.')
                     continue
                 companion = next(other for other in fields if other != field)
-                comparison = fit_count_models(field, audit, audits[companion], original, as_of=config['as_of'])
+                comparison = fit_count_models(field, audit, audits[companion], original, as_of=config['as_of'], seed=SEED)
                 results[field] = comparison
                 for name in ('label_quality', 'category_quality', 'candidate_evidence', 'ablation', 'coefficients'):
                     table = comparison[name]
@@ -120,6 +125,82 @@ def build():
                 show(estimates.groupby(['field', 'method']).size().rename('rows').reset_index())
             if write_private_estimates:
                 STORE.write('count_model_estimates', estimates)
+                csv_path = STORE.write_csv('count_model_estimates', estimates)
+                print(f'Portable estimate table: {csv_path}')
+        '''),
+        markdown('''
+            ## Save fitted count models to Weights & Biases
+
+            This cell saves the primary fitted ridge and random forest for each target that
+            yielded a predictor set. Each artifact includes the fitted preprocessing, model,
+            held-out scores, training-median baseline, sensitivity scores, and aggregate
+            feature-selection results from the training folds. Facility records and individual
+            estimates stay out of the artifacts. The sensitivity scores use the same test set.
+
+            If the tracking packages are missing, run `%pip install "wandb==0.31.2" "skops==0.16.0"`
+            in a separate notebook cell. Set `DATATHON_LOG_COUNT_MODELS=0` before running the
+            notebook to skip tracking. See the [ML tracking setup](../../ML/README.md#experiment-tracking)
+            for W&B project settings and offline storage.
+
+            The saved pipeline predicts on the log scale. Convert its point output with
+            `np.maximum(0, np.rint(np.expm1(predicted)))` to recover counts in beds or doctors.
+            See the artifact metadata for how to prepare the selected input columns.
+        '''),
+        code('''
+            if LOG_MODEL_TO_WANDB and any(result['fitted_pipelines'] for result in results.values()):
+                import json
+
+                sys.path.insert(0, str(ROOT / 'ML' / 'notebooks'))
+                from wandb_models import log_sklearn_capacity
+
+                def records(frame):
+                    return json.loads(frame.to_json(orient='records', double_precision=15))
+
+                model_names = {'regression': 'ridge', 'ml': 'random-forest'}
+                for field, result in results.items():
+                    metrics = result['metrics']
+                    numeric = metrics.select_dtypes(include='number').columns
+                    baseline = metrics.loc[metrics['method'].eq('median'), numeric].iloc[0].to_dict()
+                    for method, pipeline in result['fitted_pipelines'].items():
+                        method_metrics = metrics.loc[metrics['method'].eq(method)]
+                        primary = method_metrics.loc[method_metrics['run'].eq('all_exact_labels'), numeric].iloc[0].to_dict()
+                        feature_names = list(pipeline.feature_names_in_)
+                        categorical = [name for name in feature_names if name in CATEGORY_NAMES]
+                        tracking = log_sklearn_capacity(
+                            name=f'{fields[field].replace("_", "-")}-{model_names[method]}',
+                            model=pipeline,
+                            metrics=primary,
+                            baseline_metrics=baseline,
+                            evaluation_tables={
+                                'test_metrics': records(method_metrics),
+                                'group_metrics': records(result['group_metrics'].query('method == @method')),
+                                'label_quality': records(result['label_quality']),
+                                'candidate_evidence': records(result['candidate_evidence']),
+                                'feature_selection': records(result['ablation']),
+                                'fold_scores': records(result['fold_scores'].query('method == @method')),
+                            },
+                            config={
+                                'target_field': field,
+                                'target_unit': COUNT_UNITS[field],
+                                'snapshot_as_of': config['as_of'],
+                                'input_mode': MODE,
+                                'model_seed': SEED,
+                                'selected_predictors': feature_names,
+                                'categorical_features': categorical,
+                                'numeric_features': [name for name in feature_names if name not in categorical],
+                                'feature_stage': (
+                                    'Use the selected facility/operator categories normalized with CATEGORY_NAMES, '
+                                    'using (unknown) for missing categories. If the companion count is selected, '
+                                    'provide log1p(raw reported count) and other_count_reported=True, or NaN and False.'
+                                ),
+                                'prediction_postprocess': (
+                                    'The fitted pipeline returns log1p(count). Apply expm1 once, round '
+                                    'to the nearest whole count and clamp at zero.'
+                                ),
+                            },
+                            target_transform='log1p before fitting; expm1 after predict',
+                        )
+                        print(tracking)
         '''),
     ])
 

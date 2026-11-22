@@ -20,6 +20,12 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "non-ml" / "src"))
+from facility_tool.equity import (  # noqa: E402
+    MAX_EXTRA_KM, EquityCandidate, load_paired_equity_evidence, rank_for_paired_equity, synthetic_equity_evidence,
+)
+from facility_tool.network_load import read_network_pressure, replay_network_load  # noqa: E402
+from facility_tool.recommend import compare_observed_availability, routine_load_allowed  # noqa: E402
 
 
 
@@ -295,6 +301,8 @@ def from_facility_table(raw: pd.DataFrame) -> pd.DataFrame:
         if need not in raw.columns:
             raise ValueError(f"The facilities table needs a '{need}' column.")
     df = raw.copy().reset_index(drop=True)
+    ids = _text(df, "unique_id")
+    df["equity_facility_id"] = ("fdr:" + ids).where(ids.ne("") & ~ids.duplicated(keep=False), "")
     df["lat"] = pd.to_numeric(_text(df, "latitude"), errors="coerce")
     df["lon"] = pd.to_numeric(_text(df, "longitude"), errors="coerce")
     inside = df["lat"].between(*INDIA_BBOX["lat"]) & df["lon"].between(*INDIA_BBOX["lon"])
@@ -365,7 +373,10 @@ def from_dashboard_csv(df: pd.DataFrame) -> pd.DataFrame:
         "occupancy": df.get("occupancy"), "accreditation": df.get("accreditation"), "rating": df.get("rating"),
         "last_verified": df.get("last_verified"), "source": df.get("source"),
     })
+    ids = _text(df, "facility_id")
+    raw["_dashboard_equity_id"] = ids.where(~ids.duplicated(keep=False), "")
     out = from_facility_table(raw)
+    out["equity_facility_id"] = out.pop("_dashboard_equity_id")
     out["district"] = _text(df.reset_index(drop=True).loc[out.index] if len(df) == len(out) else out, "district").where(lambda s: s != "", out["city"]) if "district" in out else out["district"]
     # In this schema services are listed explicitly, split on ';'.
     explicit = df.reset_index(drop=True).get("services")
@@ -411,6 +422,9 @@ def demo_table() -> pd.DataFrame:
                 occupancy=round(float(rng.uniform(0.35, 0.98)), 2),
                 last_verified=(pd.Timestamp.today() - pd.Timedelta(days=int(rng.integers(10, 600)))).date().isoformat(),
                 source="synthetic demo data"))
+    # Place two fictional Delhi maternity options close together for the equity-score example.
+    rows[6]["latitude"] = rows[1]["latitude"] + 0.005
+    rows[6]["longitude"] = rows[1]["longitude"]
     return pd.DataFrame(rows)
 
 
@@ -425,7 +439,9 @@ def load_data():
     mode = st.sidebar.radio("Facility data", ["Demo (synthetic)", "Facilities table export", "Dashboard-schema CSV"])
     if mode == "Demo (synthetic)":
         st.sidebar.warning("Demo data is synthetic. Do not use it for real decisions.")
-        return prepare(demo_table(), "table")
+        demo = prepare(demo_table(), "table")
+        demo.attrs["synthetic_demo"] = True
+        return demo
     if mode == "Facilities table export":
         path = st.sidebar.text_input("Path to export (CSV or Parquet)", value=os.environ.get("DATATHON_FACILITY_EXPORT", ""))
         up = st.sidebar.file_uploader("...or upload it", type=["csv", "parquet"])
@@ -444,7 +460,8 @@ def load_data():
     else:
         up = st.sidebar.file_uploader("CSV file", type="csv")
         st.sidebar.caption("Required: name, city, district, state, pin, lat, lon, services (';'-separated). "
-                           "Optional: phone, hours, beds, equipment, ownership, occupancy (0-1 or %), accreditation, rating, last_verified, source.")
+                           "Optional: facility_id (exact evidence ID), phone, hours, beds, equipment, ownership, "
+                           "occupancy (0-1 or %), accreditation, rating, last_verified, source.")
         if up is None:
             st.info("Upload a CSV in the sidebar, or switch to demo data.")
             st.stop()
@@ -531,7 +548,7 @@ def score_facilities(df, service, lat, lon, weights):
         occ = None if pd.isna(r["occupancy"]) else float(r["occupancy"])
         why = [match_note, f"**{r['distance_km']:.1f} km** straight-line from your location ({r['city'] or 'city n/a'}, {r['state'] or 'state n/a'})."]
         if occ is not None:
-            why.append(f"Occupancy on record: **{occ:.0%}** ({1 - occ:.0%} spare capacity).")
+            why.append(f"Facility-wide occupancy on record: **{occ:.0%}**.")
         if eq_f:
             why.append("Equipment text covers: " + ", ".join(eq_f) + ".")
         if r["open_24x7"]:
@@ -543,39 +560,94 @@ def score_facilities(df, service, lat, lon, weights):
             caveats.append("Equipment not mentioned: " + ", ".join(eq_m) + ".")
         if meta["urgent"] and not r["open_24x7"]:
             caveats.append("Round-the-clock operation is not mentioned, and this service is often time-critical.")
-        if occ is None:
-            caveats.append("No occupancy data; current load is unknown.")
         if age_m is None:
             caveats.append("No verification date on the record.")
         elif age_m > 12:
             caveats.append(f"Record last verified {age_m / 12:.1f} years ago and may be stale.")
         results.append(dict(row=r, dist=float(r["distance_km"]), fit=round(100 * fit, 1), match=match, comps=comps,
+                            equity_tier=(tuple(eq_m), tuple(st_m)) if match == 1 else None,
                             occ=occ, spare=None if occ is None else max(0.0, 1 - occ), why=why, caveats=caveats,
                             verified=None if pd.isna(r["last_verified"]) else r["last_verified"].date().isoformat()))
     return sorted(results, key=lambda x: x["dist"])
 
 
-def balance_rank(ranked, extra_km, lam):
-    """Opt-in load spreading. Needs real load data (occupancy); returns None when no candidate has any.
+def balance_rank(ranked, service, measures, extra_km, as_of):
+    """Compare current service availability using the closest direct match as reference."""
+    nearest = next((item for item in ranked if item["match"] == 1), None)
+    reference_id = nearest["row"]["equity_facility_id"] if nearest else ""
+    if not reference_id:
+        return ranked, nearest, {}
 
-    balance = match * ( lam * spare_capacity + (1 - lam) * closeness ); closeness is 1 at the closest option
-    and 0 at +extra_km. Unknown load counts as 50% spare. Bed counts are not used as load.
-    """
-    nearest = ranked[0]
-    cands = [x for x in ranked if x["dist"] - nearest["dist"] <= extra_km]
-    if not any(x["occ"] is not None for x in cands):
-        return None, nearest
-    for x in cands:
-        spare = 0.5 if x["spare"] is None else x["spare"]
-        closeness = 1 - (x["dist"] - nearest["dist"]) / max(extra_km, 1e-9)
-        x["balance"] = round(100 * x["match"] * (lam * spare + (1 - lam) * closeness), 1)
-        extra = x["dist"] - nearest["dist"]
-        n_occ = "unknown" if nearest["occ"] is None else f"{nearest['occ']:.0%}"
-        x_occ = "unknown" if x["occ"] is None else f"{x['occ']:.0%}"
-        x["balance_note"] = (f"Load balancing: this is also the closest option (occupancy {x_occ})." if x is nearest else
-                             f"Load balancing: **{extra:.1f} km farther** than the closest option ({nearest['row']['name']}), "
-                             f"with occupancy {x_occ} vs {n_occ} there.")
-    return sorted(cands, key=lambda x: -x["balance"]), nearest
+    candidates = {
+        item["row"]["equity_facility_id"]: item
+        for item in ranked
+        if item["match"] == 1 and item["row"]["equity_facility_id"]
+        and item["equity_tier"] == nearest["equity_tier"] and item["dist"] <= nearest["dist"] + extra_km
+    }
+    observations, _ = compare_observed_availability(
+        measures, equity_service_key(service), as_of, reference_id,
+        [ident for ident in candidates if ident != reference_id], require_window=True,
+    )
+    if not observations:
+        return ranked, nearest, {}
+
+    best = candidates[min(observations, key=lambda ident: (
+        -observations[ident]["available_units"], candidates[ident]["dist"], ident,
+    ))]
+    first = [nearest] if best is nearest else [best, nearest]
+    return [*first, *(item for item in ranked if item is not best and item is not nearest)], nearest, observations
+
+
+def show_network_plan(facilities, service, lat, lon):
+    default = Path(__file__).resolve().parents[1] / "non-ml/caseload/network_caseload.csv.gz"
+    path = Path(os.environ.get("DATATHON_NETWORK_CASELOAD_CSV", str(default))).expanduser()
+    if not path.is_file():
+        return
+    with st.expander("Historical load planning"):
+        if not st.checkbox("Run a monthly planning scenario"):
+            return
+        st.caption("This compares hypothetical activity using historical caseloads and modeled throughput. "
+                   "Distance is straight-line.")
+        assumed = st.checkbox("Include documented service leads as hypothetical providers")
+        requests = st.number_input("Additional activities in the planning month", min_value=0, max_value=100000, value=100)
+        sites = facilities.loc[facilities["equity_facility_id"].ne(""),
+                               ["equity_facility_id", "name", "lat", "lon"]].set_index("equity_facility_id")
+        distances = haversine_km(lat, lon, sites["lat"].to_numpy(), sites["lon"].to_numpy())
+        sites = sites.assign(distance_km=distances).loc[distances <= 50]
+        key = equity_service_key(service)
+        try:
+            pressure = read_network_pressure(path, key, sites.index)
+            supported = {"reported_activity_in_scope"}
+            if assumed:
+                supported.update({"verified_service_broad_scope", "service_listed_unverified"})
+            pressure = pressure.loc[pressure["service_evidence"].isin(supported)]
+            candidates = pd.DataFrame([
+                {"facility_id": row.facility_id, "service": key, "name": sites.at[row.facility_id, "name"],
+                 "distance_km": sites.at[row.facility_id, "distance_km"], "scope": row.scope, "eligible": True,
+                 "evidence_tier": "unknown"} for row in pressure.itertuples()
+            ])
+            if candidates.empty:
+                st.info("No branches met the planning criteria within 50 km.")
+                return
+            plan = replay_network_load(candidates, pressure, requests=int(requests))
+        except (OSError, ValueError) as exc:
+            st.warning(f"The planning data could not be used. {exc}")
+            return
+        if not plan["comparable"].any():
+            st.info("No pair had comparable planning inputs within the 10 km detour limit.")
+        plan = plan.merge(pressure[["facility_id", "service_evidence"]], on="facility_id", how="left", validate="one_to_one")
+        plan["service_evidence"] = plan["service_evidence"].map({
+            "reported_activity_in_scope": "Historical activity reported for this scope",
+            "verified_service_broad_scope": "Scenario assumption based on verified broader service",
+            "service_listed_unverified": "Scenario assumption based on unverified service listing",
+        })
+        columns = {"name": "Facility", "distance_km": "Distance (km)", "service_evidence": "Service evidence",
+                   "unit": "Activity unit", "demand": "Typical monthly caseload",
+                   "capacity": "Modeled monthly throughput", "caseload_predicted": "Caseload predicted",
+                   "capacity_predicted": "Capacity predicted", "reference_end": "Caseload reference end",
+                   "capacity_reference_period": "Capacity reference period", "baseline_suggestions": "Nearest-only suggestions",
+                   "balanced_suggestions": "Load-balanced suggestions"}
+        st.dataframe(plan[list(columns)].rename(columns=columns), hide_index=True)
 
 
 # --- Recommended ranking: scored by care_engine.rank_facilities -------------------
@@ -648,8 +720,20 @@ def score_priorities(results, ordered_keys):
 
 
 # ----------------------------------------------------------------------------
-# 5. MAP WITH PINS
+# 5. EQUITY EVIDENCE AND MAP
 # ----------------------------------------------------------------------------
+def equity_service_key(service):
+    if service == "Maternity / delivery":
+        return "maternity_delivery"
+    return re.sub(r"[^a-z0-9]+", "_", service.lower()).strip("_")
+
+
+def equity_evidence_for_dashboard(synthetic):
+    if synthetic:
+        return synthetic_equity_evidence("maternity_delivery", "fdr:synthetic-new-01", "fdr:synthetic-new-06")
+    return load_paired_equity_evidence()
+
+
 def safe(value) -> str:
     """HTML-escape and neutralise characters that could break folium's JS template strings."""
     return html.escape(str(value)).replace("`", "&#96;").replace("$", "&#36;").replace("\\", "&#92;")
@@ -722,7 +806,7 @@ def build_map(origin, top, label) -> str:
 # 6. UI
 # ----------------------------------------------------------------------------
 st.title("🏥 Facility Finder")
-st.caption("Choose a service and a location. Facilities are ranked by distance and fit; bed counts are shown only when reported by the source.")
+st.caption("Choose a service and a location to compare nearby facility records.")
 
 df = load_data()
 
@@ -780,14 +864,24 @@ with st.container(border=True):
     severity = st.selectbox("How urgent is this need?", SEVERITIES, index=SEVERITIES.index(default_severity),
                             key=f"severity_{service}",
                             help="Used by the Recommended ranking. Emergency ranks purely by travel; routine and urgent also weigh how busy a facility is.")
-    balance = st.toggle("Balance load: also consider farther facilities with more spare capacity", value=False)
-    extra_km, lam = 25, 0.6
-    if balance:
-        o1, o2 = st.columns(2)
-        extra_km = o1.slider("Extra travel accepted vs. the closest option (km)", 5, 150, 25, 5)
-        lam = o2.slider("Favor spare capacity over closeness", 0.0, 1.0, 0.6, 0.1)
-        if m["urgent"]:
-            st.warning(f"{service} is time-critical. Extra travel can cost more than a shorter wait; use load balancing only when the patient is stable.")
+
+    routine_comparison = severity == "Routine" and not m["urgent"] and routine_load_allowed(equity_service_key(service))
+    balance = st.toggle("Compare current service availability", value=False, disabled=not routine_comparison,
+                        help="For routine care with comparable, recent availability measurements.")
+    extra_km, measurements_file = 25, None
+    if balance and routine_comparison:
+        extra_km = st.slider("Max extra straight-line distance (km)", 0, 150, 25, 5)
+        measurements_file = st.sidebar.file_uploader("Service availability CSV", type="csv",
+                                                    help="Use an authorised facility-level availability export.")
+
+    equity_control, equity_help, _ = st.columns([2, 1, 5], gap="small")
+    with equity_control:
+        consider_equity = st.toggle("Consider equity score", value=False)
+    with equity_help.popover("What's that?"):
+        st.write("Women and people from marginalized groups can receive worse care. "
+                 "The equity score combines patient-reported respect and clinical outcomes to help choose between similar hospitals.")
+    if consider_equity and df.attrs.get("synthetic_demo") and service == "Maternity / delivery":
+        st.caption("Try the fictional maternity example at coordinates 28.551395, 77.185600.")
 
     advanced = st.toggle("Advanced options", value=False)
     priority_keys = []
@@ -839,42 +933,34 @@ if search:
         st.info(search["note"])
     if svc != service:
         st.caption(f"Showing results for **{svc}**. Press Find facilities to search for {service}.")
+    if (severity == "Routine" and not SERVICES[svc]["urgent"] and routine_load_allowed(equity_service_key(svc))
+            and not df.attrs.get("synthetic_demo")):
+        show_network_plan(df, svc, lat, lon)
     ranked = score_facilities(df, svc, lat, lon, weights)
     if not ranked:
         st.warning(f"No facility's text mentions {svc} or a related service.")
     else:
-        nearest = min(ranked, key=lambda x: x["dist"])
-
-        if balance:
-            pool, nearest = balance_rank(ranked, extra_km, lam)
-
-            if pool is None:
-                st.info(
-                    "Load balancing needs measured or scenario load data "
-                    "(occupancy), and none exists for these candidates. "
-                    "Showing the ordinary ranking."
-                )
-                balance_on = False
-                candidates = ranked
-            else:
-                balance_on = True
-                candidates = pool
-
-                st.subheader(f"Load-balanced picks for {svc} near {label}")
-                st.caption(
-                    f"Candidates: facilities within {extra_km} km of "
-                    f"the closest option ({nearest['row']['name']}, "
-                    f"{nearest['dist']:.1f} km)."
-                )
-        else:
-            balance_on = False
-            candidates = ranked
-
-
-        apply_engine(candidates, svc, severity)
+        apply_engine(ranked, svc, severity)
         if advanced and priority_keys:
-            score_priorities(candidates, priority_keys)
+            score_priorities(ranked, priority_keys)
 
+        availability_order, nearest, observations = ranked, None, {}
+        if balance and svc == service and routine_comparison:
+            measured_source = measurements_file
+            measure_path = os.environ.get("DATATHON_MEASURED_LOAD_CSV", "").strip()
+            if measured_source is None and measure_path:
+                measured_source = Path(measure_path).expanduser()
+            if measured_source is not None:
+                try:
+                    measures = pd.read_csv(measured_source, dtype="string")
+                    availability_order, nearest, observations = balance_rank(
+                        ranked, svc, measures, extra_km, pd.Timestamp.now(tz="UTC"),
+                    )
+                except (OSError, ValueError):
+                    st.warning("The service availability CSV could not be read or has missing fields.")
+            if not observations:
+                st.info("Comparable current availability is unavailable for these facilities. Showing the ordinary order.")
+        balance_on = bool(observations)
         results_col, map_col = st.columns([1, 1], gap="medium")
         SORT_RECOMMENDED, SORT_RANKED = "Recommended", "Ranked criteria (best match first)"
         sort_options = [SORT_RECOMMENDED, "Distance (nearest first)", "Fit (highest first)", "Occupancy (lowest first)"]
@@ -895,21 +981,60 @@ if search:
                 ranked_note = "Switch on at least one criterion under Advanced options to rank by your priorities. Showing the Recommended order for now."
                 sort_by = SORT_RECOMMENDED
 
+            ordered = ranked
             if sort_by == SORT_RECOMMENDED:
-                candidates = sorted(candidates, key=lambda x: (x["engine"]["score"], -x["engine"]["confidence"]) if x["engine"] else (x["dist"], 0))
-            elif sort_by == "Distance (nearest first)":
-                candidates = sorted(candidates, key=lambda x: x["dist"])
+                ordered = sorted(ranked, key=lambda x: (x["engine"]["score"], -x["engine"]["confidence"]) if x["engine"] else (x["dist"], 0))
             elif sort_by == "Fit (highest first)":
-                candidates = sorted(candidates, key=lambda x: x["fit"], reverse=True)
+                ordered = sorted(ranked, key=lambda x: x["fit"], reverse=True)
             elif sort_by == "Occupancy (lowest first)":
-                candidates = sorted(candidates, key=lambda x: (x["occ"] is None, x["occ"] if x["occ"] is not None else 0))
+                ordered = sorted(ranked, key=lambda x: (x["occ"] is None, x["occ"] if x["occ"] is not None else 0))
             elif sort_by == SORT_RANKED:
-                candidates = sorted(candidates, key=lambda x: -x["priority"])
-            top = candidates[:top_n]
+                ordered = sorted(ranked, key=lambda x: -x["priority"])
+
+            equity = None
+            top_indices = range(len(ordered))
+            if balance_on:
+                preferred = availability_order[0]
+                ordered = [preferred, *(item for item in ordered if item is not preferred)]
+                st.caption(f"Compared current availability within {extra_km} straight-line km of the closest "
+                           f"direct match, {nearest['row']['name']} ({nearest['dist']:.1f} km). "
+                           "The facility with the most comparable available units is shown first.")
+                if consider_equity:
+                    st.info("The current availability comparison determines the first option.")
+            elif consider_equity and svc == service and severity != "Emergency" and not SERVICES[svc]["urgent"]:
+                if sort_by != SORT_RECOMMENDED:
+                    st.info("Choose Recommended sorting to consider equity scores.")
+                else:
+                    try:
+                        evidence = equity_evidence_for_dashboard(df.attrs.get("synthetic_demo", False))
+                    except (OSError, ValueError):
+                        st.warning("The equity evidence file could not be read. Showing the original order.")
+                    else:
+                        equity_candidates = [
+                            EquityCandidate(item["row"]["equity_facility_id"], item["equity_tier"], item["dist"])
+                            for item in ordered
+                        ]
+                        equity = rank_for_paired_equity(
+                            equity_candidates, equity_service_key(svc), enabled=True, evidence=evidence,
+                        )
+                        top_indices = equity.order
+            elif consider_equity and svc == service:
+                st.info("Equity scoring is paused for time-critical searches.")
+
+            top_indices = top_indices[:top_n]
+            top = [ordered[index] for index in top_indices]
+            equity_visible = equity is not None and any(index in equity.scores for index in top_indices)
+            if equity_visible and tuple(top_indices) != tuple(range(len(top))):
+                st.caption(f"Equity evidence changed the order within the {MAX_EXTRA_KM:g} km straight-line limit. "
+                           "The prior rank is shown on each affected card.")
+            elif equity_visible:
+                st.info("The available equity scores did not change the displayed order.")
+            elif equity is not None:
+                st.info("Comparable patient-reported respect and clinical outcomes are unavailable for the options shown.")
 
             if ranked_note:
                 st.info(ranked_note)
-            if sort_by == SORT_RECOMMENDED:
+            if sort_by == SORT_RECOMMENDED and care_engine is not None:
                 st.caption("Recommended uses care_engine's score: travel (straight-line distance x 2, no road times), a penalty for weaker "
                            "service evidence, and, for routine or urgent needs, a penalty for busy facilities. Lower scores rank first.")
             st.caption("Service matches are keyword matches in each facility's own text, not cited evidence. "
@@ -917,8 +1042,10 @@ if search:
 
             # Fixed-height container with independent scrolling
             with st.container(height=720, border=False):
-                for i, res in enumerate(top, 1):
+                for i, (base_index, res) in enumerate(zip(top_indices, top), 1):
                     r = res["row"]
+                    observation = observations.get(r["equity_facility_id"])
+
                     with st.container(border=True):
                         st.markdown(f"### {i}. {r['name']}")
                         st.caption(f"{r['city'] or 'city n/a'}, {r['state'] or 'state n/a'} · "
@@ -927,8 +1054,8 @@ if search:
                         metrics = [("Distance", f"{res['dist']:.1f} km"), ("Fit (/100)", f"{res['fit']:.1f}")]
                         if res["occ"] is not None:
                             metrics.append(("Occupancy", f"{res['occ']:.0%}"))
-                        if balance_on:
-                            metrics.append(("Balance", f"{res['balance']:.1f}/100"))
+                        if observation:
+                            metrics.append(("Available units", f"{observation['available_units']:g}"))
                         if advanced and priority_keys:
                             metrics.append(("Your match", f"{res['priority']:.0f}/100"))
                         for col, (lab, val) in zip(st.columns(len(metrics)), metrics):
@@ -941,8 +1068,37 @@ if search:
                                     f"**Hours:** {r['hours'] or 'Not listed (call to confirm)'}")
                         st.caption(CALL_PROMPT)
 
+                        if observation:
+                            seen = pd.Timestamp(observation["as_of"]).tz_convert("Asia/Kolkata")
+                            start = pd.Timestamp(observation["window_start"]).tz_convert("Asia/Kolkata")
+                            end = pd.Timestamp(observation["window_end"]).tz_convert("Asia/Kolkata")
+                            st.caption(f"{observation['unit']} · observed {seen:%d %b %Y %H:%M} IST · "
+                                       f"covers {start:%d %b %Y %H:%M} to {end:%d %b %Y %H:%M} IST")
+                            st.markdown(f"[Availability source](<{observation['source_url']}>)")
+
+                        if equity_visible:
+                            st.caption(f"Rank before equity score {base_index + 1}")
+                            score = equity.scores.get(base_index)
+                            if score is None:
+                                st.caption("Comparable equity score unavailable for this branch and service.")
+                            else:
+                                record = score.evidence
+                                equity_label = "Fictional equity score" if record.fictional else "Equity score"
+                                st.markdown(f"**{equity_label} {score.value:.0f}/100**")
+                                with st.expander("Equity score evidence"):
+                                    st.caption(f"Uncertainty range {score.lower:.0f}–{score.upper:.0f} out of 100")
+                                    st.write(f"{record.respect_measure} · {record.respect_rate:.1%} (n={record.respect_n:,})")
+                                    st.write(f"{record.outcome_measure} · {record.outcome_rate:.1%} (n={record.outcome_n:,})")
+                                    st.caption(f"{record.population} · {record.period_start} to {record.period_end}")
+                                    st.caption(f"Clinical adjustment · {record.adjustment_method}")
+                                    if record.source_url:
+                                        st.markdown(f"[{record.source_title}](<{record.source_url}>)")
+                                    else:
+                                        st.caption(record.source_title)
+
                         st.markdown("**Why this facility**")
-                        st.markdown("\n".join(f"- {w}" for w in (([res["balance_note"]] if balance_on else []) + res["why"])))
+                        st.markdown("\n".join(f"- {why}" for why in res["why"]))
+
                         if res["caveats"]:
                             st.markdown("**Caveats**")
                             st.markdown("\n".join(f"- {w}" for w in res["caveats"]))

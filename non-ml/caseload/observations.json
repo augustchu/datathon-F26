@@ -1,0 +1,1020 @@
+{
+  "as_of_month": "2026-11",
+  "targets": {
+    "Dialysis": {
+      "workload_definition": "Completed hemodialysis sessions in the reporting unit."
+    },
+    "Emergency C-section": {
+      "workload_definition": "Cesarean procedures explicitly classified as emergency."
+    },
+    "Maternity / delivery": {
+      "workload_definition": "Delivery episodes for all explicitly reported delivery modes."
+    },
+    "NICU": {
+      "workload_definition": "Neonatal intensive care admissions or cases in the named NICU."
+    },
+    "Pediatric care": {
+      "workload_definition": "Pediatric medicine outpatient encounters, including recorded follow-ups."
+    },
+    "Cardiac surgery": {
+      "workload_definition": "Cardiac operations performed in the reporting hospital."
+    },
+    "Cardiology consultation": {
+      "workload_definition": "Cardiology outpatient encounters, including recorded follow-ups."
+    },
+    "MRI": {
+      "workload_definition": "MRI examinations performed."
+    },
+    "CT scan": {
+      "workload_definition": "CT examinations performed."
+    },
+    "Burn care": {
+      "workload_definition": "Burn-specific emergency admissions or other explicitly identified burn encounters."
+    },
+    "Orthopedic surgery": {
+      "workload_definition": "Orthopedic operations, with major, minor, elective and emergency scope retained."
+    },
+    "Fracture care": {
+      "workload_definition": "Fracture encounters, with emergency, inpatient and outpatient scope retained."
+    },
+    "Dental care": {
+      "workload_definition": "Dental outpatient encounters or registrations, including recorded follow-ups."
+    },
+    "Oral surgery": {
+      "workload_definition": "Oral and maxillofacial surgery procedures, with major, minor and extraction scope retained."
+    },
+    "Cataract surgery": {
+      "workload_definition": "Cataract operations performed at the named site."
+    },
+    "Stroke care": {
+      "workload_definition": "Stroke-specific emergency admissions or other explicitly identified stroke encounters."
+    },
+    "Chemotherapy": {
+      "workload_definition": "Chemotherapy administrations or treatment sessions in the named setting."
+    },
+    "Trauma / emergency": {
+      "workload_definition": "Emergency or casualty encounters, with trauma-specific case counts kept as a separate scope."
+    }
+  },
+  "sources": {
+    "smimer": {
+      "title": "SMIMER Hospital overall statistics",
+      "url": "https://www.suratmunicipal.gov.in/smimer/Hospital/SHOverallStatistics"
+    },
+    "bilaspur_2425": {
+      "title": "AIIMS Bilaspur Annual Report 2024–25",
+      "url": "https://aiimsbilaspur.edu.in/sites/default/files/2026-09/2024_25_ENGLISH.pdf"
+    },
+    "ipgmer": {
+      "title": "IPGMER and SSKM Hospital Annual Report 2025",
+      "url": "https://ipgmer.gov.in/pdf/AnnualReports/AnnualReport2025.pdf"
+    },
+    "igims": {
+      "title": "IGIMS Nephrology and Kidney Transplant department",
+      "url": "https://igims.org/about-us/department-detail/nephrology---kidney-transplant"
+    },
+    "gims": {
+      "title": "Analysis of caesarean section at tertiary centre in North Karnataka",
+      "url": "https://www.ijrcog.org/index.php/ijrcog/article/view/15115",
+      "related_urls": [
+        "https://www.ijrcog.org/index.php/ijrcog/article/download/15115/9447"
+      ]
+    },
+    "nhsrc_up": {
+      "title": "NHSRC PPP MCH Wing in Uttar Pradesh report",
+      "url": "https://www.nhsrcindia.org/sites/default/files/2025-07/PPP%20MCH%20Wing%20in%20Uttar%20Pradesh-Report%20.pdf"
+    },
+    "himalayan": {
+      "title": "Himalayan Institute of Medical Sciences month-wise clinical material archive",
+      "url": "https://hims.srhu.edu.in/mci-information/",
+      "related_urls": [
+        "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+        "https://hims.srhu.edu.in/wp-content/uploads/2025/11/10.-NMC-Website-Clinical-Data-October-2025.pdf",
+        "https://hims.srhu.edu.in/wp-content/uploads/2025/12/11.-NMC-Website-Clinical-Data-November-2025.pdf",
+        "https://hims.srhu.edu.in/wp-content/uploads/2026/01/12.-NMC-Website-Clinical-Data-December-2025.pdf",
+        "https://hims.srhu.edu.in/wp-content/uploads/2026/02/1.-NMC-Website-Clinical-Data-January-2026.pdf",
+        "https://hims.srhu.edu.in/wp-content/uploads/2026/05/3.-NMC-Website-Clinical-Data-March-2026.pdf"
+      ]
+    },
+    "lnh": {
+      "title": "Lok Nayak Hospital Annual Report of OPD Jan 2025–Dec 2025",
+      "url": "https://lnjp.delhi.gov.in/lnjp/annual-report-opd-jan-2025-dec-2025"
+    },
+    "sssihms": {
+      "title": "Sri Sathya Sai Institute of Higher Medical Sciences Whitefield Annual Report 2025–26",
+      "url": "https://whitefield.sssihms.org/about-hospital/annual-report-2025-26/"
+    },
+    "unmehta": {
+      "title": "U. N. Mehta Institute of Cardiology and Research Centre Statistics",
+      "url": "https://www.unmicrc.org/Statistics"
+    },
+    "bathinda": {
+      "title": "AIIMS Bathinda Annual Report 2024–25",
+      "url": "https://www.aiimsbathinda.edu.in/images/Downloads/20251215103458.pdf"
+    },
+    "tiruppur": {
+      "title": "Government Medical College Hospital Tiruppur 2025 Statistics",
+      "url": "https://tiruppurmedicalcollege.in/page/2025-statistics"
+    },
+    "fracture": {
+      "title": "Prospective fracture admissions cohort at UP University of Medical Sciences",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13271864/"
+    },
+    "its": {
+      "title": "I.T.S. Centre for Dental Studies & Research, Murad Nagar, OPD and procedure statistics",
+      "url": "https://itsdentalcollege.com/opd-patients"
+    },
+    "gtdental": {
+      "title": "Government Medical College Mumbai Dentistry statistics",
+      "url": "https://gmcmumbai.org/dentistry/"
+    },
+    "indexdental": {
+      "title": "Index Institute of Dental Sciences department procedure statistics",
+      "url": "https://indexdental.in/clinical-procedures/"
+    },
+    "aravind": {
+      "title": "Aravind Eye Care System Activity Report 2025–2026",
+      "url": "https://aravind.org/wp-content/uploads/2026/09/Activity-Report-2025-2026.pdf"
+    },
+    "faridkot": {
+      "title": "Acute and subacute ischemic stroke admissions cohort at Guru Gobind Singh Medical College and Hospital",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13154447/"
+    },
+    "safdarjung": {
+      "title": "VMMC and Safdarjung Hospital Annual Report 2021",
+      "url": "https://vmmc-sjh.mohfw.gov.in/sites/default/files/Annual%20Report%20-%202021.pdf"
+    },
+    "bhubaneswar": {
+      "title": "AIIMS Bhubaneswar Annual Report 2024–25",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf"
+    },
+    "cochin": {
+      "title": "Kerala State Planning Board Economic Review 2025",
+      "url": "https://spb.kerala.gov.in/economic-review/ER2025/62.php?pid=62"
+    }
+  },
+  "series": [
+    {
+      "id": "smimer_mri",
+      "service": "MRI",
+      "facility": "SMIMER Hospital",
+      "locality": "Surat",
+      "region": "Gujarat",
+      "location_level": "facility",
+      "scope": "Hospital MRI examinations",
+      "unit": "scans",
+      "source": "smimer",
+      "locator": "MRI table",
+      "monthly": [
+        {
+          "start": "2025-01",
+          "counts": [668, 683, 781, 923, 712, 737, 600, 472, 475, 497, 555, 475, 610, 543, 551, 487, 474, 532, 587, 591, 811]
+        }
+      ]
+    },
+    {
+      "id": "smimer_ct",
+      "service": "CT scan",
+      "facility": "SMIMER Hospital",
+      "locality": "Surat",
+      "region": "Gujarat",
+      "location_level": "facility",
+      "scope": "Hospital CT examinations",
+      "unit": "scans",
+      "source": "smimer",
+      "locator": "CT Scan table",
+      "monthly": [
+        {
+          "start": "2025-01",
+          "counts": [859, 748, 784, 714, 753, 719, 639, 442, 423, 539, 496, 537, 664, 616, 630, 567, 575, 520, 409, 628, 679]
+        }
+      ]
+    },
+    {
+      "id": "smimer_casualty",
+      "service": "Trauma / emergency",
+      "facility": "SMIMER Hospital",
+      "locality": "Surat",
+      "region": "Gujarat",
+      "location_level": "facility",
+      "scope": "All-cause casualty attendance",
+      "unit": "visits",
+      "source": "smimer",
+      "locator": "Casualty Attendance table",
+      "monthly": [
+        {
+          "start": "2025-01",
+          "counts": [7225, 6459, 7903, 7193, 7169, 7291, 7615, 7978, 7255, 7267, 6281, 7580, 7431, 6842, 7456, 6922, 7313, 7092, 6648, 7748, 7959]
+        }
+      ]
+    },
+    {
+      "id": "smimer_deliveries",
+      "service": "Maternity / delivery",
+      "facility": "SMIMER Hospital",
+      "locality": "Surat",
+      "region": "Gujarat",
+      "location_level": "facility",
+      "scope": "Reported vaginal and cesarean deliveries",
+      "unit": "deliveries",
+      "source": "smimer",
+      "locator": "Delivery Statistics, Normal and Caesarian rows",
+      "monthly": [
+        {
+          "start": "2025-01",
+          "counts": [594, 434, 428, 505, 476, 467, 486, 627, 665, 710, 621, 594, 542, 433, 445, 445, 483, 498, 502, 629, 668]
+        }
+      ],
+      "transformation": {
+        "operation": "sum_exclusive_rows",
+        "components": [
+          {
+            "name": "Normal",
+            "counts": [337, 231, 242, 264, 267, 263, 267, 370, 377, 424, 380, 359, 299, 234, 252, 254, 263, 250, 276, 344, 370]
+          },
+          {
+            "name": "Caesarian",
+            "counts": [257, 203, 186, 241, 209, 204, 219, 257, 288, 286, 241, 235, 243, 199, 193, 191, 220, 248, 226, 285, 298]
+          }
+        ]
+      },
+      "notes": "The Caesarian row includes all reported cesareans."
+    },
+    {
+      "id": "bilaspur_mri",
+      "service": "MRI",
+      "facility": "AIIMS Bilaspur",
+      "locality": "Bilaspur",
+      "region": "Himachal Pradesh",
+      "location_level": "facility",
+      "scope": "Radiodiagnosis MRI examinations",
+      "unit": "scans",
+      "source": "bilaspur_2425",
+      "locator": "Radiodiagnosis, monthly MRI row",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [482, 485, 402, 416, 441, 614, 659, 608, 651, 725, 666, 610]
+        }
+      ]
+    },
+    {
+      "id": "bilaspur_ct",
+      "service": "CT scan",
+      "facility": "AIIMS Bilaspur",
+      "locality": "Bilaspur",
+      "region": "Himachal Pradesh",
+      "location_level": "facility",
+      "scope": "Radiodiagnosis CT examinations",
+      "unit": "scans",
+      "source": "bilaspur_2425",
+      "locator": "Radiodiagnosis, monthly CT row",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [1132, 1097, 1169, 1172, 1415, 1644, 1458, 1663, 1302, 1568, 1326, 1552]
+        }
+      ]
+    },
+    {
+      "id": "bilaspur_stroke",
+      "service": "Stroke care",
+      "facility": "AIIMS Bilaspur",
+      "locality": "Bilaspur",
+      "region": "Himachal Pradesh",
+      "location_level": "facility",
+      "scope": "Stroke cases in the Trauma and Emergency category table",
+      "unit": "cases",
+      "source": "bilaspur_2425",
+      "locator": "Printed p. 23, Trauma and Emergency monthly category table, Stroke row",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [12, 18, 8, 4, 5, 5, 20, 18, 19, 18, 12, 3]
+        }
+      ],
+      "notes": "The category table gives case counts. It leaves the disposition criteria unspecified."
+    },
+    {
+      "id": "bilaspur_burn",
+      "service": "Burn care",
+      "facility": "AIIMS Bilaspur",
+      "locality": "Bilaspur",
+      "region": "Himachal Pradesh",
+      "location_level": "facility",
+      "scope": "Burn cases in the Trauma and Emergency category table",
+      "unit": "cases",
+      "source": "bilaspur_2425",
+      "locator": "Printed p. 23, Trauma and Emergency monthly category table, Burns row",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [1, 2, 2, 1, 1, 0, 0, 7, 2, 0, 2, 0]
+        }
+      ],
+      "notes": "Explicit zeros are transcribed as reported. The category table leaves the disposition criteria unspecified."
+    },
+    {
+      "id": "bilaspur_trauma",
+      "service": "Trauma / emergency",
+      "facility": "AIIMS Bilaspur",
+      "locality": "Bilaspur",
+      "region": "Himachal Pradesh",
+      "location_level": "facility",
+      "scope": "Trauma cases in the Trauma and Emergency category table",
+      "unit": "cases",
+      "source": "bilaspur_2425",
+      "locator": "Printed p. 23, Trauma and Emergency monthly category table, Trauma row",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [77, 57, 76, 66, 72, 79, 83, 61, 48, 53, 56, 51]
+        }
+      ],
+      "notes": "This covers the trauma category of the table. The category table leaves the disposition criteria unspecified."
+    },
+    {
+      "id": "bilaspur_nicu",
+      "service": "NICU",
+      "facility": "AIIMS Bilaspur",
+      "locality": "Bilaspur",
+      "region": "Himachal Pradesh",
+      "location_level": "facility",
+      "scope": "NICU total cases, inborn and outborn",
+      "unit": "cases",
+      "source": "bilaspur_2425",
+      "locator": "Neonatology, NICU Total Cases row",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [17, 29, 25, 35, 40, 52, 34, 37, 47, 30, 44, 35]
+        }
+      ],
+      "notes": "Use the published Total Cases row for the reported NICU cases, including inborn and outborn cases."
+    },
+    {
+      "id": "bilaspur_deliveries",
+      "service": "Maternity / delivery",
+      "facility": "AIIMS Bilaspur",
+      "locality": "Bilaspur",
+      "region": "Himachal Pradesh",
+      "location_level": "facility",
+      "scope": "OBGYN reported total deliveries",
+      "unit": "deliveries",
+      "source": "bilaspur_2425",
+      "locator": "Obstetrics and Gynaecology, Total deliveries row",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [31, 34, 58, 64, 95, 117, 109, 112, 117, 125, 88, 84]
+        }
+      ],
+      "notes": "Use the published total row. Some component sums differ."
+    },
+    {
+      "id": "bilaspur_ortho",
+      "service": "Orthopedic surgery",
+      "facility": "AIIMS Bilaspur",
+      "locality": "Bilaspur",
+      "region": "Himachal Pradesh",
+      "location_level": "facility",
+      "scope": "Orthopedic operations reported in the OT row",
+      "unit": "operations",
+      "source": "bilaspur_2425",
+      "locator": "Orthopedics monthly OT activity",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [101, 121, 130, 150, 119, 131, 129, 126, 126, 150, 125, 119]
+        }
+      ],
+      "notes": "The source uses a department OT count without a major/minor split in this row."
+    },
+    {
+      "id": "ipgmer_dialysis",
+      "service": "Dialysis",
+      "facility": "IPGMER and SSKM Hospital",
+      "locality": "Kolkata",
+      "region": "West Bengal",
+      "location_level": "facility_unit",
+      "scope": "Hemodialysis Unit sessions",
+      "unit": "sessions",
+      "source": "ipgmer",
+      "locator": "Nephrology, Hemodialysis Unit monthly table",
+      "monthly": [
+        {
+          "start": "2024-12",
+          "counts": [1030, 1179, 1270, 1205, 1307, 1524, 1235, 1593, 963, 824, 941, 891]
+        }
+      ],
+      "notes": "Repeated sessions for the same patient contribute separately."
+    },
+    {
+      "id": "igims_dialysis",
+      "service": "Dialysis",
+      "facility": "Indira Gandhi Institute of Medical Sciences",
+      "locality": "Patna",
+      "region": "Bihar",
+      "location_level": "facility",
+      "scope": "Hemodialysis sessions",
+      "unit": "sessions",
+      "source": "igims",
+      "locator": "Department activity, 2025–26 Hemodialysis sessions",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 4451
+      }
+    },
+    {
+      "id": "gims_emergency_cs",
+      "service": "Emergency C-section",
+      "facility": "Gulbarga Institute of Medical Sciences",
+      "locality": "Kalaburagi",
+      "region": "Karnataka",
+      "location_level": "facility_cohort",
+      "scope": "Emergency C-sections in the study cohort",
+      "unit": "operations",
+      "source": "gims",
+      "locator": "Table 5, Emergency LSCS",
+      "period": {
+        "start": "2023-01",
+        "end": "2023-12",
+        "total": 4065
+      },
+      "notes": "Prospective labor ward cohort of deliveries at 28 or more weeks of gestation, with study exclusions."
+    },
+    {
+      "id": "gims_deliveries",
+      "service": "Maternity / delivery",
+      "facility": "Gulbarga Institute of Medical Sciences",
+      "locality": "Kalaburagi",
+      "region": "Karnataka",
+      "location_level": "facility_cohort",
+      "scope": "Deliveries in the study cohort",
+      "unit": "deliveries",
+      "source": "gims",
+      "locator": "Table 1, Number of deliveries, by month",
+      "monthly": [
+        {
+          "start": "2023-01",
+          "counts": [560, 670, 818, 665, 639, 571, 617, 779, 749, 782, 732, 684]
+        }
+      ],
+      "notes": "Same eligible labor ward cohort as the emergency C-section benchmark."
+    },
+    {
+      "id": "mirzapur_emergency_cs",
+      "service": "Emergency C-section",
+      "facility": "Mirzapur MCH Wing",
+      "locality": "Mirzapur",
+      "region": "Uttar Pradesh",
+      "location_level": "facility_unit",
+      "scope": "Emergency C-sections at the MCH wing",
+      "unit": "operations",
+      "source": "nhsrc_up",
+      "locator": "Printed p. 40, Emergency C sections monthly average",
+      "period": {
+        "start": "2024-02",
+        "end": "2025-03",
+        "monthly_average": 107
+      },
+      "notes": "Use the published mean. The report describes the period as one year while its month labels span 14 calendar months. The underlying monthly counts and exact averaging denominator are unavailable."
+    },
+    {
+      "id": "chandauli_emergency_cs",
+      "service": "Emergency C-section",
+      "facility": "Chandauli MCH Wing",
+      "locality": "Chandauli",
+      "region": "Uttar Pradesh",
+      "location_level": "facility_unit",
+      "scope": "Emergency C-sections at the MCH wing",
+      "unit": "operations",
+      "source": "nhsrc_up",
+      "locator": "Printed p. 48, Emergency C sections monthly average",
+      "period": {
+        "start": "2024-02",
+        "end": "2025-03",
+        "monthly_average": 71.28
+      },
+      "notes": "Use the published mean. The report describes the period as one year while its month labels span 14 calendar months. The underlying monthly counts and exact averaging denominator are unavailable."
+    },
+    {
+      "id": "himalayan_pediatric",
+      "service": "Pediatric care",
+      "facility": "Himalayan Hospital",
+      "locality": "Jolly Grant, Dehradun",
+      "region": "Uttarakhand",
+      "location_level": "facility",
+      "scope": "Pediatrics outpatient visits",
+      "unit": "visits",
+      "source": "himalayan",
+      "locator": "NMC monthly clinical material, Paediatrics OPD",
+      "monthly": [
+        {
+          "start": "2025-08",
+          "counts": [5020, null, 5259, 5218, 5788, 5690, null, 5385]
+        }
+      ],
+      "notes": "Six reports transcribed. September 2025 and February 2026 are missing from this series."
+    },
+    {
+      "id": "himalayan_cardiology",
+      "service": "Cardiology consultation",
+      "facility": "Himalayan Hospital",
+      "locality": "Jolly Grant, Dehradun",
+      "region": "Uttarakhand",
+      "location_level": "facility",
+      "scope": "Cardiology outpatient visits",
+      "unit": "visits",
+      "source": "himalayan",
+      "locator": "NMC monthly clinical material, Cardiology OPD",
+      "monthly": [
+        {
+          "start": "2025-08",
+          "counts": [2511, null, 2421, 2322, 2809, 2444, null, 2604]
+        }
+      ],
+      "notes": "Six reports transcribed. September 2025 and February 2026 are missing from this series."
+    },
+    {
+      "id": "himalayan_ortho",
+      "service": "Orthopedic surgery",
+      "facility": "Himalayan Hospital",
+      "locality": "Jolly Grant, Dehradun",
+      "region": "Uttarakhand",
+      "location_level": "facility",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "source": "himalayan",
+      "locator": "NMC monthly clinical material, Orthopaedics Major",
+      "monthly": [
+        {
+          "start": "2025-08",
+          "counts": [153, null, 146, 120, 134, 141, null, 184]
+        }
+      ],
+      "notes": "Six reports transcribed. September 2025 and February 2026 are missing from this series."
+    },
+    {
+      "id": "lnh_pediatric",
+      "service": "Pediatric care",
+      "facility": "Lok Nayak Hospital",
+      "locality": "New Delhi",
+      "region": "Delhi",
+      "location_level": "facility",
+      "scope": "Pediatric Medicine outpatient visits",
+      "unit": "visits",
+      "source": "lnh",
+      "locator": "Annual OPD, PEDS MEDICINE Grand Total",
+      "period": {
+        "start": "2025-01",
+        "end": "2025-12",
+        "total": 80429
+      },
+      "notes": "The published total includes new and follow-up visits. Pediatric subspecialty and inpatient rows are separate."
+    },
+    {
+      "id": "lnh_casualty",
+      "service": "Trauma / emergency",
+      "facility": "Lok Nayak Hospital",
+      "locality": "New Delhi",
+      "region": "Delhi",
+      "location_level": "facility",
+      "scope": "All-cause casualty attendance",
+      "unit": "visits",
+      "source": "lnh",
+      "locator": "ED Census Report Jan–Dec 2025, Casualty Total Patient monthly rows",
+      "monthly": [
+        {
+          "start": "2025-01",
+          "counts": [15059, 15302, 16351, 17919, 18800, 16416, 18236, 22691, 21926, 20528, 16126, 17995]
+        }
+      ]
+    },
+    {
+      "id": "sssihms_whitefield_cardiac",
+      "service": "Cardiac surgery",
+      "facility": "Sri Sathya Sai Institute of Higher Medical Sciences, Whitefield",
+      "locality": "Bengaluru",
+      "region": "Karnataka",
+      "location_level": "facility",
+      "scope": "Reported cardiac surgeries",
+      "unit": "operations",
+      "source": "sssihms",
+      "locator": "Time Series Cardiac Sciences, Cardiac Surgeries",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 925
+      }
+    },
+    {
+      "id": "sssihms_whitefield_cardiology",
+      "service": "Cardiology consultation",
+      "facility": "Sri Sathya Sai Institute of Higher Medical Sciences, Whitefield",
+      "locality": "Bengaluru",
+      "region": "Karnataka",
+      "location_level": "facility",
+      "scope": "Cardiology outpatient visits",
+      "unit": "visits",
+      "source": "sssihms",
+      "locator": "Time Series Cardiac Sciences, Cardiology Outpatients",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 29158
+      },
+      "notes": "Use the 2025–26 cardiology-only row. Earlier combined outpatient counts have different scope."
+    },
+    {
+      "id": "unmehta_cardiac",
+      "service": "Cardiac surgery",
+      "facility": "U. N. Mehta Institute of Cardiology and Research Centre",
+      "locality": "Ahmedabad",
+      "region": "Gujarat",
+      "location_level": "facility",
+      "scope": "All cardiac surgeries at the institute",
+      "unit": "operations",
+      "source": "unmehta",
+      "locator": "Surgical Procedures, 2025 Total Cardiac Surgeries",
+      "period": {
+        "start": "2025-01",
+        "end": "2025-12",
+        "total": 8504
+      },
+      "notes": "Adult and pediatric rows are subtotals. The running 2026 count is excluded."
+    },
+    {
+      "id": "bathinda_nicu",
+      "service": "NICU",
+      "facility": "AIIMS Bathinda",
+      "locality": "Bathinda",
+      "region": "Punjab",
+      "location_level": "facility",
+      "scope": "NICU admissions",
+      "unit": "admissions",
+      "source": "bathinda",
+      "locator": "Neonatology, NICU admissions in FY 2024–25",
+      "period": {
+        "start": "2024-04",
+        "end": "2025-03",
+        "total": 354
+      },
+      "notes": "All-neonatology admissions are reported separately."
+    },
+    {
+      "id": "bathinda_mri",
+      "service": "MRI",
+      "facility": "AIIMS Bathinda",
+      "locality": "Bathinda",
+      "region": "Punjab",
+      "location_level": "facility",
+      "scope": "Radiodiagnosis MRI examinations",
+      "unit": "scans",
+      "source": "bathinda",
+      "locator": "Radiodiagnosis annual investigations table, MRI",
+      "period": {
+        "start": "2024-04",
+        "end": "2025-03",
+        "total": 11572
+      }
+    },
+    {
+      "id": "bathinda_ct",
+      "service": "CT scan",
+      "facility": "AIIMS Bathinda",
+      "locality": "Bathinda",
+      "region": "Punjab",
+      "location_level": "facility",
+      "scope": "Radiodiagnosis CT examinations",
+      "unit": "scans",
+      "source": "bathinda",
+      "locator": "Radiodiagnosis annual investigations table, CT",
+      "period": {
+        "start": "2024-04",
+        "end": "2025-03",
+        "total": 42760
+      }
+    },
+    {
+      "id": "tiruppur_ortho",
+      "service": "Orthopedic surgery",
+      "facility": "Government Medical College Hospital Tiruppur",
+      "locality": "Tiruppur",
+      "region": "Tamil Nadu",
+      "location_level": "facility",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "source": "tiruppur",
+      "locator": "Major Surgery table, Ortho column",
+      "monthly": [
+        {
+          "start": "2025-01",
+          "counts": [142, 125, 164, 168, 188, 183, 220, 174, 235, 217, 193, 216]
+        }
+      ],
+      "notes": "Minor and emergency surgery tables are reported separately."
+    },
+    {
+      "id": "saifai_fractures",
+      "service": "Fracture care",
+      "facility": "UP University of Medical Sciences",
+      "locality": "Saifai, Etawah",
+      "region": "Uttar Pradesh",
+      "location_level": "facility_cohort",
+      "scope": "Eligible fracture patients admitted under orthopedics via emergency",
+      "unit": "admissions",
+      "source": "fracture",
+      "locator": "Methods, study duration, and Table 2, total admitted fracture patients",
+      "period": {
+        "start": "2022-12",
+        "end": "2024-12",
+        "total": 2182,
+        "exposure_months": 24
+      },
+      "notes": "The authors state two years and give Dec 2022 to Dec 2024 without exact days. The estimate uses the stated 24 months. Fractures treated without eligible admission are outside the cohort."
+    },
+    {
+      "id": "its_opd",
+      "service": "Dental care",
+      "facility": "I.T.S. Centre for Dental Studies & Research",
+      "locality": "Murad Nagar, Ghaziabad",
+      "region": "Uttar Pradesh",
+      "location_level": "facility",
+      "scope": "Whole-college dental OPD registrations, new and repeat",
+      "unit": "registrations",
+      "source": "its",
+      "locator": "2026 Out Patients, Total CPR row",
+      "monthly": [
+        {
+          "start": "2026-01",
+          "counts": [15437, 14479, 13109, 16144, 16527, 18193, 17971, 12735, 18953, 16439]
+        }
+      ],
+      "notes": "November and December have blank components. Computed template zeros for those months are excluded."
+    },
+    {
+      "id": "its_oral",
+      "service": "Oral surgery",
+      "facility": "I.T.S. Centre for Dental Studies & Research",
+      "locality": "Murad Nagar, Ghaziabad",
+      "region": "Uttar Pradesh",
+      "location_level": "facility",
+      "scope": "Reported major and minor oral/maxillofacial surgery",
+      "unit": "operations",
+      "source": "its",
+      "locator": "2026 Departmental Procedure Report, Oral & Maxillofacial Surgery Major Surgeries and Minor Surgeries",
+      "monthly": [
+        {
+          "start": "2026-01",
+          "counts": [140, 152, 140, 146, 132, 154, 80, 89, 99, 122]
+        }
+      ],
+      "transformation": {
+        "operation": "sum_exclusive_rows",
+        "components": [
+          {
+            "name": "Minor Surgeries",
+            "counts": [128, 139, 127, 130, 119, 135, 67, 76, 88, 111]
+          },
+          {
+            "name": "Major Surgeries",
+            "counts": [12, 13, 13, 16, 13, 19, 13, 13, 11, 11]
+          }
+        ]
+      },
+      "notes": "Exodontia, implant and other procedure rows are separate."
+    },
+    {
+      "id": "gt_dental",
+      "service": "Dental care",
+      "facility": "Gokuldas Tejpal Hospital",
+      "locality": "Mumbai",
+      "region": "Maharashtra",
+      "location_level": "facility_unit",
+      "scope": "G.T. Hospital Dentistry OPD",
+      "unit": "visits",
+      "source": "gtdental",
+      "locator": "OPD and procedure statistics for G.T. Hospital, OPD column",
+      "monthly": [
+        {
+          "start": "2025-01",
+          "counts": [231, 225, 252, 209, 200, 268, 266, 236, 199, 218, 232, 266, 243, 328]
+        }
+      ],
+      "notes": "The report separately mentions Dentistry at Cama Hospital. These counts are labeled for G.T. Hospital."
+    },
+    {
+      "id": "index_oral",
+      "service": "Oral surgery",
+      "facility": "Index Institute of Dental Sciences",
+      "locality": "Indore",
+      "region": "Madhya Pradesh",
+      "location_level": "facility",
+      "scope": "Major oral and maxillofacial procedures",
+      "unit": "operations",
+      "source": "indexdental",
+      "locator": "Jan–Jun 2026, Oral & Maxillofacial Surgery, Major Procedures",
+      "monthly": [
+        {
+          "start": "2026-01",
+          "counts": [58, 53, 54, 72, 71, 80]
+        }
+      ],
+      "notes": "Minor procedures are separate."
+    },
+    {
+      "id": "aravind_madurai_cataract",
+      "service": "Cataract surgery",
+      "facility": "Aravind Eye Hospital, Madurai",
+      "locality": "Madurai",
+      "region": "Tamil Nadu",
+      "location_level": "facility_branch",
+      "scope": "Cataract surgeries reported for the individual branch",
+      "unit": "operations",
+      "source": "aravind",
+      "locator": "Printed pp. 22–23, Procedures Performed, Cataract Surgery row and site column",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 100657
+      }
+    },
+    {
+      "id": "aravind_dindigul_cataract",
+      "service": "Cataract surgery",
+      "facility": "Aravind Eye Hospital, Dindigul",
+      "locality": "Dindigul",
+      "region": "Tamil Nadu",
+      "location_level": "facility_branch",
+      "scope": "Cataract surgeries reported for the individual branch",
+      "unit": "operations",
+      "source": "aravind",
+      "locator": "Printed pp. 22–23, Procedures Performed, Cataract Surgery row and site column",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 11324
+      }
+    },
+    {
+      "id": "aravind_tirunelveli_cataract",
+      "service": "Cataract surgery",
+      "facility": "Aravind Eye Hospital, Tirunelveli",
+      "locality": "Tirunelveli",
+      "region": "Tamil Nadu",
+      "location_level": "facility_branch",
+      "scope": "Cataract surgeries reported for the individual branch",
+      "unit": "operations",
+      "source": "aravind",
+      "locator": "Printed pp. 22–23, Procedures Performed, Cataract Surgery row and site column",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 49311
+      }
+    },
+    {
+      "id": "aravind_coimbatore_cataract",
+      "service": "Cataract surgery",
+      "facility": "Aravind Eye Hospital, Coimbatore",
+      "locality": "Coimbatore",
+      "region": "Tamil Nadu",
+      "location_level": "facility_branch",
+      "scope": "Cataract surgeries reported for the individual branch",
+      "unit": "operations",
+      "source": "aravind",
+      "locator": "Printed pp. 22–23, Procedures Performed, Cataract Surgery row and site column",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 63598
+      }
+    },
+    {
+      "id": "aravind_kovilpatti_cataract",
+      "service": "Cataract surgery",
+      "facility": "Aravind Eye Hospital, Kovilpatti",
+      "locality": "Kovilpatti",
+      "region": "Tamil Nadu",
+      "location_level": "facility_branch",
+      "scope": "Cataract surgeries reported for the individual branch",
+      "unit": "operations",
+      "source": "aravind",
+      "locator": "Printed pp. 22–23, Procedures Performed, Cataract Surgery row and site column",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 5189
+      }
+    },
+    {
+      "id": "aravind_pondicherry_cataract",
+      "service": "Cataract surgery",
+      "facility": "Aravind Eye Hospital, Pondicherry",
+      "locality": "Pondicherry",
+      "region": "Puducherry",
+      "location_level": "facility_branch",
+      "scope": "Cataract surgeries reported for the individual branch",
+      "unit": "operations",
+      "source": "aravind",
+      "locator": "Printed pp. 22–23, Procedures Performed, Cataract Surgery row and site column",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 55775
+      }
+    },
+    {
+      "id": "aravind_tirupati_cataract",
+      "service": "Cataract surgery",
+      "facility": "Aravind Eye Hospital, Tirupati",
+      "locality": "Tirupati",
+      "region": "Andhra Pradesh",
+      "location_level": "facility_branch",
+      "scope": "Cataract surgeries reported for the individual branch",
+      "unit": "operations",
+      "source": "aravind",
+      "locator": "Printed pp. 22–23, Procedures Performed, Cataract Surgery row and site column",
+      "period": {
+        "start": "2025-04",
+        "end": "2026-03",
+        "total": 37419
+      }
+    },
+    {
+      "id": "faridkot_stroke",
+      "service": "Stroke care",
+      "facility": "Guru Gobind Singh Medical College and Hospital",
+      "locality": "Faridkot",
+      "region": "Punjab",
+      "location_level": "facility_cohort",
+      "scope": "Adult acute or subacute ischemic stroke admissions in the study",
+      "unit": "admissions",
+      "source": "faridkot",
+      "locator": "Methods and results, 2023 adult acute or subacute ischemic stroke cases",
+      "period": {
+        "start": "2023-01",
+        "end": "2023-12",
+        "total": 208
+      },
+      "notes": "The study requires neuroimaging confirmation. Hemorrhagic strokes and incomplete records are outside the cohort."
+    },
+    {
+      "id": "safdarjung_burn",
+      "service": "Burn care",
+      "facility": "VMMC and Safdarjung Hospital",
+      "locality": "New Delhi",
+      "region": "Delhi",
+      "location_level": "facility_unit",
+      "scope": "Burn-specific OPD visits, new and return",
+      "unit": "visits",
+      "source": "safdarjung",
+      "locator": "Printed p. 146, burn OPD new and return cases",
+      "period": {
+        "start": "2021-01",
+        "end": "2021-12",
+        "total": 20507
+      },
+      "notes": "Sum of 4,011 new and 16,496 return visits. The combined burns, plastic and maxillofacial inpatient count is a separate measure."
+    },
+    {
+      "id": "bhubaneswar_chemo",
+      "service": "Chemotherapy",
+      "facility": "AIIMS Bhubaneswar",
+      "locality": "Bhubaneswar",
+      "region": "Odisha",
+      "location_level": "facility_unit",
+      "scope": "Medical Oncology day-care chemotherapy",
+      "unit": "administrations",
+      "source": "bhubaneswar",
+      "locator": "Printed p. 41, Day Care Chemotherapy monthly row",
+      "monthly": [
+        {
+          "start": "2024-04",
+          "counts": [2830, 2890, 3012, 3273, 3182, 2829, 3178, 3489, 3527, 3559, 3158, 3334]
+        }
+      ],
+      "notes": "The separately reported cancer service counts are excluded to avoid overlap."
+    },
+    {
+      "id": "cochin_chemo",
+      "service": "Chemotherapy",
+      "facility": "Cochin Cancer Research Centre",
+      "locality": "Kochi",
+      "region": "Kerala",
+      "location_level": "facility_unit",
+      "scope": "Day-care chemotherapy procedures",
+      "unit": "procedures",
+      "source": "cochin",
+      "locator": "Cochin Cancer Research Centre, Day Care Chemotherapy procedures",
+      "period": {
+        "start": "2025-04",
+        "end": "2025-08",
+        "total": 1149
+      },
+      "notes": "Five reported months in the FY2025–26 partial-period total. FY2024–25 is reported separately at 2,558 procedures."
+    }
+  ]
+}

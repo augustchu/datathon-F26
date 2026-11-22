@@ -1,4 +1,5 @@
-import { parseDelimited, normalizeRows, resolveAssetUrl, safeSourceUrl, toCsv, paginate, datasetKey } from './lib/data.js';
+import { parseDelimited, normalizeRows, resolveAssetUrl, safeSourceUrl, toCsv, paginate, datasetKey, buildSourceComparisons } from './lib/data.js';
+import { planAudit, drawAuditSample, evaluateAudit } from './lib/audit.js';
 
 const $ = selector => document.querySelector(selector);
 const paths = {
@@ -35,13 +36,18 @@ const STATUS = {
   rejected: { label: 'Rejected', pill: 'Incorrect', icon: 'x' },
   inconclusive: { label: 'Inconclusive', pill: 'Inconclusive', icon: 'question' },
 };
-const STORAGE = 'in-the-loop:active:v1';
+const linkOnly = new URL(location.href).searchParams.get('mode') === 'links';
+const mode = linkOnly ? 'links' : 'screenshots';
+const STORAGE = linkOnly ? 'in-the-loop:active:v1:links' : 'in-the-loop:active:v1';
+const draftKey = items => linkOnly ? `${datasetKey(items)}:links` : datasetKey(items);
 let records = [], selectedId = null, expanded = 'pending', query = '', zoom = 100;
+let sourceComparisons = new Map();
 let settings = { repository: 'yana-157/in-the-loop-verification-tool', ref: 'main' };
 let name = 'Repository evidence', isSample = true, key = '', saveFailed = false;
 const queues = Object.fromEntries(Object.keys(STATUS).map(status => [status, { page: 1, size: 10 }]));
 let pendingImport = null, workbook = null, loadedFileName = '', toastTimeout, importSequence = 0;
 let localFiles = new Map(), localUrls = new Set();
+let auditPreview = null, auditRun = null, inAudit = false;
 
 function notify(message) {
   $('#toast').textContent = message;
@@ -53,14 +59,27 @@ function notice(message) {
   $('#notice').textContent = message;
   $('#notice').hidden = !message;
 }
-function current() { return records.find(record => record.id === selectedId); }
+function reviewRecords() { return inAudit ? auditRun.records : records; }
+function current() { return reviewRecords().find(record => record.id === selectedId); }
+function differs(record) { return !inAudit && sourceComparisons.get(record.id)?.state === 'different'; }
 function queueRecords(status = expanded || current()?.status || 'pending') {
-  return records.filter(record => record.status === status && (!query || [record.id, record.title, record.assetPath, ...record.fields.map(field => field.value)].some(value => String(value).toLowerCase().includes(query))));
+  const differencesOnly = linkOnly && !inAudit && $('#differences-only').checked;
+  return reviewRecords().filter(record => record.status === status && (!differencesOnly || differs(record)) && (!query || [record.id, record.title, record.assetPath, record.sourceUrl, ...record.fields.map(field => field.value)].some(value => String(value ?? '').toLowerCase().includes(query))));
 }
+function updateComparisons() {
+  sourceComparisons = linkOnly ? buildSourceComparisons(records) : new Map();
+  $('#differences-option').hidden = sourceComparisons.size === 0;
+  $('#differences-only').checked = false;
+}
+function reviewDecision({ id, status, notes, reviewedAt }) { return { id, status, notes, reviewedAt }; }
+function auditKey() { return `${key}:accuracy-audit:v1`; }
 function persist() {
   try {
-    localStorage.setItem(STORAGE, JSON.stringify({ records, settings, name, isSample, key, selectedId, expanded, queues, autoAdvance: $('#auto-advance').checked }));
-    if (key) localStorage.setItem(key, JSON.stringify(records.map(({ id, status, notes, reviewedAt }) => ({ id, status, notes, reviewedAt }))));
+    localStorage.setItem(STORAGE, JSON.stringify({ records, settings, name, isSample, key, selectedId, expanded, queues, autoAdvance: $('#auto-advance').checked, inAudit }));
+    if (key) localStorage.setItem(key, JSON.stringify(records.map(reviewDecision)));
+    if (auditRun) localStorage.setItem(auditKey(), JSON.stringify({
+      plan: auditRun.plan, startedAt: auditRun.startedAt, reviews: auditRun.records.map(reviewDecision),
+    }));
     saveFailed = false;
     $('#save-status').innerHTML = '<span class="local-dot"></span>Saved locally';
   } catch {
@@ -69,17 +88,40 @@ function persist() {
     notice('Browser storage is unavailable or full. Your reviews are still here for this session. Export reviews to save a copy.');
   }
 }
+function sampleRecords(sampleIds) {
+  const byId = new Map(records.map(record => [record.id, record]));
+  return sampleIds.map(id => ({ ...byId.get(id), status: 'pending', notes: '', reviewedAt: '' }));
+}
+function restoreAudit() {
+  auditRun = null;
+  if (!key) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem(auditKey()));
+    if (!saved || saved.plan?.population !== records.length || !Array.isArray(saved.reviews) || saved.reviews.length !== saved.plan.sampleSize) return;
+    const ids = new Set(records.map(record => record.id));
+    const sampleIds = saved.reviews.map(review => review.id);
+    if (new Set(sampleIds).size !== sampleIds.length || !sampleIds.every(id => ids.has(id))) return;
+    if (!saved.reviews.every(review => Object.hasOwn(STATUS, review.status) && typeof review.notes === 'string' && typeof review.reviewedAt === 'string')) return;
+    const sample = sampleRecords(sampleIds).map((record, index) => ({ ...record, ...reviewDecision(saved.reviews[index]) }));
+    auditRun = { plan: saved.plan, startedAt: saved.startedAt, records: sample };
+  } catch { /* A malformed draft can be restarted from the imported data. */ }
+}
 function restore() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE));
     if (!saved || !Array.isArray(saved.records) || !saved.records.length) return false;
     if (!saved.records.every(record => typeof record.id === 'string' && typeof record.title === 'string' && typeof record.assetPath === 'string' && Array.isArray(record.fields) && STATUS[record.status] && record.original)) return false;
+    if (linkOnly && !saved.records.every(record => safeSourceUrl(record.sourceUrl))) return false;
     records = saved.records;
+    updateComparisons();
     settings = saved.settings || settings;
     name = saved.name || 'Imported spreadsheet';
     isSample = Boolean(saved.isSample);
-    key = datasetKey(records);
-    selectedId = records.some(record => record.id === saved.selectedId) ? saved.selectedId : records[0].id;
+    key = draftKey(records);
+    restoreAudit();
+    inAudit = Boolean(saved.inAudit && auditRun);
+    if (inAudit) $('#audit-panel').open = true;
+    selectedId = reviewRecords().some(record => record.id === saved.selectedId) ? saved.selectedId : reviewRecords()[0].id;
     expanded = saved.expanded === null ? null : STATUS[saved.expanded] ? saved.expanded : 'pending';
     for (const status of Object.keys(STATUS)) {
       if (saved.queues?.[status]) queues[status] = { page: Number(saved.queues[status].page) || 1, size: [1, 10, 50].includes(saved.queues[status].size) ? saved.queues[status].size : 10 };
@@ -91,39 +133,105 @@ function restore() {
 function renderNavigation() {
   const navigation = $('#navigators');
   navigation.innerHTML = Object.entries(STATUS).map(([status, meta], index) => {
-    const items = queueRecords(status), count = records.filter(record => record.status === status).length;
+    const items = queueRecords(status), count = reviewRecords().filter(record => record.status === status).length;
     const paged = paginate(items, queues[status].page, queues[status].size);
     queues[status].page = paged.page;
     const open = expanded === status;
-    return `${index === 1 ? '<div class="queue-label">REVIEWED ASSETS</div>' : ''}<div class="queue"><button class="queue-toggle" data-queue="${status}" aria-expanded="${open}" aria-controls="queue-${status}"><span class="queue-symbol ${status}">${icon(meta.icon)}</span><span class="queue-name">${meta.label}</span><span class="queue-count">${count}</span>${icon('right', 'chevron')}</button><div class="queue-panel" id="queue-${status}" ${open ? '' : 'hidden'}><div class="page-size"><span>Assets per page</span><div class="size-buttons" role="group" aria-label="${meta.label} assets per page">${[1, 10, 50].map(size => `<button data-size="${size}" data-status="${status}" aria-pressed="${queues[status].size === size}" aria-label="Show ${size} ${meta.label.toLowerCase()} assets per page">${size}</button>`).join('')}</div></div><div class="asset-list">${paged.items.length ? paged.items.map((record, offset) => `<button class="asset-item" data-record="${escapeHtml(record.id)}" aria-current="${selectedId === record.id}" title="${escapeHtml(record.title)}"><span class="asset-index">${String((paged.page - 1) * queues[status].size + offset + 1).padStart(2, '0')}</span><span class="asset-item-copy"><strong>${escapeHtml(record.title)}</strong><small>${escapeHtml(record.id)} · ${record.fields.length} fields</small></span></button>`).join('') : '<div class="list-empty">No matching assets</div>'}</div><div class="pagination"><button data-page-change="-1" data-status="${status}" aria-label="Previous ${meta.label.toLowerCase()} list page" ${paged.page <= 1 ? 'disabled' : ''}>${icon('left')}</button><span>Page <select data-page-select="${status}" aria-label="${meta.label} list page">${Array.from({ length: paged.totalPages }, (_, index) => `<option value="${index + 1}" ${paged.page === index + 1 ? 'selected' : ''}>${index + 1}</option>`).join('')}</select> of ${paged.totalPages}</span><button data-page-change="1" data-status="${status}" aria-label="Next ${meta.label.toLowerCase()} list page" ${paged.page >= paged.totalPages ? 'disabled' : ''}>${icon('right')}</button></div></div></div>`;
+    return `${index === 1 ? '<div class="queue-label">REVIEWED ASSETS</div>' : ''}<div class="queue"><button class="queue-toggle" data-queue="${status}" aria-expanded="${open}" aria-controls="queue-${status}"><span class="queue-symbol ${status}">${icon(meta.icon)}</span><span class="queue-name">${meta.label}</span><span class="queue-count">${count}</span>${icon('right', 'chevron')}</button><div class="queue-panel" id="queue-${status}" ${open ? '' : 'hidden'}><div class="page-size"><span>Assets per page</span><div class="size-buttons" role="group" aria-label="${meta.label} assets per page">${[1, 10, 50].map(size => `<button data-size="${size}" data-status="${status}" aria-pressed="${queues[status].size === size}" aria-label="Show ${size} ${meta.label.toLowerCase()} assets per page">${size}</button>`).join('')}</div></div><div class="asset-list">${paged.items.length ? paged.items.map((record, offset) => `<button class="asset-item" data-record="${escapeHtml(record.id)}" aria-current="${selectedId === record.id}" title="${escapeHtml(record.title)}"><span class="asset-index">${String((paged.page - 1) * queues[status].size + offset + 1).padStart(2, '0')}</span><span class="asset-item-copy"><strong>${escapeHtml(record.title)}</strong><small>${escapeHtml(record.id)} · ${record.fields.length} fields${differs(record) ? ' · <span class="queued-difference">Differs</span>' : ''}</small></span></button>`).join('') : '<div class="list-empty">No matching assets</div>'}</div><div class="pagination"><button data-page-change="-1" data-status="${status}" aria-label="Previous ${meta.label.toLowerCase()} list page" ${paged.page <= 1 ? 'disabled' : ''}>${icon('left')}</button><span>Page <select data-page-select="${status}" aria-label="${meta.label} list page">${Array.from({ length: paged.totalPages }, (_, index) => `<option value="${index + 1}" ${paged.page === index + 1 ? 'selected' : ''}>${index + 1}</option>`).join('')}</select> of ${paged.totalPages}</span><button data-page-change="1" data-status="${status}" aria-label="Next ${meta.label.toLowerCase()} list page" ${paged.page >= paged.totalPages ? 'disabled' : ''}>${icon('right')}</button></div></div></div>`;
   }).join('');
 }
 function renderProgress() {
-  const reviewed = records.filter(record => record.status !== 'pending').length;
-  const accepted = records.filter(record => record.status === 'accepted').length;
-  const rejected = records.filter(record => record.status === 'rejected').length;
-  const inconclusive = records.filter(record => record.status === 'inconclusive').length;
-  const percent = records.length ? Math.round(reviewed / records.length * 100) : 0;
+  const visible = reviewRecords();
+  const reviewed = visible.filter(record => record.status !== 'pending').length;
+  const accepted = visible.filter(record => record.status === 'accepted').length;
+  const rejected = visible.filter(record => record.status === 'rejected').length;
+  const inconclusive = visible.filter(record => record.status === 'inconclusive').length;
+  const percent = visible.length ? Math.round(reviewed / visible.length * 100) : 0;
   $('#reviewed-count').textContent = reviewed;
-  $('#total-count').textContent = records.length;
-  $('#remaining-count').textContent = records.length - reviewed;
+  $('#total-count').textContent = visible.length;
+  $('#remaining-count').textContent = visible.length - reviewed;
   $('#progress-percent').textContent = `${percent}%`;
   $('#progress-fill').style.width = `${percent}%`;
   $('#progress-track').setAttribute('aria-valuenow', percent);
   $('#progress-description').textContent = reviewed ? `${accepted} accepted · ${rejected} rejected · ${inconclusive} inconclusive` : 'Every review brings the data into focus.';
-  $('#export-button').disabled = records.length === 0;
+  $('#export-button').disabled = visible.length === 0;
+  $('#export-label').textContent = inAudit ? 'Export audit receipt' : 'Export reviews';
   $('#dataset-label').textContent = name;
   $('#dataset-label').title = name;
-  $('#dataset-meta').textContent = `${records.length} assets · ${isSample ? 'Repository sample' : 'Imported spreadsheet'}`;
+  $('#dataset-meta').textContent = inAudit ? `${visible.length} of ${records.length} rows · Random audit` : `${records.length} assets · ${isSample ? 'Repository sample' : 'Imported spreadsheet'}`;
+  $('#differences-option').hidden = inAudit || sourceComparisons.size === 0;
+  renderAudit();
   $('#sample-badge').hidden = !isSample;
+}
+function auditResult() {
+  const counts = { correct: 0, incorrect: 0, inconclusive: 0, remaining: 0 };
+  const outcome = { accepted: 'correct', rejected: 'incorrect', inconclusive: 'inconclusive', pending: 'remaining' };
+  for (const record of auditRun.records) counts[outcome[record.status]]++;
+  return evaluateAudit(auditRun.plan, counts);
+}
+function percent(value) { return (100 * value).toLocaleString('en', { maximumSignificantDigits: 6 }) + '%'; }
+function describePlan(plan) {
+  const selection = plan.sampleSize === plan.population ? 'All rows' : `${plan.sampleSize} random rows`;
+  return `${selection} out of ${plan.population.toLocaleString()} · ${plan.criticalCorrect} confirmed correct needed · α ${percent(plan.alpha)} · ${percent(plan.achievedPower)} power at ${percent(plan.effectiveDesignAccuracy)} accuracy.`;
+}
+function renderAudit() {
+  const pane = $('#audit-panel');
+  pane.hidden = !records.length;
+  if (pane.hidden) return;
+  $('#audit-form').hidden = Boolean(auditRun);
+  $('#audit-run').hidden = !auditRun;
+  if (!auditRun) return;
+  $('#audit-toggle').textContent = inAudit ? 'Back to all rows' : 'Open frozen sample';
+  $('#audit-export').hidden = inAudit;
+  $('#audit-plan').textContent = `Test whether accuracy exceeds ${percent(auditRun.plan.floor)}. ${describePlan(auditRun.plan)}`;
+  const result = auditResult();
+  const label = {
+    pending: `${result.remaining} sample ${result.remaining === 1 ? 'row' : 'rows'} still to review.`,
+    pass: 'Pass. The review supports accuracy above the threshold.',
+    'not-demonstrated': 'Accuracy above the threshold was not demonstrated.',
+    inconclusive: 'The conclusion depends on unresolved rows.',
+  }[result.status];
+  const formatP = p => Number(p.toPrecision(4)).toString();
+  let pText = '';
+  if (result.status !== 'pending') {
+    pText = result.pValueMin === result.pValueMax ? ` p = ${formatP(result.pValueMax)}.` : ` Possible p values ${formatP(result.pValueMin)} to ${formatP(result.pValueMax)}.`;
+  }
+  $('#audit-result').textContent = `${label} ${result.correct} correct · ${result.incorrect} incorrect · ${result.inconclusive} inconclusive.${pText}`;
+}
+function clearAuditPreview() {
+  auditPreview = null;
+  $('#audit-start').disabled = true;
+  $('#audit-error').hidden = true;
+  $('#audit-preview').hidden = true;
+}
+function showAuditError(error) {
+  $('#audit-error').textContent = error.message;
+  $('#audit-error').hidden = false;
+}
+function resetReviewSelection() {
+  const visible = reviewRecords();
+  const first = visible.find(record => record.status === 'pending') || visible[0];
+  selectedId = first?.id || null;
+  expanded = first?.status || 'pending';
+  query = '';
+  $('#asset-search').value = '';
+  $('#differences-only').checked = false;
+  Object.values(queues).forEach(queue => { queue.page = 1; });
+}
+function switchAuditView(enabled) {
+  inAudit = enabled;
+  resetReviewSelection();
+  persist();
+  renderAll();
 }
 function neighbor(direction) {
   const items = queueRecords();
   if (!items.length) return null;
   const index = items.findIndex(record => record.id === selectedId);
   if (index >= 0) return items[index + direction] || null;
-  const globalIndex = records.findIndex(record => record.id === selectedId);
-  return direction > 0 ? items.find(record => records.indexOf(record) > globalIndex) || null : [...items].reverse().find(record => records.indexOf(record) < globalIndex) || null;
+  const visible = reviewRecords();
+  const globalIndex = visible.findIndex(record => record.id === selectedId);
+  return direction > 0 ? items.find(record => visible.indexOf(record) > globalIndex) || null : [...items].reverse().find(record => visible.indexOf(record) < globalIndex) || null;
 }
 function renderDecision() {
   const record = current();
@@ -173,9 +281,49 @@ function loadImage(record) {
 function setZoom(value) {
   zoom = Math.max(50, Math.min(300, value));
   $('#evidence-image').style.width = `${zoom}%`;
-  $('#zoom-reset').textContent = `${zoom}%`;
+  $('#zoom-reset').textContent = zoom === 100 ? 'Fit width' : `${zoom}%`;
   $('#zoom-out').disabled = zoom <= 50;
   $('#zoom-in').disabled = zoom >= 300;
+}
+function showSourceLink(selector, value) {
+  const link = $(selector);
+  const source = safeSourceUrl(value);
+  link.hidden = !source;
+  if (source) {
+    link.setAttribute('href', source);
+    link.title = source;
+  } else {
+    link.removeAttribute('href');
+    link.title = '';
+  }
+  return source;
+}
+function renderClaim(field) {
+  const candidateSource = /^candidate[\s_-]+source[\s_-]+url$/i.test(field.name.trim()) && safeSourceUrl(field.value);
+  const value = escapeHtml(field.value || '—');
+  const content = candidateSource
+    ? `<a class="claim-source" href="${escapeHtml(candidateSource)}" target="_blank" rel="noopener noreferrer">${value}</a>`
+    : value;
+  return `<div><dt>${escapeHtml(field.name.replaceAll('_', ' '))}</dt><dd>${content}</dd></div>`;
+}
+function setActualSize(enabled) {
+  $('#expanded-image-viewport').dataset.actualSize = String(enabled);
+  $('#actual-size').setAttribute('aria-pressed', enabled);
+}
+function renderComparison(record) {
+  const comparison = sourceComparisons.get(record.id);
+  $('#source-comparison').hidden = !comparison;
+  if (!comparison) return;
+  const labels = { different: 'Values differ', agree: 'Values agree', 'single-source': 'One source' };
+  $('#comparison-title').textContent = comparison.field.replaceAll('_', ' ');
+  $('#comparison-state').textContent = labels[comparison.state];
+  $('#comparison-state').dataset.state = comparison.state;
+  $('#comparison-claims').innerHTML = comparison.claims.map(claim => {
+    const url = safeSourceUrl(claim.sourceUrl);
+    const publisher = escapeHtml(claim.publisher);
+    const source = url ? `<a class="claim-source" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${publisher}</a>` : publisher;
+    return `<li${record.id === claim.id ? ' aria-current="true"' : ''}><div>${source}${claim.asOf ? `<small>${escapeHtml(claim.asOf)}</small>` : ''}</div><strong>${escapeHtml(claim.value)}</strong></li>`;
+  }).join('');
 }
 function renderCurrent() {
   const record = current();
@@ -185,21 +333,26 @@ function renderCurrent() {
   $('#asset-id').textContent = record.id;
   $('#row-label').textContent = `Row ${record.rowNumber}`;
   $('#asset-title').textContent = record.title;
-  $('#asset-position').textContent = `${records.indexOf(record) + 1} / ${records.length}`;
+  const visible = reviewRecords();
+  $('#asset-position').textContent = `${visible.indexOf(record) + 1} / ${visible.length}`;
   $('#field-count').textContent = `${record.fields.length} fields`;
-  $('#claim-fields').innerHTML = record.fields.length ? record.fields.map(field => `<div><dt>${escapeHtml(field.name.replaceAll('_', ' '))}</dt><dd>${escapeHtml(field.value || '—')}</dd></div>`).join('') : '<div><dd>No claim fields were supplied in this row.</dd></div>';
-  const source = safeSourceUrl(record.sourceUrl);
-  $('#source-link').hidden = !source;
-  if (source) $('#source-link').href = source;
-  else $('#source-link').removeAttribute('href');
+  $('#claim-fields').innerHTML = record.fields.length ? record.fields.map(renderClaim).join('') : '<div><dd>No claim fields were supplied in this row.</dd></div>';
   $('#review-notes').value = record.notes || '';
-  $('#image-viewport').scrollTo(0, 0);
-  setZoom(100);
-  loadImage(record);
+  if (linkOnly) {
+    $('#live-source-address').textContent = showSourceLink('#live-source-link', record.sourceUrl);
+    if (inAudit) $('#source-comparison').hidden = true;
+    else renderComparison(record);
+  } else {
+    showSourceLink('#source-link', record.sourceUrl);
+    $('#image-viewport').scrollTo(0, 0);
+    setZoom(100);
+    loadImage(record);
+  }
   renderDecision();
 }
 function renderAll() { renderProgress(); renderNavigation(); renderCurrent(); }
 function selectAsset(id, { alignPage = false } = {}) {
+  if (inAudit && !reviewRecords().some(record => record.id === id)) return;
   selectedId = id;
   if (alignPage && expanded) {
     const index = queueRecords().findIndex(record => record.id === id);
@@ -228,7 +381,11 @@ function revokeLocalImages() {
 function openDataset(importedRecords, { datasetName, sample = false, repository = settings.repository, ref = settings.ref } = {}) {
   revokeLocalImages();
   records = importedRecords;
-  key = datasetKey(records);
+  updateComparisons();
+  key = draftKey(records);
+  restoreAudit();
+  inAudit = false;
+  clearAuditPreview();
   // Explicit decisions in an imported review export take precedence over an older local draft.
   const includesReviews = records.some(record => Object.keys(record.original).some(column => column.trim().toLowerCase().replace(/[\s-]+/g, '_') === 'review_status'));
   if (!includesReviews) {
@@ -247,19 +404,16 @@ function openDataset(importedRecords, { datasetName, sample = false, repository 
       }
     } catch { /* Saving will show an actionable message if storage is unavailable. */ }
   }
-  selectedId = (records.find(record => record.status === 'pending') || records[0])?.id || null;
-  expanded = records.some(record => record.status === 'pending') ? 'pending' : records[0]?.status || 'pending';
   name = datasetName || 'Imported spreadsheet'; isSample = sample;
-  settings = { repository, ref }; query = '';
-  $('#asset-search').value = '';
-  Object.values(queues).forEach(queue => { queue.page = 1; });
+  settings = { repository, ref };
+  resetReviewSelection();
   notice(''); persist(); renderAll();
 }
 async function loadSample() {
   try {
     const response = await fetch(new URL('./samples/evidence.csv', import.meta.url));
     if (!response.ok) throw new Error(`Could not load the sample (${response.status}).`);
-    openDataset(normalizeRows(parseDelimited(await response.text()).rows), { datasetName: 'Repository evidence', sample: true });
+    openDataset(normalizeRows(parseDelimited(await response.text()).rows, { mode }), { datasetName: 'Repository evidence', sample: true });
   } catch (error) { notice(error.message); renderAll(); }
 }
 
@@ -283,13 +437,18 @@ $('#navigators').addEventListener('click', event => {
 $('#navigators').addEventListener('change', event => {
   if (event.target.dataset.pageSelect) { queues[event.target.dataset.pageSelect].page = Number(event.target.value); renderNavigation(); persist(); }
 });
-$('#asset-search').addEventListener('input', event => {
-  query = event.target.value.trim().toLowerCase();
+function applyQueueFilters() {
   Object.values(queues).forEach(queue => { queue.page = 1; });
   if (!expanded) expanded = 'pending';
-  if (!queueRecords().some(record => record.id === selectedId)) selectedId = queueRecords()[0]?.id || null;
+  const matching = queueRecords();
+  if (!matching.some(record => record.id === selectedId)) selectedId = matching[0]?.id || null;
   renderNavigation(); renderCurrent();
+}
+$('#asset-search').addEventListener('input', event => {
+  query = event.target.value.trim().toLowerCase();
+  applyQueueFilters();
 });
+$('#differences-only').addEventListener('change', applyQueueFilters);
 $('#previous-asset').addEventListener('click', () => navigate(-1));
 $('#next-asset').addEventListener('click', () => navigate(1));
 document.querySelectorAll('[data-rate]').forEach(button => button.addEventListener('click', () => rate(button.dataset.rate)));
@@ -303,11 +462,16 @@ $('#zoom-in').addEventListener('click', () => setZoom(zoom + 25));
 $('#zoom-out').addEventListener('click', () => setZoom(zoom - 25));
 $('#zoom-reset').addEventListener('click', () => setZoom(100));
 $('#expand-image').addEventListener('click', () => {
-  if (!current() || $('#evidence-image').hidden) return;
+  const record = current();
+  if (!record || $('#evidence-image').hidden) return;
   $('#expanded-image').src = $('#evidence-image').src;
-  $('#expanded-title').textContent = current().title;
+  $('#expanded-title').textContent = record.title;
+  showSourceLink('#expanded-source-link', record.sourceUrl);
+  setActualSize(false);
   $('#image-dialog').showModal();
+  $('#expanded-image-viewport').scrollTo(0, 0);
 });
+$('#actual-size').addEventListener('click', () => setActualSize($('#expanded-image-viewport').dataset.actualSize !== 'true'));
 $('#attach-button').addEventListener('click', () => $('#screenshot-files').click());
 $('#screenshot-files').addEventListener('change', event => {
   let matched = 0, ambiguous = 0;
@@ -332,11 +496,56 @@ function download(content, filename, mime) {
   document.body.append(anchor); anchor.click(); anchor.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+function exportAudit() {
+  if (!auditRun) return;
+  const receipt = {
+    method: 'one-sided exact hypergeometric', dataset: name, datasetKey: key,
+    startedAt: auditRun.startedAt, exportedAt: new Date().toISOString(), plan: auditRun.plan,
+    result: auditResult(), sample: auditRun.records.map((record, index) => ({
+      drawOrder: index + 1, sourceUrl: record.sourceUrl, rowNumber: record.rowNumber, ...reviewDecision(record),
+    })),
+  };
+  const filename = name.replace(/\.[^.]+$/, '').replace(/[^\w\s.-]/g, '_');
+  download(JSON.stringify(receipt, null, 2) + '\n', `${filename}-accuracy-audit.json`, 'application/json');
+  notify('Audit receipt downloaded.');
+}
 $('#export-button').addEventListener('click', () => {
-  try { download(toCsv(records), `${name.replace(/\.[^.]+$/, '').replace(/[^\w\s.-]/g, '_')}-reviewed.csv`, 'text/csv;charset=utf-8'); notify('Review export downloaded.'); }
+  if (inAudit) { exportAudit(); return; }
+  try { download(toCsv(records, { mode }), `${name.replace(/\.[^.]+$/, '').replace(/[^\w\s.-]/g, '_')}-reviewed.csv`, 'text/csv;charset=utf-8'); notify('Review export downloaded.'); }
   catch (error) { notice(error.message); }
 });
 function importError(message = '') { $('#import-error').textContent = message; $('#import-error').hidden = !message; }
+$('#audit-form').addEventListener('input', clearAuditPreview);
+$('#audit-form').addEventListener('submit', event => {
+  event.preventDefault();
+  if (auditRun || !records.length) return;
+  clearAuditPreview();
+  const proportion = id => {
+    const input = $(`#audit-${id}`).value.trim();
+    return input ? Number(input) / 100 : NaN;
+  };
+  try {
+    auditPreview = planAudit(records.length, {
+      alpha: proportion('alpha'), floor: proportion('floor'),
+      designAccuracy: proportion('target'), power: proportion('power'),
+    });
+    $('#audit-preview').textContent = describePlan(auditPreview);
+    $('#audit-preview').hidden = false;
+    $('#audit-start').disabled = false;
+  } catch (error) { showAuditError(error); }
+});
+$('#audit-start').addEventListener('click', () => {
+  if (!auditPreview || auditRun) return;
+  try {
+    const sample = drawAuditSample(records.map(record => record.id), auditPreview.sampleSize);
+    auditRun = { plan: auditPreview, startedAt: new Date().toISOString(), records: sampleRecords(sample) };
+  } catch (error) { showAuditError(error); return; }
+  clearAuditPreview();
+  switchAuditView(true);
+  $('#audit-toggle').focus();
+});
+$('#audit-toggle').addEventListener('click', () => { if (auditRun) switchAuditView(!inAudit); });
+$('#audit-export').addEventListener('click', exportAudit);
 function showImport() {
   $('#repository-input').value = settings.repository; $('#ref-input').value = settings.ref;
   $('#import-dialog').showModal();
@@ -352,18 +561,21 @@ function setImportTable(table) {
   if (table.rows.length > 25000) throw new Error('Please split this spreadsheet into files of 25,000 rows or fewer.');
   pendingImport = table;
   const normalized = value => value.trim().toLowerCase().replace(/[\s-]+/g, '_');
-  function options(selector, aliases, optional) {
+  function options(selector, aliases, placeholder = 'Generate from row') {
     const select = $(selector);
     select.replaceChildren();
-    if (optional) select.add(new Option('Generate from row', ''));
-    else select.add(new Option('Select screenshot column', ''));
+    select.add(new Option(placeholder, ''));
     table.headers.forEach(header => select.add(new Option(header, header)));
     const match = aliases.map(alias => table.headers.find(header => normalized(header) === alias)).find(Boolean);
     select.value = match || '';
   }
-  options('#asset-column', ['review_asset_path', 'asset_path', 'screenshot_path', 'github_path', 'filepath', 'file_path', 'screenshot', 'screenshot_url', 'asset_url', 'image_path', 'image_url', 'asset'], false);
-  options('#title-column', ['review_asset_title', 'title', 'name', 'facility_name', 'hospital_name', 'document_title'], true);
-  options('#id-column', ['review_asset_id', 'id', 'asset_id', 'record_id'], true);
+  if (linkOnly) {
+    options('#source-column', ['review_source_url', 'source_url', 'original_source_url', 'evidence_source_url', 'page_url', 'url', 'source', 'candidate_source_url'], 'Select original page column');
+  } else {
+    options('#asset-column', ['review_asset_path', 'asset_path', 'screenshot_path', 'full_page_screenshot_path', 'github_path', 'filepath', 'file_path', 'screenshot', 'screenshot_url', 'asset_url', 'image_path', 'image_url', 'asset'], 'Select screenshot column');
+  }
+  options('#title-column', ['review_asset_title', 'title', 'name', 'facility_name', 'hospital_name', 'document_title']);
+  options('#id-column', ['review_asset_id', 'id', 'asset_id', 'record_id']);
   $('#import-settings').hidden = false;
   $('#import-summary').textContent = `${table.rows.length.toLocaleString()} assets · ${table.headers.length} columns · all other fields will appear as scraped claims.`;
   $('#confirm-import').disabled = false;
@@ -413,19 +625,50 @@ $('#import-form').addEventListener('submit', event => {
   if (!pendingImport) return;
   try {
     const repository = $('#repository-input').value.trim(), ref = $('#ref-input').value.trim();
-    if (!/^[\w.-]+\/[\w.-]+$/.test(repository)) throw new Error('Enter the GitHub repository as owner/repository.');
-    if (!ref) throw new Error('Enter a branch or commit.');
-    const imported = normalizeRows(pendingImport.rows, { assetColumn: $('#asset-column').value, titleColumn: $('#title-column').value, idColumn: $('#id-column').value });
-    openDataset(imported, { datasetName: loadedFileName, repository, ref });
+    const mapping = { mode, titleColumn: $('#title-column').value, idColumn: $('#id-column').value };
+    if (linkOnly) {
+      mapping.sourceColumn = $('#source-column').value || undefined;
+    } else {
+      if (!/^[\w.-]+\/[\w.-]+$/.test(repository)) throw new Error('Enter the GitHub repository as owner/repository.');
+      if (!ref) throw new Error('Enter a branch or commit.');
+      mapping.assetColumn = $('#asset-column').value;
+    }
+    const imported = normalizeRows(pendingImport.rows, mapping);
+    openDataset(imported, { datasetName: loadedFileName, ...(linkOnly ? {} : { repository, ref }) });
     $('#import-dialog').close(); notify(`Loaded ${records.length} assets. Ready for a human check.`);
   } catch (error) { importError(error.message); }
 });
 document.addEventListener('keydown', event => {
   if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || document.querySelector('dialog[open]') || event.target.closest('input,textarea,select,[contenteditable="true"]')) return;
   if (['1', '2', '3'].includes(event.key)) { event.preventDefault(); rate({ 1: 'rejected', 2: 'inconclusive', 3: 'accepted' }[event.key]); }
+  if (event.target.closest('#image-viewport')) return;
   if (event.key === 'ArrowLeft') { event.preventDefault(); navigate(-1); }
   if (event.key === 'ArrowRight') { event.preventDefault(); navigate(1); }
 });
+
+if (linkOnly) {
+  $('#active-mode').textContent = 'Source links';
+  $('#switch-review-mode').textContent = 'Screenshot review';
+  $('#switch-review-mode').href = './';
+  $('#review-description').textContent = 'Open each original page and compare it with the claims.';
+  $('#claim-explanation').textContent = 'Does this information match the original page?';
+  $('#screenshot-evidence').hidden = true;
+  $('#link-evidence').hidden = false;
+  $('#import-description').textContent = 'Include the original page URL and the claims to check in each row.';
+  $('#import-template').href = './samples/link-template.csv';
+  $('#screenshot-column-field').hidden = true;
+  $('#asset-column').disabled = true;
+  $('#source-column-field').hidden = false;
+  $('#source-column').disabled = false;
+  $('#source-column').required = true;
+  $('#repository-settings').hidden = true;
+  $('#repository-input').disabled = true;
+  $('#ref-input').disabled = true;
+  $('#repository-help').hidden = true;
+  $('#help-input').textContent = 'Include the original page URL and the claims to check in each row.';
+  $('#help-evidence').textContent = 'Open the original page in a new tab, compare its text with the claim, and add an optional note.';
+  $('#help-attachments').hidden = true;
+}
 
 if (restore()) renderAll();
 else await loadSample();

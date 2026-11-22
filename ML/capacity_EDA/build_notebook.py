@@ -58,6 +58,7 @@ MAX_ROWS = 20000
 SEED = 42
 N_TREES = 300
 PERMUTATION_REPEATS = 3
+TEST_SIZE = 0.2
 # Example: "/Volumes/<catalog>/<schema>/<volume>/capacity_EDA"
 OUTPUT_DIR = None
 REPO_ROOT = None  # Supply the absolute Git folder path if it is outside the working directory.
@@ -118,7 +119,7 @@ performs poorly. Mean and median baselines make the result easier to assess.
     cell("code", """
 result = run_capacity_rf(
     data, target=TARGET, after_column=AFTER_COLUMN, group_column=GROUP_COLUMN,
-    test_size=0.2, random_state=SEED, n_estimators=N_TREES,
+    test_size=TEST_SIZE, random_state=SEED, n_estimators=N_TREES,
     permutation_repeats=PERMUTATION_REPEATS,
     max_text_features=128, max_categories=40, n_jobs=2,
 )
@@ -199,12 +200,16 @@ else:
 ## Optional: record a W&B model artifact
 
 Set `LOG_MODEL_TO_WANDB = True` to log the training-split fitted model and aggregate
-test metrics. The detailed audit stays in the notebook and optional output directory.
-The fitted encoder requires the matching `capacity_rf` module for loading.
+test metrics, both baselines, and the permutation and encoding summaries. The
+run records the source table, the fitted settings, and hashes of the split and
+holdout. Facility rows and individual predictions stay in the notebook and optional
+output directory. Runs default to offline. The fitted encoder requires the matching
+`capacity_rf` module for loading.
     """),
     cell("code", """
 if LOG_MODEL_TO_WANDB:
     from copy import copy
+    from hashlib import sha256
     from sklearn.pipeline import Pipeline
 
     sys.path.insert(0, str(repo_root / "ML/notebooks"))
@@ -215,22 +220,49 @@ if LOG_MODEL_TO_WANDB:
     encoder = copy(fitted.named_steps["encode"])
     del encoder.audit_
     encoder.feature_names_in_ = np.asarray(encoder.columns_, dtype=object)
-    export_model = Pipeline([("encode", encoder), ("forest", fitted.named_steps["forest"])])
-    metrics = {
-        f"test_{row.model}_{measure}": float(getattr(row, measure))
-        for row in result["metrics"].itertuples(index=False)
-        for measure in ("mae", "rmse", "r2")
-        if np.isfinite(getattr(row, measure))
+    forest = fitted.named_steps["forest"]
+    export_model = Pipeline([("encode", encoder), ("forest", forest)])
+    metrics_by_model = result["metrics"].set_index("model")
+    metrics = {f"test_{name}": value for name, value in metrics_by_model.loc["random_forest"].items()}
+    baseline_metrics = {
+        f"test_{strategy}_{measure}": value
+        for strategy in ("mean", "median")
+        for measure, value in metrics_by_model.loc[f"baseline_{strategy}", ["mae", "rmse", "r2"]].items()
+    }
+    # Hash sorted group/label pairs. Source row order can vary across Spark reads.
+    members = result["split"].merge(
+        result["target_audit"][["source_row", "parsed_capacity"]], on="source_row", validate="one_to_one",
+    )
+
+    def fingerprint(frame):
+        records = sorted(frame[["split", "group", "parsed_capacity"]].itertuples(index=False, name=None))
+        return sha256(json.dumps(records, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+
+    feature_audit = result["feature_audit"].drop(columns="feature_names")
+    tables = {
+        "test_comparison": result["metrics"].to_dict("records"),
+        "permutation_importance": result["importance"].to_dict("records"),
+        "column_selection": result["column_selection"].to_dict("records"),
+        "encoding_summary": feature_audit.to_dict("records"),
+        "potential_leakage": result["leakage_flags"].to_dict("records"),
+        "target_status_counts": result["target_audit"]["status"].value_counts().rename_axis("status")
+            .reset_index(name="rows").to_dict("records"),
     }
     config = {
-        "table": TABLE, "target": TARGET, "after_column": AFTER_COLUMN, "group_column": GROUP_COLUMN,
-        "read_completed_at_utc": SOURCE_READ_AT_UTC, "predictor_columns": predictor_columns,
-        "seed": SEED, "n_estimators": N_TREES, "permutation_repeats": PERMUTATION_REPEATS,
-        "train_rows": result["summary"]["train_rows"], "test_rows": result["summary"]["test_rows"],
+        "source_table": TABLE, "target_field": TARGET, "after_column": AFTER_COLUMN, "group_column": GROUP_COLUMN,
+        "table": TABLE, "target": TARGET, "predictor_columns": predictor_columns,
+        "read_completed_at_utc": SOURCE_READ_AT_UTC, "seed": SEED, "requested_test_group_fraction": TEST_SIZE,
+        "split_fingerprint": fingerprint(members), "holdout_fingerprint": fingerprint(members.loc[members["split"].eq("test")]),
+        "fingerprint_method": "SHA-256 of sorted split, group digest and parsed label triples",
+        "fit_summary": result["summary"], "forest_hyperparameters": forest.get_params(deep=False),
+        "encoder_hyperparameters": encoder.get_params(deep=False),
+        "feature_stage": "Pass the original columns in the recorded predictor schema. The fitted encoder transforms them.",
+        "permutation_scoring": "test MAE increase after shuffling one original input column",
         "artifact_reviewed_types": ["capacity_rf.FacilityEncoder", "sklearn.tree._tree.Tree"],
     }
     wandb_run = log_sklearn_capacity(
         name="capacity-random-forest", model=export_model, metrics=metrics,
+        baseline_metrics=baseline_metrics, evaluation_tables=tables,
         config=config, target_transform="identity",
     )
     print(f"W&B {wandb_run['mode']} run: {wandb_run['run_directory']}")

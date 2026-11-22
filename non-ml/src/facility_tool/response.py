@@ -8,7 +8,7 @@ from .profiles import plausible_phone
 from .recommend import DISTANCE_METRIC, ROUTE_DISTANCE_METRIC, ROUTE_METRIC
 
 
-LOAD_OPT_IN_LABEL = 'Not an emergency? Opt in to find less crowded facilities, which may be further away.'
+LOAD_OPT_IN_LABEL = 'For routine care, compare recently reported service availability within your travel limits.'
 CALL_PROMPT = 'Call this facility before traveling to verify the service, branch, and current availability.'
 CONTACT_FIELDS = ('phone_number', 'phone_source_url', 'phone_source_note', 'phone_source_urls', 'other_listed_phones')
 FIT_TRAVEL_SCALES = {

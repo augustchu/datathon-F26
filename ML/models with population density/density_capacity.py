@@ -167,19 +167,30 @@ def train_capacity(frame, *, include_nfhs, include_density=True, seed=42, epochs
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=.5, patience=10)
     loss = nn.HuberLoss(delta=1)
-    best_loss, bad_epochs, best_weights = float("inf"), 0, None
-    for _ in range(epochs):
+    best_loss, bad_epochs, best_weights, best_epoch = float("inf"), 0, None, None
+    history = []
+    for epoch in range(1, epochs + 1):
         model.train()
+        training_loss = torch.zeros((), device=device)
         for inputs, labels in loader:
             optimizer.zero_grad()
-            loss(model(inputs), labels).backward()
+            batch_loss = loss(model(inputs), labels)
+            batch_loss.backward()
             optimizer.step()
+            training_loss += batch_loss.detach() * len(labels)
         model.eval()
         with torch.no_grad():
             observed = float(loss(model(x_val), y_val))
+        history.append({
+            "epoch": epoch,
+            "train_huber_log1p": float(training_loss / len(loader.dataset)),
+            "validation_huber_log1p": observed,
+            "learning_rate": optimizer.param_groups[0]["lr"],
+        })
         scheduler.step(observed)
         if observed < best_loss - 1e-4:
             best_loss, bad_epochs = observed, 0
+            best_epoch = epoch
             best_weights = {key: value.detach().clone() for key, value in model.state_dict().items()}
         else:
             bad_epochs += 1
@@ -204,6 +215,7 @@ def train_capacity(frame, *, include_nfhs, include_density=True, seed=42, epochs
         "model": model, "preprocessor": processor, "numeric_features": numeric,
         "categorical_features": list(CATEGORICAL), "test_metrics": scores,
         "baseline_metrics": _scores(actual, baseline), "test_cohorts": pd.DataFrame(coverage),
+        "training_history": history, "best_epoch": best_epoch, "device": device.type,
         "split_fingerprint": fingerprint, "holdout_fingerprint": holdout, "facility_counts": {
             name: int(groups.loc[mask].nunique())
             for name, mask in (("train", train), ("validation", validation), ("test", test))

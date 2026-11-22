@@ -1,9 +1,11 @@
 import json
+from datetime import date
 from tempfile import TemporaryDirectory
 import unittest
 
 import pandas as pd
 
+from facility_tool.equity import synthetic_equity_evidence
 from facility_tool.recommend import PREPARED_COLUMNS, compare_modes, compare_prepared_modes, prepare_service_candidates, simulate_spread
 from facility_tool.travel import SOURCE as TRAVELTIME_SOURCE
 from facility_tool.workspace import Store
@@ -43,6 +45,13 @@ def load(branch, available, *, unit="dialysis slots", as_of="2026-11-21T11:00:00
     )
 
 
+def provider_load(branch, available, **overrides):
+    return {
+        **load(branch, available), "window_start": "2026-11-21T10:00:00Z", "window_end": "2026-11-21T16:00:00Z",
+        **overrides,
+    }
+
+
 def pressure(branch, demand, capacity, *, unit="dialysis visits", period="same day", basis="synthetic scenario"):
     return dict(
         facility_id=branch, service=SERVICE, demand=demand, capacity=capacity, unit=unit,
@@ -72,6 +81,10 @@ def provider_route(branch, kilometers=None, minutes=None, *, status="estimated",
 
 def rated(site, value, key="Example survey, overall experience, 1–5, 2026 Q3", status="eligible"):
     return dict(site, patient_experience_value=value, patient_comparison_key=key, patient_experience_status=status)
+
+
+def paired_evidence(service=SERVICE):
+    return synthetic_equity_evidence(service, "first", "near", as_of=date.fromisoformat(AS_OF[:10]))
 
 
 def query(entities, claims, updates=None, measurements=None, **kwargs):
@@ -395,6 +408,41 @@ class RecommendationTests(unittest.TestCase):
         self.assertEqual(set(self.first_rows(lower_tier)["facility_id"]), {"first"})
         self.assertTrue(lower_tier["trace"]["quality_credit"].dropna().le(3).all())
 
+    def test_equity_ranks_paired_respect_and_outcomes_for_the_exact_service(self):
+        entities = [self.entities[0], dict(self.entities[1], lon=77.016)]
+        for evidence, status in (((), "no_evidence"), (paired_evidence("mri"), "no_evidence"),
+                                 (paired_evidence()[1:], "incomparable")):
+            with self.subTest(status=status, records=len(evidence)):
+                ordinary = query(entities, self.claims[:2], consider_equity=True, equity_evidence=evidence)
+                self.assertEqual(set(self.first_rows(ordinary)["facility_id"]), {"first"})
+                self.assertEqual(set(ordinary["summary"]["equity_status"]), {status})
+                self.assertTrue(ordinary["rows"]["equity_score"].isna().all())
+
+        result = query(entities, self.claims[:2], consider_equity=True, equity_evidence=paired_evidence())
+        winner = self.first_rows(result).iloc[0]
+        self.assertEqual(winner["facility_id"], "near")
+        self.assertEqual(winner["pre_equity_rank"], 2)
+        self.assertEqual(winner["equity_score"], 93)
+        self.assertTrue(winner["equity_evidence"]["fictional"])
+        self.assertIn("patient-reported respect", winner["reason"])
+        self.assertEqual(set(result["summary"]["equity_status"]), {"reranked"})
+
+    def test_equity_does_not_bypass_eligibility_tier_scope_or_detour(self):
+        entities = [self.entities[0], dict(self.entities[1], lon=77.016)]
+        options = dict(consider_equity=True, equity_evidence=paired_evidence())
+        for title, claims, routes_for_query in (
+            ("service evidence", [self.claims[0], claim("near", "weak")], None),
+            ("evidence tier", [self.claims[0], claim("near", validity="unknown")], None),
+            ("service scope", [self.claims[0], claim("near", scope="Training unit")], None),
+            ("route duration", self.claims[:2], driving_routes(first=(3, 10), near=(3, 14))),
+            ("route distance", self.claims[:2], driving_routes(first=(3, 10), near=(5, 10))),
+        ):
+            with self.subTest(title=title):
+                result = query(entities, claims, travel_times=routes_for_query, **options)
+                self.assertEqual(set(self.first_rows(result)["facility_id"]), {"first"})
+        trace = query(entities, [self.claims[0], claim("near", "weak")], **options)["trace"]
+        self.assertTrue(trace.loc[trace["facility_id"].eq("near"), "rank"].isna().all())
+
     def test_route_credit_uses_minutes_and_breaks_equal_scores_by_travel(self):
         entities = [self.entities[0], dict(self.entities[1], quality_corroborated=True, quality_assessed=True)]
         claims = self.claims[:2]
@@ -521,11 +569,76 @@ class RecommendationTests(unittest.TestCase):
                 self.assertEqual(set(result["summary"]["weighted_status"]), {"no_comparable_pressure_inputs"})
                 self.assertEqual(set(result["summary"]["load_status"]), {"measured_availability_rerank"})
 
+    def test_operational_load_uses_measurements_and_keeps_the_nearest_option(self):
+        result = query(
+            self.entities, self.claims, measurements=[provider_load("first", 0), provider_load("near", 3)],
+            pressure_inputs=pd.DataFrame([pressure("first", 0, 100), pressure("near", 100, 100)]),
+            travel_times=driving_routes(first=(3, 10), near=(6, 17), far=(9, 18)),
+            load_context="operational", spread_demand=True,
+        )
+        rows = result["rows"].query("mode == 'confirmed'")
+        self.assertEqual(rows["facility_id"].tolist(), ["near", "first", "far"])
+        self.assertEqual(rows.iloc[0]["load_window_end"], "2026-11-21T16:00:00+00:00")
+        self.assertEqual(rows.iloc[1]["load_available_units"], 0)
+        self.assertTrue(rows["pressure_ratio"].isna().all())
+
+    def test_operational_load_ignores_prediction_and_incompatible_windows(self):
+        for near in (
+            provider_load("near", 20, capacity_predicted=True),
+            provider_load("near", 20, window_end="2026-11-21T17:00:00Z"),
+            provider_load("near", 20, window_end="2026-11-21T11:30:00Z"),
+            provider_load("near", 20, as_of="2026-11-21T12:30:00Z"),
+        ):
+            with self.subTest(near=near):
+                result = query(
+                    self.entities, self.claims, measurements=[provider_load("first", 1), near],
+                    travel_times=driving_routes(first=(3, 10), near=(6, 17), far=(9, 18)),
+                    load_context="operational", spread_demand=True,
+                )
+                self.assertEqual(set(self.first_rows(result)["facility_id"]), {"first"})
+                self.assertEqual(set(result["summary"]["load_status"]), {"no_fresh_comparable_measurements"})
+
+    def test_operational_load_requires_a_comparable_route_time_within_detour(self):
+        observations = [provider_load("first", 1), provider_load("near", 20)]
+        options = dict(measurements=observations, load_context="operational", spread_demand=True)
+        offline = query(self.entities, self.claims, **options)
+        too_far = query(self.entities, self.claims, travel_times=routes(first=10, near=35, far=60), **options)
+        self.assertEqual(set(offline["summary"]["load_status"]), {"no_comparable_load_routes"})
+        self.assertEqual(set(self.first_rows(too_far)["facility_id"]), {"first"})
+
+    def test_operational_load_holds_windows_that_close_before_arrival(self):
+        observations = [provider_load(branch, count, window_end="2026-11-21T12:15:00Z")
+                        for branch, count in (("first", 1), ("near", 20))]
+        result = query(self.entities, self.claims, measurements=observations,
+                       travel_times=routes(first=10, near=15, far=25),
+                       load_context="operational", spread_demand=True)
+        self.assertEqual(set(self.first_rows(result)["facility_id"]), {"first"})
+        self.assertEqual(set(result["summary"]["load_status"]), {"no_load_window_at_arrival"})
+
+    def test_planning_pressure_displays_predicted_capacity_provenance(self):
+        predicted = [dict(pressure(branch, demand, 100), capacity_predicted="true",
+                          capacity_method="Published throughput benchmark",
+                          capacity_source_url="https://example.org/capacity")
+                     for branch, demand in (("first", 100), ("near", 2))]
+        result = query(self.entities, self.claims, pressure_inputs=pd.DataFrame(predicted),
+                       load_context="planning", spread_demand=True, travel_weight=0)
+        winner = self.first_rows(result).iloc[0]
+        self.assertEqual(winner["facility_id"], "near")
+        self.assertTrue(winner["pressure_capacity_predicted"])
+        self.assertEqual(winner["pressure_capacity_source_url"], "https://example.org/capacity")
+
+    def test_operational_load_does_not_rank_time_critical_specialty(self):
+        service = "stroke_care"
+        prepared = pd.DataFrame([dict(row, service=service) for row in self.claims])
+        result = compare_modes(pd.DataFrame(self.entities), prepared, 28.0, 77.0, service,
+                               load_context="operational", spread_demand=True)
+        self.assertEqual(set(result["summary"]["load_status"]), {"non_emergency_only"})
+
     def test_explicit_emergency_request_stays_on_normal_order(self):
         service = "emergency_c_section"
         result = compare_modes(
             pd.DataFrame([rated(self.entities[0], 0),
-                          rated(dict(self.entities[1], quality_corroborated=True, quality_assessed=True), 1),
+                          rated(dict(self.entities[1], lon=77.016, quality_corroborated=True, quality_assessed=True), 1),
                           rated(self.entities[2], 1)]),
             pd.DataFrame(self.claims).assign(service=service),
             28, 77, service, as_of=AS_OF, spread_demand=True, quality_policy=EXPERIENCE_POLICY,
@@ -535,10 +648,12 @@ class RecommendationTests(unittest.TestCase):
             measured_load=pd.DataFrame([load("first", 1), load("near", 8)]).assign(
                 service=service, unit="obstetric admission slots"
             ),
+            consider_equity=True, equity_evidence=paired_evidence(service),
         )
         self.assertEqual(set(self.first_rows(result)["facility_id"]), {"first"})
         self.assertEqual(set(result["summary"]["load_status"]), {"non_emergency_only"})
         self.assertEqual(set(result["summary"]["ranking_policy"]), {"emergency_travel_only"})
+        self.assertEqual(set(result["summary"]["equity_status"]), {"urgent"})
         self.assertEqual(set(result["trace"]["quality_credit"]), {0})
         self.assertEqual(set(result["trace"]["patient_experience_credit"]), {0})
 

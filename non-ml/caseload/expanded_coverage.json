@@ -1,0 +1,4626 @@
+{
+  "as_of_month": "2026-11",
+  "dataset": {
+    "source_rows": 10088,
+    "unique_facility_ids": 10073,
+    "rows_without_facility_id": 4,
+    "additional_rows_with_repeated_id": 11,
+    "routing_eligible_unique_facility_ids": 9574,
+    "source_file": "facilities_newest_capacity.csv",
+    "sha256": "0aecdb730ed177ac05f8787c9c024d3f88dd8d7c97f702b8fdc3d0b1e4d1af94"
+  },
+  "summary": [
+    {
+      "care_needed": "Dialysis",
+      "previous_estimated_facilities": 5,
+      "reported_facilities": 0,
+      "estimated_facilities": 0,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Emergency C-section",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 0,
+      "estimated_facilities": 0,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Maternity / delivery",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 8,
+      "estimated_facilities": 3,
+      "withheld_targets": 1
+    },
+    {
+      "care_needed": "NICU",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 1,
+      "estimated_facilities": 0,
+      "withheld_targets": 1
+    },
+    {
+      "care_needed": "Pediatric care",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 2,
+      "estimated_facilities": 1,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Cardiac surgery",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 2,
+      "estimated_facilities": 1,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Cardiology consultation",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 2,
+      "estimated_facilities": 0,
+      "withheld_targets": 2
+    },
+    {
+      "care_needed": "MRI",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 4,
+      "estimated_facilities": 3,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "CT scan",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 4,
+      "estimated_facilities": 2,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Burn care",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 0,
+      "estimated_facilities": 0,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Orthopedic surgery",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 1,
+      "estimated_facilities": 1,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Fracture care",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 0,
+      "estimated_facilities": 0,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Dental care",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 2,
+      "estimated_facilities": 0,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Oral surgery",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 2,
+      "estimated_facilities": 0,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Cataract surgery",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 0,
+      "estimated_facilities": 0,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Stroke care",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 0,
+      "estimated_facilities": 1,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Chemotherapy",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 0,
+      "estimated_facilities": 1,
+      "withheld_targets": 0
+    },
+    {
+      "care_needed": "Trauma / emergency",
+      "previous_estimated_facilities": 0,
+      "reported_facilities": 7,
+      "estimated_facilities": 2,
+      "withheld_targets": 1
+    }
+  ],
+  "expansion_target_counts": {
+    "baseline_estimate": 20,
+    "withheld": 5,
+    "reported": 35
+  },
+  "previous_baseline_facilities": 5,
+  "additional_distinct_facilities": 21,
+  "additional_distinct_facilities_with_reported_counts": 16,
+  "additional_distinct_facilities_with_estimates": 9,
+  "total_distinct_facilities_with_estimates": 14,
+  "total_distinct_facilities_with_caseload": 26,
+  "targets": [
+    {
+      "series_id": "aiims_bbsr_chemo_daycare_total",
+      "site": {
+        "facility": "AIIMS Bhubaneswar",
+        "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+        "release_pin": "751024",
+        "state": "Odisha",
+        "identity_url": "https://aiimsbhubaneswar.nic.in/annual-report/",
+        "identity_basis": "Unique AIIMS Bhubaneswar hospital campus in Sijua, Patrapada. Official and release hospital helpdesk both end 6742476789. Official PIN is 751019, while the release PIN is 751024."
+      },
+      "service": "Chemotherapy",
+      "scope": "Reported hospital day-care chemotherapy administrations, combined Medical Oncology and Radiotherapy column totals",
+      "unit": "administrations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The official AIIMS Bhubaneswar annual archive and the targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 4,
+        "method_mae": {
+          "last_observed": 791.8958333333335,
+          "recent_median": 1413.0729166666667
+        },
+        "rows": [
+          {
+            "period": "2021-04",
+            "actual": 1778.3333333333333,
+            "last_observed": 1191.8333333333333,
+            "recent_median": 1213.9583333333333
+          },
+          {
+            "period": "2022-04",
+            "actual": 3210.0833333333335,
+            "last_observed": 1778.3333333333333,
+            "recent_median": 1236.0833333333333
+          },
+          {
+            "period": "2023-04",
+            "actual": 3742.9166666666665,
+            "last_observed": 3210.0833333333335,
+            "recent_median": 1778.3333333333333
+          },
+          {
+            "period": "2024-04",
+            "actual": 4359.416666666667,
+            "last_observed": 3742.9166666666665,
+            "recent_median": 3210.0833333333335
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 4359.42,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 52313,
+          "source": {
+            "title": "AIIMS Bhubaneswar annual report 2024–25",
+            "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+            "locator": "Hospital services Day Care Chemotherapy Statistics, Total column; hospital at-a-glance table for deliveries and emergency activity where reported."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_bbsr_hospital_deliveries",
+      "site": {
+        "facility": "AIIMS Bhubaneswar",
+        "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+        "release_pin": "751024",
+        "state": "Odisha",
+        "identity_url": "https://aiimsbhubaneswar.nic.in/annual-report/",
+        "identity_basis": "Unique AIIMS Bhubaneswar hospital campus in Sijua, Patrapada. Official and release hospital helpdesk both end 6742476789. Official PIN is 751019, while the release PIN is 751024."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Normal deliveries plus LSCS in hospital at-a-glance statistics, all reported urgencies",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The official AIIMS Bhubaneswar annual archive and the targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 1,
+        "method_mae": {
+          "last_observed": 3.75,
+          "recent_median": 10.666666666666671
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 111.41666666666667,
+            "last_observed": 115.16666666666667,
+            "recent_median": 122.08333333333334
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "withheld",
+      "reason": "insufficient_matched_horizon_tests"
+    },
+    {
+      "series_id": "aiims_bbsr_hospital_emergency",
+      "site": {
+        "facility": "AIIMS Bhubaneswar",
+        "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+        "release_pin": "751024",
+        "state": "Odisha",
+        "identity_url": "https://aiimsbhubaneswar.nic.in/annual-report/",
+        "identity_basis": "Unique AIIMS Bhubaneswar hospital campus in Sijua, Patrapada. Official and release hospital helpdesk both end 6742476789. Official PIN is 751019, while the release PIN is 751024."
+      },
+      "service": "Trauma / emergency",
+      "scope": "All-cause emergency patients in hospital at-a-glance statistics",
+      "unit": "visits",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The official AIIMS Bhubaneswar annual archive and the targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 1,
+        "method_mae": {
+          "last_observed": 166.91666666666697,
+          "recent_median": 112.29166666666697
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 4441.416666666667,
+            "last_observed": 4274.5,
+            "recent_median": 4329.125
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "withheld",
+      "reason": "insufficient_matched_horizon_tests"
+    },
+    {
+      "series_id": "sctimst_cardiac_ot",
+      "site": {
+        "facility": "Sree Chitra Tirunal Institute for Medical Sciences and Technology, Thiruvananthapuram",
+        "facility_id": "fdr:2dc0c78a-d732-4c9b-af06-28a3304a8363",
+        "release_pin": "695011",
+        "state": "Kerala",
+        "identity_url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/",
+        "identity_basis": "Unique institute name and Thiruvananthapuram hospital-campus PIN 695011 are shared by the release and publisher."
+      },
+      "service": "Cardiac surgery",
+      "scope": "Adult and paediatric cardiac operating theatre procedures reported by Cardiothoracic and Vascular Anaesthesiology",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The official SCTIMST annual archive and targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 2,
+        "method_mae": {
+          "last_observed": 18.125,
+          "recent_median": 14.958333333333314
+        },
+        "rows": [
+          {
+            "period": "2023-04",
+            "actual": 161.91666666666666,
+            "last_observed": 170.25,
+            "recent_median": 159.91666666666669
+          },
+          {
+            "period": "2024-04",
+            "actual": 134.0,
+            "last_observed": 161.91666666666666,
+            "recent_median": 161.91666666666666
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 161.92,
+      "prior_periods": [
+        {
+          "period_start": "2022-04",
+          "reported_count": 2043,
+          "source": {
+            "title": "SCTIMST annual report 2022–23",
+            "url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/resources/Annual_Report_2022_2023_English.pdf",
+            "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+          }
+        },
+        {
+          "period_start": "2023-04",
+          "reported_count": 1943,
+          "source": {
+            "title": "SCTIMST annual report 2023–24",
+            "url": "https://new1.sctimst.ac.in/resources/annual-report/annual_report_23_24_english.pdf",
+            "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+          }
+        },
+        {
+          "period_start": "2024-04",
+          "reported_count": 1608,
+          "source": {
+            "title": "SCTIMST annual report 2024–25",
+            "url": "https://sctimst.ac.in/About%20SCTIMST/Annual%20Report/resources/Annual_Report_2024_2025_English.pdf",
+            "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "sctimst_stroke_thrombectomy",
+      "site": {
+        "facility": "Sree Chitra Tirunal Institute for Medical Sciences and Technology, Thiruvananthapuram",
+        "facility_id": "fdr:2dc0c78a-d732-4c9b-af06-28a3304a8363",
+        "release_pin": "695011",
+        "state": "Kerala",
+        "identity_url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/",
+        "identity_basis": "Unique institute name and Thiruvananthapuram hospital-campus PIN 695011 are shared by the release and publisher."
+      },
+      "service": "Stroke care",
+      "scope": "Mechanical thrombectomy procedures in the Comprehensive Stroke Care Program",
+      "unit": "procedures",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The official SCTIMST annual archive and targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 2,
+        "method_mae": {
+          "last_observed": 0.25,
+          "recent_median": 0.2708333333333335
+        },
+        "rows": [
+          {
+            "period": "2023-04",
+            "actual": 2.5,
+            "last_observed": 2.8333333333333335,
+            "recent_median": 2.875
+          },
+          {
+            "period": "2024-04",
+            "actual": 2.6666666666666665,
+            "last_observed": 2.5,
+            "recent_median": 2.8333333333333335
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 2.67,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 32,
+          "source": {
+            "title": "SCTIMST annual report 2024–25",
+            "url": "https://sctimst.ac.in/About%20SCTIMST/Annual%20Report/resources/Annual_Report_2024_2025_English.pdf",
+            "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "whitefield_mri_annual",
+      "site": {
+        "facility": "SSSIHMS Whitefield",
+        "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+        "release_pin": "560067",
+        "state": "Karnataka",
+        "identity_url": "https://whitefield.sssihms.org/contact-us/",
+        "identity_basis": "The release's Sai Institute of Higher Medical Sciences record names Whitefield, Bengaluru, and gives +91 80 4710 4600, the exact telephone on the official Whitefield contact page. The official branch uses PIN 560066 and the release uses 560067. The Whitefield branch website publishes the annual counts."
+      },
+      "service": "MRI",
+      "scope": "Whitefield campus radiology MRI investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "Direct fiscal-year count in the branch annual report, April 2025 through March 2026.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 0,
+        "method_mae": {},
+        "rows": []
+      },
+      "status": "reported",
+      "reported_count": 8096,
+      "typical_month": 674.67,
+      "source": {
+        "title": "SSSIHMS Whitefield Annual Report 2025–26",
+        "url": "https://whitefield.sssihms.org/about-hospital/annual-report-2025-26/",
+        "locator": "The year at a glance and Tertiary and general specialities for deliveries. Tertiary specialities — outpatients, procedures and surgeries, Cardiology outpatients and Total (Cardiac Surgeries). Laboratory and radiology investigations, MRI and CT scan rows."
+      }
+    },
+    {
+      "series_id": "whitefield_ct_annual",
+      "site": {
+        "facility": "SSSIHMS Whitefield",
+        "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+        "release_pin": "560067",
+        "state": "Karnataka",
+        "identity_url": "https://whitefield.sssihms.org/contact-us/",
+        "identity_basis": "The release's Sai Institute of Higher Medical Sciences record names Whitefield, Bengaluru, and gives +91 80 4710 4600, the exact telephone on the official Whitefield contact page. The official branch uses PIN 560066 and the release uses 560067. The Whitefield branch website publishes the annual counts."
+      },
+      "service": "CT scan",
+      "scope": "Whitefield campus radiology CT scan investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "Direct fiscal-year count in the branch annual report, April 2025 through March 2026.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 0,
+        "method_mae": {},
+        "rows": []
+      },
+      "status": "reported",
+      "reported_count": 5139,
+      "typical_month": 428.25,
+      "source": {
+        "title": "SSSIHMS Whitefield Annual Report 2025–26",
+        "url": "https://whitefield.sssihms.org/about-hospital/annual-report-2025-26/",
+        "locator": "The year at a glance and Tertiary and general specialities for deliveries. Tertiary specialities — outpatients, procedures and surgeries, Cardiology outpatients and Total (Cardiac Surgeries). Laboratory and radiology investigations, MRI and CT scan rows."
+      }
+    },
+    {
+      "series_id": "whitefield_cardiac_surgery_annual",
+      "site": {
+        "facility": "SSSIHMS Whitefield",
+        "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+        "release_pin": "560067",
+        "state": "Karnataka",
+        "identity_url": "https://whitefield.sssihms.org/contact-us/",
+        "identity_basis": "The release's Sai Institute of Higher Medical Sciences record names Whitefield, Bengaluru, and gives +91 80 4710 4600, the exact telephone on the official Whitefield contact page. The official branch uses PIN 560066 and the release uses 560067. The Whitefield branch website publishes the annual counts."
+      },
+      "service": "Cardiac surgery",
+      "scope": "Whitefield campus cardiac surgeries excluding cardiac catheterisation",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "Direct fiscal-year count in Total (Cardiac Surgeries), April 2025 through March 2026.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 0,
+        "method_mae": {},
+        "rows": []
+      },
+      "status": "reported",
+      "reported_count": 925,
+      "typical_month": 77.08,
+      "source": {
+        "title": "SSSIHMS Whitefield Annual Report 2025–26",
+        "url": "https://whitefield.sssihms.org/about-hospital/annual-report-2025-26/",
+        "locator": "The year at a glance and Tertiary and general specialities for deliveries. Tertiary specialities — outpatients, procedures and surgeries, Cardiology outpatients and Total (Cardiac Surgeries). Laboratory and radiology investigations, MRI and CT scan rows."
+      }
+    },
+    {
+      "series_id": "whitefield_cardiology_annual",
+      "site": {
+        "facility": "SSSIHMS Whitefield",
+        "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+        "release_pin": "560067",
+        "state": "Karnataka",
+        "identity_url": "https://whitefield.sssihms.org/contact-us/",
+        "identity_basis": "The release's Sai Institute of Higher Medical Sciences record names Whitefield, Bengaluru, and gives +91 80 4710 4600, the exact telephone on the official Whitefield contact page. The official branch uses PIN 560066 and the release uses 560067. The Whitefield branch website publishes the annual counts."
+      },
+      "service": "Cardiology consultation",
+      "scope": "Whitefield campus tertiary cardiology outpatient consultations excluding Cardiac Surgery outpatients",
+      "unit": "visits",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "Direct cardiology consultation count, April 2025 through March 2026. The prior-year figure also includes Cardiac Surgery outpatient visits and is omitted.",
+      "status": "reported",
+      "reported_count": 29158,
+      "typical_month": 2429.83,
+      "source": {
+        "title": "SSSIHMS Whitefield Annual Report 2025–26",
+        "url": "https://whitefield.sssihms.org/about-hospital/annual-report-2025-26/",
+        "locator": "The year at a glance and Tertiary and general specialities for deliveries. Tertiary specialities — outpatients, procedures and surgeries, Cardiology outpatients and Total (Cardiac Surgeries). Laboratory and radiology investigations, MRI and CT scan rows."
+      }
+    },
+    {
+      "series_id": "whitefield_maternity_annual",
+      "site": {
+        "facility": "SSSIHMS Whitefield",
+        "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+        "release_pin": "560067",
+        "state": "Karnataka",
+        "identity_url": "https://whitefield.sssihms.org/contact-us/",
+        "identity_basis": "The release's Sai Institute of Higher Medical Sciences record names Whitefield, Bengaluru, and gives +91 80 4710 4600, the exact telephone on the official Whitefield contact page. The official branch uses PIN 560066 and the release uses 560067. The Whitefield branch website publishes the annual counts."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Whitefield campus Obstetrics & Gynaecology deliveries",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "Direct deliveries count, April 2025 through March 2026. The hospital reports cesarean sections within its surgical table and the delivery count is used alone.",
+      "status": "reported",
+      "reported_count": 552,
+      "typical_month": 46.0,
+      "source": {
+        "title": "SSSIHMS Whitefield Annual Report 2025–26",
+        "url": "https://whitefield.sssihms.org/about-hospital/annual-report-2025-26/",
+        "locator": "The year at a glance and Tertiary and general specialities for deliveries. Tertiary specialities — outpatients, procedures and surgeries, Cardiology outpatients and Total (Cardiac Surgeries). Laboratory and radiology investigations, MRI and CT scan rows."
+      }
+    },
+    {
+      "series_id": "unmehta_mri_monthly",
+      "site": {
+        "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+        "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+        "release_pin": "380016",
+        "state": "Gujarat",
+        "identity_url": "https://www.unmicrc.org/InfoMSRClause",
+        "identity_basis": "The full institution name, Civil Hospital Asarwa campus in Ahmedabad, PIN 380016, and 079 2268 4200 match the release and official institution disclosure page."
+      },
+      "service": "MRI",
+      "scope": "Ahmedabad main campus MRI clinical material Grand Total",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2025-12",
+      "period_end": "2025-12",
+      "target_source_review": "The public 2025 monthly disclosure ends in November and the next located disclosure begins in January 2026. The institution's annual modality statistics lack an MRI row, leaving December MRI unobserved. Retrospective testing and estimation use only pre-December data.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2025-11",
+      "backtest": {
+        "scored_periods": 8,
+        "method_mae": {
+          "last_observed": 29.5,
+          "recent_median": 21.8125
+        },
+        "rows": [
+          {
+            "period": "2025-04",
+            "actual": 107.0,
+            "last_observed": 123.0,
+            "recent_median": 132.0
+          },
+          {
+            "period": "2025-05",
+            "actual": 146.0,
+            "last_observed": 107.0,
+            "recent_median": 127.5
+          },
+          {
+            "period": "2025-06",
+            "actual": 149.0,
+            "last_observed": 146.0,
+            "recent_median": 132.0
+          },
+          {
+            "period": "2025-07",
+            "actual": 176.0,
+            "last_observed": 149.0,
+            "recent_median": 139.0
+          },
+          {
+            "period": "2025-08",
+            "actual": 112.0,
+            "last_observed": 176.0,
+            "recent_median": 146.0
+          },
+          {
+            "period": "2025-09",
+            "actual": 159.0,
+            "last_observed": 112.0,
+            "recent_median": 139.0
+          },
+          {
+            "period": "2025-10",
+            "actual": 127.0,
+            "last_observed": 159.0,
+            "recent_median": 146.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 135.0,
+            "last_observed": 127.0,
+            "recent_median": 139.0
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 135.0,
+      "prior_periods": [
+        {
+          "period_start": "2025-01",
+          "reported_count": 150,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 132,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 123,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 107,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-05",
+          "reported_count": 146,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-06",
+          "reported_count": 149,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-07",
+          "reported_count": 176,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 112,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-09",
+          "reported_count": 159,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 127,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 135,
+          "source": {
+            "title": "U. N. Mehta Institute clinical material, January–November 2025",
+            "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+            "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "unmehta_mri_monthly",
+      "site": {
+        "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+        "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+        "release_pin": "380016",
+        "state": "Gujarat",
+        "identity_url": "https://www.unmicrc.org/InfoMSRClause",
+        "identity_basis": "The full institution name, Civil Hospital Asarwa campus in Ahmedabad, PIN 380016, and 079 2268 4200 match the release and official institution disclosure page."
+      },
+      "service": "MRI",
+      "scope": "Ahmedabad main campus MRI clinical material Grand Total",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "target_source_review": "Direct count in the February 2026 column of the main campus clinical-material disclosure.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-01",
+      "backtest": {
+        "scored_periods": 8,
+        "method_mae": {
+          "last_observed": 29.5,
+          "recent_median": 21.8125
+        },
+        "rows": [
+          {
+            "period": "2025-04",
+            "actual": 107.0,
+            "last_observed": 123.0,
+            "recent_median": 132.0
+          },
+          {
+            "period": "2025-05",
+            "actual": 146.0,
+            "last_observed": 107.0,
+            "recent_median": 127.5
+          },
+          {
+            "period": "2025-06",
+            "actual": 149.0,
+            "last_observed": 146.0,
+            "recent_median": 132.0
+          },
+          {
+            "period": "2025-07",
+            "actual": 176.0,
+            "last_observed": 149.0,
+            "recent_median": 139.0
+          },
+          {
+            "period": "2025-08",
+            "actual": 112.0,
+            "last_observed": 176.0,
+            "recent_median": 146.0
+          },
+          {
+            "period": "2025-09",
+            "actual": 159.0,
+            "last_observed": 112.0,
+            "recent_median": 139.0
+          },
+          {
+            "period": "2025-10",
+            "actual": 127.0,
+            "last_observed": 159.0,
+            "recent_median": 146.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 135.0,
+            "last_observed": 127.0,
+            "recent_median": 139.0
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 147,
+      "typical_month": 147.0,
+      "source": {
+        "title": "U. N. Mehta Institute clinical material, January–February 2026",
+        "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2026_%282%29.pdf",
+        "locator": "Annexure I, Jan.26 and Feb.26 columns and Grand Total rows for CT Scan and MRI. The heading has a year typo, while the individual columns and filename identify 2026."
+      }
+    },
+    {
+      "series_id": "unmehta_ct_monthly",
+      "site": {
+        "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+        "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+        "release_pin": "380016",
+        "state": "Gujarat",
+        "identity_url": "https://www.unmicrc.org/InfoMSRClause",
+        "identity_basis": "The full institution name, Civil Hospital Asarwa campus in Ahmedabad, PIN 380016, and 079 2268 4200 match the release and official institution disclosure page."
+      },
+      "service": "CT scan",
+      "scope": "Ahmedabad main campus CT scan clinical material Grand Total",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "target_source_review": "Direct count in the February 2026 column of the main campus clinical-material disclosure. The institution posts CY2025 CT statistics in a separate annual series with unconfirmed reconciliation, so the missing December monthly count is not targeted.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-01",
+      "backtest": {
+        "scored_periods": 8,
+        "method_mae": {
+          "last_observed": 62.625,
+          "recent_median": 79.25
+        },
+        "rows": [
+          {
+            "period": "2025-04",
+            "actual": 666.0,
+            "last_observed": 724.0,
+            "recent_median": 823.0
+          },
+          {
+            "period": "2025-05",
+            "actual": 717.0,
+            "last_observed": 666.0,
+            "recent_median": 773.5
+          },
+          {
+            "period": "2025-06",
+            "actual": 751.0,
+            "last_observed": 717.0,
+            "recent_median": 724.0
+          },
+          {
+            "period": "2025-07",
+            "actual": 856.0,
+            "last_observed": 751.0,
+            "recent_median": 737.5
+          },
+          {
+            "period": "2025-08",
+            "actual": 847.0,
+            "last_observed": 856.0,
+            "recent_median": 751.0
+          },
+          {
+            "period": "2025-09",
+            "actual": 946.0,
+            "last_observed": 847.0,
+            "recent_median": 787.0
+          },
+          {
+            "period": "2025-10",
+            "actual": 819.0,
+            "last_observed": 946.0,
+            "recent_median": 823.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 837.0,
+            "last_observed": 819.0,
+            "recent_median": 821.0
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 887,
+      "typical_month": 887.0,
+      "source": {
+        "title": "U. N. Mehta Institute clinical material, January–February 2026",
+        "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2026_%282%29.pdf",
+        "locator": "Annexure I, Jan.26 and Feb.26 columns and Grand Total rows for CT Scan and MRI. The heading has a year typo, while the individual columns and filename identify 2026."
+      }
+    },
+    {
+      "series_id": "aiims_bhubaneswar_mri_annual",
+      "site": {
+        "facility": "AIIMS Bhubaneswar",
+        "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+        "release_pin": "751024",
+        "state": "Odisha",
+        "identity_url": "https://aiimsbhubaneswar.nic.in/contact-us/",
+        "identity_basis": "The AIIMS Bhubaneswar name, Sijua/Patrapada campus, and exact FDR officialPhone (+91 674 2476789, official OPD Help Desk) identify the same institution. The hospital uses PIN 751019 and the release uses 751024."
+      },
+      "service": "MRI",
+      "scope": "AIIMS Bhubaneswar hospital Radio-diagnosis MRI investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The institute's public annual-report archive lists the clinical annual series through FY2024–25. No equivalent FY2025–26 report was located. The target covers April 2025 through March 2026.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 5,
+        "method_mae": {
+          "last_observed": 201.9,
+          "recent_median": 298.65000000000003
+        },
+        "rows": [
+          {
+            "period": "2020-04",
+            "actual": 424.0,
+            "last_observed": 612.5,
+            "recent_median": 517.3333333333334
+          },
+          {
+            "period": "2021-04",
+            "actual": 671.3333333333334,
+            "last_observed": 424.0,
+            "recent_median": 424.0
+          },
+          {
+            "period": "2022-04",
+            "actual": 787.0,
+            "last_observed": 671.3333333333334,
+            "recent_median": 612.5
+          },
+          {
+            "period": "2023-04",
+            "actual": 1191.4166666666667,
+            "last_observed": 787.0,
+            "recent_median": 671.3333333333334
+          },
+          {
+            "period": "2024-04",
+            "actual": 1245.0,
+            "last_observed": 1191.4166666666667,
+            "recent_median": 787.0
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 1245.0,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 14940,
+          "source": {
+            "title": "AIIMS Bhubaneswar Annual Report 2024–25",
+            "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+            "locator": "Printed page 45, Diagnostics, Radio-diagnosis, fiscal-year MRI and CT Scan counts. CT Angiography is reported separately and omitted."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_bhubaneswar_ct_annual",
+      "site": {
+        "facility": "AIIMS Bhubaneswar",
+        "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+        "release_pin": "751024",
+        "state": "Odisha",
+        "identity_url": "https://aiimsbhubaneswar.nic.in/contact-us/",
+        "identity_basis": "The AIIMS Bhubaneswar name, Sijua/Patrapada campus, and exact FDR officialPhone (+91 674 2476789, official OPD Help Desk) identify the same institution. The hospital uses PIN 751019 and the release uses 751024."
+      },
+      "service": "CT scan",
+      "scope": "AIIMS Bhubaneswar hospital Radio-diagnosis CT Scan column excluding separately reported CT Angiography",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The institute's public annual-report archive lists the clinical annual series through FY2024–25. No equivalent FY2025–26 report was located. The target covers April 2025 through March 2026.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 5,
+        "method_mae": {
+          "last_observed": 455.6833333333333,
+          "recent_median": 620.8833333333333
+        },
+        "rows": [
+          {
+            "period": "2020-04",
+            "actual": 2020.6666666666667,
+            "last_observed": 2494.4166666666665,
+            "recent_median": 2316.1666666666665
+          },
+          {
+            "period": "2021-04",
+            "actual": 2967.8333333333335,
+            "last_observed": 2020.6666666666667,
+            "recent_median": 2137.9166666666665
+          },
+          {
+            "period": "2022-04",
+            "actual": 3361.5833333333335,
+            "last_observed": 2967.8333333333335,
+            "recent_median": 2494.4166666666665
+          },
+          {
+            "period": "2023-04",
+            "actual": 3615.9166666666665,
+            "last_observed": 3361.5833333333335,
+            "recent_median": 2967.8333333333335
+          },
+          {
+            "period": "2024-04",
+            "actual": 3825.3333333333335,
+            "last_observed": 3615.9166666666665,
+            "recent_median": 3361.5833333333335
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 3825.33,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 45904,
+          "source": {
+            "title": "AIIMS Bhubaneswar Annual Report 2024–25",
+            "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+            "locator": "Printed page 45, Diagnostics, Radio-diagnosis, fiscal-year MRI and CT Scan counts. CT Angiography is reported separately and omitted."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_nagpur_emergency_monthly",
+      "site": {
+        "facility": "AIIMS Nagpur",
+        "facility_id": "fdr:ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c",
+        "release_pin": "441108",
+        "state": "Maharashtra",
+        "identity_url": "https://aiimsnagpur.edu.in/hospital",
+        "identity_basis": "The hospital name, MIHAN campus at Plot No. 2 in Sector 20, and helpline 9404044944 match the release. The release uses the earlier hospital PIN 441108 and the current hospital page uses 441124."
+      },
+      "service": "Trauma / emergency",
+      "scope": "AIIMS Nagpur Trauma & Emergency OPD attendances excluding separately reported IPD",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-08",
+      "period_end": "2026-08",
+      "target_source_review": "Direct count in the institution's August 2026 newsletter, Hospital Services, Trauma & Emergency OPD.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-07",
+      "backtest": {
+        "scored_periods": 14,
+        "method_mae": {
+          "last_observed": 310.0,
+          "recent_median": 308.39285714285717
+        },
+        "rows": [
+          {
+            "period": "2025-06",
+            "actual": 1763.0,
+            "last_observed": 2036.0,
+            "recent_median": 1723.0
+          },
+          {
+            "period": "2025-07",
+            "actual": 1856.0,
+            "last_observed": 1763.0,
+            "recent_median": 1743.0
+          },
+          {
+            "period": "2025-08",
+            "actual": 2084.0,
+            "last_observed": 1856.0,
+            "recent_median": 1763.0
+          },
+          {
+            "period": "2025-09",
+            "actual": 2711.0,
+            "last_observed": 2084.0,
+            "recent_median": 1809.5
+          },
+          {
+            "period": "2025-10",
+            "actual": 2411.0,
+            "last_observed": 2711.0,
+            "recent_median": 1856.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 2009.0,
+            "last_observed": 2411.0,
+            "recent_median": 1946.0
+          },
+          {
+            "period": "2025-12",
+            "actual": 2370.0,
+            "last_observed": 2009.0,
+            "recent_median": 2009.0
+          },
+          {
+            "period": "2026-01",
+            "actual": 2795.0,
+            "last_observed": 2370.0,
+            "recent_median": 2022.5
+          },
+          {
+            "period": "2026-02",
+            "actual": 2308.0,
+            "last_observed": 2795.0,
+            "recent_median": 2036.0
+          },
+          {
+            "period": "2026-03",
+            "actual": 2566.0,
+            "last_observed": 2308.0,
+            "recent_median": 2060.0
+          },
+          {
+            "period": "2026-04",
+            "actual": 2241.0,
+            "last_observed": 2566.0,
+            "recent_median": 2196.0
+          },
+          {
+            "period": "2026-05",
+            "actual": 2368.0,
+            "last_observed": 2241.0,
+            "recent_median": 2274.5
+          },
+          {
+            "period": "2026-06",
+            "actual": 2559.0,
+            "last_observed": 2368.0,
+            "recent_median": 2338.0
+          },
+          {
+            "period": "2026-07",
+            "actual": 2316.0,
+            "last_observed": 2559.0,
+            "recent_median": 2369.0
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 3011,
+      "typical_month": 3011.0,
+      "source": {
+        "title": "AIIMS Nagpur Monthly Newsletter, August 2026",
+        "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/fd39620399cabc9428ee57a1bf089d8e.pdf",
+        "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+      }
+    },
+    {
+      "series_id": "aiims_nagpur_emergency_monthly",
+      "site": {
+        "facility": "AIIMS Nagpur",
+        "facility_id": "fdr:ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c",
+        "release_pin": "441108",
+        "state": "Maharashtra",
+        "identity_url": "https://aiimsnagpur.edu.in/hospital",
+        "identity_basis": "The hospital name, MIHAN campus at Plot No. 2 in Sector 20, and helpline 9404044944 match the release. The release uses the earlier hospital PIN 441108 and the current hospital page uses 441124."
+      },
+      "service": "Trauma / emergency",
+      "scope": "AIIMS Nagpur Trauma & Emergency OPD attendances excluding separately reported IPD",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-09",
+      "period_end": "2026-09",
+      "target_source_review": "The hospital monthly newsletter archive ends in August 2026. No September 2026 report for this measure was located. The target is the next month after 18 consecutive reported months.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-08",
+      "backtest": {
+        "scored_periods": 15,
+        "method_mae": {
+          "last_observed": 335.6666666666667,
+          "recent_median": 330.6333333333333
+        },
+        "rows": [
+          {
+            "period": "2025-06",
+            "actual": 1763.0,
+            "last_observed": 2036.0,
+            "recent_median": 1723.0
+          },
+          {
+            "period": "2025-07",
+            "actual": 1856.0,
+            "last_observed": 1763.0,
+            "recent_median": 1743.0
+          },
+          {
+            "period": "2025-08",
+            "actual": 2084.0,
+            "last_observed": 1856.0,
+            "recent_median": 1763.0
+          },
+          {
+            "period": "2025-09",
+            "actual": 2711.0,
+            "last_observed": 2084.0,
+            "recent_median": 1809.5
+          },
+          {
+            "period": "2025-10",
+            "actual": 2411.0,
+            "last_observed": 2711.0,
+            "recent_median": 1856.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 2009.0,
+            "last_observed": 2411.0,
+            "recent_median": 1946.0
+          },
+          {
+            "period": "2025-12",
+            "actual": 2370.0,
+            "last_observed": 2009.0,
+            "recent_median": 2009.0
+          },
+          {
+            "period": "2026-01",
+            "actual": 2795.0,
+            "last_observed": 2370.0,
+            "recent_median": 2022.5
+          },
+          {
+            "period": "2026-02",
+            "actual": 2308.0,
+            "last_observed": 2795.0,
+            "recent_median": 2036.0
+          },
+          {
+            "period": "2026-03",
+            "actual": 2566.0,
+            "last_observed": 2308.0,
+            "recent_median": 2060.0
+          },
+          {
+            "period": "2026-04",
+            "actual": 2241.0,
+            "last_observed": 2566.0,
+            "recent_median": 2196.0
+          },
+          {
+            "period": "2026-05",
+            "actual": 2368.0,
+            "last_observed": 2241.0,
+            "recent_median": 2274.5
+          },
+          {
+            "period": "2026-06",
+            "actual": 2559.0,
+            "last_observed": 2368.0,
+            "recent_median": 2338.0
+          },
+          {
+            "period": "2026-07",
+            "actual": 2316.0,
+            "last_observed": 2559.0,
+            "recent_median": 2369.0
+          },
+          {
+            "period": "2026-08",
+            "actual": 3011.0,
+            "last_observed": 2316.0,
+            "recent_median": 2369.0
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 2390.5,
+      "prior_periods": [
+        {
+          "period_start": "2025-09",
+          "reported_count": 2711,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, September 2025",
+            "url": "https://aiimsnagpur.edu.in/writereaddata/AIIMS/files/176128439068fb11263617dNewsletter_Sept_2025.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 2411,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, October 2025",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/e0de57139239fd825899992a4ed968e0.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 2009,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, November 2025",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/c5f1548f26864f395006427d7bb6dc63.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 2370,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, December 2025",
+            "url": "https://aiimsnagpur.edu.in/writereaddata/AIIMS/files/17679553886960dbbc83f93Monthly_report_Dec_2025_09012026.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 2795,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, January 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/cec2b7d1c8394b160d1e88366af464a7.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2026-02",
+          "reported_count": 2308,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, February 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/3c1df40475a166d5367491a3b6b29f72.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2026-03",
+          "reported_count": 2566,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, March 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/8e33802ce7896fdd0ab95ef111603a5d.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2026-04",
+          "reported_count": 2241,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, April 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/a85d26eacf9971de514b3b9472b82bf1.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2026-05",
+          "reported_count": 2368,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, May 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/446647e3bf0c7f02fca33b2930961c43.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2026-06",
+          "reported_count": 2559,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, June 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/e7091a0c80cc8a9cb177cd62a4ea5286.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2026-07",
+          "reported_count": 2316,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, July 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/2b3a45d66821800475ff2fce9343f98a.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        },
+        {
+          "period_start": "2026-08",
+          "reported_count": 3011,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, August 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/fd39620399cabc9428ee57a1bf089d8e.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_nagpur_emergency_monthly",
+      "site": {
+        "facility": "AIIMS Nagpur",
+        "facility_id": "fdr:ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c",
+        "release_pin": "441108",
+        "state": "Maharashtra",
+        "identity_url": "https://aiimsnagpur.edu.in/hospital",
+        "identity_basis": "The hospital name, MIHAN campus at Plot No. 2 in Sector 20, and helpline 9404044944 match the release. The release uses the earlier hospital PIN 441108 and the current hospital page uses 441124."
+      },
+      "service": "Trauma / emergency",
+      "scope": "AIIMS Nagpur Trauma & Emergency OPD attendances excluding separately reported IPD",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "The hospital monthly newsletter archive ends in August 2026. No October 2026 report for this measure was located. Use a two-month-ahead backtest from the last verified August count.",
+      "forecast_horizon_periods": 2,
+      "latest_prior_period_start": "2026-08",
+      "backtest": {
+        "scored_periods": 14,
+        "method_mae": {
+          "last_observed": 327.85714285714283,
+          "recent_median": 393.10714285714283
+        },
+        "rows": [
+          {
+            "period": "2025-07",
+            "actual": 1856.0,
+            "last_observed": 2036.0,
+            "recent_median": 1723.0
+          },
+          {
+            "period": "2025-08",
+            "actual": 2084.0,
+            "last_observed": 1763.0,
+            "recent_median": 1743.0
+          },
+          {
+            "period": "2025-09",
+            "actual": 2711.0,
+            "last_observed": 1856.0,
+            "recent_median": 1763.0
+          },
+          {
+            "period": "2025-10",
+            "actual": 2411.0,
+            "last_observed": 2084.0,
+            "recent_median": 1809.5
+          },
+          {
+            "period": "2025-11",
+            "actual": 2009.0,
+            "last_observed": 2711.0,
+            "recent_median": 1856.0
+          },
+          {
+            "period": "2025-12",
+            "actual": 2370.0,
+            "last_observed": 2411.0,
+            "recent_median": 1946.0
+          },
+          {
+            "period": "2026-01",
+            "actual": 2795.0,
+            "last_observed": 2009.0,
+            "recent_median": 2009.0
+          },
+          {
+            "period": "2026-02",
+            "actual": 2308.0,
+            "last_observed": 2370.0,
+            "recent_median": 2022.5
+          },
+          {
+            "period": "2026-03",
+            "actual": 2566.0,
+            "last_observed": 2795.0,
+            "recent_median": 2036.0
+          },
+          {
+            "period": "2026-04",
+            "actual": 2241.0,
+            "last_observed": 2308.0,
+            "recent_median": 2060.0
+          },
+          {
+            "period": "2026-05",
+            "actual": 2368.0,
+            "last_observed": 2566.0,
+            "recent_median": 2196.0
+          },
+          {
+            "period": "2026-06",
+            "actual": 2559.0,
+            "last_observed": 2241.0,
+            "recent_median": 2274.5
+          },
+          {
+            "period": "2026-07",
+            "actual": 2316.0,
+            "last_observed": 2368.0,
+            "recent_median": 2338.0
+          },
+          {
+            "period": "2026-08",
+            "actual": 3011.0,
+            "last_observed": 2559.0,
+            "recent_median": 2369.0
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 3011.0,
+      "prior_periods": [
+        {
+          "period_start": "2026-08",
+          "reported_count": 3011,
+          "source": {
+            "title": "AIIMS Nagpur Monthly Newsletter, August 2026",
+            "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/fd39620399cabc9428ee57a1bf089d8e.pdf",
+            "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_bhubaneswar_nicu_calendar",
+      "site": {
+        "facility": "AIIMS Bhubaneswar",
+        "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+        "release_pin": "751024",
+        "state": "Odisha",
+        "identity_url": "https://aiimsbhubaneswar.nic.in/contact-us/",
+        "identity_basis": "The AIIMS Bhubaneswar name, Sijua/Patrapada campus, and exact FDR officialPhone (+91 674 2476789, official OPD Help Desk) identify the same institution. The hospital uses PIN 751019 and the release uses 751024."
+      },
+      "service": "NICU",
+      "scope": "AIIMS Bhubaneswar Level III neonatal intensive care admissions, excluding neonatal OPD and SNCU",
+      "unit": "admissions",
+      "grain": "calendar_year",
+      "period_start": "2024-01",
+      "period_end": "2024-12",
+      "target_source_review": "Direct calendar-year Level III NICU admission count in the Neonatology chapter of the FY2024–25 report.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2023-01",
+      "backtest": {
+        "scored_periods": 0,
+        "method_mae": {},
+        "rows": []
+      },
+      "status": "reported",
+      "reported_count": 424,
+      "typical_month": 35.33,
+      "source": {
+        "title": "AIIMS Bhubaneswar Annual Report 2024–25, Neonatology",
+        "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+        "locator": "Neonatology, Patient Care / Hospital Services. The Level III NICU figure is stated for calendar 2024."
+      }
+    },
+    {
+      "series_id": "aiims_bhubaneswar_nicu_calendar",
+      "site": {
+        "facility": "AIIMS Bhubaneswar",
+        "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+        "release_pin": "751024",
+        "state": "Odisha",
+        "identity_url": "https://aiimsbhubaneswar.nic.in/contact-us/",
+        "identity_basis": "The AIIMS Bhubaneswar name, Sijua/Patrapada campus, and exact FDR officialPhone (+91 674 2476789, official OPD Help Desk) identify the same institution. The hospital uses PIN 751019 and the release uses 751024."
+      },
+      "service": "NICU",
+      "scope": "AIIMS Bhubaneswar Level III neonatal intensive care admissions, excluding neonatal OPD and SNCU",
+      "unit": "admissions",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "target_source_review": "The newest public Neonatology chapter reports CY2024. No equivalent CY2025 count was located. Earlier published NICU totals use fiscal years, which do not provide equivalent annual observations.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-01",
+      "backtest": {
+        "scored_periods": 0,
+        "method_mae": {},
+        "rows": []
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "withheld",
+      "reason": "insufficient_matched_horizon_tests"
+    },
+    {
+      "series_id": "eha_chhatarpur_deliveries",
+      "site": {
+        "facility": "Christian Hospital Chhatarpur",
+        "facility_id": "fdr:8080e7b2-b85d-463a-8e8f-ad6b7412a12e",
+        "release_pin": "471001",
+        "state": "Madhya Pradesh",
+        "identity_url": "https://www.ehahealth.org/clinical-hospital",
+        "identity_basis": "The reporting association names Christian Hospital Chhatarpur on Mahoba Road, Chhatarpur 471001, matching the release name, branch address and PIN."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The association's annual report index at https://www.ehahealth.org/annual-reports ends with FY2024–25 as checked 2026-11-22. No matching FY2025–26 delivery total surfaced in searches for the named facility.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 4,
+        "method_mae": {
+          "last_observed": 24.999999999999993,
+          "recent_median": 38.75000000000001
+        },
+        "rows": [
+          {
+            "period": "2021-04",
+            "actual": 137.16666666666666,
+            "last_observed": 135.0,
+            "recent_median": 165.16666666666669
+          },
+          {
+            "period": "2022-04",
+            "actual": 183.5,
+            "last_observed": 137.16666666666666,
+            "recent_median": 137.16666666666666
+          },
+          {
+            "period": "2023-04",
+            "actual": 200.66666666666666,
+            "last_observed": 183.5,
+            "recent_median": 137.16666666666666
+          },
+          {
+            "period": "2024-04",
+            "actual": 166.33333333333334,
+            "last_observed": 200.66666666666666,
+            "recent_median": 183.5
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 166.33,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 1996,
+          "source": {
+            "title": "Emmanuel Hospital Association Annual Report 2024–2025",
+            "url": "https://ehausa.org/wp-content/uploads/2025/09/Annual-Report-2024-2025.pdf",
+            "locator": "Printed page 32, Clinical Statistics of Hospital, deliveries column"
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "eha_herbertpur_deliveries",
+      "site": {
+        "facility": "Herbertpur Christian Hospital",
+        "facility_id": "fdr:a0869aab-74e6-4f7e-ae98-521da6d1b6eb",
+        "release_pin": "248142",
+        "state": "Uttarakhand",
+        "identity_url": "https://www.ehahealth.org/clinical-hospital",
+        "identity_basis": "The reporting association names Herbertpur Christian Hospital in Herbertpur, Dehradun 248142, matching the release name, locality and PIN."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility. Reported activity declined markedly after FY2022–23.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The association's annual report index at https://www.ehahealth.org/annual-reports ends with FY2024–25 as checked 2026-11-22. No matching FY2025–26 delivery total surfaced in searches for the named facility.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 4,
+        "method_mae": {
+          "last_observed": 23.208333333333332,
+          "recent_median": 36.729166666666664
+        },
+        "rows": [
+          {
+            "period": "2021-04",
+            "actual": 110.25,
+            "last_observed": 113.58333333333333,
+            "recent_median": 115.0
+          },
+          {
+            "period": "2022-04",
+            "actual": 97.91666666666667,
+            "last_observed": 110.25,
+            "recent_median": 113.58333333333333
+          },
+          {
+            "period": "2023-04",
+            "actual": 60.916666666666664,
+            "last_observed": 97.91666666666667,
+            "recent_median": 110.25
+          },
+          {
+            "period": "2024-04",
+            "actual": 20.75,
+            "last_observed": 60.916666666666664,
+            "recent_median": 97.91666666666667
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 20.75,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 249,
+          "source": {
+            "title": "Emmanuel Hospital Association Annual Report 2024–2025",
+            "url": "https://ehausa.org/wp-content/uploads/2025/09/Annual-Report-2024-2025.pdf",
+            "locator": "Printed page 32, Clinical Statistics of Hospital, deliveries column"
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "eha_kachhwa_deliveries",
+      "site": {
+        "facility": "Kachhwa Christian Hospital",
+        "facility_id": "fdr:acf665e2-7895-420c-81af-fcc329ed8a36",
+        "release_pin": "231501",
+        "state": "Uttar Pradesh",
+        "identity_url": "https://www.ehahealth.org/clinical-hospital",
+        "identity_basis": "The reporting association names Kachhwa Christian Hospital in Kachhwa, Mirzapur 231501, matching the release name, locality and PIN."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The association's annual report index at https://www.ehahealth.org/annual-reports ends with FY2024–25 as checked 2026-11-22. No matching FY2025–26 delivery total surfaced in searches for the named facility.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 4,
+        "method_mae": {
+          "last_observed": 1.0833333333333333,
+          "recent_median": 1.583333333333333
+        },
+        "rows": [
+          {
+            "period": "2021-04",
+            "actual": 1.4166666666666667,
+            "last_observed": 2.3333333333333335,
+            "recent_median": 3.916666666666667
+          },
+          {
+            "period": "2022-04",
+            "actual": 2.0833333333333335,
+            "last_observed": 1.4166666666666667,
+            "recent_median": 2.3333333333333335
+          },
+          {
+            "period": "2023-04",
+            "actual": 2.9166666666666665,
+            "last_observed": 2.0833333333333335,
+            "recent_median": 2.0833333333333335
+          },
+          {
+            "period": "2024-04",
+            "actual": 4.833333333333333,
+            "last_observed": 2.9166666666666665,
+            "recent_median": 2.0833333333333335
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 4.83,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 58,
+          "source": {
+            "title": "Emmanuel Hospital Association Annual Report 2024–2025",
+            "url": "https://ehausa.org/wp-content/uploads/2025/09/Annual-Report-2024-2025.pdf",
+            "locator": "Printed page 32, Clinical Statistics of Hospital, deliveries column"
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "kem_mumbai_deliveries",
+      "site": {
+        "facility": "King Edward Memorial Hospital, Mumbai",
+        "facility_id": "fdr:1a62801f-4ddb-43e0-81cc-182cb1311171",
+        "release_pin": "400012",
+        "state": "Maharashtra",
+        "identity_url": "https://www.kem.edu/gsmckemh/",
+        "identity_basis": "The release lists the hospital at Parel, Mumbai 400012 and gives the kem.edu domain. The institution's annual statistical reports name KEM Hospital at Parel, Mumbai 400012 on that same domain."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Hospital-wide deliveries, as reported in the annual Vital Statistics table.",
+      "unit": "deliveries",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "target_source_review": "The hospital-wide Vital Statistics table reports the calendar 2025 delivery total.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-01",
+      "backtest": {
+        "scored_periods": 2,
+        "method_mae": {
+          "last_observed": 56.33333333333334,
+          "recent_median": 116.02083333333337
+        },
+        "rows": [
+          {
+            "period": "2023-01",
+            "actual": 413.3333333333333,
+            "last_observed": 518.8333333333334,
+            "recent_median": 532.7083333333334
+          },
+          {
+            "period": "2024-01",
+            "actual": 406.1666666666667,
+            "last_observed": 413.3333333333333,
+            "recent_median": 518.8333333333334
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 4473,
+      "typical_month": 372.75,
+      "source": {
+        "title": "Seth G.S. Medical College and KEM Hospital Annual Report 2025",
+        "url": "https://www.kem.edu/wp-content/uploads/2026/02/Annual-Report-2025-2nd-Feb-2026.pdf",
+        "locator": "Printed page 3, Vital Statistics, rows 13 and 18, annual casualty attendance and deliveries"
+      }
+    },
+    {
+      "series_id": "kem_mumbai_casualty",
+      "site": {
+        "facility": "King Edward Memorial Hospital, Mumbai",
+        "facility_id": "fdr:1a62801f-4ddb-43e0-81cc-182cb1311171",
+        "release_pin": "400012",
+        "state": "Maharashtra",
+        "identity_url": "https://www.kem.edu/gsmckemh/",
+        "identity_basis": "The release lists the hospital at Parel, Mumbai 400012 and gives the kem.edu domain. The institution's annual statistical reports name KEM Hospital at Parel, Mumbai 400012 on that same domain."
+      },
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty attendances, all reasons.",
+      "unit": "casualty attendances",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "target_source_review": "The hospital-wide Vital Statistics table reports the calendar 2025 casualty attendance total.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-01",
+      "backtest": {
+        "scored_periods": 2,
+        "method_mae": {
+          "last_observed": 1020.958333333333,
+          "recent_median": 169.04166666666697
+        },
+        "rows": [
+          {
+            "period": "2023-01",
+            "actual": 11924.833333333334,
+            "last_observed": 13636.75,
+            "recent_median": 11916.75
+          },
+          {
+            "period": "2024-01",
+            "actual": 12254.833333333334,
+            "last_observed": 11924.833333333334,
+            "recent_median": 11924.833333333334
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 147996,
+      "typical_month": 12333.0,
+      "source": {
+        "title": "Seth G.S. Medical College and KEM Hospital Annual Report 2025",
+        "url": "https://www.kem.edu/wp-content/uploads/2026/02/Annual-Report-2025-2nd-Feb-2026.pdf",
+        "locator": "Printed page 3, Vital Statistics, rows 13 and 18, annual casualty attendance and deliveries"
+      }
+    },
+    {
+      "series_id": "sanjay_gandhi_memorial_casualty",
+      "site": {
+        "facility": "Sanjay Gandhi Memorial Hospital, Mangolpuri",
+        "facility_id": "fdr:989ef605-1404-4bcf-9e4f-4e910f8c8d9e",
+        "release_pin": "110083",
+        "state": "Delhi",
+        "identity_url": "https://sgmh.delhi.gov.in/sgmh/hospital-statistics",
+        "identity_basis": "The reporting branch explicitly identifies itself as Sanjay Gandhi Memorial Hospital in Mangolpuri, Delhi 110083, matching the release name, locality and PIN."
+      },
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty attendances, all reasons.",
+      "unit": "casualty attendances",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "target_source_review": "The hospital statistics explicitly report the calendar 2025 casualty attendance total.",
+      "status": "reported",
+      "reported_count": 432564,
+      "typical_month": 36047.0,
+      "source": {
+        "title": "Sanjay Gandhi Memorial Hospital statistics for the year 2025",
+        "url": "https://sgmh.delhi.gov.in/sgmh/hospital-statistics",
+        "locator": "Hospital Statistics for the Year 2025, Casualty att. (Total) row"
+      }
+    },
+    {
+      "series_id": "rtrmh_deliveries",
+      "site": {
+        "facility": "Rao Tula Ram Memorial Hospital",
+        "facility_id": "fdr:d817c0a9-6b9f-46eb-adc5-048c8c0296b7",
+        "release_pin": "110073",
+        "state": "Delhi",
+        "identity_url": "https://health.delhi.gov.in/health/delhi-government-hospitals",
+        "identity_basis": "Delhi Health lists Rao Tula Ram Memorial Hospital at Jaffarpur Kalan, New Delhi 110073, matching the release branch name, locality and PIN."
+      },
+      "service": "Maternity / delivery",
+      "scope": "All reported hospital deliveries in the Delhi fiscal-year performance table.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The annual performance table reports the exact FY2025–26 total.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 4,
+        "method_mae": {
+          "last_observed": 25.5625,
+          "recent_median": 16.40625
+        },
+        "rows": [
+          {
+            "period": "2021-04",
+            "actual": 199.25,
+            "last_observed": 184.25,
+            "recent_median": 197.45833333333331
+          },
+          {
+            "period": "2022-04",
+            "actual": 208.16666666666666,
+            "last_observed": 199.25,
+            "recent_median": 199.25
+          },
+          {
+            "period": "2023-04",
+            "actual": 240.5,
+            "last_observed": 208.16666666666666,
+            "recent_median": 199.25
+          },
+          {
+            "period": "2024-04",
+            "actual": 194.5,
+            "last_observed": 240.5,
+            "recent_median": 208.16666666666666
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 2341,
+      "typical_month": 195.08,
+      "source": {
+        "title": "Rao Tula Ram Memorial Hospital annual report",
+        "url": "https://rtrmh.delhi.gov.in/rtrmh/annual-report-2012-13",
+        "locator": "Section 5, Hospital Performance data for the year 2021–22 to 2025–26, Deliveries and Casualty Registrations rows"
+      }
+    },
+    {
+      "series_id": "rtrmh_casualty",
+      "site": {
+        "facility": "Rao Tula Ram Memorial Hospital",
+        "facility_id": "fdr:d817c0a9-6b9f-46eb-adc5-048c8c0296b7",
+        "release_pin": "110073",
+        "state": "Delhi",
+        "identity_url": "https://health.delhi.gov.in/health/delhi-government-hospitals",
+        "identity_basis": "Delhi Health lists Rao Tula Ram Memorial Hospital at Jaffarpur Kalan, New Delhi 110073, matching the release branch name, locality and PIN."
+      },
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty registrations, all reasons.",
+      "unit": "casualty registrations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The annual performance table reports the exact FY2025–26 total.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 4,
+        "method_mae": {
+          "last_observed": 1586.583333333333,
+          "recent_median": 2336.010416666667
+        },
+        "rows": [
+          {
+            "period": "2021-04",
+            "actual": 8169.083333333333,
+            "last_observed": 6476.25,
+            "recent_median": 9887.958333333332
+          },
+          {
+            "period": "2022-04",
+            "actual": 11429.333333333334,
+            "last_observed": 8169.083333333333,
+            "recent_median": 8169.083333333333
+          },
+          {
+            "period": "2023-04",
+            "actual": 11717.916666666666,
+            "last_observed": 11429.333333333334,
+            "recent_median": 8169.083333333333
+          },
+          {
+            "period": "2024-04",
+            "actual": 10613.25,
+            "last_observed": 11717.916666666666,
+            "recent_median": 11429.333333333334
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 119092,
+      "typical_month": 9924.33,
+      "source": {
+        "title": "Rao Tula Ram Memorial Hospital annual report",
+        "url": "https://rtrmh.delhi.gov.in/rtrmh/annual-report-2012-13",
+        "locator": "Section 5, Hospital Performance data for the year 2021–22 to 2025–26, Deliveries and Casualty Registrations rows"
+      }
+    },
+    {
+      "series_id": "govt_lawley_deliveries",
+      "site": {
+        "facility": "Government Lawley Hospital",
+        "facility_id": "fdr:f447fa95-f439-4dab-9de2-3205136588bf",
+        "release_pin": "643101",
+        "state": "Tamil Nadu",
+        "identity_url": "https://nilgiris.nic.in/public-utility/govt-lawely-hospital/",
+        "identity_basis": "The Nilgiris district identifies its Government Lawely Hospital in Coonoor, identifying the Coonoor government hospital in Table 1. The release names the branch Government Lawley Hospital and places it in Coonoor."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Report's FY2025–26 delivery total for the Coonoor DMS CEmONC centre.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "DMS CEmONC Table 1, Coonoor row.",
+      "status": "reported",
+      "reported_count": 243,
+      "typical_month": 20.25,
+      "source": {
+        "title": "Tamil Nadu NHM 51st Executive Committee Agenda, Part A",
+        "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+        "locator": "Agenda 24, Annexure 1, Table 1, printed pp. 109–113, Deliveries 2025–26 column"
+      }
+    },
+    {
+      "series_id": "pattukkottai_deliveries",
+      "site": {
+        "facility": "Government Hospital Pattukkottai, Palaniappan Street",
+        "facility_id": "fdr:397ead66-5f38-475f-b577-924f9fe53f78",
+        "release_pin": "614601",
+        "state": "Tamil Nadu",
+        "identity_url": "https://www.tnurbantree.tn.gov.in/chengalpattu/hospitals-2/",
+        "identity_basis": "The government municipal hospital list explicitly names Government Hospital, Palaniyappan Street, Pattukkottai, matching the release street and town. The site appears as Pattukottai in the DMS table."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Report's FY2025–26 delivery total for the Pattukottai DMS CEmONC centre.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "DMS CEmONC Table 1, Pattukottai row.",
+      "status": "reported",
+      "reported_count": 2427,
+      "typical_month": 202.25,
+      "source": {
+        "title": "Tamil Nadu NHM 51st Executive Committee Agenda, Part A",
+        "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+        "locator": "Agenda 24, Annexure 1, Table 1, printed pp. 109–113, Deliveries 2025–26 column"
+      }
+    },
+    {
+      "series_id": "raja_mirasdar_deliveries",
+      "site": {
+        "facility": "Government Raja Mirasdar Hospital",
+        "facility_id": "fdr:c582b8cc-2fc1-4372-bddc-054b37fefc14",
+        "release_pin": "613001",
+        "state": "Tamil Nadu",
+        "identity_url": "https://thanjavur.nic.in/public-utility/govt-raja-mirasudhar-hospital/",
+        "identity_basis": "Thanjavur's official district directory gives the Raja Mirasudhar name variant at the Old Bus Stand, PIN 613001, matching the named Raja Mirasdar branch and landmark in the release."
+      },
+      "service": "Maternity / delivery",
+      "scope": "FY2025–26 institution-wide deliveries reported for the exact Government Raja Mirasdar Hospital branch.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "Institution-wise 2025–26 Performance Table 3, Government Raja Mirasdar Hospital row.",
+      "status": "reported",
+      "reported_count": 11001,
+      "typical_month": 916.75,
+      "source": {
+        "title": "Tamil Nadu NHM 51st Executive Committee Agenda, Part A",
+        "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+        "locator": "Table 3, Institution-wise Performance (2025–2026) and Justification, printed pp. 89–91, Deliveries column"
+      }
+    },
+    {
+      "series_id": "chengalpattu_medical_college_deliveries",
+      "site": {
+        "facility": "Government Chengalpattu Medical College Hospital",
+        "facility_id": "fdr:14e13612-bac5-4e8f-82d4-167385402203",
+        "release_pin": "603001",
+        "state": "Tamil Nadu",
+        "identity_url": "https://cmccpt.ac.in/",
+        "identity_basis": "The release lists this row as Chengalpattu Government Hospital and identifies its official website as cmccpt.ac.in. That exact domain publishes the Government Chengalpattu Medical College and Hospital name and PIN 603001."
+      },
+      "service": "Maternity / delivery",
+      "scope": "FY2025–26 institution-wide deliveries reported for Government Chengalpattu Medical College Hospital.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "Institution-wise 2025–26 Performance Table 3, Chengalpattu row.",
+      "status": "reported",
+      "reported_count": 8579,
+      "typical_month": 714.92,
+      "source": {
+        "title": "Tamil Nadu NHM 51st Executive Committee Agenda, Part A",
+        "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+        "locator": "Table 3, Institution-wise Performance (2025–2026) and Justification, printed pp. 89–91, Deliveries column"
+      }
+    },
+    {
+      "series_id": "sgrd_pediatric",
+      "site": {
+        "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+        "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+        "release_pin": "143501",
+        "state": "Punjab",
+        "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "identity_basis": "Exact institute name and Vallah–Mehta Road, Amritsar campus PIN 143501 agree with the site footer and facility release; release website uses sgrdimsr.in."
+      },
+      "service": "Pediatric care",
+      "scope": "Paediatrics outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "Official October Pediatric total in OPD Patients table.",
+      "status": "reported",
+      "reported_count": 3977,
+      "typical_month": 3977.0,
+      "source": {
+        "title": "Sri Guru Ram Das Institute of Medical Sciences and Research October 2026 clinical material",
+        "url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "locator": "October 2026 month heading, OPD counts, Major & Minor Operations, and Radio Diagnosis & Imaging; campus address in site footer."
+      }
+    },
+    {
+      "series_id": "sgrd_dental",
+      "site": {
+        "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+        "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+        "release_pin": "143501",
+        "state": "Punjab",
+        "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "identity_basis": "Exact institute name and Vallah–Mehta Road, Amritsar campus PIN 143501 agree with the site footer and facility release; release website uses sgrdimsr.in."
+      },
+      "service": "Dental care",
+      "scope": "Dental outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "Official October Dental total in OPD Patients table.",
+      "status": "reported",
+      "reported_count": 206,
+      "typical_month": 206.0,
+      "source": {
+        "title": "Sri Guru Ram Das Institute of Medical Sciences and Research October 2026 clinical material",
+        "url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "locator": "October 2026 month heading, OPD counts, Major & Minor Operations, and Radio Diagnosis & Imaging; campus address in site footer."
+      }
+    },
+    {
+      "series_id": "sgrd_emergency",
+      "site": {
+        "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+        "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+        "release_pin": "143501",
+        "state": "Punjab",
+        "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "identity_basis": "Exact institute name and Vallah–Mehta Road, Amritsar campus PIN 143501 agree with the site footer and facility release; release website uses sgrdimsr.in."
+      },
+      "service": "Trauma / emergency",
+      "scope": "Emergency outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "Official October Emergency total in OPD Patients table; covers emergency visits from any cause.",
+      "status": "reported",
+      "reported_count": 2721,
+      "typical_month": 2721.0,
+      "source": {
+        "title": "Sri Guru Ram Das Institute of Medical Sciences and Research October 2026 clinical material",
+        "url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "locator": "October 2026 month heading, OPD counts, Major & Minor Operations, and Radio Diagnosis & Imaging; campus address in site footer."
+      }
+    },
+    {
+      "series_id": "sgrd_ortho",
+      "site": {
+        "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+        "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+        "release_pin": "143501",
+        "state": "Punjab",
+        "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "identity_basis": "Exact institute name and Vallah–Mehta Road, Amritsar campus PIN 143501 agree with the site footer and facility release; release website uses sgrdimsr.in."
+      },
+      "service": "Orthopedic surgery",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "Official October Orthopedics Major Operation count; excludes 102 separately reported minor operations.",
+      "status": "reported",
+      "reported_count": 199,
+      "typical_month": 199.0,
+      "source": {
+        "title": "Sri Guru Ram Das Institute of Medical Sciences and Research October 2026 clinical material",
+        "url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "locator": "October 2026 month heading, OPD counts, Major & Minor Operations, and Radio Diagnosis & Imaging; campus address in site footer."
+      }
+    },
+    {
+      "series_id": "sgrd_mri",
+      "site": {
+        "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+        "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+        "release_pin": "143501",
+        "state": "Punjab",
+        "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "identity_basis": "Exact institute name and Vallah–Mehta Road, Amritsar campus PIN 143501 agree with the site footer and facility release; release website uses sgrdimsr.in."
+      },
+      "service": "MRI",
+      "scope": "MRI examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "Official October MRI total in Radio Diagnosis & Imaging table.",
+      "status": "reported",
+      "reported_count": 798,
+      "typical_month": 798.0,
+      "source": {
+        "title": "Sri Guru Ram Das Institute of Medical Sciences and Research October 2026 clinical material",
+        "url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "locator": "October 2026 month heading, OPD counts, Major & Minor Operations, and Radio Diagnosis & Imaging; campus address in site footer."
+      }
+    },
+    {
+      "series_id": "sgrd_ct",
+      "site": {
+        "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+        "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+        "release_pin": "143501",
+        "state": "Punjab",
+        "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "identity_basis": "Exact institute name and Vallah–Mehta Road, Amritsar campus PIN 143501 agree with the site footer and facility release; release website uses sgrdimsr.in."
+      },
+      "service": "CT scan",
+      "scope": "CT examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "Official October CT Scan total in Radio Diagnosis & Imaging table.",
+      "status": "reported",
+      "reported_count": 1144,
+      "typical_month": 1144.0,
+      "source": {
+        "title": "Sri Guru Ram Das Institute of Medical Sciences and Research October 2026 clinical material",
+        "url": "https://www.sgrdimsr.in/page-clinical_material.html",
+        "locator": "October 2026 month heading, OPD counts, Major & Minor Operations, and Radio Diagnosis & Imaging; campus address in site footer."
+      }
+    },
+    {
+      "series_id": "zydus_dahod_emergency",
+      "site": {
+        "facility": "Zydus Medical College and Hospital, Dahod",
+        "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+        "release_pin": "389151",
+        "state": "Gujarat",
+        "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+        "identity_basis": "The signed hospital report and the facility release give the same hospital name, Dahod, Bhagini Samaj/Naheru Baug landmark and PIN 389151. Other Zydus hospitals in Gujarat use different locations."
+      },
+      "service": "Trauma / emergency",
+      "scope": "Casualty attendance",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "Signed October report's total monthly Casualty attendance.",
+      "status": "reported",
+      "reported_count": 5546,
+      "typical_month": 5546.0,
+      "source": {
+        "title": "Zydus Medical College and Hospital Dahod October 2026 clinical material",
+        "url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+        "locator": "October 2026 signed report; casualty, normal deliveries plus Caesarian sections, and CT/MRI Total O.P.D. plus Total I.P.D. columns."
+      }
+    },
+    {
+      "series_id": "zydus_dahod_delivery",
+      "site": {
+        "facility": "Zydus Medical College and Hospital, Dahod",
+        "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+        "release_pin": "389151",
+        "state": "Gujarat",
+        "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+        "identity_basis": "The signed hospital report and the facility release give the same hospital name, Dahod, Bhagini Samaj/Naheru Baug landmark and PIN 389151. Other Zydus hospitals in Gujarat use different locations."
+      },
+      "service": "Maternity / delivery",
+      "scope": "Normal and caesarean delivery procedures",
+      "unit": "deliveries",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "October report lists 321 normal deliveries and 177 Caesarian sections; sum across those two reported delivery modes.",
+      "status": "reported",
+      "reported_count": 498,
+      "typical_month": 498.0,
+      "source": {
+        "title": "Zydus Medical College and Hospital Dahod October 2026 clinical material",
+        "url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+        "locator": "October 2026 signed report; casualty, normal deliveries plus Caesarian sections, and CT/MRI Total O.P.D. plus Total I.P.D. columns."
+      }
+    },
+    {
+      "series_id": "zydus_dahod_mri",
+      "site": {
+        "facility": "Zydus Medical College and Hospital, Dahod",
+        "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+        "release_pin": "389151",
+        "state": "Gujarat",
+        "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+        "identity_basis": "The signed hospital report and the facility release give the same hospital name, Dahod, Bhagini Samaj/Naheru Baug landmark and PIN 389151. Other Zydus hospitals in Gujarat use different locations."
+      },
+      "service": "MRI",
+      "scope": "MRI examinations in outpatient and inpatient columns",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "October report's MRI column has 162 total OPD examinations and 213 total IPD examinations.",
+      "status": "reported",
+      "reported_count": 375,
+      "typical_month": 375.0,
+      "source": {
+        "title": "Zydus Medical College and Hospital Dahod October 2026 clinical material",
+        "url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+        "locator": "October 2026 signed report; casualty, normal deliveries plus Caesarian sections, and CT/MRI Total O.P.D. plus Total I.P.D. columns."
+      }
+    },
+    {
+      "series_id": "zydus_dahod_ct",
+      "site": {
+        "facility": "Zydus Medical College and Hospital, Dahod",
+        "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+        "release_pin": "389151",
+        "state": "Gujarat",
+        "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+        "identity_basis": "The signed hospital report and the facility release give the same hospital name, Dahod, Bhagini Samaj/Naheru Baug landmark and PIN 389151. Other Zydus hospitals in Gujarat use different locations."
+      },
+      "service": "CT scan",
+      "scope": "CT examinations in outpatient and inpatient columns",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "October report's C.T. row has 81 total OPD examinations and 793 total IPD examinations.",
+      "status": "reported",
+      "reported_count": 874,
+      "typical_month": 874.0,
+      "source": {
+        "title": "Zydus Medical College and Hospital Dahod October 2026 clinical material",
+        "url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+        "locator": "October 2026 signed report; casualty, normal deliveries plus Caesarian sections, and CT/MRI Total O.P.D. plus Total I.P.D. columns."
+      }
+    },
+    {
+      "series_id": "its_muradnagar_dental",
+      "site": {
+        "facility": "I.T.S. Centre for Dental Studies & Research, Murad Nagar",
+        "facility_id": "fdr:2bd7a9fd-1b70-4c82-a743-5064667cf075",
+        "release_pin": "201206",
+        "state": "Uttar Pradesh",
+        "identity_url": "https://itsdentalcollege.com/contact",
+        "identity_basis": "Official contact of the publisher names Delhi–Meerut Road, Murad Nagar, Ghaziabad 201206. That exact campus is the facility release I.T.S Dental College, Ghaziabad row. The similarly named Greater Noida operator uses a different website and address."
+      },
+      "service": "Dental care",
+      "scope": "Whole-college central dental OPD registrations, new and repeat",
+      "unit": "registrations",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "October total CPR registrations, 3,692 new plus 12,747 repeat visits.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-09",
+      "backtest": {
+        "scored_periods": 6,
+        "method_mae": {
+          "last_observed": 2793.3333333333335,
+          "recent_median": 2457.0
+        },
+        "rows": [
+          {
+            "period": "2026-04",
+            "actual": 16144.0,
+            "last_observed": 13109.0,
+            "recent_median": 14479.0
+          },
+          {
+            "period": "2026-05",
+            "actual": 16527.0,
+            "last_observed": 16144.0,
+            "recent_median": 14958.0
+          },
+          {
+            "period": "2026-06",
+            "actual": 18193.0,
+            "last_observed": 16527.0,
+            "recent_median": 15437.0
+          },
+          {
+            "period": "2026-07",
+            "actual": 17971.0,
+            "last_observed": 18193.0,
+            "recent_median": 15790.5
+          },
+          {
+            "period": "2026-08",
+            "actual": 12735.0,
+            "last_observed": 17971.0,
+            "recent_median": 16144.0
+          },
+          {
+            "period": "2026-09",
+            "actual": 18953.0,
+            "last_observed": 12735.0,
+            "recent_median": 15790.5
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 16439,
+      "typical_month": 16439.0,
+      "source": {
+        "title": "I.T.S. Centre for Dental Studies & Research, Murad Nagar, OPD Patient Statistics – 2026",
+        "url": "https://itsdentalcollege.com/opd-patients",
+        "locator": "2026 Jan–Oct columns; General Information Total CPR registrations (row 4) and Dept. of Oral and Maxillofacial Surgery Minor Surgeries and Major Surgeries (rows 2 + 3)."
+      }
+    },
+    {
+      "series_id": "its_muradnagar_oral",
+      "site": {
+        "facility": "I.T.S. Centre for Dental Studies & Research, Murad Nagar",
+        "facility_id": "fdr:2bd7a9fd-1b70-4c82-a743-5064667cf075",
+        "release_pin": "201206",
+        "state": "Uttar Pradesh",
+        "identity_url": "https://itsdentalcollege.com/contact",
+        "identity_basis": "Official contact of the publisher names Delhi–Meerut Road, Murad Nagar, Ghaziabad 201206. That exact campus is the facility release I.T.S Dental College, Ghaziabad row. The similarly named Greater Noida operator uses a different website and address."
+      },
+      "service": "Oral surgery",
+      "scope": "Major and minor oral and maxillofacial surgeries",
+      "unit": "operations",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "October total of 111 minor plus 11 major surgeries; independent exodontia, implant and other procedures excluded.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-09",
+      "backtest": {
+        "scored_periods": 6,
+        "method_mae": {
+          "last_observed": 22.5,
+          "recent_median": 31.0
+        },
+        "rows": [
+          {
+            "period": "2026-04",
+            "actual": 146.0,
+            "last_observed": 140.0,
+            "recent_median": 140.0
+          },
+          {
+            "period": "2026-05",
+            "actual": 132.0,
+            "last_observed": 146.0,
+            "recent_median": 143.0
+          },
+          {
+            "period": "2026-06",
+            "actual": 154.0,
+            "last_observed": 132.0,
+            "recent_median": 140.0
+          },
+          {
+            "period": "2026-07",
+            "actual": 80.0,
+            "last_observed": 154.0,
+            "recent_median": 143.0
+          },
+          {
+            "period": "2026-08",
+            "actual": 89.0,
+            "last_observed": 80.0,
+            "recent_median": 140.0
+          },
+          {
+            "period": "2026-09",
+            "actual": 99.0,
+            "last_observed": 89.0,
+            "recent_median": 140.0
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 122,
+      "typical_month": 122.0,
+      "source": {
+        "title": "I.T.S. Centre for Dental Studies & Research, Murad Nagar, OPD Patient Statistics – 2026",
+        "url": "https://itsdentalcollege.com/opd-patients",
+        "locator": "2026 Jan–Oct columns; General Information Total CPR registrations (row 4) and Dept. of Oral and Maxillofacial Surgery Minor Surgeries and Major Surgeries (rows 2 + 3)."
+      }
+    },
+    {
+      "series_id": "unmehta_ayushman_surgery",
+      "site": {
+        "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+        "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+        "release_pin": "380016",
+        "state": "Gujarat",
+        "identity_url": "https://www.unmicrc.org/Statistics",
+        "identity_basis": "Exact institute name, Ahmedabad, PIN 380016 and unchanged unmicrc.org domain agree; source tab is headed with the Ahmedabad institute, separate from links to satellite centres."
+      },
+      "service": "Cardiac surgery",
+      "scope": "Cardiac surgeries recorded in the institute's Ayushman Bharat Yojana table",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "target_source_review": "The completed 2025–26 fiscal-year scheme row reports 5,772 cardiac surgeries. Institution-wide calendar-year total is a different series.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2024-04",
+      "backtest": {
+        "scored_periods": 5,
+        "method_mae": {
+          "last_observed": 76.6,
+          "recent_median": 149.7
+        },
+        "rows": [
+          {
+            "period": "2020-04",
+            "actual": 116.5,
+            "last_observed": 59.333333333333336,
+            "recent_median": 33.5
+          },
+          {
+            "period": "2021-04",
+            "actual": 225.41666666666666,
+            "last_observed": 116.5,
+            "recent_median": 59.333333333333336
+          },
+          {
+            "period": "2022-04",
+            "actual": 304.0,
+            "last_observed": 225.41666666666666,
+            "recent_median": 116.5
+          },
+          {
+            "period": "2023-04",
+            "actual": 399.0,
+            "last_observed": 304.0,
+            "recent_median": 225.41666666666666
+          },
+          {
+            "period": "2024-04",
+            "actual": 442.3333333333333,
+            "last_observed": 399.0,
+            "recent_median": 304.0
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 5772,
+      "typical_month": 481.0,
+      "source": {
+        "title": "U. N. Mehta Institute of Cardiology & Research Centre statistics",
+        "url": "https://www.unmicrc.org/Statistics",
+        "locator": "Ayushman Bharat Yojana table, Year (April to March), Cardiac Surgeries column. These are scheme-reported cardiac surgeries; the neighboring Cardiovascular Thoracic Surgery totals cover calendar years and different scope."
+      }
+    },
+    {
+      "series_id": "himalayan_expanded_pediatric",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "Pediatric care",
+      "scope": "Paediatrics outpatient visits",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "target_source_review": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2025-08",
+      "backtest": {
+        "scored_periods": 13,
+        "method_mae": {
+          "last_observed": 383.9230769230769,
+          "recent_median": 322.53846153846155
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 4641.0,
+            "last_observed": 4947.0,
+            "recent_median": 4904.0
+          },
+          {
+            "period": "2024-05",
+            "actual": 4875.0,
+            "last_observed": 4641.0,
+            "recent_median": 4884.5
+          },
+          {
+            "period": "2024-06",
+            "actual": 4411.0,
+            "last_observed": 4875.0,
+            "recent_median": 4875.0
+          },
+          {
+            "period": "2024-07",
+            "actual": 4594.0,
+            "last_observed": 4411.0,
+            "recent_median": 4870.0
+          },
+          {
+            "period": "2024-08",
+            "actual": 4982.0,
+            "last_observed": 4594.0,
+            "recent_median": 4865.0
+          },
+          {
+            "period": "2024-09",
+            "actual": 5258.0,
+            "last_observed": 4982.0,
+            "recent_median": 4870.0
+          },
+          {
+            "period": "2024-10",
+            "actual": 5087.0,
+            "last_observed": 5258.0,
+            "recent_median": 4875.0
+          },
+          {
+            "period": "2024-11",
+            "actual": 4608.0,
+            "last_observed": 5087.0,
+            "recent_median": 4889.5
+          },
+          {
+            "period": "2024-12",
+            "actual": 5744.0,
+            "last_observed": 4608.0,
+            "recent_median": 4875.0
+          },
+          {
+            "period": "2025-01",
+            "actual": 5970.0,
+            "last_observed": 5744.0,
+            "recent_median": 4889.5
+          },
+          {
+            "period": "2025-02",
+            "actual": 4970.0,
+            "last_observed": 5970.0,
+            "recent_median": 4911.0
+          },
+          {
+            "period": "2025-03",
+            "actual": 5010.0,
+            "last_observed": 4970.0,
+            "recent_median": 4958.5
+          },
+          {
+            "period": "2025-04",
+            "actual": 5098.0,
+            "last_observed": 5010.0,
+            "recent_median": 4976.0
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital September 2025 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/9.-NMC-Website-Clinical-Data-September-2025.pdf",
+        "locator": "NMC Clinical Material Details index September 2025 link. Repeated PDF retrieval returned an error; no counts extracted."
+      },
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 5087.0,
+      "prior_periods": [
+        {
+          "period_start": "2024-09",
+          "reported_count": 5258,
+          "source": {
+            "title": "Himalayan Hospital September 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/9.-NMC-Website-Clinical-Data-Sep-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-10",
+          "reported_count": 5087,
+          "source": {
+            "title": "Himalayan Hospital October 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/10.-NMC-Website-Clinical-Data-Oct-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-11",
+          "reported_count": 4608,
+          "source": {
+            "title": "Himalayan Hospital November 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/11.-NMC-Website-Clinical-Data-Nov-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-12",
+          "reported_count": 5744,
+          "source": {
+            "title": "Himalayan Hospital December 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/12.-NMC-Website-Clinical-Data-Dec-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-01",
+          "reported_count": 5970,
+          "source": {
+            "title": "Himalayan Hospital January 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/1.-NMC-Website-Clinical-Data-Jan-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 4970,
+          "source": {
+            "title": "Himalayan Hospital February 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 5010,
+          "source": {
+            "title": "Himalayan Hospital March 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 5098,
+          "source": {
+            "title": "Himalayan Hospital April 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 5020,
+          "source": {
+            "title": "Himalayan Hospital August 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_pediatric",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "Pediatric care",
+      "scope": "Paediatrics outpatient visits",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "target_source_review": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-01",
+      "backtest": {
+        "scored_periods": 16,
+        "method_mae": {
+          "last_observed": 356.25,
+          "recent_median": 344.625
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 4641.0,
+            "last_observed": 4947.0,
+            "recent_median": 4904.0
+          },
+          {
+            "period": "2024-05",
+            "actual": 4875.0,
+            "last_observed": 4641.0,
+            "recent_median": 4884.5
+          },
+          {
+            "period": "2024-06",
+            "actual": 4411.0,
+            "last_observed": 4875.0,
+            "recent_median": 4875.0
+          },
+          {
+            "period": "2024-07",
+            "actual": 4594.0,
+            "last_observed": 4411.0,
+            "recent_median": 4870.0
+          },
+          {
+            "period": "2024-08",
+            "actual": 4982.0,
+            "last_observed": 4594.0,
+            "recent_median": 4865.0
+          },
+          {
+            "period": "2024-09",
+            "actual": 5258.0,
+            "last_observed": 4982.0,
+            "recent_median": 4870.0
+          },
+          {
+            "period": "2024-10",
+            "actual": 5087.0,
+            "last_observed": 5258.0,
+            "recent_median": 4875.0
+          },
+          {
+            "period": "2024-11",
+            "actual": 4608.0,
+            "last_observed": 5087.0,
+            "recent_median": 4889.5
+          },
+          {
+            "period": "2024-12",
+            "actual": 5744.0,
+            "last_observed": 4608.0,
+            "recent_median": 4875.0
+          },
+          {
+            "period": "2025-01",
+            "actual": 5970.0,
+            "last_observed": 5744.0,
+            "recent_median": 4889.5
+          },
+          {
+            "period": "2025-02",
+            "actual": 4970.0,
+            "last_observed": 5970.0,
+            "recent_median": 4911.0
+          },
+          {
+            "period": "2025-03",
+            "actual": 5010.0,
+            "last_observed": 4970.0,
+            "recent_median": 4958.5
+          },
+          {
+            "period": "2025-04",
+            "actual": 5098.0,
+            "last_observed": 5010.0,
+            "recent_median": 4976.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 5218.0,
+            "last_observed": 5259.0,
+            "recent_median": 5059.0
+          },
+          {
+            "period": "2025-12",
+            "actual": 5788.0,
+            "last_observed": 5218.0,
+            "recent_median": 5158.0
+          },
+          {
+            "period": "2026-01",
+            "actual": 5690.0,
+            "last_observed": 5788.0,
+            "recent_median": 5158.0
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital February 2026 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/06/2.-NMC-Website-Clinical-Data-February-2026.pdf",
+        "locator": "NMC Clinical Material Details index February 2026 link. Repeated PDF retrieval timed out; no counts extracted."
+      },
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 5158.0,
+      "prior_periods": [
+        {
+          "period_start": "2025-02",
+          "reported_count": 4970,
+          "source": {
+            "title": "Himalayan Hospital February 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 5010,
+          "source": {
+            "title": "Himalayan Hospital March 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 5098,
+          "source": {
+            "title": "Himalayan Hospital April 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 5020,
+          "source": {
+            "title": "Himalayan Hospital August 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 5259,
+          "source": {
+            "title": "Himalayan Hospital October 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/10.-NMC-Website-Clinical-Data-October-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 5218,
+          "source": {
+            "title": "Himalayan Hospital November 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/12/11.-NMC-Website-Clinical-Data-November-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 5788,
+          "source": {
+            "title": "Himalayan Hospital December 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/01/12.-NMC-Website-Clinical-Data-December-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 5690,
+          "source": {
+            "title": "Himalayan Hospital January 2026 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/02/1.-NMC-Website-Clinical-Data-January-2026.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_cardiology",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "Cardiology consultation",
+      "scope": "Cardiology outpatient visits",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "target_source_review": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2025-08",
+      "backtest": {
+        "scored_periods": 0,
+        "method_mae": {},
+        "rows": []
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital September 2025 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/9.-NMC-Website-Clinical-Data-September-2025.pdf",
+        "locator": "NMC Clinical Material Details index September 2025 link. Repeated PDF retrieval returned an error; no counts extracted."
+      },
+      "status": "withheld",
+      "reason": "insufficient_matched_horizon_tests"
+    },
+    {
+      "series_id": "himalayan_expanded_cardiology",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "Cardiology consultation",
+      "scope": "Cardiology outpatient visits",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "target_source_review": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-01",
+      "backtest": {
+        "scored_periods": 2,
+        "method_mae": {
+          "last_observed": 426.0,
+          "recent_median": 205.0
+        },
+        "rows": [
+          {
+            "period": "2025-12",
+            "actual": 2809.0,
+            "last_observed": 2322.0,
+            "recent_median": 2421.0
+          },
+          {
+            "period": "2026-01",
+            "actual": 2444.0,
+            "last_observed": 2809.0,
+            "recent_median": 2466.0
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital February 2026 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/06/2.-NMC-Website-Clinical-Data-February-2026.pdf",
+        "locator": "NMC Clinical Material Details index February 2026 link. Repeated PDF retrieval timed out; no counts extracted."
+      },
+      "status": "withheld",
+      "reason": "insufficient_matched_horizon_tests"
+    },
+    {
+      "series_id": "himalayan_expanded_ortho",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "Orthopedic surgery",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "target_source_review": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2025-08",
+      "backtest": {
+        "scored_periods": 13,
+        "method_mae": {
+          "last_observed": 48.53846153846154,
+          "recent_median": 34.30769230769231
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 135.0,
+            "last_observed": 153.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2024-05",
+            "actual": 240.0,
+            "last_observed": 135.0,
+            "recent_median": 161.0
+          },
+          {
+            "period": "2024-06",
+            "actual": 192.0,
+            "last_observed": 240.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2024-07",
+            "actual": 138.0,
+            "last_observed": 192.0,
+            "recent_median": 180.5
+          },
+          {
+            "period": "2024-08",
+            "actual": 124.0,
+            "last_observed": 138.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2024-09",
+            "actual": 260.0,
+            "last_observed": 124.0,
+            "recent_median": 161.0
+          },
+          {
+            "period": "2024-10",
+            "actual": 160.0,
+            "last_observed": 260.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2024-11",
+            "actual": 170.0,
+            "last_observed": 160.0,
+            "recent_median": 164.5
+          },
+          {
+            "period": "2024-12",
+            "actual": 171.0,
+            "last_observed": 170.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2025-01",
+            "actual": 200.0,
+            "last_observed": 171.0,
+            "recent_median": 169.5
+          },
+          {
+            "period": "2025-02",
+            "actual": 186.0,
+            "last_observed": 200.0,
+            "recent_median": 170.5
+          },
+          {
+            "period": "2025-03",
+            "actual": 145.0,
+            "last_observed": 186.0,
+            "recent_median": 170.5
+          },
+          {
+            "period": "2025-04",
+            "actual": 206.0,
+            "last_observed": 145.0,
+            "recent_median": 170.5
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital September 2025 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/9.-NMC-Website-Clinical-Data-September-2025.pdf",
+        "locator": "NMC Clinical Material Details index September 2025 link. Repeated PDF retrieval returned an error; no counts extracted."
+      },
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 171.0,
+      "prior_periods": [
+        {
+          "period_start": "2024-09",
+          "reported_count": 260,
+          "source": {
+            "title": "Himalayan Hospital September 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/9.-NMC-Website-Clinical-Data-Sep-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-10",
+          "reported_count": 160,
+          "source": {
+            "title": "Himalayan Hospital October 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/10.-NMC-Website-Clinical-Data-Oct-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-11",
+          "reported_count": 170,
+          "source": {
+            "title": "Himalayan Hospital November 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/11.-NMC-Website-Clinical-Data-Nov-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-12",
+          "reported_count": 171,
+          "source": {
+            "title": "Himalayan Hospital December 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/12.-NMC-Website-Clinical-Data-Dec-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-01",
+          "reported_count": 200,
+          "source": {
+            "title": "Himalayan Hospital January 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/1.-NMC-Website-Clinical-Data-Jan-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 186,
+          "source": {
+            "title": "Himalayan Hospital February 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 145,
+          "source": {
+            "title": "Himalayan Hospital March 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 206,
+          "source": {
+            "title": "Himalayan Hospital April 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 153,
+          "source": {
+            "title": "Himalayan Hospital August 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_ortho",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "Orthopedic surgery",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "target_source_review": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-01",
+      "backtest": {
+        "scored_periods": 16,
+        "method_mae": {
+          "last_observed": 42.375,
+          "recent_median": 33.3125
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 135.0,
+            "last_observed": 153.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2024-05",
+            "actual": 240.0,
+            "last_observed": 135.0,
+            "recent_median": 161.0
+          },
+          {
+            "period": "2024-06",
+            "actual": 192.0,
+            "last_observed": 240.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2024-07",
+            "actual": 138.0,
+            "last_observed": 192.0,
+            "recent_median": 180.5
+          },
+          {
+            "period": "2024-08",
+            "actual": 124.0,
+            "last_observed": 138.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2024-09",
+            "actual": 260.0,
+            "last_observed": 124.0,
+            "recent_median": 161.0
+          },
+          {
+            "period": "2024-10",
+            "actual": 160.0,
+            "last_observed": 260.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2024-11",
+            "actual": 170.0,
+            "last_observed": 160.0,
+            "recent_median": 164.5
+          },
+          {
+            "period": "2024-12",
+            "actual": 171.0,
+            "last_observed": 170.0,
+            "recent_median": 169.0
+          },
+          {
+            "period": "2025-01",
+            "actual": 200.0,
+            "last_observed": 171.0,
+            "recent_median": 169.5
+          },
+          {
+            "period": "2025-02",
+            "actual": 186.0,
+            "last_observed": 200.0,
+            "recent_median": 170.5
+          },
+          {
+            "period": "2025-03",
+            "actual": 145.0,
+            "last_observed": 186.0,
+            "recent_median": 170.5
+          },
+          {
+            "period": "2025-04",
+            "actual": 206.0,
+            "last_observed": 145.0,
+            "recent_median": 170.5
+          },
+          {
+            "period": "2025-11",
+            "actual": 120.0,
+            "last_observed": 146.0,
+            "recent_median": 170.5
+          },
+          {
+            "period": "2025-12",
+            "actual": 134.0,
+            "last_observed": 120.0,
+            "recent_median": 162.0
+          },
+          {
+            "period": "2026-01",
+            "actual": 141.0,
+            "last_observed": 134.0,
+            "recent_median": 149.5
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital February 2026 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/06/2.-NMC-Website-Clinical-Data-February-2026.pdf",
+        "locator": "NMC Clinical Material Details index February 2026 link. Repeated PDF retrieval timed out; no counts extracted."
+      },
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 145.5,
+      "prior_periods": [
+        {
+          "period_start": "2025-02",
+          "reported_count": 186,
+          "source": {
+            "title": "Himalayan Hospital February 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 145,
+          "source": {
+            "title": "Himalayan Hospital March 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 206,
+          "source": {
+            "title": "Himalayan Hospital April 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 153,
+          "source": {
+            "title": "Himalayan Hospital August 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 146,
+          "source": {
+            "title": "Himalayan Hospital October 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/10.-NMC-Website-Clinical-Data-October-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 120,
+          "source": {
+            "title": "Himalayan Hospital November 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/12/11.-NMC-Website-Clinical-Data-November-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 134,
+          "source": {
+            "title": "Himalayan Hospital December 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/01/12.-NMC-Website-Clinical-Data-December-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 141,
+          "source": {
+            "title": "Himalayan Hospital January 2026 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/02/1.-NMC-Website-Clinical-Data-January-2026.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_mri",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "MRI",
+      "scope": "MRI examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "target_source_review": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2025-08",
+      "backtest": {
+        "scored_periods": 13,
+        "method_mae": {
+          "last_observed": 160.0,
+          "recent_median": 114.5
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 769.0,
+            "last_observed": 718.0,
+            "recent_median": 656.0
+          },
+          {
+            "period": "2024-05",
+            "actual": 928.0,
+            "last_observed": 769.0,
+            "recent_median": 687.0
+          },
+          {
+            "period": "2024-06",
+            "actual": 742.0,
+            "last_observed": 928.0,
+            "recent_median": 718.0
+          },
+          {
+            "period": "2024-07",
+            "actual": 753.0,
+            "last_observed": 742.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2024-08",
+            "actual": 699.0,
+            "last_observed": 753.0,
+            "recent_median": 742.0
+          },
+          {
+            "period": "2024-09",
+            "actual": 755.0,
+            "last_observed": 699.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2024-10",
+            "actual": 646.0,
+            "last_observed": 755.0,
+            "recent_median": 742.0
+          },
+          {
+            "period": "2024-11",
+            "actual": 1262.0,
+            "last_observed": 646.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2024-12",
+            "actual": 616.0,
+            "last_observed": 1262.0,
+            "recent_median": 742.0
+          },
+          {
+            "period": "2025-01",
+            "actual": 660.0,
+            "last_observed": 616.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2025-02",
+            "actual": 613.0,
+            "last_observed": 660.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2025-03",
+            "actual": 658.0,
+            "last_observed": 613.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2025-04",
+            "actual": 714.0,
+            "last_observed": 658.0,
+            "recent_median": 720.5
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital September 2025 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/9.-NMC-Website-Clinical-Data-September-2025.pdf",
+        "locator": "NMC Clinical Material Details index September 2025 link. Repeated PDF retrieval returned an error; no counts extracted."
+      },
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 660.0,
+      "prior_periods": [
+        {
+          "period_start": "2024-09",
+          "reported_count": 755,
+          "source": {
+            "title": "Himalayan Hospital September 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/9.-NMC-Website-Clinical-Data-Sep-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-10",
+          "reported_count": 646,
+          "source": {
+            "title": "Himalayan Hospital October 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/10.-NMC-Website-Clinical-Data-Oct-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-11",
+          "reported_count": 1262,
+          "source": {
+            "title": "Himalayan Hospital November 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/11.-NMC-Website-Clinical-Data-Nov-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-12",
+          "reported_count": 616,
+          "source": {
+            "title": "Himalayan Hospital December 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/12.-NMC-Website-Clinical-Data-Dec-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-01",
+          "reported_count": 660,
+          "source": {
+            "title": "Himalayan Hospital January 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/1.-NMC-Website-Clinical-Data-Jan-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 613,
+          "source": {
+            "title": "Himalayan Hospital February 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 658,
+          "source": {
+            "title": "Himalayan Hospital March 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 714,
+          "source": {
+            "title": "Himalayan Hospital April 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 737,
+          "source": {
+            "title": "Himalayan Hospital August 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_mri",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "MRI",
+      "scope": "MRI examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "target_source_review": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-01",
+      "backtest": {
+        "scored_periods": 16,
+        "method_mae": {
+          "last_observed": 144.25,
+          "recent_median": 103.0
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 769.0,
+            "last_observed": 718.0,
+            "recent_median": 656.0
+          },
+          {
+            "period": "2024-05",
+            "actual": 928.0,
+            "last_observed": 769.0,
+            "recent_median": 687.0
+          },
+          {
+            "period": "2024-06",
+            "actual": 742.0,
+            "last_observed": 928.0,
+            "recent_median": 718.0
+          },
+          {
+            "period": "2024-07",
+            "actual": 753.0,
+            "last_observed": 742.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2024-08",
+            "actual": 699.0,
+            "last_observed": 753.0,
+            "recent_median": 742.0
+          },
+          {
+            "period": "2024-09",
+            "actual": 755.0,
+            "last_observed": 699.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2024-10",
+            "actual": 646.0,
+            "last_observed": 755.0,
+            "recent_median": 742.0
+          },
+          {
+            "period": "2024-11",
+            "actual": 1262.0,
+            "last_observed": 646.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2024-12",
+            "actual": 616.0,
+            "last_observed": 1262.0,
+            "recent_median": 742.0
+          },
+          {
+            "period": "2025-01",
+            "actual": 660.0,
+            "last_observed": 616.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2025-02",
+            "actual": 613.0,
+            "last_observed": 660.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2025-03",
+            "actual": 658.0,
+            "last_observed": 613.0,
+            "recent_median": 730.0
+          },
+          {
+            "period": "2025-04",
+            "actual": 714.0,
+            "last_observed": 658.0,
+            "recent_median": 720.5
+          },
+          {
+            "period": "2025-11",
+            "actual": 577.0,
+            "last_observed": 651.0,
+            "recent_median": 659.0
+          },
+          {
+            "period": "2025-12",
+            "actual": 656.0,
+            "last_observed": 577.0,
+            "recent_median": 654.5
+          },
+          {
+            "period": "2026-01",
+            "actual": 581.0,
+            "last_observed": 656.0,
+            "recent_median": 657.0
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital February 2026 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/06/2.-NMC-Website-Clinical-Data-February-2026.pdf",
+        "locator": "NMC Clinical Material Details index February 2026 link. Repeated PDF retrieval timed out; no counts extracted."
+      },
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 653.5,
+      "prior_periods": [
+        {
+          "period_start": "2025-02",
+          "reported_count": 613,
+          "source": {
+            "title": "Himalayan Hospital February 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 658,
+          "source": {
+            "title": "Himalayan Hospital March 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 714,
+          "source": {
+            "title": "Himalayan Hospital April 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 737,
+          "source": {
+            "title": "Himalayan Hospital August 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 651,
+          "source": {
+            "title": "Himalayan Hospital October 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/10.-NMC-Website-Clinical-Data-October-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 577,
+          "source": {
+            "title": "Himalayan Hospital November 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/12/11.-NMC-Website-Clinical-Data-November-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 656,
+          "source": {
+            "title": "Himalayan Hospital December 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/01/12.-NMC-Website-Clinical-Data-December-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 581,
+          "source": {
+            "title": "Himalayan Hospital January 2026 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/02/1.-NMC-Website-Clinical-Data-January-2026.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_ct",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "CT scan",
+      "scope": "CT examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "target_source_review": "The public NMC archive lists the September 2025 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2025-08",
+      "backtest": {
+        "scored_periods": 13,
+        "method_mae": {
+          "last_observed": 367.53846153846155,
+          "recent_median": 225.5
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 1303.0,
+            "last_observed": 1382.0,
+            "recent_median": 1276.0
+          },
+          {
+            "period": "2024-05",
+            "actual": 1429.0,
+            "last_observed": 1303.0,
+            "recent_median": 1289.5
+          },
+          {
+            "period": "2024-06",
+            "actual": 1435.0,
+            "last_observed": 1429.0,
+            "recent_median": 1303.0
+          },
+          {
+            "period": "2024-07",
+            "actual": 1516.0,
+            "last_observed": 1435.0,
+            "recent_median": 1342.5
+          },
+          {
+            "period": "2024-08",
+            "actual": 1479.0,
+            "last_observed": 1516.0,
+            "recent_median": 1382.0
+          },
+          {
+            "period": "2024-09",
+            "actual": 1338.0,
+            "last_observed": 1479.0,
+            "recent_median": 1405.5
+          },
+          {
+            "period": "2024-10",
+            "actual": 1271.0,
+            "last_observed": 1338.0,
+            "recent_median": 1382.0
+          },
+          {
+            "period": "2024-11",
+            "actual": 3113.0,
+            "last_observed": 1271.0,
+            "recent_median": 1360.0
+          },
+          {
+            "period": "2024-12",
+            "actual": 1232.0,
+            "last_observed": 3113.0,
+            "recent_median": 1382.0
+          },
+          {
+            "period": "2025-01",
+            "actual": 1340.0,
+            "last_observed": 1232.0,
+            "recent_median": 1360.0
+          },
+          {
+            "period": "2025-02",
+            "actual": 1167.0,
+            "last_observed": 1340.0,
+            "recent_median": 1361.0
+          },
+          {
+            "period": "2025-03",
+            "actual": 1352.0,
+            "last_observed": 1167.0,
+            "recent_median": 1361.0
+          },
+          {
+            "period": "2025-04",
+            "actual": 1404.0,
+            "last_observed": 1352.0,
+            "recent_median": 1346.0
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital September 2025 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/9.-NMC-Website-Clinical-Data-September-2025.pdf",
+        "locator": "NMC Clinical Material Details index September 2025 link. Repeated PDF retrieval returned an error; no counts extracted."
+      },
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 1338.0,
+      "prior_periods": [
+        {
+          "period_start": "2024-09",
+          "reported_count": 1338,
+          "source": {
+            "title": "Himalayan Hospital September 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/9.-NMC-Website-Clinical-Data-Sep-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-10",
+          "reported_count": 1271,
+          "source": {
+            "title": "Himalayan Hospital October 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/10.-NMC-Website-Clinical-Data-Oct-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-11",
+          "reported_count": 3113,
+          "source": {
+            "title": "Himalayan Hospital November 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/11.-NMC-Website-Clinical-Data-Nov-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2024-12",
+          "reported_count": 1232,
+          "source": {
+            "title": "Himalayan Hospital December 2024 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/12.-NMC-Website-Clinical-Data-Dec-2024-Revised.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-01",
+          "reported_count": 1340,
+          "source": {
+            "title": "Himalayan Hospital January 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/1.-NMC-Website-Clinical-Data-Jan-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 1167,
+          "source": {
+            "title": "Himalayan Hospital February 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 1352,
+          "source": {
+            "title": "Himalayan Hospital March 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 1404,
+          "source": {
+            "title": "Himalayan Hospital April 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 1317,
+          "source": {
+            "title": "Himalayan Hospital August 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_ct",
+      "site": {
+        "facility": "Himalayan Hospital, Jolly Grant",
+        "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+        "release_pin": "249201",
+        "state": "Uttarakhand",
+        "identity_url": "https://hihtindia.org/contact-us/",
+        "identity_basis": "The release website is hihtindia.org. Its contact page gives the same 0135-2471200 and Swami Ram Nagar, Jolly Grant campus, and links Himalayan Hospital on srhu.edu.in. The NMC clinical material archive independently names that campus and hospital. Official PIN 248016 differs from the saved PIN 249201, which is recorded here without changing the release."
+      },
+      "service": "CT scan",
+      "scope": "CT examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "target_source_review": "The public NMC archive lists the February 2026 PDF. The count could not be retrieved after retries and searches for an alternate copy; provisional historical extraction-gap estimate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-01",
+      "backtest": {
+        "scored_periods": 16,
+        "method_mae": {
+          "last_observed": 321.5,
+          "recent_median": 197.375
+        },
+        "rows": [
+          {
+            "period": "2024-04",
+            "actual": 1303.0,
+            "last_observed": 1382.0,
+            "recent_median": 1276.0
+          },
+          {
+            "period": "2024-05",
+            "actual": 1429.0,
+            "last_observed": 1303.0,
+            "recent_median": 1289.5
+          },
+          {
+            "period": "2024-06",
+            "actual": 1435.0,
+            "last_observed": 1429.0,
+            "recent_median": 1303.0
+          },
+          {
+            "period": "2024-07",
+            "actual": 1516.0,
+            "last_observed": 1435.0,
+            "recent_median": 1342.5
+          },
+          {
+            "period": "2024-08",
+            "actual": 1479.0,
+            "last_observed": 1516.0,
+            "recent_median": 1382.0
+          },
+          {
+            "period": "2024-09",
+            "actual": 1338.0,
+            "last_observed": 1479.0,
+            "recent_median": 1405.5
+          },
+          {
+            "period": "2024-10",
+            "actual": 1271.0,
+            "last_observed": 1338.0,
+            "recent_median": 1382.0
+          },
+          {
+            "period": "2024-11",
+            "actual": 3113.0,
+            "last_observed": 1271.0,
+            "recent_median": 1360.0
+          },
+          {
+            "period": "2024-12",
+            "actual": 1232.0,
+            "last_observed": 3113.0,
+            "recent_median": 1382.0
+          },
+          {
+            "period": "2025-01",
+            "actual": 1340.0,
+            "last_observed": 1232.0,
+            "recent_median": 1360.0
+          },
+          {
+            "period": "2025-02",
+            "actual": 1167.0,
+            "last_observed": 1340.0,
+            "recent_median": 1361.0
+          },
+          {
+            "period": "2025-03",
+            "actual": 1352.0,
+            "last_observed": 1167.0,
+            "recent_median": 1361.0
+          },
+          {
+            "period": "2025-04",
+            "actual": 1404.0,
+            "last_observed": 1352.0,
+            "recent_median": 1346.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 1296.0,
+            "last_observed": 1315.0,
+            "recent_median": 1328.5
+          },
+          {
+            "period": "2025-12",
+            "actual": 1143.0,
+            "last_observed": 1296.0,
+            "recent_median": 1316.0
+          },
+          {
+            "period": "2026-01",
+            "actual": 1337.0,
+            "last_observed": 1143.0,
+            "recent_median": 1316.0
+          }
+        ]
+      },
+      "gap_kind": "listed_report_unreadable",
+      "gap_source": {
+        "title": "Himalayan Hospital February 2026 clinical material",
+        "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/06/2.-NMC-Website-Clinical-Data-February-2026.pdf",
+        "locator": "NMC Clinical Material Details index February 2026 link. Repeated PDF retrieval timed out; no counts extracted."
+      },
+      "status": "baseline_estimate",
+      "method": "recent_median",
+      "typical_month": 1316.0,
+      "prior_periods": [
+        {
+          "period_start": "2025-02",
+          "reported_count": 1167,
+          "source": {
+            "title": "Himalayan Hospital February 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 1352,
+          "source": {
+            "title": "Himalayan Hospital March 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 1404,
+          "source": {
+            "title": "Himalayan Hospital April 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 1317,
+          "source": {
+            "title": "Himalayan Hospital August 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 1315,
+          "source": {
+            "title": "Himalayan Hospital October 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/10.-NMC-Website-Clinical-Data-October-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 1296,
+          "source": {
+            "title": "Himalayan Hospital November 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/12/11.-NMC-Website-Clinical-Data-November-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 1143,
+          "source": {
+            "title": "Himalayan Hospital December 2025 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/01/12.-NMC-Website-Clinical-Data-December-2025.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 1337,
+          "source": {
+            "title": "Himalayan Hospital January 2026 clinical material",
+            "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/02/1.-NMC-Website-Clinical-Data-January-2026.pdf",
+            "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "vishnu_dental_oral_surgery",
+      "site": {
+        "facility": "Vishnu Dental College",
+        "facility_id": "fdr:3872ea66-d8f6-4175-a177-4bd66852cb4d",
+        "release_pin": "534202",
+        "state": "Andhra Pradesh",
+        "identity_url": "https://vdc.edu.in/contact-us/",
+        "identity_basis": "The release and publisher share the exact institution name and domain, Vishnupur at Bhimavaram, and PIN 534202. The contact page places Vishnu Dental College and Vishnu Dental Hospital at that address."
+      },
+      "service": "Oral surgery",
+      "scope": "Reported minor plus major Oral & Maxillofacial Surgery department operations, excluding the separately reported extraction and implant rows",
+      "unit": "procedures",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "target_source_review": "The university dashboard reports a complete October column and distinguishes minor and major surgical activity from exodontia and implants.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2026-09",
+      "backtest": {
+        "scored_periods": 0,
+        "method_mae": {},
+        "rows": []
+      },
+      "status": "reported",
+      "reported_count": 96,
+      "typical_month": 96.0,
+      "source": {
+        "title": "Vishnu Dental College Digital Clinical Dashboard, department-wise number of patients",
+        "url": "https://vdc.edu.in/department-wise-number-of-patients/",
+        "locator": "Oral & Maxillofacial Surgery, September and October 2026 columns. Minor and Major Surgeries rows: September 91 + 9; October 78 + 18. Exodontia, implants, and inpatient counts are separate rows."
+      }
+    },
+    {
+      "series_id": "lok_nayak_casualty",
+      "site": {
+        "facility": "LNJP Hospital",
+        "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+        "release_pin": "110002",
+        "state": "Delhi",
+        "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+        "identity_basis": "This FDR release row names LNJP Hospital, New Delhi 110002 and links the Delhi government LNJP site. Its Ahilaya Bai College of Nursing Building address corresponds to the publisher’s Ahilya Bai College of Nursing at Lok Nayak Hospital, New Delhi 110002."
+      },
+      "service": "Trauma / emergency",
+      "scope": "Reported all-cause Emergency Department casualty attendances",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2025-12",
+      "period_end": "2025-12",
+      "target_source_review": "Latest month in the 2025 Emergency Department census; the separate December census confirms the same casualty attendance.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2025-11",
+      "backtest": {
+        "scored_periods": 8,
+        "method_mae": {
+          "last_observed": 2209.125,
+          "recent_median": 2887.75
+        },
+        "rows": [
+          {
+            "period": "2025-04",
+            "actual": 17919.0,
+            "last_observed": 16351.0,
+            "recent_median": 15302.0
+          },
+          {
+            "period": "2025-05",
+            "actual": 18800.0,
+            "last_observed": 17919.0,
+            "recent_median": 15826.5
+          },
+          {
+            "period": "2025-06",
+            "actual": 16416.0,
+            "last_observed": 18800.0,
+            "recent_median": 16351.0
+          },
+          {
+            "period": "2025-07",
+            "actual": 18236.0,
+            "last_observed": 16416.0,
+            "recent_median": 16383.5
+          },
+          {
+            "period": "2025-08",
+            "actual": 22691.0,
+            "last_observed": 18236.0,
+            "recent_median": 16416.0
+          },
+          {
+            "period": "2025-09",
+            "actual": 21926.0,
+            "last_observed": 22691.0,
+            "recent_median": 17167.5
+          },
+          {
+            "period": "2025-10",
+            "actual": 20528.0,
+            "last_observed": 21926.0,
+            "recent_median": 17919.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 16126.0,
+            "last_observed": 20528.0,
+            "recent_median": 18077.5
+          }
+        ]
+      },
+      "status": "reported",
+      "reported_count": 17995,
+      "typical_month": 17995.0,
+      "source": {
+        "title": "Lok Nayak Hospital annual OPD, IPD, and Emergency Department census, January to December 2025",
+        "url": "https://lnjp.delhi.gov.in/lnjp/annual-report-opd-jan-2025-dec-2025",
+        "locator": "OPD table: PEDS MEDICINE and PEDS CARDIOLOGY CLINIC, Grand Total column. ED Census Report: Casualty, monthly Total Patient column, January–December 2025."
+      }
+    },
+    {
+      "series_id": "lok_nayak_casualty",
+      "site": {
+        "facility": "LNJP Hospital",
+        "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+        "release_pin": "110002",
+        "state": "Delhi",
+        "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+        "identity_basis": "This FDR release row names LNJP Hospital, New Delhi 110002 and links the Delhi government LNJP site. Its Ahilaya Bai College of Nursing Building address corresponds to the publisher’s Ahilya Bai College of Nursing at Lok Nayak Hospital, New Delhi 110002."
+      },
+      "service": "Trauma / emergency",
+      "scope": "Reported all-cause Emergency Department casualty attendances",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-01",
+      "period_end": "2026-01",
+      "target_source_review": "The complete 2025 Emergency Department census ends in December. No January 2026 casualty census surfaced on the hospital site. This is the first month after the published monthly series, a historical estimate candidate.",
+      "forecast_horizon_periods": 1,
+      "latest_prior_period_start": "2025-12",
+      "backtest": {
+        "scored_periods": 9,
+        "method_mae": {
+          "last_observed": 2171.3333333333335,
+          "recent_median": 2575.3333333333335
+        },
+        "rows": [
+          {
+            "period": "2025-04",
+            "actual": 17919.0,
+            "last_observed": 16351.0,
+            "recent_median": 15302.0
+          },
+          {
+            "period": "2025-05",
+            "actual": 18800.0,
+            "last_observed": 17919.0,
+            "recent_median": 15826.5
+          },
+          {
+            "period": "2025-06",
+            "actual": 16416.0,
+            "last_observed": 18800.0,
+            "recent_median": 16351.0
+          },
+          {
+            "period": "2025-07",
+            "actual": 18236.0,
+            "last_observed": 16416.0,
+            "recent_median": 16383.5
+          },
+          {
+            "period": "2025-08",
+            "actual": 22691.0,
+            "last_observed": 18236.0,
+            "recent_median": 16416.0
+          },
+          {
+            "period": "2025-09",
+            "actual": 21926.0,
+            "last_observed": 22691.0,
+            "recent_median": 17167.5
+          },
+          {
+            "period": "2025-10",
+            "actual": 20528.0,
+            "last_observed": 21926.0,
+            "recent_median": 17919.0
+          },
+          {
+            "period": "2025-11",
+            "actual": 16126.0,
+            "last_observed": 20528.0,
+            "recent_median": 18077.5
+          },
+          {
+            "period": "2025-12",
+            "actual": 17995.0,
+            "last_observed": 16126.0,
+            "recent_median": 17919.0
+          }
+        ]
+      },
+      "gap_kind": "no_matching_total_recovered",
+      "status": "baseline_estimate",
+      "method": "last_observed",
+      "typical_month": 17995.0,
+      "prior_periods": [
+        {
+          "period_start": "2025-12",
+          "reported_count": 17995,
+          "source": {
+            "title": "Lok Nayak Hospital annual OPD, IPD, and Emergency Department census, January to December 2025",
+            "url": "https://lnjp.delhi.gov.in/lnjp/annual-report-opd-jan-2025-dec-2025",
+            "locator": "OPD table: PEDS MEDICINE and PEDS CARDIOLOGY CLINIC, Grand Total column. ED Census Report: Casualty, monthly Total Patient column, January–December 2025."
+          }
+        }
+      ]
+    },
+    {
+      "series_id": "lok_nayak_pediatrics",
+      "site": {
+        "facility": "LNJP Hospital",
+        "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+        "release_pin": "110002",
+        "state": "Delhi",
+        "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+        "identity_basis": "This FDR release row names LNJP Hospital, New Delhi 110002 and links the Delhi government LNJP site. Its Ahilaya Bai College of Nursing Building address corresponds to the publisher’s Ahilya Bai College of Nursing at Lok Nayak Hospital, New Delhi 110002."
+      },
+      "service": "Pediatric care",
+      "scope": "New and follow-up outpatient visits recorded under PEDS MEDICINE",
+      "unit": "visits",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "target_source_review": "Published full calendar-year 2025 pediatric medicine outpatient census. The hospital reports surgery and subspecialty clinics separately.",
+      "status": "reported",
+      "reported_count": 80429,
+      "typical_month": 6702.42,
+      "source": {
+        "title": "Lok Nayak Hospital annual OPD, IPD, and Emergency Department census, January to December 2025",
+        "url": "https://lnjp.delhi.gov.in/lnjp/annual-report-opd-jan-2025-dec-2025",
+        "locator": "OPD table: PEDS MEDICINE and PEDS CARDIOLOGY CLINIC, Grand Total column. ED Census Report: Casualty, monthly Total Patient column, January–December 2025."
+      }
+    },
+    {
+      "series_id": "lok_nayak_pediatric_cardiology",
+      "site": {
+        "facility": "LNJP Hospital",
+        "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+        "release_pin": "110002",
+        "state": "Delhi",
+        "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+        "identity_basis": "This FDR release row names LNJP Hospital, New Delhi 110002 and links the Delhi government LNJP site. Its Ahilaya Bai College of Nursing Building address corresponds to the publisher’s Ahilya Bai College of Nursing at Lok Nayak Hospital, New Delhi 110002."
+      },
+      "service": "Cardiology consultation",
+      "scope": "New and follow-up outpatient visits at the pediatric cardiology clinic only",
+      "unit": "visits",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "target_source_review": "Published full calendar-year 2025 outpatient census for the pediatric cardiology clinic.",
+      "status": "reported",
+      "reported_count": 199,
+      "typical_month": 16.58,
+      "source": {
+        "title": "Lok Nayak Hospital annual OPD, IPD, and Emergency Department census, January to December 2025",
+        "url": "https://lnjp.delhi.gov.in/lnjp/annual-report-opd-jan-2025-dec-2025",
+        "locator": "OPD table: PEDS MEDICINE and PEDS CARDIOLOGY CLINIC, Grand Total column. ED Census Report: Casualty, monthly Total Patient column, January–December 2025."
+      }
+    }
+  ]
+}

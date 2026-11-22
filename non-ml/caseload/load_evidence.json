@@ -1,0 +1,4281 @@
+{
+  "schema_version": 1,
+  "purpose": "Historical load planning only",
+  "as_of_month": "2026-11",
+  "summary": {
+    "reported_caseload_rows": 35,
+    "estimated_caseload_rows": 25,
+    "reported_caseload_facilities": 16,
+    "estimated_caseload_facilities": 14,
+    "all_caseload_facilities": 26,
+    "withheld_expansion_rows": 5,
+    "hp_pmndp_programme_rows": 47,
+    "hp_pmndp_linked_project_rows": 10,
+    "tn_cemonc_programme_rows": 94,
+    "tn_cemonc_linked_project_rows": 2,
+    "historical_predicted_capacity_pressure_rows": 5,
+    "live_availability_rows": 0
+  },
+  "sources": {
+    "source_01": {
+      "title": "AIIMS Bhubaneswar annual report 2024–25",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+      "locator": "Hospital services Day Care Chemotherapy Statistics, Total column; hospital at-a-glance table for deliveries and emergency activity where reported."
+    },
+    "source_02": {
+      "title": "SCTIMST annual report 2022–23",
+      "url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/resources/Annual_Report_2022_2023_English.pdf",
+      "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+    },
+    "source_03": {
+      "title": "SCTIMST annual report 2023–24",
+      "url": "https://new1.sctimst.ac.in/resources/annual-report/annual_report_23_24_english.pdf",
+      "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+    },
+    "source_04": {
+      "title": "SCTIMST annual report 2024–25",
+      "url": "https://sctimst.ac.in/About%20SCTIMST/Annual%20Report/resources/Annual_Report_2024_2025_English.pdf",
+      "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+    },
+    "source_05": {
+      "title": "SSSIHMS Whitefield Annual Report 2025–26",
+      "url": "https://whitefield.sssihms.org/about-hospital/annual-report-2025-26/",
+      "locator": "The year at a glance and Tertiary and general specialities for deliveries. Tertiary specialities — outpatients, procedures and surgeries, Cardiology outpatients and Total (Cardiac Surgeries). Laboratory and radiology investigations, MRI and CT scan rows."
+    },
+    "source_06": {
+      "title": "U. N. Mehta Institute clinical material, January–November 2025",
+      "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+      "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+    },
+    "source_07": {
+      "title": "U. N. Mehta Institute clinical material, January–February 2026",
+      "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2026_%282%29.pdf",
+      "locator": "Annexure I, Jan.26 and Feb.26 columns and Grand Total rows for CT Scan and MRI. The heading has a year typo, while the individual columns and filename identify 2026."
+    },
+    "source_08": {
+      "title": "AIIMS Bhubaneswar Annual Report 2024–25",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+      "locator": "Printed page 45, Diagnostics, Radio-diagnosis, fiscal-year MRI and CT Scan counts. CT Angiography is reported separately and omitted."
+    },
+    "source_09": {
+      "title": "AIIMS Nagpur Monthly Newsletter, August 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/fd39620399cabc9428ee57a1bf089d8e.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_10": {
+      "title": "AIIMS Nagpur Monthly Newsletter, September 2025",
+      "url": "https://aiimsnagpur.edu.in/writereaddata/AIIMS/files/176128439068fb11263617dNewsletter_Sept_2025.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_11": {
+      "title": "AIIMS Nagpur Monthly Newsletter, October 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/e0de57139239fd825899992a4ed968e0.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_12": {
+      "title": "AIIMS Nagpur Monthly Newsletter, November 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/c5f1548f26864f395006427d7bb6dc63.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_13": {
+      "title": "AIIMS Nagpur Monthly Newsletter, December 2025",
+      "url": "https://aiimsnagpur.edu.in/writereaddata/AIIMS/files/17679553886960dbbc83f93Monthly_report_Dec_2025_09012026.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_14": {
+      "title": "AIIMS Nagpur Monthly Newsletter, January 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/cec2b7d1c8394b160d1e88366af464a7.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_15": {
+      "title": "AIIMS Nagpur Monthly Newsletter, February 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/3c1df40475a166d5367491a3b6b29f72.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_16": {
+      "title": "AIIMS Nagpur Monthly Newsletter, March 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/8e33802ce7896fdd0ab95ef111603a5d.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_17": {
+      "title": "AIIMS Nagpur Monthly Newsletter, April 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/a85d26eacf9971de514b3b9472b82bf1.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_18": {
+      "title": "AIIMS Nagpur Monthly Newsletter, May 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/446647e3bf0c7f02fca33b2930961c43.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_19": {
+      "title": "AIIMS Nagpur Monthly Newsletter, June 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/e7091a0c80cc8a9cb177cd62a4ea5286.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_20": {
+      "title": "AIIMS Nagpur Monthly Newsletter, July 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/2b3a45d66821800475ff2fce9343f98a.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "source_21": {
+      "title": "AIIMS Bhubaneswar Annual Report 2024–25, Neonatology",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+      "locator": "Neonatology, Patient Care / Hospital Services. The Level III NICU figure is stated for calendar 2024."
+    },
+    "source_22": {
+      "title": "Emmanuel Hospital Association Annual Report 2024–2025",
+      "url": "https://ehausa.org/wp-content/uploads/2025/09/Annual-Report-2024-2025.pdf",
+      "locator": "Printed page 32, Clinical Statistics of Hospital, deliveries column"
+    },
+    "source_23": {
+      "title": "Seth G.S. Medical College and KEM Hospital Annual Report 2025",
+      "url": "https://www.kem.edu/wp-content/uploads/2026/02/Annual-Report-2025-2nd-Feb-2026.pdf",
+      "locator": "Printed page 3, Vital Statistics, rows 13 and 18, annual casualty attendance and deliveries"
+    },
+    "source_24": {
+      "title": "Sanjay Gandhi Memorial Hospital statistics for the year 2025",
+      "url": "https://sgmh.delhi.gov.in/sgmh/hospital-statistics",
+      "locator": "Hospital Statistics for the Year 2025, Casualty att. (Total) row"
+    },
+    "source_25": {
+      "title": "Rao Tula Ram Memorial Hospital annual report",
+      "url": "https://rtrmh.delhi.gov.in/rtrmh/annual-report-2012-13",
+      "locator": "Section 5, Hospital Performance data for the year 2021–22 to 2025–26, Deliveries and Casualty Registrations rows"
+    },
+    "source_26": {
+      "title": "Tamil Nadu NHM 51st Executive Committee Agenda, Part A",
+      "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+      "locator": "Agenda 24, Annexure 1, Table 1, printed pp. 109–113, Deliveries 2025–26 column"
+    },
+    "source_27": {
+      "title": "Tamil Nadu NHM 51st Executive Committee Agenda, Part A",
+      "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+      "locator": "Table 3, Institution-wise Performance (2025–2026) and Justification, printed pp. 89–91, Deliveries column"
+    },
+    "source_28": {
+      "title": "Sri Guru Ram Das Institute of Medical Sciences and Research October 2026 clinical material",
+      "url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "locator": "October 2026 month heading, OPD counts, Major & Minor Operations, and Radio Diagnosis & Imaging; campus address in site footer."
+    },
+    "source_29": {
+      "title": "Zydus Medical College and Hospital Dahod October 2026 clinical material",
+      "url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+      "locator": "October 2026 signed report; casualty, normal deliveries plus Caesarian sections, and CT/MRI Total O.P.D. plus Total I.P.D. columns."
+    },
+    "source_30": {
+      "title": "I.T.S. Centre for Dental Studies & Research, Murad Nagar, OPD Patient Statistics – 2026",
+      "url": "https://itsdentalcollege.com/opd-patients",
+      "locator": "2026 Jan–Oct columns; General Information Total CPR registrations (row 4) and Dept. of Oral and Maxillofacial Surgery Minor Surgeries and Major Surgeries (rows 2 + 3)."
+    },
+    "source_31": {
+      "title": "U. N. Mehta Institute of Cardiology & Research Centre statistics",
+      "url": "https://www.unmicrc.org/Statistics",
+      "locator": "Ayushman Bharat Yojana table, Year (April to March), Cardiac Surgeries column. These are scheme-reported cardiac surgeries; the neighboring Cardiovascular Thoracic Surgery totals cover calendar years and different scope."
+    },
+    "source_32": {
+      "title": "Himalayan Hospital September 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/9.-NMC-Website-Clinical-Data-September-2025.pdf",
+      "locator": "NMC Clinical Material Details index September 2025 link. Repeated PDF retrieval returned an error; no counts extracted."
+    },
+    "source_33": {
+      "title": "Himalayan Hospital September 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/9.-NMC-Website-Clinical-Data-Sep-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_34": {
+      "title": "Himalayan Hospital October 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/10.-NMC-Website-Clinical-Data-Oct-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_35": {
+      "title": "Himalayan Hospital November 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/11.-NMC-Website-Clinical-Data-Nov-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_36": {
+      "title": "Himalayan Hospital December 2024 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/07/12.-NMC-Website-Clinical-Data-Dec-2024-Revised.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_37": {
+      "title": "Himalayan Hospital January 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/1.-NMC-Website-Clinical-Data-Jan-2025-R.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_38": {
+      "title": "Himalayan Hospital February 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/2.-NMC-Website-Clinical-Data-Feb-2025-R.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_39": {
+      "title": "Himalayan Hospital March 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/3.-NMC-Website-Clinical-Data-Mar-2025-R.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_40": {
+      "title": "Himalayan Hospital April 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/05/4.-NMC-Website-Clinical-Data-Apr-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_41": {
+      "title": "Himalayan Hospital August 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/09/8.-NMC-Website-Clinical-Data-August-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_42": {
+      "title": "Himalayan Hospital February 2026 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/06/2.-NMC-Website-Clinical-Data-February-2026.pdf",
+      "locator": "NMC Clinical Material Details index February 2026 link. Repeated PDF retrieval timed out; no counts extracted."
+    },
+    "source_43": {
+      "title": "Himalayan Hospital October 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/11/10.-NMC-Website-Clinical-Data-October-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_44": {
+      "title": "Himalayan Hospital November 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2025/12/11.-NMC-Website-Clinical-Data-November-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_45": {
+      "title": "Himalayan Hospital December 2025 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/01/12.-NMC-Website-Clinical-Data-December-2025.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_46": {
+      "title": "Himalayan Hospital January 2026 clinical material",
+      "url": "https://hims.srhu.edu.in/wp-content/uploads/2026/02/1.-NMC-Website-Clinical-Data-January-2026.pdf",
+      "locator": "Paediatrics and Cardiology OPD where separate, Operations Summary Orthopedics Major, and Radiology Investigations MRI/CTs totals."
+    },
+    "source_47": {
+      "title": "Vishnu Dental College Digital Clinical Dashboard, department-wise number of patients",
+      "url": "https://vdc.edu.in/department-wise-number-of-patients/",
+      "locator": "Oral & Maxillofacial Surgery, September and October 2026 columns. Minor and Major Surgeries rows: September 91 + 9; October 78 + 18. Exodontia, implants, and inpatient counts are separate rows."
+    },
+    "source_48": {
+      "title": "Lok Nayak Hospital annual OPD, IPD, and Emergency Department census, January to December 2025",
+      "url": "https://lnjp.delhi.gov.in/lnjp/annual-report-opd-jan-2025-dec-2025",
+      "locator": "OPD table: PEDS MEDICINE and PEDS CARDIOLOGY CLINIC, Grand Total column. ED Census Report: Casualty, monthly Total Patient column, January–December 2025."
+    },
+    "source_49": {
+      "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+      "title": "Himachal Pradesh State Health Society annual report 2024–25",
+      "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+    },
+    "source_50": {
+      "url": "https://nhm.hp.gov.in/storage/app/media/uploaded-files/PMNDP%202023-24.pdf",
+      "title": "Himachal Pradesh NHM, PMNDP March 2024 and FY 2023–24 report",
+      "locator": "March 2024 monthly reporting table, first page, columns 'Number of functional Dialysis machines', 'Number of dialysis sessions conducted during the month' and 'Number of dialysis sessions conducted up to the month in 2023-24'"
+    },
+    "source_51": {
+      "title": "National Health Mission Tamil Nadu 51st Executive Committee Agenda, Part A",
+      "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+      "locator": "Agenda 24/51/2026, Annexure 1, Table 1, printed pp. 109–113",
+      "notes": "Source reports FY2025–26 observed deliveries and the CEmONC beds for all 94 DMS facilities. Bed occupancy rate, staffing proposal, priority, and the publisher's rounded monthly value are excluded. DME medical college hospitals are a separate cohort. Centre and district names retain the report's printed spelling. The 94 site rows sum to the published Table 1 totals of 137,712 deliveries and 6,173 CEmONC beds. The narrative's all-DMS count is a separately published aggregate and is not the source of these targets."
+    }
+  },
+  "reported_caseload": [
+    {
+      "series_id": "whitefield_mri_annual",
+      "service": "MRI",
+      "scope": "Whitefield campus radiology MRI investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 674.67,
+      "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+      "facility": "SSSIHMS Whitefield",
+      "state": "Karnataka",
+      "identity_url": "https://whitefield.sssihms.org/contact-us/",
+      "reported_count": 8096,
+      "source_id": "source_05"
+    },
+    {
+      "series_id": "whitefield_ct_annual",
+      "service": "CT scan",
+      "scope": "Whitefield campus radiology CT scan investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 428.25,
+      "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+      "facility": "SSSIHMS Whitefield",
+      "state": "Karnataka",
+      "identity_url": "https://whitefield.sssihms.org/contact-us/",
+      "reported_count": 5139,
+      "source_id": "source_05"
+    },
+    {
+      "series_id": "whitefield_cardiac_surgery_annual",
+      "service": "Cardiac surgery",
+      "scope": "Whitefield campus cardiac surgeries excluding cardiac catheterisation",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 77.08,
+      "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+      "facility": "SSSIHMS Whitefield",
+      "state": "Karnataka",
+      "identity_url": "https://whitefield.sssihms.org/contact-us/",
+      "reported_count": 925,
+      "source_id": "source_05"
+    },
+    {
+      "series_id": "whitefield_cardiology_annual",
+      "service": "Cardiology consultation",
+      "scope": "Whitefield campus tertiary cardiology outpatient consultations excluding Cardiac Surgery outpatients",
+      "unit": "visits",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 2429.83,
+      "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+      "facility": "SSSIHMS Whitefield",
+      "state": "Karnataka",
+      "identity_url": "https://whitefield.sssihms.org/contact-us/",
+      "reported_count": 29158,
+      "source_id": "source_05"
+    },
+    {
+      "series_id": "whitefield_maternity_annual",
+      "service": "Maternity / delivery",
+      "scope": "Whitefield campus Obstetrics & Gynaecology deliveries",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 46.0,
+      "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+      "facility": "SSSIHMS Whitefield",
+      "state": "Karnataka",
+      "identity_url": "https://whitefield.sssihms.org/contact-us/",
+      "reported_count": 552,
+      "source_id": "source_05"
+    },
+    {
+      "series_id": "unmehta_mri_monthly",
+      "service": "MRI",
+      "scope": "Ahmedabad main campus MRI clinical material Grand Total",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "typical_month": 147.0,
+      "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+      "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+      "state": "Gujarat",
+      "identity_url": "https://www.unmicrc.org/InfoMSRClause",
+      "reported_count": 147,
+      "source_id": "source_07"
+    },
+    {
+      "series_id": "unmehta_ct_monthly",
+      "service": "CT scan",
+      "scope": "Ahmedabad main campus CT scan clinical material Grand Total",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "typical_month": 887.0,
+      "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+      "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+      "state": "Gujarat",
+      "identity_url": "https://www.unmicrc.org/InfoMSRClause",
+      "reported_count": 887,
+      "source_id": "source_07"
+    },
+    {
+      "series_id": "aiims_nagpur_emergency_monthly",
+      "service": "Trauma / emergency",
+      "scope": "AIIMS Nagpur Trauma & Emergency OPD attendances excluding separately reported IPD",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-08",
+      "period_end": "2026-08",
+      "typical_month": 3011.0,
+      "facility_id": "fdr:ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c",
+      "facility": "AIIMS Nagpur",
+      "state": "Maharashtra",
+      "identity_url": "https://aiimsnagpur.edu.in/hospital",
+      "reported_count": 3011,
+      "source_id": "source_09"
+    },
+    {
+      "series_id": "aiims_bhubaneswar_nicu_calendar",
+      "service": "NICU",
+      "scope": "AIIMS Bhubaneswar Level III neonatal intensive care admissions, excluding neonatal OPD and SNCU",
+      "unit": "admissions",
+      "grain": "calendar_year",
+      "period_start": "2024-01",
+      "period_end": "2024-12",
+      "typical_month": 35.33,
+      "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+      "facility": "AIIMS Bhubaneswar",
+      "state": "Odisha",
+      "identity_url": "https://aiimsbhubaneswar.nic.in/contact-us/",
+      "reported_count": 424,
+      "source_id": "source_21"
+    },
+    {
+      "series_id": "kem_mumbai_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "Hospital-wide deliveries, as reported in the annual Vital Statistics table.",
+      "unit": "deliveries",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "typical_month": 372.75,
+      "facility_id": "fdr:1a62801f-4ddb-43e0-81cc-182cb1311171",
+      "facility": "King Edward Memorial Hospital, Mumbai",
+      "state": "Maharashtra",
+      "identity_url": "https://www.kem.edu/gsmckemh/",
+      "reported_count": 4473,
+      "source_id": "source_23"
+    },
+    {
+      "series_id": "kem_mumbai_casualty",
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty attendances, all reasons.",
+      "unit": "casualty attendances",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "typical_month": 12333.0,
+      "facility_id": "fdr:1a62801f-4ddb-43e0-81cc-182cb1311171",
+      "facility": "King Edward Memorial Hospital, Mumbai",
+      "state": "Maharashtra",
+      "identity_url": "https://www.kem.edu/gsmckemh/",
+      "reported_count": 147996,
+      "source_id": "source_23"
+    },
+    {
+      "series_id": "sanjay_gandhi_memorial_casualty",
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty attendances, all reasons.",
+      "unit": "casualty attendances",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "typical_month": 36047.0,
+      "facility_id": "fdr:989ef605-1404-4bcf-9e4f-4e910f8c8d9e",
+      "facility": "Sanjay Gandhi Memorial Hospital, Mangolpuri",
+      "state": "Delhi",
+      "identity_url": "https://sgmh.delhi.gov.in/sgmh/hospital-statistics",
+      "reported_count": 432564,
+      "source_id": "source_24"
+    },
+    {
+      "series_id": "rtrmh_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "All reported hospital deliveries in the Delhi fiscal-year performance table.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 195.08,
+      "facility_id": "fdr:d817c0a9-6b9f-46eb-adc5-048c8c0296b7",
+      "facility": "Rao Tula Ram Memorial Hospital",
+      "state": "Delhi",
+      "identity_url": "https://health.delhi.gov.in/health/delhi-government-hospitals",
+      "reported_count": 2341,
+      "source_id": "source_25"
+    },
+    {
+      "series_id": "rtrmh_casualty",
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty registrations, all reasons.",
+      "unit": "casualty registrations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 9924.33,
+      "facility_id": "fdr:d817c0a9-6b9f-46eb-adc5-048c8c0296b7",
+      "facility": "Rao Tula Ram Memorial Hospital",
+      "state": "Delhi",
+      "identity_url": "https://health.delhi.gov.in/health/delhi-government-hospitals",
+      "reported_count": 119092,
+      "source_id": "source_25"
+    },
+    {
+      "series_id": "govt_lawley_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "Report's FY2025–26 delivery total for the Coonoor DMS CEmONC centre.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 20.25,
+      "facility_id": "fdr:f447fa95-f439-4dab-9de2-3205136588bf",
+      "facility": "Government Lawley Hospital",
+      "state": "Tamil Nadu",
+      "identity_url": "https://nilgiris.nic.in/public-utility/govt-lawely-hospital/",
+      "reported_count": 243,
+      "source_id": "source_26"
+    },
+    {
+      "series_id": "pattukkottai_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "Report's FY2025–26 delivery total for the Pattukottai DMS CEmONC centre.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 202.25,
+      "facility_id": "fdr:397ead66-5f38-475f-b577-924f9fe53f78",
+      "facility": "Government Hospital Pattukkottai, Palaniappan Street",
+      "state": "Tamil Nadu",
+      "identity_url": "https://www.tnurbantree.tn.gov.in/chengalpattu/hospitals-2/",
+      "reported_count": 2427,
+      "source_id": "source_26"
+    },
+    {
+      "series_id": "raja_mirasdar_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "FY2025–26 institution-wide deliveries reported for the exact Government Raja Mirasdar Hospital branch.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 916.75,
+      "facility_id": "fdr:c582b8cc-2fc1-4372-bddc-054b37fefc14",
+      "facility": "Government Raja Mirasdar Hospital",
+      "state": "Tamil Nadu",
+      "identity_url": "https://thanjavur.nic.in/public-utility/govt-raja-mirasudhar-hospital/",
+      "reported_count": 11001,
+      "source_id": "source_27"
+    },
+    {
+      "series_id": "chengalpattu_medical_college_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "FY2025–26 institution-wide deliveries reported for Government Chengalpattu Medical College Hospital.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 714.92,
+      "facility_id": "fdr:14e13612-bac5-4e8f-82d4-167385402203",
+      "facility": "Government Chengalpattu Medical College Hospital",
+      "state": "Tamil Nadu",
+      "identity_url": "https://cmccpt.ac.in/",
+      "reported_count": 8579,
+      "source_id": "source_27"
+    },
+    {
+      "series_id": "sgrd_pediatric",
+      "service": "Pediatric care",
+      "scope": "Paediatrics outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 3977.0,
+      "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+      "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+      "state": "Punjab",
+      "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "reported_count": 3977,
+      "source_id": "source_28"
+    },
+    {
+      "series_id": "sgrd_dental",
+      "service": "Dental care",
+      "scope": "Dental outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 206.0,
+      "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+      "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+      "state": "Punjab",
+      "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "reported_count": 206,
+      "source_id": "source_28"
+    },
+    {
+      "series_id": "sgrd_emergency",
+      "service": "Trauma / emergency",
+      "scope": "Emergency outpatient encounters",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 2721.0,
+      "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+      "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+      "state": "Punjab",
+      "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "reported_count": 2721,
+      "source_id": "source_28"
+    },
+    {
+      "series_id": "sgrd_ortho",
+      "service": "Orthopedic surgery",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 199.0,
+      "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+      "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+      "state": "Punjab",
+      "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "reported_count": 199,
+      "source_id": "source_28"
+    },
+    {
+      "series_id": "sgrd_mri",
+      "service": "MRI",
+      "scope": "MRI examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 798.0,
+      "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+      "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+      "state": "Punjab",
+      "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "reported_count": 798,
+      "source_id": "source_28"
+    },
+    {
+      "series_id": "sgrd_ct",
+      "service": "CT scan",
+      "scope": "CT examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 1144.0,
+      "facility_id": "fdr:1186d459-ad5b-4462-b100-7146cf31dad9",
+      "facility": "Sri Guru Ram Das Institute of Medical Sciences and Research",
+      "state": "Punjab",
+      "identity_url": "https://www.sgrdimsr.in/page-clinical_material.html",
+      "reported_count": 1144,
+      "source_id": "source_28"
+    },
+    {
+      "series_id": "zydus_dahod_emergency",
+      "service": "Trauma / emergency",
+      "scope": "Casualty attendance",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 5546.0,
+      "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+      "facility": "Zydus Medical College and Hospital, Dahod",
+      "state": "Gujarat",
+      "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+      "reported_count": 5546,
+      "source_id": "source_29"
+    },
+    {
+      "series_id": "zydus_dahod_delivery",
+      "service": "Maternity / delivery",
+      "scope": "Normal and caesarean delivery procedures",
+      "unit": "deliveries",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 498.0,
+      "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+      "facility": "Zydus Medical College and Hospital, Dahod",
+      "state": "Gujarat",
+      "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+      "reported_count": 498,
+      "source_id": "source_29"
+    },
+    {
+      "series_id": "zydus_dahod_mri",
+      "service": "MRI",
+      "scope": "MRI examinations in outpatient and inpatient columns",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 375.0,
+      "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+      "facility": "Zydus Medical College and Hospital, Dahod",
+      "state": "Gujarat",
+      "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+      "reported_count": 375,
+      "source_id": "source_29"
+    },
+    {
+      "series_id": "zydus_dahod_ct",
+      "service": "CT scan",
+      "scope": "CT examinations in outpatient and inpatient columns",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 874.0,
+      "facility_id": "fdr:f3ff0951-1f03-4bbd-bd3f-524e687b55e0",
+      "facility": "Zydus Medical College and Hospital, Dahod",
+      "state": "Gujarat",
+      "identity_url": "https://www.zmchdahod.in/pdf/Clinical_Material_Month_of_October_2026.pdf",
+      "reported_count": 874,
+      "source_id": "source_29"
+    },
+    {
+      "series_id": "its_muradnagar_dental",
+      "service": "Dental care",
+      "scope": "Whole-college central dental OPD registrations, new and repeat",
+      "unit": "registrations",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 16439.0,
+      "facility_id": "fdr:2bd7a9fd-1b70-4c82-a743-5064667cf075",
+      "facility": "I.T.S. Centre for Dental Studies & Research, Murad Nagar",
+      "state": "Uttar Pradesh",
+      "identity_url": "https://itsdentalcollege.com/contact",
+      "reported_count": 16439,
+      "source_id": "source_30"
+    },
+    {
+      "series_id": "its_muradnagar_oral",
+      "service": "Oral surgery",
+      "scope": "Major and minor oral and maxillofacial surgeries",
+      "unit": "operations",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 122.0,
+      "facility_id": "fdr:2bd7a9fd-1b70-4c82-a743-5064667cf075",
+      "facility": "I.T.S. Centre for Dental Studies & Research, Murad Nagar",
+      "state": "Uttar Pradesh",
+      "identity_url": "https://itsdentalcollege.com/contact",
+      "reported_count": 122,
+      "source_id": "source_30"
+    },
+    {
+      "series_id": "unmehta_ayushman_surgery",
+      "service": "Cardiac surgery",
+      "scope": "Cardiac surgeries recorded in the institute's Ayushman Bharat Yojana table",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 481.0,
+      "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+      "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+      "state": "Gujarat",
+      "identity_url": "https://www.unmicrc.org/Statistics",
+      "reported_count": 5772,
+      "source_id": "source_31"
+    },
+    {
+      "series_id": "vishnu_dental_oral_surgery",
+      "service": "Oral surgery",
+      "scope": "Reported minor plus major Oral & Maxillofacial Surgery department operations, excluding the separately reported extraction and implant rows",
+      "unit": "procedures",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 96.0,
+      "facility_id": "fdr:3872ea66-d8f6-4175-a177-4bd66852cb4d",
+      "facility": "Vishnu Dental College",
+      "state": "Andhra Pradesh",
+      "identity_url": "https://vdc.edu.in/contact-us/",
+      "reported_count": 96,
+      "source_id": "source_47"
+    },
+    {
+      "series_id": "lok_nayak_casualty",
+      "service": "Trauma / emergency",
+      "scope": "Reported all-cause Emergency Department casualty attendances",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2025-12",
+      "period_end": "2025-12",
+      "typical_month": 17995.0,
+      "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+      "facility": "LNJP Hospital",
+      "state": "Delhi",
+      "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+      "reported_count": 17995,
+      "source_id": "source_48"
+    },
+    {
+      "series_id": "lok_nayak_pediatrics",
+      "service": "Pediatric care",
+      "scope": "New and follow-up outpatient visits recorded under PEDS MEDICINE",
+      "unit": "visits",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "typical_month": 6702.42,
+      "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+      "facility": "LNJP Hospital",
+      "state": "Delhi",
+      "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+      "reported_count": 80429,
+      "source_id": "source_48"
+    },
+    {
+      "series_id": "lok_nayak_pediatric_cardiology",
+      "service": "Cardiology consultation",
+      "scope": "New and follow-up outpatient visits at the pediatric cardiology clinic only",
+      "unit": "visits",
+      "grain": "calendar_year",
+      "period_start": "2025-01",
+      "period_end": "2025-12",
+      "typical_month": 16.58,
+      "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+      "facility": "LNJP Hospital",
+      "state": "Delhi",
+      "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+      "reported_count": 199,
+      "source_id": "source_48"
+    }
+  ],
+  "estimated_caseload": [
+    {
+      "series_id": "aiims_bbsr_chemo_daycare_total",
+      "service": "Chemotherapy",
+      "scope": "Reported hospital day-care chemotherapy administrations, combined Medical Oncology and Radiotherapy column totals",
+      "unit": "administrations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 4359.42,
+      "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+      "facility": "AIIMS Bhubaneswar",
+      "state": "Odisha",
+      "identity_url": "https://aiimsbhubaneswar.nic.in/annual-report/",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 52313,
+          "source_id": "source_01"
+        }
+      ]
+    },
+    {
+      "series_id": "sctimst_cardiac_ot",
+      "service": "Cardiac surgery",
+      "scope": "Adult and paediatric cardiac operating theatre procedures reported by Cardiothoracic and Vascular Anaesthesiology",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 161.92,
+      "facility_id": "fdr:2dc0c78a-d732-4c9b-af06-28a3304a8363",
+      "facility": "Sree Chitra Tirunal Institute for Medical Sciences and Technology, Thiruvananthapuram",
+      "state": "Kerala",
+      "identity_url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/",
+      "method": "recent_median",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2022-04",
+          "reported_count": 2043,
+          "source_id": "source_02"
+        },
+        {
+          "period_start": "2023-04",
+          "reported_count": 1943,
+          "source_id": "source_03"
+        },
+        {
+          "period_start": "2024-04",
+          "reported_count": 1608,
+          "source_id": "source_04"
+        }
+      ]
+    },
+    {
+      "series_id": "sctimst_stroke_thrombectomy",
+      "service": "Stroke care",
+      "scope": "Mechanical thrombectomy procedures in the Comprehensive Stroke Care Program",
+      "unit": "procedures",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 2.67,
+      "facility_id": "fdr:2dc0c78a-d732-4c9b-af06-28a3304a8363",
+      "facility": "Sree Chitra Tirunal Institute for Medical Sciences and Technology, Thiruvananthapuram",
+      "state": "Kerala",
+      "identity_url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 32,
+          "source_id": "source_04"
+        }
+      ]
+    },
+    {
+      "series_id": "unmehta_mri_monthly",
+      "service": "MRI",
+      "scope": "Ahmedabad main campus MRI clinical material Grand Total",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2025-12",
+      "period_end": "2025-12",
+      "typical_month": 135.0,
+      "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+      "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+      "state": "Gujarat",
+      "identity_url": "https://www.unmicrc.org/InfoMSRClause",
+      "method": "recent_median",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2025-01",
+          "reported_count": 150,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 132,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 123,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 107,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-05",
+          "reported_count": 146,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-06",
+          "reported_count": 149,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-07",
+          "reported_count": 176,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 112,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-09",
+          "reported_count": 159,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 127,
+          "source_id": "source_06"
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 135,
+          "source_id": "source_06"
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_bhubaneswar_mri_annual",
+      "service": "MRI",
+      "scope": "AIIMS Bhubaneswar hospital Radio-diagnosis MRI investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 1245.0,
+      "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+      "facility": "AIIMS Bhubaneswar",
+      "state": "Odisha",
+      "identity_url": "https://aiimsbhubaneswar.nic.in/contact-us/",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 14940,
+          "source_id": "source_08"
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_bhubaneswar_ct_annual",
+      "service": "CT scan",
+      "scope": "AIIMS Bhubaneswar hospital Radio-diagnosis CT Scan column excluding separately reported CT Angiography",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 3825.33,
+      "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+      "facility": "AIIMS Bhubaneswar",
+      "state": "Odisha",
+      "identity_url": "https://aiimsbhubaneswar.nic.in/contact-us/",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 45904,
+          "source_id": "source_08"
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_nagpur_emergency_monthly",
+      "service": "Trauma / emergency",
+      "scope": "AIIMS Nagpur Trauma & Emergency OPD attendances excluding separately reported IPD",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-09",
+      "period_end": "2026-09",
+      "typical_month": 2390.5,
+      "facility_id": "fdr:ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c",
+      "facility": "AIIMS Nagpur",
+      "state": "Maharashtra",
+      "identity_url": "https://aiimsnagpur.edu.in/hospital",
+      "method": "recent_median",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2025-09",
+          "reported_count": 2711,
+          "source_id": "source_10"
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 2411,
+          "source_id": "source_11"
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 2009,
+          "source_id": "source_12"
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 2370,
+          "source_id": "source_13"
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 2795,
+          "source_id": "source_14"
+        },
+        {
+          "period_start": "2026-02",
+          "reported_count": 2308,
+          "source_id": "source_15"
+        },
+        {
+          "period_start": "2026-03",
+          "reported_count": 2566,
+          "source_id": "source_16"
+        },
+        {
+          "period_start": "2026-04",
+          "reported_count": 2241,
+          "source_id": "source_17"
+        },
+        {
+          "period_start": "2026-05",
+          "reported_count": 2368,
+          "source_id": "source_18"
+        },
+        {
+          "period_start": "2026-06",
+          "reported_count": 2559,
+          "source_id": "source_19"
+        },
+        {
+          "period_start": "2026-07",
+          "reported_count": 2316,
+          "source_id": "source_20"
+        },
+        {
+          "period_start": "2026-08",
+          "reported_count": 3011,
+          "source_id": "source_09"
+        }
+      ]
+    },
+    {
+      "series_id": "aiims_nagpur_emergency_monthly",
+      "service": "Trauma / emergency",
+      "scope": "AIIMS Nagpur Trauma & Emergency OPD attendances excluding separately reported IPD",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-10",
+      "period_end": "2026-10",
+      "typical_month": 3011.0,
+      "facility_id": "fdr:ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c",
+      "facility": "AIIMS Nagpur",
+      "state": "Maharashtra",
+      "identity_url": "https://aiimsnagpur.edu.in/hospital",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2026-08",
+          "reported_count": 3011,
+          "source_id": "source_09"
+        }
+      ]
+    },
+    {
+      "series_id": "eha_chhatarpur_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 166.33,
+      "facility_id": "fdr:8080e7b2-b85d-463a-8e8f-ad6b7412a12e",
+      "facility": "Christian Hospital Chhatarpur",
+      "state": "Madhya Pradesh",
+      "identity_url": "https://www.ehahealth.org/clinical-hospital",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 1996,
+          "source_id": "source_22"
+        }
+      ]
+    },
+    {
+      "series_id": "eha_herbertpur_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility. Reported activity declined markedly after FY2022–23.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 20.75,
+      "facility_id": "fdr:a0869aab-74e6-4f7e-ae98-521da6d1b6eb",
+      "facility": "Herbertpur Christian Hospital",
+      "state": "Uttarakhand",
+      "identity_url": "https://www.ehahealth.org/clinical-hospital",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 249,
+          "source_id": "source_22"
+        }
+      ]
+    },
+    {
+      "series_id": "eha_kachhwa_deliveries",
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 4.83,
+      "facility_id": "fdr:acf665e2-7895-420c-81af-fcc329ed8a36",
+      "facility": "Kachhwa Christian Hospital",
+      "state": "Uttar Pradesh",
+      "identity_url": "https://www.ehahealth.org/clinical-hospital",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 58,
+          "source_id": "source_22"
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_pediatric",
+      "service": "Pediatric care",
+      "scope": "Paediatrics outpatient visits",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "typical_month": 5087.0,
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "method": "recent_median",
+      "gap_kind": "listed_report_unreadable",
+      "gap_source_id": "source_32",
+      "prior_periods": [
+        {
+          "period_start": "2024-09",
+          "reported_count": 5258,
+          "source_id": "source_33"
+        },
+        {
+          "period_start": "2024-10",
+          "reported_count": 5087,
+          "source_id": "source_34"
+        },
+        {
+          "period_start": "2024-11",
+          "reported_count": 4608,
+          "source_id": "source_35"
+        },
+        {
+          "period_start": "2024-12",
+          "reported_count": 5744,
+          "source_id": "source_36"
+        },
+        {
+          "period_start": "2025-01",
+          "reported_count": 5970,
+          "source_id": "source_37"
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 4970,
+          "source_id": "source_38"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 5010,
+          "source_id": "source_39"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 5098,
+          "source_id": "source_40"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 5020,
+          "source_id": "source_41"
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_pediatric",
+      "service": "Pediatric care",
+      "scope": "Paediatrics outpatient visits",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "typical_month": 5158.0,
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "method": "recent_median",
+      "gap_kind": "listed_report_unreadable",
+      "gap_source_id": "source_42",
+      "prior_periods": [
+        {
+          "period_start": "2025-02",
+          "reported_count": 4970,
+          "source_id": "source_38"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 5010,
+          "source_id": "source_39"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 5098,
+          "source_id": "source_40"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 5020,
+          "source_id": "source_41"
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 5259,
+          "source_id": "source_43"
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 5218,
+          "source_id": "source_44"
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 5788,
+          "source_id": "source_45"
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 5690,
+          "source_id": "source_46"
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_ortho",
+      "service": "Orthopedic surgery",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "typical_month": 171.0,
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "method": "recent_median",
+      "gap_kind": "listed_report_unreadable",
+      "gap_source_id": "source_32",
+      "prior_periods": [
+        {
+          "period_start": "2024-09",
+          "reported_count": 260,
+          "source_id": "source_33"
+        },
+        {
+          "period_start": "2024-10",
+          "reported_count": 160,
+          "source_id": "source_34"
+        },
+        {
+          "period_start": "2024-11",
+          "reported_count": 170,
+          "source_id": "source_35"
+        },
+        {
+          "period_start": "2024-12",
+          "reported_count": 171,
+          "source_id": "source_36"
+        },
+        {
+          "period_start": "2025-01",
+          "reported_count": 200,
+          "source_id": "source_37"
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 186,
+          "source_id": "source_38"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 145,
+          "source_id": "source_39"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 206,
+          "source_id": "source_40"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 153,
+          "source_id": "source_41"
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_ortho",
+      "service": "Orthopedic surgery",
+      "scope": "Major orthopedic operations",
+      "unit": "operations",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "typical_month": 145.5,
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "method": "recent_median",
+      "gap_kind": "listed_report_unreadable",
+      "gap_source_id": "source_42",
+      "prior_periods": [
+        {
+          "period_start": "2025-02",
+          "reported_count": 186,
+          "source_id": "source_38"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 145,
+          "source_id": "source_39"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 206,
+          "source_id": "source_40"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 153,
+          "source_id": "source_41"
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 146,
+          "source_id": "source_43"
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 120,
+          "source_id": "source_44"
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 134,
+          "source_id": "source_45"
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 141,
+          "source_id": "source_46"
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_mri",
+      "service": "MRI",
+      "scope": "MRI examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "typical_month": 660.0,
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "method": "recent_median",
+      "gap_kind": "listed_report_unreadable",
+      "gap_source_id": "source_32",
+      "prior_periods": [
+        {
+          "period_start": "2024-09",
+          "reported_count": 755,
+          "source_id": "source_33"
+        },
+        {
+          "period_start": "2024-10",
+          "reported_count": 646,
+          "source_id": "source_34"
+        },
+        {
+          "period_start": "2024-11",
+          "reported_count": 1262,
+          "source_id": "source_35"
+        },
+        {
+          "period_start": "2024-12",
+          "reported_count": 616,
+          "source_id": "source_36"
+        },
+        {
+          "period_start": "2025-01",
+          "reported_count": 660,
+          "source_id": "source_37"
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 613,
+          "source_id": "source_38"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 658,
+          "source_id": "source_39"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 714,
+          "source_id": "source_40"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 737,
+          "source_id": "source_41"
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_mri",
+      "service": "MRI",
+      "scope": "MRI examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "typical_month": 653.5,
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "method": "recent_median",
+      "gap_kind": "listed_report_unreadable",
+      "gap_source_id": "source_42",
+      "prior_periods": [
+        {
+          "period_start": "2025-02",
+          "reported_count": 613,
+          "source_id": "source_38"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 658,
+          "source_id": "source_39"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 714,
+          "source_id": "source_40"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 737,
+          "source_id": "source_41"
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 651,
+          "source_id": "source_43"
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 577,
+          "source_id": "source_44"
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 656,
+          "source_id": "source_45"
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 581,
+          "source_id": "source_46"
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_ct",
+      "service": "CT scan",
+      "scope": "CT examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2025-09",
+      "period_end": "2025-09",
+      "typical_month": 1338.0,
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "method": "recent_median",
+      "gap_kind": "listed_report_unreadable",
+      "gap_source_id": "source_32",
+      "prior_periods": [
+        {
+          "period_start": "2024-09",
+          "reported_count": 1338,
+          "source_id": "source_33"
+        },
+        {
+          "period_start": "2024-10",
+          "reported_count": 1271,
+          "source_id": "source_34"
+        },
+        {
+          "period_start": "2024-11",
+          "reported_count": 3113,
+          "source_id": "source_35"
+        },
+        {
+          "period_start": "2024-12",
+          "reported_count": 1232,
+          "source_id": "source_36"
+        },
+        {
+          "period_start": "2025-01",
+          "reported_count": 1340,
+          "source_id": "source_37"
+        },
+        {
+          "period_start": "2025-02",
+          "reported_count": 1167,
+          "source_id": "source_38"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 1352,
+          "source_id": "source_39"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 1404,
+          "source_id": "source_40"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 1317,
+          "source_id": "source_41"
+        }
+      ]
+    },
+    {
+      "series_id": "himalayan_expanded_ct",
+      "service": "CT scan",
+      "scope": "CT examinations reported by radiology",
+      "unit": "scans",
+      "grain": "month",
+      "period_start": "2026-02",
+      "period_end": "2026-02",
+      "typical_month": 1316.0,
+      "facility_id": "fdr:0dc6cd25-5907-4ae5-9f1c-258c27658325",
+      "facility": "Himalayan Hospital, Jolly Grant",
+      "state": "Uttarakhand",
+      "identity_url": "https://hihtindia.org/contact-us/",
+      "method": "recent_median",
+      "gap_kind": "listed_report_unreadable",
+      "gap_source_id": "source_42",
+      "prior_periods": [
+        {
+          "period_start": "2025-02",
+          "reported_count": 1167,
+          "source_id": "source_38"
+        },
+        {
+          "period_start": "2025-03",
+          "reported_count": 1352,
+          "source_id": "source_39"
+        },
+        {
+          "period_start": "2025-04",
+          "reported_count": 1404,
+          "source_id": "source_40"
+        },
+        {
+          "period_start": "2025-08",
+          "reported_count": 1317,
+          "source_id": "source_41"
+        },
+        {
+          "period_start": "2025-10",
+          "reported_count": 1315,
+          "source_id": "source_43"
+        },
+        {
+          "period_start": "2025-11",
+          "reported_count": 1296,
+          "source_id": "source_44"
+        },
+        {
+          "period_start": "2025-12",
+          "reported_count": 1143,
+          "source_id": "source_45"
+        },
+        {
+          "period_start": "2026-01",
+          "reported_count": 1337,
+          "source_id": "source_46"
+        }
+      ]
+    },
+    {
+      "series_id": "lok_nayak_casualty",
+      "service": "Trauma / emergency",
+      "scope": "Reported all-cause Emergency Department casualty attendances",
+      "unit": "visits",
+      "grain": "month",
+      "period_start": "2026-01",
+      "period_end": "2026-01",
+      "typical_month": 17995.0,
+      "facility_id": "fdr:2feb2607-d956-49ed-a957-85c34d1a61b7",
+      "facility": "LNJP Hospital",
+      "state": "Delhi",
+      "identity_url": "https://lnjp.delhi.gov.in/lnjp/contact-us",
+      "method": "last_observed",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2025-12",
+          "reported_count": 17995,
+          "source_id": "source_48"
+        }
+      ]
+    },
+    {
+      "series_id": "hp_pmndp:bilaspur",
+      "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+      "facility": "Regional Hospital, Bilaspur",
+      "state": "Himachal Pradesh",
+      "identity_url": "https://hpbilaspur.nic.in/public-utility-category/hospitals/",
+      "service": "Dialysis",
+      "scope": "Reported programme haemodialysis sessions at a PMNDP site",
+      "unit": "PMNDP haemodialysis sessions",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 256.5,
+      "method": "prior_fiscal_year_monthly_average",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 3078,
+          "source_id": "source_49"
+        }
+      ]
+    },
+    {
+      "series_id": "hp_pmndp:chamba",
+      "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+      "facility": "Government Medical College Chamba",
+      "state": "Himachal Pradesh",
+      "identity_url": "https://hpchamba.nic.in/public-utility/pt-jawaharlal-govt-medical-college-chamba/",
+      "service": "Dialysis",
+      "scope": "Reported programme haemodialysis sessions at a PMNDP site",
+      "unit": "PMNDP haemodialysis sessions",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 430.08,
+      "method": "prior_fiscal_year_monthly_average",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 5161,
+          "source_id": "source_49"
+        }
+      ]
+    },
+    {
+      "series_id": "hp_pmndp:dharamshala",
+      "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+      "facility": "Zonal Hospital Dharamshala",
+      "state": "Himachal Pradesh",
+      "identity_url": "https://hpkangra.nic.in/public-utility/zonal-hospital/",
+      "service": "Dialysis",
+      "scope": "Reported programme haemodialysis sessions at a PMNDP site",
+      "unit": "PMNDP haemodialysis sessions",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 464.17,
+      "method": "prior_fiscal_year_monthly_average",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 5570,
+          "source_id": "source_49"
+        }
+      ]
+    },
+    {
+      "series_id": "hp_pmndp:kullu",
+      "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+      "facility": "Regional Hospital Kullu",
+      "state": "Himachal Pradesh",
+      "identity_url": "https://hpkullu.nic.in/public-utility/government-regional-hospital-kullu/",
+      "service": "Dialysis",
+      "scope": "Reported programme haemodialysis sessions at a PMNDP site",
+      "unit": "PMNDP haemodialysis sessions",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 275.92,
+      "method": "prior_fiscal_year_monthly_average",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 3311,
+          "source_id": "source_49"
+        }
+      ]
+    },
+    {
+      "series_id": "hp_pmndp:mandi",
+      "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+      "facility": "Netaji Subhash Chandra Bose Zonal Hospital",
+      "state": "Himachal Pradesh",
+      "identity_url": "https://hpmandi.nic.in/health/",
+      "service": "Dialysis",
+      "scope": "Reported programme haemodialysis sessions at a PMNDP site",
+      "unit": "PMNDP haemodialysis sessions",
+      "grain": "fiscal_year",
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "typical_month": 385.33,
+      "method": "prior_fiscal_year_monthly_average",
+      "gap_kind": "no_matching_total_recovered",
+      "gap_source_id": null,
+      "prior_periods": [
+        {
+          "period_start": "2024-04",
+          "reported_count": 4624,
+          "source_id": "source_49"
+        }
+      ]
+    }
+  ],
+  "historical_intensity": {
+    "hp_pmndp": {
+      "scope": "Himachal Pradesh PMNDP public-private haemodialysis centres",
+      "unit": "PMNDP haemodialysis sessions",
+      "resource_unit": "functional dialysis machines",
+      "interpretation": "March sessions per functional machine reported in the same March census.",
+      "rows": [
+        {
+          "programme_site_id": "hp_pmndp:bilaspur",
+          "facility": "Regional Hospital Bilaspur",
+          "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+          "identity_url": "https://hpbilaspur.nic.in/public-utility-category/hospitals/",
+          "district": "Bilaspur",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 198,
+          "reported_resource_count": 4,
+          "count_per_resource": 49.5,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:chamba",
+          "facility": "Regional Hospital Chamba",
+          "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+          "identity_url": "https://hpchamba.nic.in/public-utility/pt-jawaharlal-govt-medical-college-chamba/",
+          "district": "Chamba",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 361,
+          "reported_resource_count": 6,
+          "count_per_resource": 60.166667,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:hamirpur",
+          "facility": "Dr. Radhakrishnan Government Medical College, Hamirpur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Hamirpur",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 139,
+          "reported_resource_count": 6,
+          "count_per_resource": 23.166667,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:dharamshala",
+          "facility": "Zonal Hospital Dharamshala",
+          "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+          "identity_url": "https://hpkangra.nic.in/public-utility/zonal-hospital/",
+          "district": "Kangra",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 407,
+          "reported_resource_count": 9,
+          "count_per_resource": 45.222222,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:nurpur",
+          "facility": "Civil Hospital Nurpur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kangra",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 49,
+          "reported_resource_count": 3,
+          "count_per_resource": 16.333333,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:palampur",
+          "facility": "Civil Hospital Palampur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kangra",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 178,
+          "reported_resource_count": 4,
+          "count_per_resource": 44.5,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:reckong_peo",
+          "facility": "Regional Hospital Reckong Peo",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kinnaur",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 38,
+          "reported_resource_count": 3,
+          "count_per_resource": 12.666667,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:kullu",
+          "facility": "Regional Hospital Kullu",
+          "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+          "identity_url": "https://hpkullu.nic.in/public-utility/government-regional-hospital-kullu/",
+          "district": "Kullu",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 96,
+          "reported_resource_count": 8,
+          "count_per_resource": 12.0,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:mandi",
+          "facility": "Zonal Hospital Mandi",
+          "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+          "identity_url": "https://hpmandi.nic.in/health/",
+          "district": "Mandi",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 356,
+          "reported_resource_count": 9,
+          "count_per_resource": 39.555556,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:sundernagar",
+          "facility": "Civil Hospital Sundernagar",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 269,
+          "reported_resource_count": 7,
+          "count_per_resource": 38.428571,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:ner_chowk",
+          "facility": "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 109,
+          "reported_resource_count": 6,
+          "count_per_resource": 18.166667,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:joginder_nagar",
+          "facility": "Civil Hospital Joginder Nagar",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 119,
+          "reported_resource_count": 3,
+          "count_per_resource": 39.666667,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:sarkaghat",
+          "facility": "Civil Hospital Sarkaghat",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 114,
+          "reported_resource_count": 3,
+          "count_per_resource": 38.0,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:karsog",
+          "facility": "Civil Hospital Karsog",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 27,
+          "reported_resource_count": 3,
+          "count_per_resource": 9.0,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:nahan",
+          "facility": "Dr. Yashwant Singh Parmar Government Medical College, Nahan",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Sirmour",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 160,
+          "reported_resource_count": 4,
+          "count_per_resource": 40.0,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:paonta_sahib",
+          "facility": "Civil Hospital Paonta Sahib",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Sirmour",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 123,
+          "reported_resource_count": 4,
+          "count_per_resource": 30.75,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:shimla",
+          "facility": "Deen Dayal Upadhyay Zonal Hospital, Shimla",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Shimla",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 175,
+          "reported_resource_count": 6,
+          "count_per_resource": 29.166667,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:rohru",
+          "facility": "Civil Hospital Rohru",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Shimla",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 215,
+          "reported_resource_count": 6,
+          "count_per_resource": 35.833333,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:rampur",
+          "facility": "Civil Hospital Rampur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Shimla",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 112,
+          "reported_resource_count": 3,
+          "count_per_resource": 37.333333,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:solan",
+          "facility": "Regional Hospital Solan",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Solan",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 309,
+          "reported_resource_count": 8,
+          "count_per_resource": 38.625,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:nalagarh",
+          "facility": "Civil Hospital Nalagarh",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Solan",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 101,
+          "reported_resource_count": 3,
+          "count_per_resource": 33.666667,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:dharampur",
+          "facility": "Community Health Centre Dharampur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Solan",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 81,
+          "reported_resource_count": 3,
+          "count_per_resource": 27.0,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:una",
+          "facility": "Regional Hospital Una",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Una",
+          "period_start": "2024-03",
+          "period_end": "2024-03",
+          "reported_count": 472,
+          "reported_resource_count": 10,
+          "count_per_resource": 47.2,
+          "source_id": "source_50"
+        },
+        {
+          "programme_site_id": "hp_pmndp:bilaspur",
+          "facility": "Regional Hospital Bilaspur",
+          "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+          "identity_url": "https://hpbilaspur.nic.in/public-utility-category/hospitals/",
+          "district": "Bilaspur",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 311,
+          "reported_resource_count": 6,
+          "count_per_resource": 51.833333,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:chamba",
+          "facility": "Regional Hospital Chamba",
+          "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+          "identity_url": "https://hpchamba.nic.in/public-utility/pt-jawaharlal-govt-medical-college-chamba/",
+          "district": "Chamba",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 473,
+          "reported_resource_count": 8,
+          "count_per_resource": 59.125,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:hamirpur",
+          "facility": "Dr. Radhakrishnan Government Medical College, Hamirpur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Hamirpur",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 271,
+          "reported_resource_count": 6,
+          "count_per_resource": 45.166667,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:dharamshala",
+          "facility": "Zonal Hospital Dharamshala",
+          "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+          "identity_url": "https://hpkangra.nic.in/public-utility/zonal-hospital/",
+          "district": "Kangra",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 473,
+          "reported_resource_count": 9,
+          "count_per_resource": 52.555556,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:nurpur",
+          "facility": "Civil Hospital Nurpur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kangra",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 138,
+          "reported_resource_count": 3,
+          "count_per_resource": 46.0,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:palampur",
+          "facility": "Civil Hospital Palampur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kangra",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 218,
+          "reported_resource_count": 4,
+          "count_per_resource": 54.5,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:reckong_peo",
+          "facility": "Regional Hospital Reckong Peo",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kinnaur",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 60,
+          "reported_resource_count": 3,
+          "count_per_resource": 20.0,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:kullu",
+          "facility": "Regional Hospital Kullu",
+          "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+          "identity_url": "https://hpkullu.nic.in/public-utility/government-regional-hospital-kullu/",
+          "district": "Kullu",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 329,
+          "reported_resource_count": 8,
+          "count_per_resource": 41.125,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:manali",
+          "facility": "Civil Hospital Manali",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kullu",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 115,
+          "reported_resource_count": 3,
+          "count_per_resource": 38.333333,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:mandi",
+          "facility": "Zonal Hospital Mandi",
+          "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+          "identity_url": "https://hpmandi.nic.in/health/",
+          "district": "Mandi",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 405,
+          "reported_resource_count": 9,
+          "count_per_resource": 45.0,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:sundernagar",
+          "facility": "Civil Hospital Sundernagar",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 303,
+          "reported_resource_count": 7,
+          "count_per_resource": 43.285714,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:ner_chowk",
+          "facility": "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 59,
+          "reported_resource_count": 6,
+          "count_per_resource": 9.833333,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:joginder_nagar",
+          "facility": "Civil Hospital Joginder Nagar",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 184,
+          "reported_resource_count": 3,
+          "count_per_resource": 61.333333,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:sarkaghat",
+          "facility": "Civil Hospital Sarkaghat",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 116,
+          "reported_resource_count": 3,
+          "count_per_resource": 38.666667,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:karsog",
+          "facility": "Civil Hospital Karsog",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mandi",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 44,
+          "reported_resource_count": 3,
+          "count_per_resource": 14.666667,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:nahan",
+          "facility": "Dr. Yashwant Singh Parmar Government Medical College, Nahan",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Sirmour",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 169,
+          "reported_resource_count": 4,
+          "count_per_resource": 42.25,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:paonta_sahib",
+          "facility": "Civil Hospital Paonta Sahib",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Sirmour",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 153,
+          "reported_resource_count": 4,
+          "count_per_resource": 38.25,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:shimla",
+          "facility": "Deen Dayal Upadhyay Zonal Hospital, Shimla",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Shimla",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 212,
+          "reported_resource_count": 6,
+          "count_per_resource": 35.333333,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:rohru",
+          "facility": "Civil Hospital Rohru",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Shimla",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 271,
+          "reported_resource_count": 6,
+          "count_per_resource": 45.166667,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:rampur",
+          "facility": "Civil Hospital Rampur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Shimla",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 120,
+          "reported_resource_count": 3,
+          "count_per_resource": 40.0,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:solan",
+          "facility": "Regional Hospital Solan",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Solan",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 444,
+          "reported_resource_count": 8,
+          "count_per_resource": 55.5,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:nalagarh",
+          "facility": "Civil Hospital Nalagarh",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Solan",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 153,
+          "reported_resource_count": 3,
+          "count_per_resource": 51.0,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:dharampur",
+          "facility": "Community Health Centre Dharampur",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Solan",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 127,
+          "reported_resource_count": 3,
+          "count_per_resource": 42.333333,
+          "source_id": "source_49"
+        },
+        {
+          "programme_site_id": "hp_pmndp:una",
+          "facility": "Regional Hospital Una",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Una",
+          "period_start": "2025-03",
+          "period_end": "2025-03",
+          "reported_count": 587,
+          "reported_resource_count": 10,
+          "count_per_resource": 58.7,
+          "source_id": "source_49"
+        }
+      ]
+    },
+    "tn_cemonc": {
+      "scope": "Tamil Nadu Directorate of Medical and Rural Health Services (DMS) CEmONC centres, FY2025–26",
+      "unit": "deliveries",
+      "resource_unit": "reported CEmONC beds",
+      "interpretation": "Fiscal-year deliveries per reported programme bed. Staffed bed-days are unknown.",
+      "rows": [
+        {
+          "programme_site_id": "tn-dms:cuddalore:chidambaram",
+          "facility": "Chidambaram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Cuddalore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 3503,
+          "reported_resource_count": 118,
+          "count_per_resource": 29.686441,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:cuddalore:cuddalore",
+          "facility": "Cuddalore DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Cuddalore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 4990,
+          "reported_resource_count": 134,
+          "count_per_resource": 37.238806,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:cuddalore:virudhachalam",
+          "facility": "Virudhachalam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Cuddalore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2635,
+          "reported_resource_count": 77,
+          "count_per_resource": 34.220779,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:karur:kulithalai",
+          "facility": "Kulithalai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Karur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1420,
+          "reported_resource_count": 75,
+          "count_per_resource": 18.933333,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:krishnagiri:hosur",
+          "facility": "Hosur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Krishnagiri",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 4167,
+          "reported_resource_count": 185,
+          "count_per_resource": 22.524324,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:ranipet:walajapet",
+          "facility": "Walajapet DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Ranipet",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2401,
+          "reported_resource_count": 56,
+          "count_per_resource": 42.875,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:salem:attur",
+          "facility": "Attur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Salem",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2187,
+          "reported_resource_count": 86,
+          "count_per_resource": 25.430233,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:thanjavur:kumbakonam",
+          "facility": "Kumbakonam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Thanjavur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 3983,
+          "reported_resource_count": 206,
+          "count_per_resource": 19.334951,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:thirupattur:tirupathur",
+          "facility": "Tirupathur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Thirupattur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 5275,
+          "reported_resource_count": 122,
+          "count_per_resource": 43.237705,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:thirupattur:vaniyambadi",
+          "facility": "Vaniyambadi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Thirupattur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2533,
+          "reported_resource_count": 69,
+          "count_per_resource": 36.710145,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvarur:mannargudi",
+          "facility": "Mannargudi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvarur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2026,
+          "reported_resource_count": 134,
+          "count_per_resource": 15.119403,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:virudhunagar:sivakasi",
+          "facility": "Sivakasi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Virudhunagar",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1298,
+          "reported_resource_count": 40,
+          "count_per_resource": 32.45,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:ariyalur:jayamkondan",
+          "facility": "Jayamkondan DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Ariyalur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2238,
+          "reported_resource_count": 75,
+          "count_per_resource": 29.84,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:erode:erode",
+          "facility": "Erode DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Erode",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2886,
+          "reported_resource_count": 133,
+          "count_per_resource": 21.699248,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:dharmapuri:pennagaram",
+          "facility": "Pennagaram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Dharmapuri",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1229,
+          "reported_resource_count": 78,
+          "count_per_resource": 15.75641,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:kancheepuram:kancheepuram",
+          "facility": "Kancheepuram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kancheepuram",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 5293,
+          "reported_resource_count": 105,
+          "count_per_resource": 50.409524,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:kanyakumari:kuzhithurai",
+          "facility": "Kuzhithurai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kanyakumari",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1325,
+          "reported_resource_count": 69,
+          "count_per_resource": 19.202899,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:kanyakumari:padhmanabapuram",
+          "facility": "Padhmanabapuram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kanyakumari",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1270,
+          "reported_resource_count": 70,
+          "count_per_resource": 18.142857,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:madurai:melur",
+          "facility": "Melur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Madurai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1338,
+          "reported_resource_count": 40,
+          "count_per_resource": 33.45,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:mayiladuthurai:mayiladuthurai",
+          "facility": "Mayiladuthurai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mayiladuthurai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 4653,
+          "reported_resource_count": 197,
+          "count_per_resource": 23.619289,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:namakkal:tiruchengode",
+          "facility": "Tiruchengode DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Namakkal",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1175,
+          "reported_resource_count": 61,
+          "count_per_resource": 19.262295,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:perambalur:perambalur",
+          "facility": "Perambalur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Perambalur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 3889,
+          "reported_resource_count": 189,
+          "count_per_resource": 20.57672,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:ramanathapuram:paramakudi",
+          "facility": "Paramakudi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Ramanathapuram",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1575,
+          "reported_resource_count": 67,
+          "count_per_resource": 23.507463,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:salem:mettur-dam",
+          "facility": "Mettur Dam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Salem",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2100,
+          "reported_resource_count": 86,
+          "count_per_resource": 24.418605,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tenkasi:tenkasi",
+          "facility": "Tenkasi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tenkasi",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2962,
+          "reported_resource_count": 154,
+          "count_per_resource": 19.233766,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:thanjavur:pattukottai",
+          "facility": "Pattukottai DMS CEmONC Centre",
+          "facility_id": "fdr:397ead66-5f38-475f-b577-924f9fe53f78",
+          "identity_url": "https://www.tnurbantree.tn.gov.in/chengalpattu/hospitals-2/",
+          "district": "Thanjavur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2427,
+          "reported_resource_count": 124,
+          "count_per_resource": 19.572581,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:theni:cumbum",
+          "facility": "Cumbum DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Theni",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2044,
+          "reported_resource_count": 56,
+          "count_per_resource": 36.5,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:theni:periakulam",
+          "facility": "Periakulam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Theni",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1760,
+          "reported_resource_count": 75,
+          "count_per_resource": 23.466667,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tirunelveli:ambasamudram",
+          "facility": "Ambasamudram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tirunelveli",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1814,
+          "reported_resource_count": 75,
+          "count_per_resource": 24.186667,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tirupur:udumalpet",
+          "facility": "Udumalpet DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tirupur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1400,
+          "reported_resource_count": 75,
+          "count_per_resource": 18.666667,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:vellore:gudiyatham",
+          "facility": "Gudiyatham DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Vellore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2989,
+          "reported_resource_count": 98,
+          "count_per_resource": 30.5,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:virudhunagar:aruppukottai",
+          "facility": "Aruppukottai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Virudhunagar",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2538,
+          "reported_resource_count": 124,
+          "count_per_resource": 20.467742,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:virudhunagar:rajapalayam",
+          "facility": "Rajapalayam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Virudhunagar",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2334,
+          "reported_resource_count": 94,
+          "count_per_resource": 24.829787,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tirupur:dharapuram",
+          "facility": "Dharapuram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tirupur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 879,
+          "reported_resource_count": 46,
+          "count_per_resource": 19.108696,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvarur:tiruthuraipoondi",
+          "facility": "Tiruthuraipoondi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvarur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 749,
+          "reported_resource_count": 43,
+          "count_per_resource": 17.418605,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:chengalpattu:madhuranthagam",
+          "facility": "Madhuranthagam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Chengalpattu",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 444,
+          "reported_resource_count": 44,
+          "count_per_resource": 10.090909,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:chengalpattu:tambaram",
+          "facility": "Tambaram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Chengalpattu",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2163,
+          "reported_resource_count": 119,
+          "count_per_resource": 18.176471,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:coimbatore:mettupalayam",
+          "facility": "Mettupalayam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Coimbatore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1092,
+          "reported_resource_count": 66,
+          "count_per_resource": 16.545455,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:coimbatore:pollachi",
+          "facility": "Pollachi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Coimbatore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2479,
+          "reported_resource_count": 141,
+          "count_per_resource": 17.58156,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:coimbatore:valparai",
+          "facility": "Valparai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Coimbatore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 67,
+          "reported_resource_count": 20,
+          "count_per_resource": 3.35,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:cuddalore:kattumannarkoil",
+          "facility": "Kattumannarkoil DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Cuddalore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 178,
+          "reported_resource_count": 21,
+          "count_per_resource": 8.47619,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:cuddalore:kurinchipadi",
+          "facility": "Kurinchipadi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Cuddalore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 229,
+          "reported_resource_count": 34,
+          "count_per_resource": 6.735294,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:cuddalore:panrutti",
+          "facility": "Panrutti DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Cuddalore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 184,
+          "reported_resource_count": 26,
+          "count_per_resource": 7.076923,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:cuddalore:thittakudi",
+          "facility": "Thittakudi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Cuddalore",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 52,
+          "reported_resource_count": 20,
+          "count_per_resource": 2.6,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:dharmapuri:harur",
+          "facility": "Harur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Dharmapuri",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1194,
+          "reported_resource_count": 60,
+          "count_per_resource": 19.9,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:dindugal:kodaikanal",
+          "facility": "Kodaikanal DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Dindugal",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 320,
+          "reported_resource_count": 22,
+          "count_per_resource": 14.545455,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:dindugal:nilakottai",
+          "facility": "Nilakottai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Dindugal",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 234,
+          "reported_resource_count": 27,
+          "count_per_resource": 8.666667,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:dindugal:palani",
+          "facility": "Palani DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Dindugal",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1764,
+          "reported_resource_count": 54,
+          "count_per_resource": 32.666667,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:erode:gobichettypalayam",
+          "facility": "Gobichettypalayam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Erode",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 988,
+          "reported_resource_count": 64,
+          "count_per_resource": 15.4375,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:erode:sathiyamangalam",
+          "facility": "Sathiyamangalam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Erode",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 792,
+          "reported_resource_count": 64,
+          "count_per_resource": 12.375,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:kallakurichi:tirukoilur",
+          "facility": "Tirukoilur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kallakurichi",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1434,
+          "reported_resource_count": 29,
+          "count_per_resource": 49.448276,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:kanyakumari:boothapandi",
+          "facility": "Boothapandi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Kanyakumari",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 470,
+          "reported_resource_count": 24,
+          "count_per_resource": 19.583333,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:krishnagiri:denkanikottai",
+          "facility": "Denkanikottai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Krishnagiri",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 527,
+          "reported_resource_count": 46,
+          "count_per_resource": 11.456522,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:madurai:tirumangalam",
+          "facility": "Tirumangalam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Madurai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 995,
+          "reported_resource_count": 40,
+          "count_per_resource": 24.875,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:madurai:usilampatti",
+          "facility": "Usilampatti DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Madurai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2453,
+          "reported_resource_count": 102,
+          "count_per_resource": 24.04902,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:mayiladuthurai:sirkazhi",
+          "facility": "Sirkazhi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Mayiladuthurai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1066,
+          "reported_resource_count": 68,
+          "count_per_resource": 15.676471,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:nagapattinam:vedaranyam",
+          "facility": "Vedaranyam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Nagapattinam",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 639,
+          "reported_resource_count": 44,
+          "count_per_resource": 14.522727,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:namakkal:komarapalayam",
+          "facility": "Komarapalayam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Namakkal",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 399,
+          "reported_resource_count": 26,
+          "count_per_resource": 15.346154,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:namakkal:rasipuram",
+          "facility": "Rasipuram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Namakkal",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1577,
+          "reported_resource_count": 51,
+          "count_per_resource": 30.921569,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:pudukottai:aranthangi",
+          "facility": "Aranthangi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Pudukottai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2151,
+          "reported_resource_count": 52,
+          "count_per_resource": 41.365385,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:pudukottai:gandarvakottai",
+          "facility": "Gandarvakottai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Pudukottai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 36,
+          "reported_resource_count": 20,
+          "count_per_resource": 1.8,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:ramanathapuram:mudukalathur",
+          "facility": "Mudukalathur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Ramanathapuram",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 143,
+          "reported_resource_count": 11,
+          "count_per_resource": 13.0,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:ramanathapuram:rameswaram",
+          "facility": "Rameswaram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Ramanathapuram",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 249,
+          "reported_resource_count": 24,
+          "count_per_resource": 10.375,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:ranipet:arakkonam",
+          "facility": "Arakkonam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Ranipet",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 405,
+          "reported_resource_count": 30,
+          "count_per_resource": 13.5,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:ranipet:sholingur",
+          "facility": "Sholingur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Ranipet",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 252,
+          "reported_resource_count": 24,
+          "count_per_resource": 10.5,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:salem:omalur",
+          "facility": "Omalur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Salem",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 686,
+          "reported_resource_count": 44,
+          "count_per_resource": 15.590909,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:sivaganga:devakottai",
+          "facility": "Devakottai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Sivaganga",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 275,
+          "reported_resource_count": 28,
+          "count_per_resource": 9.821429,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:sivaganga:karaikudi",
+          "facility": "Karaikudi DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Sivaganga",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2073,
+          "reported_resource_count": 104,
+          "count_per_resource": 19.932692,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:sivaganga:manamadurai",
+          "facility": "Manamadurai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Sivaganga",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 227,
+          "reported_resource_count": 20,
+          "count_per_resource": 11.35,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tenkasi:sankaran-kovil",
+          "facility": "Sankaran Kovil DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tenkasi",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 876,
+          "reported_resource_count": 74,
+          "count_per_resource": 11.837838,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:thanjavur:peravurani",
+          "facility": "Peravurani DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Thanjavur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 141,
+          "reported_resource_count": 18,
+          "count_per_resource": 7.833333,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:the-nilgiris:coonoor",
+          "facility": "Coonoor DMS CEmONC Centre",
+          "facility_id": "fdr:f447fa95-f439-4dab-9de2-3205136588bf",
+          "identity_url": "https://nilgiris.nic.in/public-utility/govt-lawely-hospital/",
+          "district": "The Nilgiris",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 243,
+          "reported_resource_count": 25,
+          "count_per_resource": 9.72,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:the-nilgiris:gudalur",
+          "facility": "Gudalur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "The Nilgiris",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 573,
+          "reported_resource_count": 45,
+          "count_per_resource": 12.733333,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:the-nilgiris:kothagiri",
+          "facility": "Kothagiri DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "The Nilgiris",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 181,
+          "reported_resource_count": 20,
+          "count_per_resource": 9.05,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:theni:bodinaickannur",
+          "facility": "Bodinaickannur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Theni",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 546,
+          "reported_resource_count": 24,
+          "count_per_resource": 22.75,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:thoothukudi:kovilpatti",
+          "facility": "Kovilpatti DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Thoothukudi",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2885,
+          "reported_resource_count": 120,
+          "count_per_resource": 24.041667,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:thoothukudi:srivaikundam",
+          "facility": "Srivaikundam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Thoothukudi",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 387,
+          "reported_resource_count": 39,
+          "count_per_resource": 9.923077,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:thoothukudi:tiruchendur",
+          "facility": "Tiruchendur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Thoothukudi",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 998,
+          "reported_resource_count": 40,
+          "count_per_resource": 24.95,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruchirapalli:manapparai",
+          "facility": "Manapparai DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruchirapalli",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 2980,
+          "reported_resource_count": 107,
+          "count_per_resource": 27.850467,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruchirapalli:musiri",
+          "facility": "Musiri DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruchirapalli",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 276,
+          "reported_resource_count": 24,
+          "count_per_resource": 11.5,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruchirapalli:srirangam",
+          "facility": "Srirangam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruchirapalli",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1056,
+          "reported_resource_count": 23,
+          "count_per_resource": 45.913043,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruchirapalli:thuraiyur",
+          "facility": "Thuraiyur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruchirapalli",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 363,
+          "reported_resource_count": 30,
+          "count_per_resource": 12.1,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tirunelveli:nanguneri",
+          "facility": "Nanguneri DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tirunelveli",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 604,
+          "reported_resource_count": 12,
+          "count_per_resource": 50.333333,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvallur:ponneri",
+          "facility": "Ponneri DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvallur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 623,
+          "reported_resource_count": 32,
+          "count_per_resource": 19.46875,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvallur:tiruthani",
+          "facility": "Tiruthani DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvallur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1467,
+          "reported_resource_count": 84,
+          "count_per_resource": 17.464286,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvannamalai:arani",
+          "facility": "Arani DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvannamalai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 586,
+          "reported_resource_count": 42,
+          "count_per_resource": 13.952381,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvannamalai:chengam",
+          "facility": "Chengam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvannamalai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 658,
+          "reported_resource_count": 55,
+          "count_per_resource": 11.963636,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvannamalai:cheyyar",
+          "facility": "Cheyyar DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvannamalai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1558,
+          "reported_resource_count": 62,
+          "count_per_resource": 25.129032,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvannamalai:polur",
+          "facility": "Polur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvannamalai",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 493,
+          "reported_resource_count": 34,
+          "count_per_resource": 14.5,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvarur:nannilam",
+          "facility": "Nannilam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvarur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 216,
+          "reported_resource_count": 26,
+          "count_per_resource": 8.307692,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:tiruvarur:vijayapuram",
+          "facility": "Vijayapuram DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Tiruvarur",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 759,
+          "reported_resource_count": 36,
+          "count_per_resource": 21.083333,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:villupuram:tindivanam",
+          "facility": "Tindivanam DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Villupuram",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1575,
+          "reported_resource_count": 97,
+          "count_per_resource": 16.237113,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:virudhunagar:sathur",
+          "facility": "Sathur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Virudhunagar",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 472,
+          "reported_resource_count": 36,
+          "count_per_resource": 13.111111,
+          "source_id": "source_51"
+        },
+        {
+          "programme_site_id": "tn-dms:virudhunagar:srivilliputhur",
+          "facility": "Srivilliputhur DMS CEmONC Centre",
+          "facility_id": null,
+          "identity_url": null,
+          "district": "Virudhunagar",
+          "period_start": "2025-04",
+          "period_end": "2026-03",
+          "reported_count": 1674,
+          "reported_resource_count": 63,
+          "count_per_resource": 26.571429,
+          "source_id": "source_51"
+        }
+      ]
+    }
+  },
+  "dialysis_capacity_model": {
+    "training_period": "2024-03",
+    "evaluation_period": "2025-03",
+    "method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+    "description": "Sort the other programme sites' March 2024 sessions per reported functional machine and take the observation at rank ceil(0.90 times n), using rank 1 for the smallest value. Multiply by the destination's March 2025 reported functional machines. Training includes all prior sites for a destination without a March 2024 record.",
+    "interpretation": "A historical throughput benchmark for planning. It uses completed sessions as a proxy for served workload. Actual staffed capacity and demand that did not receive service are unknown.",
+    "sites_evaluated": 24,
+    "sites_where_observed_exceeds_prediction": 8,
+    "linked_project_sites_evaluated": 5,
+    "linked_project_sites_where_observed_exceeds_prediction": 3,
+    "rows": [
+      {
+        "programme_site_id": "hp_pmndp:bilaspur",
+        "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+        "reported_count": 311,
+        "reported_resource_count": 6,
+        "training_site_count": 22,
+        "source_rate_p90": 45.222222,
+        "predicted_session_capacity": 271.333333,
+        "observed_exceeds_prediction": true,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:chamba",
+        "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+        "reported_count": 473,
+        "reported_resource_count": 8,
+        "training_site_count": 22,
+        "source_rate_p90": 45.222222,
+        "predicted_session_capacity": 361.777778,
+        "observed_exceeds_prediction": true,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:hamirpur",
+        "facility_id": null,
+        "reported_count": 271,
+        "reported_resource_count": 6,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 283.2,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:dharamshala",
+        "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+        "reported_count": 473,
+        "reported_resource_count": 9,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 424.8,
+        "observed_exceeds_prediction": true,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:nurpur",
+        "facility_id": null,
+        "reported_count": 138,
+        "reported_resource_count": 3,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:palampur",
+        "facility_id": null,
+        "reported_count": 218,
+        "reported_resource_count": 4,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 188.8,
+        "observed_exceeds_prediction": true,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:reckong_peo",
+        "facility_id": null,
+        "reported_count": 60,
+        "reported_resource_count": 3,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:kullu",
+        "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+        "reported_count": 329,
+        "reported_resource_count": 8,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 377.6,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:manali",
+        "facility_id": null,
+        "reported_count": 115,
+        "reported_resource_count": 3,
+        "training_site_count": 23,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:mandi",
+        "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+        "reported_count": 405,
+        "reported_resource_count": 9,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 424.8,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:sundernagar",
+        "facility_id": null,
+        "reported_count": 303,
+        "reported_resource_count": 7,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 330.4,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:ner_chowk",
+        "facility_id": null,
+        "reported_count": 59,
+        "reported_resource_count": 6,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 283.2,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:joginder_nagar",
+        "facility_id": null,
+        "reported_count": 184,
+        "reported_resource_count": 3,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": true,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:sarkaghat",
+        "facility_id": null,
+        "reported_count": 116,
+        "reported_resource_count": 3,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:karsog",
+        "facility_id": null,
+        "reported_count": 44,
+        "reported_resource_count": 3,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:nahan",
+        "facility_id": null,
+        "reported_count": 169,
+        "reported_resource_count": 4,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 188.8,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:paonta_sahib",
+        "facility_id": null,
+        "reported_count": 153,
+        "reported_resource_count": 4,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 188.8,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:shimla",
+        "facility_id": null,
+        "reported_count": 212,
+        "reported_resource_count": 6,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 283.2,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:rohru",
+        "facility_id": null,
+        "reported_count": 271,
+        "reported_resource_count": 6,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 283.2,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:rampur",
+        "facility_id": null,
+        "reported_count": 120,
+        "reported_resource_count": 3,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:solan",
+        "facility_id": null,
+        "reported_count": 444,
+        "reported_resource_count": 8,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 377.6,
+        "observed_exceeds_prediction": true,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:nalagarh",
+        "facility_id": null,
+        "reported_count": 153,
+        "reported_resource_count": 3,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": true,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:dharampur",
+        "facility_id": null,
+        "reported_count": 127,
+        "reported_resource_count": 3,
+        "training_site_count": 22,
+        "source_rate_p90": 47.2,
+        "predicted_session_capacity": 141.6,
+        "observed_exceeds_prediction": false,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      },
+      {
+        "programme_site_id": "hp_pmndp:una",
+        "facility_id": null,
+        "reported_count": 587,
+        "reported_resource_count": 10,
+        "training_site_count": 22,
+        "source_rate_p90": 45.222222,
+        "predicted_session_capacity": 452.222222,
+        "observed_exceeds_prediction": true,
+        "capacity_predicted": true,
+        "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+        "capacity_training_source_ids": [
+          "source_50"
+        ],
+        "capacity_resource_source_id": "source_49",
+        "demand_source_id": "source_49"
+      }
+    ]
+  },
+  "pressure_inputs": [
+    {
+      "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+      "service": "dialysis",
+      "period": "2025-03",
+      "demand": 311,
+      "capacity": 271.333333,
+      "unit": "dialysis sessions",
+      "basis": "historical planning with predicted monthly dialysis throughput",
+      "source_url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+      "capacity_predicted": true,
+      "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+      "capacity_training_source_ids": [
+        "source_50"
+      ],
+      "capacity_resource_source_id": "source_49",
+      "demand_source_id": "source_49",
+      "capacity_training_sources": [
+        {
+          "url": "https://nhm.hp.gov.in/storage/app/media/uploaded-files/PMNDP%202023-24.pdf",
+          "title": "Himachal Pradesh NHM, PMNDP March 2024 and FY 2023–24 report",
+          "locator": "March 2024 monthly reporting table, first page, columns 'Number of functional Dialysis machines', 'Number of dialysis sessions conducted during the month' and 'Number of dialysis sessions conducted up to the month in 2023-24'"
+        }
+      ],
+      "capacity_resource_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      }
+    },
+    {
+      "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+      "service": "dialysis",
+      "period": "2025-03",
+      "demand": 473,
+      "capacity": 361.777778,
+      "unit": "dialysis sessions",
+      "basis": "historical planning with predicted monthly dialysis throughput",
+      "source_url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+      "capacity_predicted": true,
+      "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+      "capacity_training_source_ids": [
+        "source_50"
+      ],
+      "capacity_resource_source_id": "source_49",
+      "demand_source_id": "source_49",
+      "capacity_training_sources": [
+        {
+          "url": "https://nhm.hp.gov.in/storage/app/media/uploaded-files/PMNDP%202023-24.pdf",
+          "title": "Himachal Pradesh NHM, PMNDP March 2024 and FY 2023–24 report",
+          "locator": "March 2024 monthly reporting table, first page, columns 'Number of functional Dialysis machines', 'Number of dialysis sessions conducted during the month' and 'Number of dialysis sessions conducted up to the month in 2023-24'"
+        }
+      ],
+      "capacity_resource_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      }
+    },
+    {
+      "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+      "service": "dialysis",
+      "period": "2025-03",
+      "demand": 473,
+      "capacity": 424.8,
+      "unit": "dialysis sessions",
+      "basis": "historical planning with predicted monthly dialysis throughput",
+      "source_url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+      "capacity_predicted": true,
+      "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+      "capacity_training_source_ids": [
+        "source_50"
+      ],
+      "capacity_resource_source_id": "source_49",
+      "demand_source_id": "source_49",
+      "capacity_training_sources": [
+        {
+          "url": "https://nhm.hp.gov.in/storage/app/media/uploaded-files/PMNDP%202023-24.pdf",
+          "title": "Himachal Pradesh NHM, PMNDP March 2024 and FY 2023–24 report",
+          "locator": "March 2024 monthly reporting table, first page, columns 'Number of functional Dialysis machines', 'Number of dialysis sessions conducted during the month' and 'Number of dialysis sessions conducted up to the month in 2023-24'"
+        }
+      ],
+      "capacity_resource_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      }
+    },
+    {
+      "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+      "service": "dialysis",
+      "period": "2025-03",
+      "demand": 329,
+      "capacity": 377.6,
+      "unit": "dialysis sessions",
+      "basis": "historical planning with predicted monthly dialysis throughput",
+      "source_url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+      "capacity_predicted": true,
+      "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+      "capacity_training_source_ids": [
+        "source_50"
+      ],
+      "capacity_resource_source_id": "source_49",
+      "demand_source_id": "source_49",
+      "capacity_training_sources": [
+        {
+          "url": "https://nhm.hp.gov.in/storage/app/media/uploaded-files/PMNDP%202023-24.pdf",
+          "title": "Himachal Pradesh NHM, PMNDP March 2024 and FY 2023–24 report",
+          "locator": "March 2024 monthly reporting table, first page, columns 'Number of functional Dialysis machines', 'Number of dialysis sessions conducted during the month' and 'Number of dialysis sessions conducted up to the month in 2023-24'"
+        }
+      ],
+      "capacity_resource_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      }
+    },
+    {
+      "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+      "service": "dialysis",
+      "period": "2025-03",
+      "demand": 405,
+      "capacity": 424.8,
+      "unit": "dialysis sessions",
+      "basis": "historical planning with predicted monthly dialysis throughput",
+      "source_url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+      "capacity_predicted": true,
+      "capacity_method": "prior_march_leave_site_out_nearest_rank_p90_per_functional_machine",
+      "capacity_training_source_ids": [
+        "source_50"
+      ],
+      "capacity_resource_source_id": "source_49",
+      "demand_source_id": "source_49",
+      "capacity_training_sources": [
+        {
+          "url": "https://nhm.hp.gov.in/storage/app/media/uploaded-files/PMNDP%202023-24.pdf",
+          "title": "Himachal Pradesh NHM, PMNDP March 2024 and FY 2023–24 report",
+          "locator": "March 2024 monthly reporting table, first page, columns 'Number of functional Dialysis machines', 'Number of dialysis sessions conducted during the month' and 'Number of dialysis sessions conducted up to the month in 2023-24'"
+        }
+      ],
+      "capacity_resource_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      }
+    }
+  ],
+  "input_sha256": {
+    "expanded_coverage.json": "0e579baa0ec83f3dbc31aba2b65afaa2c765378f8a60fdb0449da9782f0b6d44",
+    "baseline_coverage.json": "ef92ec23c7da5a2eb366a8829c3fce7ba26f5dedbc6c4b133d76d000df486f5e",
+    "hp_dialysis_model_data.json": "3bbf650db39b0dfa81f388ded24d52852e68eaced1aa2d7e5b161743dc0b88c5",
+    "tn_maternity_model_data.json": "d567a152fd3ba3171a8dabe31f96151217e0241fc2ef0e4cd2ce658d923ce023"
+  }
+}

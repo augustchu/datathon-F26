@@ -1,0 +1,313 @@
+{
+  "sources": {
+    "eha_2019": {
+      "title": "Emmanuel Hospital Association Annual Report 2019–2020",
+      "url": "https://eha-health.org/downloads/annual-reports?download=373%3Aannual-report-2020",
+      "locator": "Printed page 68, Clinical Statistics of Hospitals, deliveries column"
+    },
+    "eha_2020": {
+      "title": "Emmanuel Hospital Association Annual Report 2020–2021",
+      "url": "https://www.ehahealth.org/AR-reports/annual-report-2020-2021.pdf",
+      "locator": "Named hospitals' Highlights of the Year tables, Total Deliveries"
+    },
+    "eha_2021": {
+      "title": "Emmanuel Hospital Association Annual Report 2021–2022",
+      "url": "https://eha-health.org/downloads/annual-reports?download=406%3Aannual-report-2022",
+      "locator": "Named hospitals' individual Statistics tables, Total Deliveries. The report's aggregate table repeats earlier values for these facilities."
+    },
+    "eha_2022": {
+      "title": "Emmanuel Hospital Association Annual Report 2022–2023",
+      "url": "https://ehausa.org/wp-content/uploads/2023/11/Annual-Report-2022-2023.pdf",
+      "locator": "Printed page 31, Clinical Statistics of Hospitals, deliveries column"
+    },
+    "eha_2023": {
+      "title": "Emmanuel Hospital Association Annual Report 2023–2024",
+      "url": "https://ehausa.org/wp-content/uploads/2024/10/Annual-Report-2023-2024.pdf",
+      "locator": "Printed page 29, Clinical Statistics of Hospitals, deliveries column"
+    },
+    "eha_2024": {
+      "title": "Emmanuel Hospital Association Annual Report 2024–2025",
+      "url": "https://ehausa.org/wp-content/uploads/2025/09/Annual-Report-2024-2025.pdf",
+      "locator": "Printed page 32, Clinical Statistics of Hospital, deliveries column"
+    },
+    "kem_stats_prior": {
+      "title": "KEM Hospital Medical Record Department annual statistical report, 2021–2023",
+      "url": "https://www.kem.edu/wp-content/uploads/2024/11/ANNUAL-STATISTICAL-REPORT-2021-2023-Medical-Records-Department.pdf",
+      "locator": "Vital Statistics, rows 13 and 18, annual casualty attendance and deliveries"
+    },
+    "kem_stats_2024": {
+      "title": "KEM Hospital Medical Record Department annual statistical report, 2022–2024",
+      "url": "https://www.kem.edu/wp-content/uploads/2025/03/Annexure5.pdf",
+      "locator": "PDF page 2, rightmost 2024 column, annual casualty attendance and deliveries"
+    },
+    "kem_annual_2025": {
+      "title": "Seth G.S. Medical College and KEM Hospital Annual Report 2025",
+      "url": "https://www.kem.edu/wp-content/uploads/2026/02/Annual-Report-2025-2nd-Feb-2026.pdf",
+      "locator": "Printed page 3, Vital Statistics, rows 13 and 18, annual casualty attendance and deliveries"
+    },
+    "sgmh_statistics": {
+      "title": "Sanjay Gandhi Memorial Hospital statistics for the year 2025",
+      "url": "https://sgmh.delhi.gov.in/sgmh/hospital-statistics",
+      "locator": "Hospital Statistics for the Year 2025, Casualty att. (Total) row"
+    },
+    "rtrmh_annual": {
+      "title": "Rao Tula Ram Memorial Hospital annual report",
+      "url": "https://rtrmh.delhi.gov.in/rtrmh/annual-report-2012-13",
+      "locator": "Section 5, Hospital Performance data for the year 2021–22 to 2025–26, Deliveries and Casualty Registrations rows"
+    },
+    "rtrmh_prior": {
+      "title": "Rao Tula Ram Memorial Hospital statistics",
+      "url": "https://rtrmh.delhi.gov.in/rtrmh/statistics",
+      "locator": "Deliveries (Total) and Casualty Cases, 2019–20 and 2020–21"
+    },
+    "tn_dms": {
+      "title": "Tamil Nadu NHM 51st Executive Committee Agenda, Part A",
+      "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+      "locator": "Agenda 24, Annexure 1, Table 1, printed pp. 109–113, Deliveries 2025–26 column"
+    },
+    "tn_mncu": {
+      "title": "Tamil Nadu NHM 51st Executive Committee Agenda, Part A",
+      "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+      "locator": "Table 3, Institution-wise Performance (2025–2026) and Justification, printed pp. 89–91, Deliveries column"
+    }
+  },
+  "sites": {
+    "eha_chhatarpur": {
+      "facility": "Christian Hospital Chhatarpur",
+      "facility_id": "fdr:8080e7b2-b85d-463a-8e8f-ad6b7412a12e",
+      "release_pin": "471001",
+      "state": "Madhya Pradesh",
+      "identity_url": "https://www.ehahealth.org/clinical-hospital",
+      "identity_basis": "The reporting association names Christian Hospital Chhatarpur on Mahoba Road, Chhatarpur 471001, matching the release name, branch address and PIN."
+    },
+    "eha_herbertpur": {
+      "facility": "Herbertpur Christian Hospital",
+      "facility_id": "fdr:a0869aab-74e6-4f7e-ae98-521da6d1b6eb",
+      "release_pin": "248142",
+      "state": "Uttarakhand",
+      "identity_url": "https://www.ehahealth.org/clinical-hospital",
+      "identity_basis": "The reporting association names Herbertpur Christian Hospital in Herbertpur, Dehradun 248142, matching the release name, locality and PIN."
+    },
+    "eha_kachhwa": {
+      "facility": "Kachhwa Christian Hospital",
+      "facility_id": "fdr:acf665e2-7895-420c-81af-fcc329ed8a36",
+      "release_pin": "231501",
+      "state": "Uttar Pradesh",
+      "identity_url": "https://www.ehahealth.org/clinical-hospital",
+      "identity_basis": "The reporting association names Kachhwa Christian Hospital in Kachhwa, Mirzapur 231501, matching the release name, locality and PIN."
+    },
+    "kem_mumbai": {
+      "facility": "King Edward Memorial Hospital, Mumbai",
+      "facility_id": "fdr:1a62801f-4ddb-43e0-81cc-182cb1311171",
+      "release_pin": "400012",
+      "state": "Maharashtra",
+      "identity_url": "https://www.kem.edu/gsmckemh/",
+      "identity_basis": "The release lists the hospital at Parel, Mumbai 400012 and gives the kem.edu domain. The institution's annual statistical reports name KEM Hospital at Parel, Mumbai 400012 on that same domain."
+    },
+    "sanjay_gandhi_memorial": {
+      "facility": "Sanjay Gandhi Memorial Hospital, Mangolpuri",
+      "facility_id": "fdr:989ef605-1404-4bcf-9e4f-4e910f8c8d9e",
+      "release_pin": "110083",
+      "state": "Delhi",
+      "identity_url": "https://sgmh.delhi.gov.in/sgmh/hospital-statistics",
+      "identity_basis": "The reporting branch explicitly identifies itself as Sanjay Gandhi Memorial Hospital in Mangolpuri, Delhi 110083, matching the release name, locality and PIN."
+    },
+    "rtrmh": {
+      "facility": "Rao Tula Ram Memorial Hospital",
+      "facility_id": "fdr:d817c0a9-6b9f-46eb-adc5-048c8c0296b7",
+      "release_pin": "110073",
+      "state": "Delhi",
+      "identity_url": "https://health.delhi.gov.in/health/delhi-government-hospitals",
+      "identity_basis": "Delhi Health lists Rao Tula Ram Memorial Hospital at Jaffarpur Kalan, New Delhi 110073, matching the release branch name, locality and PIN."
+    },
+    "govt_lawley": {
+      "facility": "Government Lawley Hospital",
+      "facility_id": "fdr:f447fa95-f439-4dab-9de2-3205136588bf",
+      "release_pin": "643101",
+      "state": "Tamil Nadu",
+      "identity_url": "https://nilgiris.nic.in/public-utility/govt-lawely-hospital/",
+      "identity_basis": "The Nilgiris district identifies its Government Lawely Hospital in Coonoor, identifying the Coonoor government hospital in Table 1. The release names the branch Government Lawley Hospital and places it in Coonoor."
+    },
+    "pattukkottai_gh": {
+      "facility": "Government Hospital Pattukkottai, Palaniappan Street",
+      "facility_id": "fdr:397ead66-5f38-475f-b577-924f9fe53f78",
+      "release_pin": "614601",
+      "state": "Tamil Nadu",
+      "identity_url": "https://www.tnurbantree.tn.gov.in/chengalpattu/hospitals-2/",
+      "identity_basis": "The government municipal hospital list explicitly names Government Hospital, Palaniyappan Street, Pattukkottai, matching the release street and town. The site appears as Pattukottai in the DMS table."
+    },
+    "raja_mirasdar": {
+      "facility": "Government Raja Mirasdar Hospital",
+      "facility_id": "fdr:c582b8cc-2fc1-4372-bddc-054b37fefc14",
+      "release_pin": "613001",
+      "state": "Tamil Nadu",
+      "identity_url": "https://thanjavur.nic.in/public-utility/govt-raja-mirasudhar-hospital/",
+      "identity_basis": "Thanjavur's official district directory gives the Raja Mirasudhar name variant at the Old Bus Stand, PIN 613001, matching the named Raja Mirasdar branch and landmark in the release."
+    },
+    "chengalpattu_medical_college": {
+      "facility": "Government Chengalpattu Medical College Hospital",
+      "facility_id": "fdr:14e13612-bac5-4e8f-82d4-167385402203",
+      "release_pin": "603001",
+      "state": "Tamil Nadu",
+      "identity_url": "https://cmccpt.ac.in/",
+      "identity_basis": "The release lists this row as Chengalpattu Government Hospital and identifies its official website as cmccpt.ac.in. That exact domain publishes the Government Chengalpattu Medical College and Hospital name and PIN 603001."
+    }
+  },
+  "series": [
+    {
+      "id": "eha_chhatarpur_deliveries",
+      "site": "eha_chhatarpur",
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [
+        {"start": "2019-04", "counts": [2344], "source": "eha_2019"},
+        {"start": "2020-04", "counts": [1620], "source": "eha_2020"},
+        {"start": "2021-04", "counts": [1646], "source": "eha_2021"},
+        {"start": "2022-04", "counts": [2202], "source": "eha_2022"},
+        {"start": "2023-04", "counts": [2408], "source": "eha_2023"},
+        {"start": "2024-04", "counts": [1996], "source": "eha_2024"}
+      ],
+      "targets": [{"period": "2025-04", "basis": "The association's annual report index at https://www.ehahealth.org/annual-reports ends with FY2024–25 as checked 2026-11-22. No matching FY2025–26 delivery total surfaced in searches for the named facility."}]
+    },
+    {
+      "id": "eha_herbertpur_deliveries",
+      "site": "eha_herbertpur",
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility. Reported activity declined markedly after FY2022–23.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [
+        {"start": "2019-04", "counts": [1397], "source": "eha_2019"},
+        {"start": "2020-04", "counts": [1363], "source": "eha_2020"},
+        {"start": "2021-04", "counts": [1323], "source": "eha_2021"},
+        {"start": "2022-04", "counts": [1175], "source": "eha_2022"},
+        {"start": "2023-04", "counts": [731], "source": "eha_2023"},
+        {"start": "2024-04", "counts": [249], "source": "eha_2024"}
+      ],
+      "targets": [{"period": "2025-04", "basis": "The association's annual report index at https://www.ehahealth.org/annual-reports ends with FY2024–25 as checked 2026-11-22. No matching FY2025–26 delivery total surfaced in searches for the named facility."}]
+    },
+    {
+      "id": "eha_kachhwa_deliveries",
+      "site": "eha_kachhwa",
+      "service": "Maternity / delivery",
+      "scope": "Total hospital deliveries reported by Emmanuel Hospital Association for this member facility.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [
+        {"start": "2019-04", "counts": [66], "source": "eha_2019"},
+        {"start": "2020-04", "counts": [28], "source": "eha_2020"},
+        {"start": "2021-04", "counts": [17], "source": "eha_2021"},
+        {"start": "2022-04", "counts": [25], "source": "eha_2022"},
+        {"start": "2023-04", "counts": [35], "source": "eha_2023"},
+        {"start": "2024-04", "counts": [58], "source": "eha_2024"}
+      ],
+      "targets": [{"period": "2025-04", "basis": "The association's annual report index at https://www.ehahealth.org/annual-reports ends with FY2024–25 as checked 2026-11-22. No matching FY2025–26 delivery total surfaced in searches for the named facility."}]
+    },
+    {
+      "id": "kem_mumbai_deliveries",
+      "site": "kem_mumbai",
+      "service": "Maternity / delivery",
+      "scope": "Hospital-wide deliveries, as reported in the annual Vital Statistics table.",
+      "unit": "deliveries",
+      "grain": "calendar_year",
+      "observations": [
+        {"start": "2021-01", "counts": [6559, 6226, 4960], "source": "kem_stats_prior"},
+        {"start": "2024-01", "counts": [4874], "source": "kem_stats_2024"},
+        {"start": "2025-01", "counts": [4473], "source": "kem_annual_2025"}
+      ],
+      "targets": [{"period": "2025-01", "basis": "The hospital-wide Vital Statistics table reports the calendar 2025 delivery total."}]
+    },
+    {
+      "id": "kem_mumbai_casualty",
+      "site": "kem_mumbai",
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty attendances, all reasons.",
+      "unit": "casualty attendances",
+      "grain": "calendar_year",
+      "observations": [
+        {"start": "2021-01", "counts": [122361, 163641, 143098], "source": "kem_stats_prior"},
+        {"start": "2024-01", "counts": [147058], "source": "kem_stats_2024"},
+        {"start": "2025-01", "counts": [147996], "source": "kem_annual_2025"}
+      ],
+      "targets": [{"period": "2025-01", "basis": "The hospital-wide Vital Statistics table reports the calendar 2025 casualty attendance total."}]
+    },
+    {
+      "id": "sanjay_gandhi_memorial_casualty",
+      "site": "sanjay_gandhi_memorial",
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty attendances, all reasons.",
+      "unit": "casualty attendances",
+      "grain": "calendar_year",
+      "observations": [{"start": "2025-01", "counts": [432564], "source": "sgmh_statistics"}],
+      "targets": [{"period": "2025-01", "basis": "The hospital statistics explicitly report the calendar 2025 casualty attendance total."}]
+    },
+    {
+      "id": "rtrmh_deliveries",
+      "site": "rtrmh",
+      "service": "Maternity / delivery",
+      "scope": "All reported hospital deliveries in the Delhi fiscal-year performance table.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [
+        {"start": "2019-04", "counts": [2528, 2211], "source": "rtrmh_prior"},
+        {"start": "2021-04", "counts": [2391, 2498, 2886, 2334, 2341], "source": "rtrmh_annual"}
+      ],
+      "targets": [{"period": "2025-04", "basis": "The annual performance table reports the exact FY2025–26 total."}]
+    },
+    {
+      "id": "rtrmh_casualty",
+      "site": "rtrmh",
+      "service": "Trauma / emergency",
+      "scope": "Hospital casualty registrations, all reasons.",
+      "unit": "casualty registrations",
+      "grain": "fiscal_year",
+      "observations": [
+        {"start": "2019-04", "counts": [159596, 77715], "source": "rtrmh_prior"},
+        {"start": "2021-04", "counts": [98029, 137152, 140615, 127359, 119092], "source": "rtrmh_annual"}
+      ],
+      "targets": [{"period": "2025-04", "basis": "The annual performance table reports the exact FY2025–26 total."}]
+    },
+    {
+      "id": "govt_lawley_deliveries",
+      "site": "govt_lawley",
+      "service": "Maternity / delivery",
+      "scope": "Report's FY2025–26 delivery total for the Coonoor DMS CEmONC centre.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [{"start": "2025-04", "counts": [243], "source": "tn_dms"}],
+      "targets": [{"period": "2025-04", "basis": "DMS CEmONC Table 1, Coonoor row."}]
+    },
+    {
+      "id": "pattukkottai_deliveries",
+      "site": "pattukkottai_gh",
+      "service": "Maternity / delivery",
+      "scope": "Report's FY2025–26 delivery total for the Pattukottai DMS CEmONC centre.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [{"start": "2025-04", "counts": [2427], "source": "tn_dms"}],
+      "targets": [{"period": "2025-04", "basis": "DMS CEmONC Table 1, Pattukottai row."}]
+    },
+    {
+      "id": "raja_mirasdar_deliveries",
+      "site": "raja_mirasdar",
+      "service": "Maternity / delivery",
+      "scope": "FY2025–26 institution-wide deliveries reported for the exact Government Raja Mirasdar Hospital branch.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [{"start": "2025-04", "counts": [11001], "source": "tn_mncu"}],
+      "targets": [{"period": "2025-04", "basis": "Institution-wise 2025–26 Performance Table 3, Government Raja Mirasdar Hospital row."}]
+    },
+    {
+      "id": "chengalpattu_medical_college_deliveries",
+      "site": "chengalpattu_medical_college",
+      "service": "Maternity / delivery",
+      "scope": "FY2025–26 institution-wide deliveries reported for Government Chengalpattu Medical College Hospital.",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [{"start": "2025-04", "counts": [8579], "source": "tn_mncu"}],
+      "targets": [{"period": "2025-04", "basis": "Institution-wise 2025–26 Performance Table 3, Chengalpattu row."}]
+    }
+  ]
+}

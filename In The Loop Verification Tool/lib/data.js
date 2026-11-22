@@ -1,9 +1,9 @@
 /** Browser-safe spreadsheet and review helpers. No network or storage side effects. */
-const REVIEW_KEYS = new Set(['review_status', 'review_notes', 'reviewed_at', 'review_csv_encoding', 'review_asset_path', 'review_asset_id', 'review_asset_title']);
-const ASSET_KEYS = ['review_asset_path', 'asset_path', 'screenshot_path', 'github_path', 'filepath', 'file_path', 'screenshot', 'screenshot_url', 'asset_url', 'image_path', 'image_url', 'asset'];
+const REVIEW_KEYS = new Set(['review_status', 'review_notes', 'reviewed_at', 'review_csv_encoding', 'review_asset_path', 'review_asset_id', 'review_asset_title', 'review_source_url', 'review_source_comparison']);
+const ASSET_KEYS = ['review_asset_path', 'asset_path', 'screenshot_path', 'full_page_screenshot_path', 'github_path', 'filepath', 'file_path', 'screenshot', 'screenshot_url', 'asset_url', 'image_path', 'image_url', 'asset'];
 const ID_KEYS = ['review_asset_id', 'id', 'asset_id', 'record_id'];
-const TITLE_KEYS = ['review_asset_title', 'title', 'name', 'facility_name', 'hospital_name', 'document_title'];
-const SOURCE_KEYS = ['source_url', 'source', 'url', 'page_url'];
+const TITLE_KEYS = ['review_asset_title', 'title', 'name', 'facility_name', 'hospital_name', 'document_title', 'facility'];
+const SOURCE_KEYS = ['review_source_url', 'source_url', 'original_source_url', 'evidence_source_url', 'page_url', 'url', 'source', 'candidate_source_url'];
 const STATUSES = new Set(['pending', 'accepted', 'rejected', 'inconclusive']);
 const keyOf = value => String(value).trim().toLowerCase().replace(/[\s-]+/g, '_');
 const stringOf = value => value == null ? '' : typeof value === 'object' ? JSON.stringify(value) : String(value);
@@ -109,19 +109,26 @@ export function normalizeRows(rows, options = {}) {
   if (rows.some(row => !row || typeof row !== 'object' || Array.isArray(row))) throw new Error('Every spreadsheet row must be an object with column headers.');
   const headers = [...new Set(rows.flatMap(row => Object.keys(row)))];
   if (new Set(headers.map(keyOf)).size !== headers.length) throw new Error('Spreadsheet column headers must be unique.');
-  const assetColumn = findColumn(headers, options.assetColumn, ASSET_KEYS);
-  if (!assetColumn) throw new Error('Add an asset_path or screenshot_path column containing the GitHub screenshot filepath.');
+  const linkOnly = options.mode === 'links';
+  const assetColumn = findColumn(headers, linkOnly ? undefined : options.assetColumn, ASSET_KEYS);
+  if (!linkOnly && !assetColumn) throw new Error('Add an asset_path or screenshot_path column containing the screenshot filepath.');
   const idColumn = findColumn(headers, options.idColumn, ID_KEYS);
   const titleColumn = findColumn(headers, options.titleColumn, TITLE_KEYS);
-  const sourceColumn = findColumn(headers, undefined, SOURCE_KEYS);
+  const sourceColumn = findColumn(headers, options.sourceColumn, SOURCE_KEYS);
+  if (linkOnly && !sourceColumn) throw new Error('Choose an original source URL column, such as source_url.');
+  const pdfPageColumn = findColumn(headers, undefined, ['source_pdf_page']);
+  const anchorColumn = findColumn(headers, undefined, ['source_anchor_text']);
   const statusColumn = findColumn(headers, undefined, ['review_status']);
   const notesColumn = findColumn(headers, undefined, ['review_notes']);
   const reviewedAtColumn = findColumn(headers, undefined, ['reviewed_at']);
   const ids = new Set();
   return rows.map((row, index) => {
     const original = Object.fromEntries(Object.entries(row).map(([key, value]) => [key, stringOf(value)]));
-    const assetPath = stringOf(cellOf(row, assetColumn)).trim();
-    if (!assetPath) throw new Error(`Row ${index + 2} is missing its screenshot filepath.`);
+    const assetPath = linkOnly ? '' : stringOf(cellOf(row, assetColumn)).trim();
+    if (!linkOnly && !assetPath) throw new Error(`Row ${index + 2} is missing its screenshot filepath.`);
+    const rawSource = stringOf(cellOf(row, sourceColumn)).trim();
+    const sourceUrl = linkOnly ? sourceDestination(rawSource, cellOf(row, pdfPageColumn), cellOf(row, anchorColumn)) : rawSource;
+    if (linkOnly && !sourceUrl) throw new Error(`Row ${index + 2} needs an original HTTP or HTTPS source URL without embedded credentials.`);
     const id = (idColumn && stringOf(cellOf(row, idColumn)).trim()) || `asset-${index + 1}`;
     if (ids.has(id)) throw new Error(`Duplicate asset ID “${id}” in row ${index + 2}. Give each row a unique ID.`);
     ids.add(id);
@@ -131,8 +138,7 @@ export function normalizeRows(rows, options = {}) {
     const excluded = new Set([assetColumn, idColumn, sourceColumn, statusColumn, notesColumn, reviewedAtColumn]);
     const fields = Object.entries(original).filter(([key]) => !excluded.has(key) && !REVIEW_KEYS.has(keyOf(key))).map(([name, value]) => ({ name, value }));
     return {
-      id, title, assetPath,
-      sourceUrl: stringOf(cellOf(row, sourceColumn)).trim(),
+      id, title, assetPath, sourceUrl,
       fields, original, rowNumber: index + 2,
       status: rawStatus || 'pending',
       notes: stringOf(cellOf(row, notesColumn)),
@@ -148,6 +154,71 @@ export function safeSourceUrl(value) {
     if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) return '';
     return url.href;
   } catch { return ''; }
+}
+
+function sourceDestination(value, pdfPage, anchorText) {
+  const safe = safeSourceUrl(value);
+  if (!safe) return '';
+  const url = new URL(safe);
+  if (url.hash) return safe;
+  const page = stringOf(pdfPage).trim();
+  const text = stringOf(anchorText).trim().replace(/\s+/g, ' ');
+  if (/^[1-9]\d*$/.test(page)) url.hash = `page=${page}`;
+  else if (text && !/\.pdf$/i.test(url.pathname)) url.hash = `:~:text=${encodeURIComponent(text).replaceAll('-', '%2D')}`;
+  return url.href;
+}
+
+const GROUP_COLUMNS = {
+  branch: ['case_id', 'facility_id', 'branch_id'],
+  field: ['field', 'field_name'],
+  value: ['value', 'reported_value', 'scraped_value', 'extracted_value', 'published_beds'],
+  publisher: ['publisher', 'source_name'],
+  date: ['source_date', 'published_as_of', 'candidate_as_of', 'as_of'],
+  type: ['value_type'],
+};
+const COUNT_FIELDS = new Set(['capacity', 'bed_capacity', 'bed_count', 'beds', 'numberdoctors', 'number_doctors', 'doctors', 'doctor_count']);
+
+function comparableValue(value, numeric) {
+  const text = value.normalize('NFKC').trim().replace(/\s+/g, ' ');
+  if (numeric) {
+    const grouped = /^[+-]?\d{1,3}(?:,\d{3})+(?:\.\d+)?$/;
+    const decimal = grouped.test(text) ? text.replaceAll(',', '') : text;
+    if (/^[+-]?\d+(?:\.\d+)?$/.test(decimal) && Math.abs(Number(decimal)) <= Number.MAX_SAFE_INTEGER) {
+      return `number:${Number(decimal)}`;
+    }
+  }
+  return `text:${text.toLowerCase()}`;
+}
+
+/** Compare claims for the same explicitly identified branch and field. */
+export function buildSourceComparisons(records) {
+  const headers = [...new Set(records.flatMap(record => Object.keys(record.original || {})))];
+  const columns = Object.fromEntries(Object.entries(GROUP_COLUMNS).map(([name, aliases]) => [name, findColumn(headers, undefined, aliases)]));
+  const comparison = new Map();
+  if (!columns.branch || !columns.value) return comparison;
+  const groups = new Map();
+  for (const record of records) {
+    const valueFor = name => stringOf(cellOf(record.original || {}, columns[name])).trim();
+    const branch = valueFor('branch');
+    const field = valueFor('field') || (keyOf(columns.value) === 'published_beds' ? 'Bed capacity' : '');
+    const value = valueFor('value');
+    const sourceUrl = safeSourceUrl(record.sourceUrl);
+    if (!branch || !field || !value || !sourceUrl) continue;
+    const publisher = valueFor('publisher') || new URL(sourceUrl).hostname.replace(/^www\./, '');
+    const fieldKey = keyOf(field);
+    const key = JSON.stringify([branch, fieldKey]);
+    if (!groups.has(key)) groups.set(key, { field, claims: [], publishers: new Set(), values: new Set() });
+    const group = groups.get(key);
+    group.claims.push({ id: record.id, publisher, value, asOf: valueFor('date'), sourceUrl });
+    group.publishers.add(publisher.toLowerCase().replace(/\s+/g, ' '));
+    group.values.add(comparableValue(value, valueFor('type').toLowerCase() === 'number' || COUNT_FIELDS.has(fieldKey)));
+  }
+  for (const { field, claims, publishers, values } of groups.values()) {
+    const state = publishers.size < 2 ? 'single-source' : values.size === 1 ? 'agree' : 'different';
+    const group = { field, claims, state };
+    for (const claim of claims) comparison.set(claim.id, group);
+  }
+  return comparison;
 }
 
 function encodedPath(path) {
@@ -203,6 +274,7 @@ export function toCsv(records) {
   if (!Array.isArray(records) || !records.length) throw new Error('There are no assets to export.');
   const headers = [...new Set(records.flatMap(record => Object.keys(record.original || {})))].filter(header => !REVIEW_KEYS.has(keyOf(header)));
   const canonicalColumns = [];
+  const linkOnly = records.every(record => !record.assetPath);
   // Preserve explicit column mappings in an exported review even when an input
   // uses custom headers or the reviewer disabled an apparent ID/title column.
   for (const [canonical, aliases, property, reviewColumn] of [
@@ -210,15 +282,27 @@ export function toCsv(records) {
     ['id', ID_KEYS, 'id', 'review_asset_id'],
     ['title', TITLE_KEYS, 'title', 'review_asset_title'],
   ]) {
+    if (linkOnly && property === 'assetPath') continue;
     const detected = findColumn(headers, undefined, aliases);
-    const column = !detected ? canonical : records.some(record => stringOf(cellOf(record.original || {}, detected)).trim() !== stringOf(record[property])) ? reviewColumn : undefined;
+    const column = !detected ? (linkOnly ? reviewColumn : canonical)
+      : records.some(record => stringOf(cellOf(record.original || {}, detected)).trim() !== stringOf(record[property])) ? reviewColumn : undefined;
     if (column) { headers.push(column); canonicalColumns.push([column, property]); }
   }
+  if (linkOnly) {
+    const detected = findColumn(headers, undefined, SOURCE_KEYS);
+    if (records.some(record => safeSourceUrl(cellOf(record.original || {}, detected)) !== record.sourceUrl)) {
+      headers.push('review_source_url');
+      canonicalColumns.push(['review_source_url', 'sourceUrl']);
+    }
+  }
+  const comparison = linkOnly ? buildSourceComparisons(records) : new Map();
+  if (comparison.size) headers.push('review_source_comparison');
   headers.push('review_status', 'review_notes', 'reviewed_at', 'review_csv_encoding');
   const lines = [headers.map(csvCell).join(',')];
   for (const record of records) {
     const row = { ...record.original };
     for (const [column, property] of canonicalColumns) row[column] = record[property];
+    if (comparison.size) row.review_source_comparison = comparison.get(record.id)?.state || '';
     row.review_status = STATUSES.has(record.status) ? record.status : 'pending';
     row.review_notes = record.notes || '';
     row.reviewed_at = record.reviewedAt || '';
@@ -244,6 +328,7 @@ export function datasetKey(records) {
     id: record.id,
     assetPath: record.assetPath,
     title: record.title,
+    ...(!record.assetPath && { sourceUrl: record.sourceUrl }),
     original: Object.entries(record.original || {}).filter(([key]) => !REVIEW_KEYS.has(keyOf(key))).sort(([a], [b]) => a.localeCompare(b)),
   })).sort((a, b) => a.id.localeCompare(b.id)));
   let first = 2166136261, second = 5381;

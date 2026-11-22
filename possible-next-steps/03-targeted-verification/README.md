@@ -2,7 +2,7 @@
 
 **Why this is promising.** The project already has a service-evidence pipeline, branch/location holds, a Hindi verification prototype, and a moderation stack. The next useful step is to decide **which branch and which question deserve the next verification effort**. A missing dialysis claim at the only nearby candidate can matter more than a more accurate bed estimate at a hospital that cannot enter the shortlist. A small, measured verification pilot could improve recommendations and produce genuinely new training or evaluation labels. It also gives a clear answer to the competition's central question: why should someone trust this recommendation?
 
-**Recommendation:** build a transparent, offline verification-priority table and compare it with random selection on a fixed budget. Start with documentary review; any future calls follow the existing outreach runbook. Keep a separate randomly sampled evaluation set. This is a research proposal, not a claim that active verification has already improved this project.
+**Recommendation:** build an offline verification-priority table and compare it with random selection on a fixed budget. Start with documentary review and use the proposed Hindi call pilot for unresolved, high-impact claims. Keep a separate randomly sampled evaluation set to measure accuracy. [Hindi call pilot and mass verification runbook](../../non-ml/MASS_VERIFICATION.md#proposed-next-step-after-the-browser-review)
 
 Review date: **21 November 2026, America/New_York**. [Brainstorm and selection](../BRAINSTORM.md) · [Project and prompt review](../CONTEXT_AND_HISTORY.md).
 

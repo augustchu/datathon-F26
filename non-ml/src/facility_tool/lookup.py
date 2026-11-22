@@ -6,10 +6,11 @@ import re
 import pandas as pd
 
 from .geography import place_key
+from .network_load import read_network_pressure
 from .origin_index import resolve_prepared_origin
 from .patient_experience import PATIENT_EXPERIENCE_COLUMNS
 from .query_assets import LOOKUP_QUALITY_FIELDS, LOOKUP_VERIFICATION_FIELDS
-from .recommend import compare_prepared_modes
+from .recommend import compare_prepared_modes, routine_load_allowed
 from .response import CONTACT_FIELDS, format_recommendations
 from .travel import MODES as TRANSPORT_MODES, estimate_travel
 
@@ -105,8 +106,9 @@ def _add_driving_options(result, driving, mode):
 
 def lookup(store, config, *, concern, location, spread_demand=False, traveltime_enabled=None,
            travel_mode=None, route_sort=None, facility_sort=None, travel_weight=None, max_extra_km=None,
-           max_extra_minutes=None, pressure_inputs=None, feedback=()):
-    """Return the best route-backed branches from one prepared evidence snapshot."""
+           max_extra_minutes=None, pressure_inputs=None, measured_load=None, load_context='operational',
+           feedback=(), consider_equity=False, equity_evidence=None, network_forecasts=None):
+    """Return route-backed branches with optional equity scoring in balanced mode."""
     service = resolve_service(concern, config['service_aliases'])
     candidates = store.read(f'lookup_candidates_{service}')
     origin = resolve_prepared_origin(location, store.read('origin_index'))
@@ -117,6 +119,16 @@ def lookup(store, config, *, concern, location, spread_demand=False, traveltime_
     facility_sort = limits.get('facility_sort', 'balanced') if facility_sort is None else facility_sort
     if facility_sort not in {'balanced', 'closest'}:
         raise ValueError('Choose balanced or closest for facility sorting.')
+    equity_status, equity_reason = '', ''
+    if consider_equity:
+        concern_text = place_key(concern)
+        if facility_sort == 'closest':
+            equity_status, equity_reason = 'off', 'Choose balanced sorting to consider equity scores.'
+        elif re.search(r'\b(?:emergency|urgent)\b', concern_text):
+            equity_status, equity_reason = 'urgent', 'Time-critical searches use the ordinary order.'
+        elif service == 'dialysis' and re.search(r'\bperitoneal\b', concern_text):
+            equity_status = 'incomparable'
+            equity_reason = 'A peritoneal dialysis comparison needs paired evidence for that modality.'
     quality_policy = config.get('quality_ranking') if facility_sort == 'balanced' else None
     routing = config['traveltime']
     travel_mode = routing['mode'] if travel_mode is None else travel_mode
@@ -130,17 +142,35 @@ def lookup(store, config, *, concern, location, spread_demand=False, traveltime_
         raise ValueError('Choose time for public transport. TravelTime does not return transit route distance in this matrix.')
     use_travel = routing['enabled'] if traveltime_enabled is None else traveltime_enabled
     demo = store.path.parent.name == 'demo'
-    measured = store.read(f'lookup_measured_{service}', optional=True) if spread_demand else None
-    if spread_demand and pressure_inputs is None:
-        pressure_inputs = store.read(f'lookup_pressure_{service}', optional=True)
+    if spread_demand and load_context == 'operational' and measured_load is None:
+        measured_load = store.read(f'lookup_measured_{service}', optional=True)
+    if network_forecasts is not None and (load_context != 'planning' or pressure_inputs is not None):
+        raise ValueError('Choose planning mode and one pressure source for network forecasts.')
+    if spread_demand and load_context == 'planning' and pressure_inputs is None:
+        if network_forecasts is None:
+            pressure_inputs = store.read(f'lookup_pressure_{service}', optional=True)
+        else:
+            pressure_inputs = read_network_pressure(network_forecasts, service, candidates['facility_id'])
+            pressure_inputs = pressure_inputs.loc[pressure_inputs['service_evidence'].eq('reported_activity_in_scope')]
+    load_hold = ''
+    if spread_demand and (load_context == 'operational' or network_forecasts is not None):
+        concern_text = place_key(concern)
+        urgency = re.sub(r'\b(?:non|not) (?:urgent|emergency)\b', '', concern_text)
+        if not routine_load_allowed(service) or re.search(r'\b(?:emergency|urgent)\b', urgency):
+            load_hold = 'non_emergency_only'
+        elif service == 'dialysis' and re.search(r'\bperitoneal\b', concern_text):
+            load_hold = 'no_comparable_load_modality'
     now = datetime.now(timezone.utc)
     parameters = dict(top_k=TOP_RECOMMENDATIONS, max_radius_km=None,
                       max_load_age_hours=limits['max_load_age_hours'], as_of=config['as_of'] if demo else now,
                       travel_weight=limits['travel_weight'] if travel_weight is None else travel_weight,
                       max_extra_km=limits['max_extra_km'] if max_extra_km is None else max_extra_km,
                       max_extra_minutes=limits['max_extra_minutes'] if max_extra_minutes is None else max_extra_minutes,
-                      spread_demand=spread_demand, pressure_inputs=pressure_inputs, measured_load=measured,
-                      quality_policy=quality_policy)
+                      spread_demand=spread_demand and not load_hold,
+                      pressure_inputs=pressure_inputs, measured_load=measured_load, load_context=load_context,
+                      quality_policy=quality_policy,
+                      consider_equity=consider_equity and not equity_reason,
+                      equity_evidence=equity_evidence)
     # Synthetic coordinates and IDs never go to the routing provider.
     routing_results = pd.DataFrame()
     driving_results = pd.DataFrame()
@@ -176,6 +206,12 @@ def lookup(store, config, *, concern, location, spread_demand=False, traveltime_
         if coverage['driving_comparison_status'] == 'partial':
             coverage['message'] += ' The driving comparison is incomplete.'
     result['summary']['n_driving_fallback'] = coverage['driving_fallback_count']
+    if load_hold:
+        for table in ('rows', 'trace', 'summary'):
+            result[table]['load_status'] = load_hold
+    if equity_reason:
+        result['summary']['equity_status'] = equity_status
+        result['summary']['equity_ranking_reason'] = equity_reason
     result['route_status'] = routing_results
     result['driving_route_status'] = driving_results
     result['routing'] = coverage

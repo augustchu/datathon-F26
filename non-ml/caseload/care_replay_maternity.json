@@ -1,0 +1,37 @@
+{
+  "source": {
+    "title": "National Health Mission Tamil Nadu 51st Executive Committee Agenda, Part A",
+    "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+    "locator": "Agenda 24, p. 107 (April 2025–March 2026 average occupancy definition) and Annexure 1, Table 1, pp. 109–113 (DMS CEmONC deliveries, beds and BOR)"
+  },
+  "rows": [
+    {
+      "facility_id": "fdr:f447fa95-f439-4dab-9de2-3205136588bf",
+      "release_pin": "643101",
+      "state": "Tamil Nadu",
+      "facility": "Government Lawley Hospital, Coonoor",
+      "beds": 25,
+      "occupancy_pct": 66,
+      "reported_deliveries": 243,
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "scope": "Tamil Nadu DMS taluk CEmONC centres",
+      "locator": "Table 1 row 72, p. 113, Coonoor, The Nilgiris, type TK",
+      "identity_url": "https://nilgiris.nic.in/public-utility/govt-lawely-hospital/"
+    },
+    {
+      "facility_id": "fdr:397ead66-5f38-475f-b577-924f9fe53f78",
+      "release_pin": "614601",
+      "state": "Tamil Nadu",
+      "facility": "Government Hospital, Pattukkottai",
+      "beds": 124,
+      "occupancy_pct": 93,
+      "reported_deliveries": 2427,
+      "period_start": "2025-04",
+      "period_end": "2026-03",
+      "scope": "Tamil Nadu DMS taluk CEmONC centres",
+      "locator": "Table 1 row 26, p. 111, Pattukottai, Thanjavur, type TK",
+      "identity_url": "https://www.tnurbantree.tn.gov.in/chengalpattu/hospitals-2/"
+    }
+  ]
+}

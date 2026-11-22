@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseDelimited, normalizeRows, resolveAssetUrl, safeSourceUrl, toCsv, paginate, datasetKey } from '../lib/data.js';
+import { parseDelimited, normalizeRows, resolveAssetUrl, safeSourceUrl, toCsv, paginate, datasetKey, buildSourceComparisons } from '../lib/data.js';
 
 const rows = [
   { id: 'a', title: 'River Clinic', asset_path: 'screenshots/river clinic.png', beds: '40', source_url: 'https://example.org/river' },
@@ -44,6 +44,99 @@ test('normalization supports explicit column mapping and rejects missing assets,
   assert.throws(() => normalizeRows([{ asset_path: '' }]));
   assert.throws(() => normalizeRows([rows[0], rows[0]]), /Duplicate/);
   assert.throws(() => normalizeRows([{ ...rows[0], review_status: 'maybe' }]), /unknown/);
+});
+
+test('completed evidence worklists supply a full-page screenshot and original page', () => {
+  const [record] = normalizeRows([{
+    full_page_screenshot_path: 'full/branch.png',
+    evidence_source_url: 'https://example.org/branch',
+    candidate_source_url: 'https://example.org/publisher',
+  }]);
+  assert.equal(record.assetPath, 'full/branch.png');
+  assert.equal(record.sourceUrl, 'https://example.org/branch');
+  assert.deepEqual(record.fields, [{ name: 'candidate_source_url', value: 'https://example.org/publisher' }]);
+});
+
+test('link-only imports use the original URL without needing a screenshot', () => {
+  const [linked] = normalizeRows([{ id: 'a', title: 'Branch', source_url: 'https://example.org/branch?location=a#beds', beds: '35' }], { mode: 'links' });
+  assert.equal(linked.assetPath, '');
+  assert.equal(linked.sourceUrl, 'https://example.org/branch?location=a#beds');
+  assert.equal(linked.status, 'pending');
+  assert.throws(() => normalizeRows([{ source_url: '' }], { mode: 'links' }), /original HTTP or HTTPS/);
+  assert.throws(() => normalizeRows([{ title: 'No URL' }], { mode: 'links' }), /original source URL column/);
+  for (const site of ['javascript:alert(1)', 'file:///tmp/source', 'https://user:secret@example.org/']) {
+    assert.throws(() => normalizeRows([{ source_url: site }], { mode: 'links' }), /original HTTP or HTTPS/);
+  }
+});
+
+test('link-only destinations preserve PDF pages and text fragments and use explicit locators when supplied', () => {
+  const cases = [
+    { source_url: 'https://example.org/roster.pdf?version=2#page=12', source_pdf_page: 42 },
+    { source_url: 'https://example.org/roster.pdf?version=2', source_pdf_page: 42 },
+    { source_url: 'https://example.org/branch#section:~:text=Bed%20count', source_anchor_text: 'Other text' },
+    { source_url: 'https://example.org/branch', source_anchor_text: '35-bed ward, X & Y' },
+    { source_url: 'https://example.org/roster.pdf', source_anchor_text: 'PDF text only' },
+  ];
+  assert.deepEqual(normalizeRows(cases, { mode: 'links' }).map(row => row.sourceUrl), [
+    'https://example.org/roster.pdf?version=2#page=12',
+    'https://example.org/roster.pdf?version=2#page=42',
+    'https://example.org/branch#section:~:text=Bed%20count',
+    'https://example.org/branch#:~:text=35%2Dbed%20ward%2C%20X%20%26%20Y',
+    'https://example.org/roster.pdf',
+  ]);
+});
+
+test('link-only reviews round-trip custom source mapping, notes and original cells', () => {
+  const input = { id: 'bed', source_url: 'https://example.org/landing', 'Publisher page': 'https://example.org/branch',
+    source_anchor_text: 'The ward has 35 beds', beds: '35' };
+  const [record] = normalizeRows([input], { mode: 'links', sourceColumn: 'Publisher page' });
+  record.status = 'accepted';
+  record.notes = 'Matched the branch and count.';
+  const { headers, rows: exported } = parseDelimited(toCsv([record]));
+  const [restored] = normalizeRows(exported, { mode: 'links' });
+  assert.ok(!headers.includes('asset_path'));
+  assert.equal(restored.status, 'accepted');
+  assert.equal(restored.notes, record.notes);
+  assert.equal(restored.sourceUrl, 'https://example.org/branch#:~:text=The%20ward%20has%2035%20beds');
+  assert.equal(restored.original['Publisher page'], input['Publisher page']);
+  assert.equal(restored.original.source_url, input.source_url);
+  assert.equal(datasetKey([restored]), datasetKey([record]));
+});
+
+test('cross-source comparison only groups the same branch and field and preserves each dated citation', () => {
+  const claims = [
+    { id: 'a-1', case_id: 'a', field: 'bed capacity', publisher: 'Alpha', value: '1,200',
+      source_url: 'https://example.org/a.pdf#page=2', source_date: '2024-04-01' },
+    { id: 'a-2', case_id: 'a', field: 'BED CAPACITY', publisher: 'Beta', value: '1200.0',
+      source_url: 'https://example.net/a#:~:text=1200' },
+    { id: 'a-3', case_id: 'a', field: 'doctor count', publisher: 'Alpha', value: '7', source_url: 'https://example.org/a' },
+    { id: 'a-4', case_id: 'a', field: 'doctor count', publisher: 'Beta', value: '8', source_url: 'https://example.net/a' },
+    { id: 'b-1', case_id: 'b', field: 'doctor count', publisher: 'Beta', value: '9', source_url: 'https://example.net/b#staff' },
+    { id: 'b-2', case_id: 'b', field: 'doctor count', publisher: 'Alpha', value: '', source_url: 'https://example.org/b' },
+    { id: 'b-3', case_id: 'b', field: 'doctor count', publisher: 'beta', value: '11', source_url: 'https://example.net/b-new' },
+  ];
+  const records = normalizeRows(claims, { mode: 'links' });
+  const comparisons = buildSourceComparisons(records);
+  assert.equal(comparisons.get('a-1').state, 'agree');
+  assert.equal(comparisons.get('a-1'), comparisons.get('a-2'));
+  assert.equal(comparisons.get('a-1').claims[0].sourceUrl, 'https://example.org/a.pdf#page=2');
+  assert.equal(comparisons.get('a-1').claims[0].asOf, '2024-04-01');
+  assert.equal(comparisons.get('a-3').state, 'different');
+  assert.equal(comparisons.get('b-1').state, 'single-source');
+  assert.ok(!comparisons.has('b-2'));
+  const { rows: exported } = parseDelimited(toCsv(records));
+  assert.deepEqual(exported.map(row => row.review_source_comparison), ['agree', 'agree', 'different', 'different', 'single-source', '', 'single-source']);
+});
+
+test('existing bed-claim worklists compare at branch level and retain highlighted source links', () => {
+  const claims = [
+    { id: 'H001-01', case_id: 'H001', publisher: 'SBI', published_beds: '53', source_url: 'https://example.org/network.pdf#page=14' },
+    { id: 'H001-02', case_id: 'H001', publisher: 'IFFCO', published_beds: '50', source_url: 'https://example.com/roster#:~:text=Hospital' },
+  ];
+  const group = buildSourceComparisons(normalizeRows(claims, { mode: 'links' })).get('H001-01');
+  assert.equal(group.field, 'Bed capacity');
+  assert.equal(group.state, 'different');
+  assert.equal(group.claims[1].sourceUrl, claims[1].source_url);
 });
 
 test('GitHub blob/raw and repo-relative filenames resolve safely, including spaces and literal hash', () => {

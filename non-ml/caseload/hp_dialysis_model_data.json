@@ -1,0 +1,169 @@
+{
+  "cohort": "Himachal Pradesh PMNDP public-private haemodialysis centres",
+  "service": "Dialysis",
+  "unit": "PMNDP haemodialysis sessions",
+  "columns": [
+    "facility_id",
+    "facility",
+    "district",
+    "period",
+    "months",
+    "total",
+    "source",
+    "machines",
+    "march_sessions",
+    "district_population_2011"
+  ],
+  "features": [
+    "machines"
+  ],
+  "ablation_features": ["district_population_2011"],
+  "capacity_field": "machines",
+  "sources": {
+    "hp_nhm_fy2023_24": {
+      "url": "https://nhm.hp.gov.in/storage/app/media/uploaded-files/PMNDP%202023-24.pdf",
+      "title": "Himachal Pradesh NHM, PMNDP March 2024 and FY 2023–24 report",
+      "locator": "March 2024 monthly reporting table, first page, columns 'Number of functional Dialysis machines', 'Number of dialysis sessions conducted during the month' and 'Number of dialysis sessions conducted up to the month in 2023-24'"
+    },
+    "hp_shs_fy2024_25": {
+      "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+      "title": "Himachal Pradesh State Health Society annual report 2024–25",
+      "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+    },
+    "hp_economic_survey_fy2025_26": {
+      "url": "https://himachalservices.nic.in/economics/pdf/en-economic_survey_2025-26.pdf",
+      "title": "Himachal Pradesh Economic Survey 2025–26",
+      "locator": "Printed page 310, PMNDP row reports 24 operational units and 48,048 sessions statewide by November 2025"
+    },
+    "mohfw_centres_fy2025_26": {
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297506&lang=2&reg=48",
+      "title": "MoHFW Update on Pradhan Mantri National Dialysis Programme",
+      "locator": "Annexure I shows 24 established Himachal Pradesh centres at both FY2024–25 and FY2025–26 year-end"
+    }
+  },
+  "facility_links": {
+    "hp_pmndp:bilaspur": {
+      "fdr_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+      "pin": "174001",
+      "source_url": "https://hpbilaspur.nic.in/public-utility-category/hospitals/",
+      "match_basis": "Regional Hospital Bilaspur, Changer Sector, PIN 174001"
+    },
+    "hp_pmndp:chamba": {
+      "fdr_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+      "pin": "176310",
+      "source_url": "https://hpchamba.nic.in/public-utility/pt-jawaharlal-govt-medical-college-chamba/",
+      "related_source_url": "https://gmcchamba.edu.in/about-us/",
+      "match_basis": "Government Medical College Chamba, Akhand Chandi Palace by Luxmi Narayan Temple. The college documents its establishment by upgrading Regional Hospital Chamba. Link is to the historic site for the reporting periods."
+    },
+    "hp_pmndp:dharamshala": {
+      "fdr_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+      "pin": "176215",
+      "source_url": "https://hpkangra.nic.in/public-utility/zonal-hospital/",
+      "match_basis": "Zonal Hospital Dharamshala, Kangra district, PIN 176215"
+    },
+    "hp_pmndp:kullu": {
+      "fdr_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+      "pin": "175101",
+      "source_url": "https://hpkullu.nic.in/public-utility/government-regional-hospital-kullu/",
+      "match_basis": "Regional Hospital Kullu, Kullu town, PIN 175101"
+    },
+    "hp_pmndp:mandi": {
+      "fdr_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+      "pin": "175001",
+      "source_url": "https://hpmandi.nic.in/health/",
+      "match_basis": "Netaji Subhash Chandra Bose Zonal Hospital Mandi, Hospital Road, Palace Colony, PIN 175001"
+    }
+  },
+  "feature_sources": {
+    "district_population_2011": {
+      "source": "hp_economic_survey_fy2025_26",
+      "locator": "Statistical tables appendix Table 8 (page 7), 2011 Census total population by district. PMNDP Sirmour corresponds to census Sirmaur.",
+      "vintage": 2011
+    }
+  },
+  "facility_link_input": "max-supplemented-data/local/rule-cleaning-v2/release/facility_values.csv",
+  "application_sources": ["hp_economic_survey_fy2025_26", "mohfw_centres_fy2025_26"],
+  "application_basis": "Conditional FY2025–26 site-year estimates assume the March 2025 roster and machine counts continued. The state reported 48,048 programme sessions from April through November 2025 across 24 operational units. This is an eight-month statewide total, with no validated FY2025–26 site totals in the sources used here.",
+  "observations": [
+    ["hp_pmndp:bilaspur", "Regional Hospital Bilaspur", "Bilaspur", "FY2023–24", 12, 2463, "hp_nhm_fy2023_24", 4, 198, 381956],
+    ["hp_pmndp:chamba", "Regional Hospital Chamba", "Chamba", "FY2023–24", 12, 4643, "hp_nhm_fy2023_24", 6, 361, 519080],
+    ["hp_pmndp:hamirpur", "Dr. Radhakrishnan Government Medical College, Hamirpur", "Hamirpur", "FY2023–24", 12, 2400, "hp_nhm_fy2023_24", 6, 139, 454768],
+    ["hp_pmndp:dharamshala", "Zonal Hospital Dharamshala", "Kangra", "FY2023–24", 12, 4223, "hp_nhm_fy2023_24", 9, 407, 1510075],
+    ["hp_pmndp:nurpur", "Civil Hospital Nurpur", "Kangra", "FY2023–24", 12, 2202, "hp_nhm_fy2023_24", 3, 49, 1510075],
+    ["hp_pmndp:palampur", "Civil Hospital Palampur", "Kangra", "FY2023–24", 12, 2690, "hp_nhm_fy2023_24", 4, 178, 1510075],
+    ["hp_pmndp:reckong_peo", "Regional Hospital Reckong Peo", "Kinnaur", "FY2023–24", 12, 698, "hp_nhm_fy2023_24", 3, 38, 84121],
+    ["hp_pmndp:kullu", "Regional Hospital Kullu", "Kullu", "FY2023–24", 12, 2739, "hp_nhm_fy2023_24", 8, 96, 437903],
+    ["hp_pmndp:mandi", "Zonal Hospital Mandi", "Mandi", "FY2023–24", 12, 4010, "hp_nhm_fy2023_24", 9, 356, 999777],
+    ["hp_pmndp:sundernagar", "Civil Hospital Sundernagar", "Mandi", "FY2023–24", 12, 3385, "hp_nhm_fy2023_24", 7, 269, 999777],
+    ["hp_pmndp:ner_chowk", "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk", "Mandi", "FY2023–24", 12, 1069, "hp_nhm_fy2023_24", 6, 109, 999777],
+    ["hp_pmndp:joginder_nagar", "Civil Hospital Joginder Nagar", "Mandi", "FY2023–24", 12, 1369, "hp_nhm_fy2023_24", 3, 119, 999777],
+    ["hp_pmndp:sarkaghat", "Civil Hospital Sarkaghat", "Mandi", "FY2023–24", 12, 1332, "hp_nhm_fy2023_24", 3, 114, 999777],
+    ["hp_pmndp:karsog", "Civil Hospital Karsog", "Mandi", "FY2023–24", 12, 269, "hp_nhm_fy2023_24", 3, 27, 999777],
+    ["hp_pmndp:nahan", "Dr. Yashwant Singh Parmar Government Medical College, Nahan", "Sirmour", "FY2023–24", 12, 1562, "hp_nhm_fy2023_24", 4, 160, 529855],
+    ["hp_pmndp:paonta_sahib", "Civil Hospital Paonta Sahib", "Sirmour", "FY2023–24", 12, 1411, "hp_nhm_fy2023_24", 4, 123, 529855],
+    ["hp_pmndp:shimla", "Deen Dayal Upadhyay Zonal Hospital, Shimla", "Shimla", "FY2023–24", 12, 2073, "hp_nhm_fy2023_24", 6, 175, 814010],
+    ["hp_pmndp:rohru", "Civil Hospital Rohru", "Shimla", "FY2023–24", 12, 1872, "hp_nhm_fy2023_24", 6, 215, 814010],
+    ["hp_pmndp:rampur", "Civil Hospital Rampur", "Shimla", "FY2023–24", 12, 1328, "hp_nhm_fy2023_24", 3, 112, 814010],
+    ["hp_pmndp:solan", "Regional Hospital Solan", "Solan", "FY2023–24", 12, 3272, "hp_nhm_fy2023_24", 8, 309, 580320],
+    ["hp_pmndp:nalagarh", "Civil Hospital Nalagarh", "Solan", "FY2023–24", 12, 1355, "hp_nhm_fy2023_24", 3, 101, 580320],
+    ["hp_pmndp:dharampur", "Community Health Centre Dharampur", "Solan", "FY2023–24", 12, 675, "hp_nhm_fy2023_24", 3, 81, 580320],
+    ["hp_pmndp:una", "Regional Hospital Una", "Una", "FY2023–24", 12, 6696, "hp_nhm_fy2023_24", 10, 472, 521173],
+    ["hp_pmndp:bilaspur", "Regional Hospital Bilaspur", "Bilaspur", "FY2024–25", 12, 3078, "hp_shs_fy2024_25", 6, 311, 381956],
+    ["hp_pmndp:chamba", "Regional Hospital Chamba", "Chamba", "FY2024–25", 12, 5161, "hp_shs_fy2024_25", 8, 473, 519080],
+    ["hp_pmndp:hamirpur", "Dr. Radhakrishnan Government Medical College, Hamirpur", "Hamirpur", "FY2024–25", 12, 2939, "hp_shs_fy2024_25", 6, 271, 454768],
+    ["hp_pmndp:dharamshala", "Zonal Hospital Dharamshala", "Kangra", "FY2024–25", 12, 5570, "hp_shs_fy2024_25", 9, 473, 1510075],
+    ["hp_pmndp:nurpur", "Civil Hospital Nurpur", "Kangra", "FY2024–25", 12, 1566, "hp_shs_fy2024_25", 3, 138, 1510075],
+    ["hp_pmndp:palampur", "Civil Hospital Palampur", "Kangra", "FY2024–25", 12, 2491, "hp_shs_fy2024_25", 4, 218, 1510075],
+    ["hp_pmndp:reckong_peo", "Regional Hospital Reckong Peo", "Kinnaur", "FY2024–25", 12, 817, "hp_shs_fy2024_25", 3, 60, 84121],
+    ["hp_pmndp:kullu", "Regional Hospital Kullu", "Kullu", "FY2024–25", 12, 3311, "hp_shs_fy2024_25", 8, 329, 437903],
+    ["hp_pmndp:manali", "Civil Hospital Manali", "Kullu", "FY2024–25", 12, 865, "hp_shs_fy2024_25", 3, 115, 437903],
+    ["hp_pmndp:mandi", "Zonal Hospital Mandi", "Mandi", "FY2024–25", 12, 4624, "hp_shs_fy2024_25", 9, 405, 999777],
+    ["hp_pmndp:sundernagar", "Civil Hospital Sundernagar", "Mandi", "FY2024–25", 12, 3097, "hp_shs_fy2024_25", 7, 303, 999777],
+    ["hp_pmndp:ner_chowk", "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk", "Mandi", "FY2024–25", 12, 769, "hp_shs_fy2024_25", 6, 59, 999777],
+    ["hp_pmndp:joginder_nagar", "Civil Hospital Joginder Nagar", "Mandi", "FY2024–25", 12, 1983, "hp_shs_fy2024_25", 3, 184, 999777],
+    ["hp_pmndp:sarkaghat", "Civil Hospital Sarkaghat", "Mandi", "FY2024–25", 12, 1608, "hp_shs_fy2024_25", 3, 116, 999777],
+    ["hp_pmndp:karsog", "Civil Hospital Karsog", "Mandi", "FY2024–25", 12, 530, "hp_shs_fy2024_25", 3, 44, 999777],
+    ["hp_pmndp:nahan", "Dr. Yashwant Singh Parmar Government Medical College, Nahan", "Sirmour", "FY2024–25", 12, 1672, "hp_shs_fy2024_25", 4, 169, 529855],
+    ["hp_pmndp:paonta_sahib", "Civil Hospital Paonta Sahib", "Sirmour", "FY2024–25", 12, 1780, "hp_shs_fy2024_25", 4, 153, 529855],
+    ["hp_pmndp:shimla", "Deen Dayal Upadhyay Zonal Hospital, Shimla", "Shimla", "FY2024–25", 12, 2039, "hp_shs_fy2024_25", 6, 212, 814010],
+    ["hp_pmndp:rohru", "Civil Hospital Rohru", "Shimla", "FY2024–25", 12, 3223, "hp_shs_fy2024_25", 6, 271, 814010],
+    ["hp_pmndp:rampur", "Civil Hospital Rampur", "Shimla", "FY2024–25", 12, 1385, "hp_shs_fy2024_25", 3, 120, 814010],
+    ["hp_pmndp:solan", "Regional Hospital Solan", "Solan", "FY2024–25", 12, 4478, "hp_shs_fy2024_25", 8, 444, 580320],
+    ["hp_pmndp:nalagarh", "Civil Hospital Nalagarh", "Solan", "FY2024–25", 12, 1602, "hp_shs_fy2024_25", 3, 153, 580320],
+    ["hp_pmndp:dharampur", "Community Health Centre Dharampur", "Solan", "FY2024–25", 12, 1499, "hp_shs_fy2024_25", 3, 127, 580320],
+    ["hp_pmndp:una", "Regional Hospital Una", "Una", "FY2024–25", 12, 5137, "hp_shs_fy2024_25", 10, 587, 521173]
+  ],
+  "applications": [
+    ["hp_pmndp:bilaspur", "Regional Hospital Bilaspur", "Bilaspur", "FY2025–26", 12, null, "hp_shs_fy2024_25", 6, null, 381956],
+    ["hp_pmndp:chamba", "Regional Hospital Chamba", "Chamba", "FY2025–26", 12, null, "hp_shs_fy2024_25", 8, null, 519080],
+    ["hp_pmndp:hamirpur", "Dr. Radhakrishnan Government Medical College, Hamirpur", "Hamirpur", "FY2025–26", 12, null, "hp_shs_fy2024_25", 6, null, 454768],
+    ["hp_pmndp:dharamshala", "Zonal Hospital Dharamshala", "Kangra", "FY2025–26", 12, null, "hp_shs_fy2024_25", 9, null, 1510075],
+    ["hp_pmndp:nurpur", "Civil Hospital Nurpur", "Kangra", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 1510075],
+    ["hp_pmndp:palampur", "Civil Hospital Palampur", "Kangra", "FY2025–26", 12, null, "hp_shs_fy2024_25", 4, null, 1510075],
+    ["hp_pmndp:reckong_peo", "Regional Hospital Reckong Peo", "Kinnaur", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 84121],
+    ["hp_pmndp:kullu", "Regional Hospital Kullu", "Kullu", "FY2025–26", 12, null, "hp_shs_fy2024_25", 8, null, 437903],
+    ["hp_pmndp:manali", "Civil Hospital Manali", "Kullu", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 437903],
+    ["hp_pmndp:mandi", "Zonal Hospital Mandi", "Mandi", "FY2025–26", 12, null, "hp_shs_fy2024_25", 9, null, 999777],
+    ["hp_pmndp:sundernagar", "Civil Hospital Sundernagar", "Mandi", "FY2025–26", 12, null, "hp_shs_fy2024_25", 7, null, 999777],
+    ["hp_pmndp:ner_chowk", "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk", "Mandi", "FY2025–26", 12, null, "hp_shs_fy2024_25", 6, null, 999777],
+    ["hp_pmndp:joginder_nagar", "Civil Hospital Joginder Nagar", "Mandi", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 999777],
+    ["hp_pmndp:sarkaghat", "Civil Hospital Sarkaghat", "Mandi", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 999777],
+    ["hp_pmndp:karsog", "Civil Hospital Karsog", "Mandi", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 999777],
+    ["hp_pmndp:nahan", "Dr. Yashwant Singh Parmar Government Medical College, Nahan", "Sirmour", "FY2025–26", 12, null, "hp_shs_fy2024_25", 4, null, 529855],
+    ["hp_pmndp:paonta_sahib", "Civil Hospital Paonta Sahib", "Sirmour", "FY2025–26", 12, null, "hp_shs_fy2024_25", 4, null, 529855],
+    ["hp_pmndp:shimla", "Deen Dayal Upadhyay Zonal Hospital, Shimla", "Shimla", "FY2025–26", 12, null, "hp_shs_fy2024_25", 6, null, 814010],
+    ["hp_pmndp:rohru", "Civil Hospital Rohru", "Shimla", "FY2025–26", 12, null, "hp_shs_fy2024_25", 6, null, 814010],
+    ["hp_pmndp:rampur", "Civil Hospital Rampur", "Shimla", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 814010],
+    ["hp_pmndp:solan", "Regional Hospital Solan", "Solan", "FY2025–26", 12, null, "hp_shs_fy2024_25", 8, null, 580320],
+    ["hp_pmndp:nalagarh", "Civil Hospital Nalagarh", "Solan", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 580320],
+    ["hp_pmndp:dharampur", "Community Health Centre Dharampur", "Solan", "FY2025–26", 12, null, "hp_shs_fy2024_25", 3, null, 580320],
+    ["hp_pmndp:una", "Regional Hospital Una", "Una", "FY2025–26", 12, null, "hp_shs_fy2024_25", 10, null, 521173]
+  ],
+  "notes": [
+    "The prediction target is reported programme sessions divided by 12 calendar months. It includes the effect of any closures and partial-year operation. The only value for Civil Hospital Manali has FY2024–25 sessions equal to its since-start sessions, consistent with start-up in that fiscal year.",
+    "Machine counts are March snapshots at the end of each reporting year. They may differ from machines available during earlier months. March session counts are supplied only for checking the transcription and are excluded from the predictors.",
+    "Local IDs identify PMNDP reporting sites. The separate links carry exact FDR IDs for the five matched branches. The report represents one public-private programme in one state.",
+    "District population is a 2011 geographic context field for exploratory comparisons. Multiple centres serve each district and patient catchments may cross its boundaries.",
+    "Lahaul and Spiti is represented by the Kullu centre in the March 2024 report and contributes no separate facility row. No patient, lifetime, or state total is a training label."
+  ]
+}

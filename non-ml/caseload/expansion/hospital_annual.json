@@ -1,0 +1,294 @@
+{
+  "sources": {
+    "aiims_1920": {
+      "title": "AIIMS Bhubaneswar annual report 2019–20",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2024/06/8thAIIMS-Annual-Report-2019-2020.pdf",
+      "locator": "Hospital services Day Care Chemotherapy Statistics, Total column; hospital at-a-glance table for deliveries and emergency activity where reported."
+    },
+    "aiims_2021": {
+      "title": "AIIMS Bhubaneswar annual report 2020–21",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2024/06/9thAIIMS-Annual-Report-2020-2021.pdf",
+      "locator": "Hospital services Day Care Chemotherapy Statistics, Total column; hospital at-a-glance table for deliveries and emergency activity where reported."
+    },
+    "aiims_2122": {
+      "title": "AIIMS Bhubaneswar annual report 2021–22",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2025/06/Annual-Report-21-22-1.pdf",
+      "locator": "Hospital services Day Care Chemotherapy Statistics, Total column; hospital at-a-glance table for deliveries and emergency activity where reported."
+    },
+    "aiims_2223": {
+      "title": "AIIMS Bhubaneswar annual report 2022–23",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2025/06/Annual-Report-22-23-1.pdf",
+      "locator": "Hospital services Day Care Chemotherapy Statistics, Total column; hospital at-a-glance table for deliveries and emergency activity where reported."
+    },
+    "aiims_2324": {
+      "title": "AIIMS Bhubaneswar annual report 2023–24",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2025/06/Annual-Report-23-24-1.pdf",
+      "locator": "Hospital services Day Care Chemotherapy Statistics, Total column; hospital at-a-glance table for deliveries and emergency activity where reported."
+    },
+    "aiims_2425": {
+      "title": "AIIMS Bhubaneswar annual report 2024–25",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+      "locator": "Hospital services Day Care Chemotherapy Statistics, Total column; hospital at-a-glance table for deliveries and emergency activity where reported."
+    },
+    "sct_2122": {
+      "title": "SCTIMST annual report 2021–22",
+      "url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/resources/Annual_Report_2021_2022_English.pdf",
+      "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+    },
+    "sct_2223": {
+      "title": "SCTIMST annual report 2022–23",
+      "url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/resources/Annual_Report_2022_2023_English.pdf",
+      "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+    },
+    "sct_2324": {
+      "title": "SCTIMST annual report 2023–24",
+      "url": "https://new1.sctimst.ac.in/resources/annual-report/annual_report_23_24_english.pdf",
+      "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+    },
+    "sct_2425": {
+      "title": "SCTIMST annual report 2024–25",
+      "url": "https://sctimst.ac.in/About%20SCTIMST/Annual%20Report/resources/Annual_Report_2024_2025_English.pdf",
+      "locator": "Cardiothoracic and Vascular Anaesthesiology adult and paediatric cardiac OT counts; Comprehensive Stroke Care Program clinical activity."
+    }
+  },
+  "sites": {
+    "aiims_bbsr": {
+      "facility": "AIIMS Bhubaneswar",
+      "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+      "release_pin": "751024",
+      "state": "Odisha",
+      "identity_url": "https://aiimsbhubaneswar.nic.in/annual-report/",
+      "identity_basis": "Unique AIIMS Bhubaneswar hospital campus in Sijua, Patrapada. Official and release hospital helpdesk both end 6742476789. Official PIN is 751019, while the release PIN is 751024."
+    },
+    "sctimst": {
+      "facility": "Sree Chitra Tirunal Institute for Medical Sciences and Technology, Thiruvananthapuram",
+      "facility_id": "fdr:2dc0c78a-d732-4c9b-af06-28a3304a8363",
+      "release_pin": "695011",
+      "state": "Kerala",
+      "identity_url": "https://www.sctimst.ac.in/About%20SCTIMST/Annual%20Report/",
+      "identity_basis": "Unique institute name and Thiruvananthapuram hospital-campus PIN 695011 are shared by the release and publisher."
+    }
+  },
+  "series": [
+    {
+      "id": "aiims_bbsr_chemo_daycare_total",
+      "site": "aiims_bbsr",
+      "service": "Chemotherapy",
+      "scope": "Reported hospital day-care chemotherapy administrations, combined Medical Oncology and Radiotherapy column totals",
+      "unit": "administrations",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2019-04",
+          "counts": [
+            14833
+          ],
+          "source": "aiims_1920"
+        },
+        {
+          "start": "2020-04",
+          "counts": [
+            14302
+          ],
+          "source": "aiims_2021"
+        },
+        {
+          "start": "2021-04",
+          "counts": [
+            21340
+          ],
+          "source": "aiims_2122"
+        },
+        {
+          "start": "2022-04",
+          "counts": [
+            38521
+          ],
+          "source": "aiims_2223"
+        },
+        {
+          "start": "2023-04",
+          "counts": [
+            44915
+          ],
+          "source": "aiims_2324"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            52313
+          ],
+          "source": "aiims_2425"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "The official AIIMS Bhubaneswar annual archive and the targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure."
+        }
+      ]
+    },
+    {
+      "id": "aiims_bbsr_hospital_deliveries",
+      "site": "aiims_bbsr",
+      "service": "Maternity / delivery",
+      "scope": "Normal deliveries plus LSCS in hospital at-a-glance statistics, all reported urgencies",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2022-04",
+          "counts": [
+            1548
+          ],
+          "source": "aiims_2223"
+        },
+        {
+          "start": "2023-04",
+          "counts": [
+            1382
+          ],
+          "source": "aiims_2324"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            1337
+          ],
+          "source": "aiims_2425"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "The official AIIMS Bhubaneswar annual archive and the targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure."
+        }
+      ]
+    },
+    {
+      "id": "aiims_bbsr_hospital_emergency",
+      "site": "aiims_bbsr",
+      "service": "Trauma / emergency",
+      "scope": "All-cause emergency patients in hospital at-a-glance statistics",
+      "unit": "visits",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2022-04",
+          "counts": [
+            52605
+          ],
+          "source": "aiims_2223"
+        },
+        {
+          "start": "2023-04",
+          "counts": [
+            51294
+          ],
+          "source": "aiims_2324"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            53297
+          ],
+          "source": "aiims_2425"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "The official AIIMS Bhubaneswar annual archive and the targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure."
+        }
+      ]
+    },
+    {
+      "id": "sctimst_cardiac_ot",
+      "site": "sctimst",
+      "service": "Cardiac surgery",
+      "scope": "Adult and paediatric cardiac operating theatre procedures reported by Cardiothoracic and Vascular Anaesthesiology",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2021-04",
+          "counts": [
+            1795
+          ],
+          "source": "sct_2122"
+        },
+        {
+          "start": "2022-04",
+          "counts": [
+            2043
+          ],
+          "source": "sct_2223"
+        },
+        {
+          "start": "2023-04",
+          "counts": [
+            1943
+          ],
+          "source": "sct_2324"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            1608
+          ],
+          "source": "sct_2425"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "The official SCTIMST annual archive and targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure."
+        }
+      ]
+    },
+    {
+      "id": "sctimst_stroke_thrombectomy",
+      "site": "sctimst",
+      "service": "Stroke care",
+      "scope": "Mechanical thrombectomy procedures in the Comprehensive Stroke Care Program",
+      "unit": "procedures",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2021-04",
+          "counts": [
+            35
+          ],
+          "source": "sct_2122"
+        },
+        {
+          "start": "2022-04",
+          "counts": [
+            34
+          ],
+          "source": "sct_2223"
+        },
+        {
+          "start": "2023-04",
+          "counts": [
+            30
+          ],
+          "source": "sct_2324"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            32
+          ],
+          "source": "sct_2425"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "The official SCTIMST annual archive and targeted service search reached FY2024–25 as the last verified comparable full fiscal year; no FY2025–26 total was verified for this measure."
+        }
+      ]
+    }
+  ]
+}

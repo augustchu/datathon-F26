@@ -10,6 +10,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import KFold
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
 from .eda import COUNT_UNITS, UPDATE_COLUMNS
@@ -215,6 +216,7 @@ def fit_count_models(target, audit, other_audit, original_columns, *, as_of, see
     linked facilities. Reported numeric tails stay in the primary fit and all
     test metrics. The sensitivity fit drops >training-p99 labels from training
     only, keeping the same preprocessing, calibration and test cohorts.
+    Each returned primary pipeline predicts log(1 + count) from prepared inputs.
     """
     if target not in COUNT_UNITS:
         raise ValueError('Choose capacity or numberDoctors.')
@@ -243,10 +245,14 @@ def fit_count_models(target, audit, other_audit, original_columns, *, as_of, see
     quality_flags = [field + '_bad_category' for field in candidates if field in CATEGORY_NAMES]
     other = next(field for field in COUNT_UNITS if field != target)
     models = {}
+    fitted_pipelines = {}
     coefficients = pd.DataFrame(columns=['field', 'encoded_feature', 'coefficient_on_log1p_count'])
     if predictors:
-        matrix = _transformer(predictors).fit(train)
+        input_columns = [*predictors, *(['other_count_reported'] if group_uses_companion else [])]
+        matrix = _transformer(predictors).fit(train[input_columns])
         models = _fit(matrix, train, seed)
+        fitted_pipelines = {method: Pipeline([('preprocessor', matrix), ('model', model)])
+                            for method, model in models.items()}
         sensitivity = _fit(matrix, trimmed, seed)
         x_cal, x_test = (matrix.transform(frame) for frame in (calibration, test))
         coefficients = pd.DataFrame({'field': target, 'encoded_feature': matrix.get_feature_names_out(),
@@ -308,4 +314,5 @@ def fit_count_models(target, audit, other_audit, original_columns, *, as_of, see
             'category_quality': pd.DataFrame(quality, columns=['field', 'predictor', 'split', 'status', 'count']),
             'label_quality': counts, 'coefficients': coefficients,
             'candidate_evidence': candidate_evidence, 'ablation': ablation, 'fold_scores': fold_scores,
+            'fitted_pipelines': fitted_pipelines,
             'updates': pd.DataFrame(outputs, columns=UPDATE_COLUMNS)}

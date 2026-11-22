@@ -1,0 +1,708 @@
+{
+  "sources": {
+    "whitefield_2025_26": {
+      "title": "SSSIHMS Whitefield Annual Report 2025–26",
+      "url": "https://whitefield.sssihms.org/about-hospital/annual-report-2025-26/",
+      "locator": "The year at a glance and Tertiary and general specialities for deliveries. Tertiary specialities — outpatients, procedures and surgeries, Cardiology outpatients and Total (Cardiac Surgeries). Laboratory and radiology investigations, MRI and CT scan rows."
+    },
+    "unmehta_2025": {
+      "title": "U. N. Mehta Institute clinical material, January–November 2025",
+      "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2025_%287%29.pdf",
+      "locator": "Annexure I, monthly Grand Total rows for CT Scan and MRI"
+    },
+    "unmehta_2026": {
+      "title": "U. N. Mehta Institute clinical material, January–February 2026",
+      "url": "https://www.unmicrc.org/Admin/FilesCMS/GovApprovel/clinical_material__2026_%282%29.pdf",
+      "locator": "Annexure I, Jan.26 and Feb.26 columns and Grand Total rows for CT Scan and MRI. The heading has a year typo, while the individual columns and filename identify 2026."
+    },
+    "aiims_bhubaneswar_2022_23": {
+      "title": "AIIMS Bhubaneswar Annual Report 2022–23",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2025/06/Annual-Report-22-23-1.pdf",
+      "locator": "Radio-diagnosis Statistics, TOTAL row under MRI and CT Scan"
+    },
+    "aiims_bhubaneswar_2023_24": {
+      "title": "AIIMS Bhubaneswar Annual Report 2023–24",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2025/06/Annual-Report-23-24-1.pdf",
+      "locator": "Printed page 43, Radio-diagnosis Statistics from April 2023 to March 2024, MRI and CT Scan total rows. CT Angiography is reported separately and omitted."
+    },
+    "aiims_bhubaneswar_2024_25": {
+      "title": "AIIMS Bhubaneswar Annual Report 2024–25",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+      "locator": "Printed page 45, Diagnostics, Radio-diagnosis, fiscal-year MRI and CT Scan counts. CT Angiography is reported separately and omitted."
+    },
+    "aiims_nagpur_2025_03": {
+      "title": "AIIMS Nagpur Monthly Newsletter, March 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/642b5ce4876918336dc671dbc34a21a1.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_04": {
+      "title": "AIIMS Nagpur Monthly Newsletter, April 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/1abf8d7ae14ff190fec8fe881be6105c.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_05": {
+      "title": "AIIMS Nagpur Monthly Newsletter, May 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/59b622586ee5d16b71ade1c7c8aa28c8.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_06": {
+      "title": "AIIMS Nagpur Monthly Newsletter, June 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/1c1f18eb82c0433f9c0e73ee6a5447b9.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_07": {
+      "title": "AIIMS Nagpur Monthly Newsletter, July 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/c0c9c05928554b39a6ab4b78fd6b8da5.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_08": {
+      "title": "AIIMS Nagpur Monthly Newsletter, August 2025",
+      "url": "https://aiimsnagpur.edu.in/writereaddata/AIIMS/files/175802195668c94944e0849Monthly_Newsletter_August_16092025.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_09": {
+      "title": "AIIMS Nagpur Monthly Newsletter, September 2025",
+      "url": "https://aiimsnagpur.edu.in/writereaddata/AIIMS/files/176128439068fb11263617dNewsletter_Sept_2025.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_10": {
+      "title": "AIIMS Nagpur Monthly Newsletter, October 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/e0de57139239fd825899992a4ed968e0.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_11": {
+      "title": "AIIMS Nagpur Monthly Newsletter, November 2025",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/c5f1548f26864f395006427d7bb6dc63.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2025_12": {
+      "title": "AIIMS Nagpur Monthly Newsletter, December 2025",
+      "url": "https://aiimsnagpur.edu.in/writereaddata/AIIMS/files/17679553886960dbbc83f93Monthly_report_Dec_2025_09012026.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2026_01": {
+      "title": "AIIMS Nagpur Monthly Newsletter, January 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/cec2b7d1c8394b160d1e88366af464a7.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2026_02": {
+      "title": "AIIMS Nagpur Monthly Newsletter, February 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/3c1df40475a166d5367491a3b6b29f72.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2026_04": {
+      "title": "AIIMS Nagpur Monthly Newsletter, April 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/a85d26eacf9971de514b3b9472b82bf1.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2026_05": {
+      "title": "AIIMS Nagpur Monthly Newsletter, May 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/446647e3bf0c7f02fca33b2930961c43.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2026_06": {
+      "title": "AIIMS Nagpur Monthly Newsletter, June 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/e7091a0c80cc8a9cb177cd62a4ea5286.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2026_07": {
+      "title": "AIIMS Nagpur Monthly Newsletter, July 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/2b3a45d66821800475ff2fce9343f98a.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2026_03": {
+      "title": "AIIMS Nagpur Monthly Newsletter, March 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/8e33802ce7896fdd0ab95ef111603a5d.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_nagpur_2026_08": {
+      "title": "AIIMS Nagpur Monthly Newsletter, August 2026",
+      "url": "https://aiimsnagpur.edu.in/upload/monthly_newsletter/fd39620399cabc9428ee57a1bf089d8e.pdf",
+      "locator": "Page 1, Hospital Services, Trauma & Emergency OPD field. Separately reported IPD excluded."
+    },
+    "aiims_bhubaneswar_2018_19": {
+      "title": "AIIMS Bhubaneswar Annual Report 2018–19",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2024/06/7th-Annual-Report-2018-19-AIIMS-Bhubaneswar.pdf",
+      "locator": "Radio-diagnosis Statistics from April 2018 to March 2019, TOTAL row under MRI and CT Scan. CT Angiography is reported separately and omitted."
+    },
+    "aiims_bhubaneswar_2019_20": {
+      "title": "AIIMS Bhubaneswar Annual Report 2019–20",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2024/06/8thAIIMS-Annual-Report-2019-2020.pdf",
+      "locator": "Radio-diagnosis Statistics from April 2019 to March 2020, TOTAL row under MRI and CT Scan. CT Angiography is reported separately and omitted."
+    },
+    "aiims_bhubaneswar_2020_21": {
+      "title": "AIIMS Bhubaneswar Annual Report 2020–21",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2024/06/9thAIIMS-Annual-Report-2020-2021.pdf",
+      "locator": "Radio-diagnosis Statistics from April 2020 to March 2021, TOTAL row under MRI and CT Scan. CT Angiography is reported separately and omitted."
+    },
+    "aiims_bhubaneswar_2021_22": {
+      "title": "AIIMS Bhubaneswar Annual Report 2021–22",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2025/06/Annual-Report-21-22-1.pdf",
+      "locator": "Printed page 34, Radiodiagnosis Statistics from April 2021 to March 2022, TOTAL row under MRI and CT Scan. CT Angiography is reported separately and omitted."
+    },
+    "aiims_bhubaneswar_icu_2023": {
+      "title": "AIIMS Bhubaneswar Annual Report 2023–24, Neonatology",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2025/06/Annual-Report-23-24-1.pdf",
+      "locator": "Neonatology, Patient Care / Hospital Services. Level III NICU admissions explicitly from January 1 to December 31, 2023."
+    },
+    "aiims_bhubaneswar_icu_2024": {
+      "title": "AIIMS Bhubaneswar Annual Report 2024–25, Neonatology",
+      "url": "https://aiimsbhubaneswar.nic.in/wp-content/uploads/2026/01/Annual-Report-24-25-Englishnew-1.pdf",
+      "locator": "Neonatology, Patient Care / Hospital Services. The Level III NICU figure is stated for calendar 2024."
+    }
+  },
+  "sites": {
+    "whitefield": {
+      "facility": "SSSIHMS Whitefield",
+      "facility_id": "fdr:6a3479c1-2331-4002-8dac-97ad062b99a9",
+      "release_pin": "560067",
+      "state": "Karnataka",
+      "identity_url": "https://whitefield.sssihms.org/contact-us/",
+      "identity_basis": "The release's Sai Institute of Higher Medical Sciences record names Whitefield, Bengaluru, and gives +91 80 4710 4600, the exact telephone on the official Whitefield contact page. The official branch uses PIN 560066 and the release uses 560067. The Whitefield branch website publishes the annual counts."
+    },
+    "unmehta": {
+      "facility": "U. N. Mehta Institute of Cardiology & Research Centre, Ahmedabad",
+      "facility_id": "fdr:67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+      "release_pin": "380016",
+      "state": "Gujarat",
+      "identity_url": "https://www.unmicrc.org/InfoMSRClause",
+      "identity_basis": "The full institution name, Civil Hospital Asarwa campus in Ahmedabad, PIN 380016, and 079 2268 4200 match the release and official institution disclosure page."
+    },
+    "aiims_bhubaneswar": {
+      "facility": "AIIMS Bhubaneswar",
+      "facility_id": "fdr:66812208-efc9-4703-a55e-eab19c58a3b5",
+      "release_pin": "751024",
+      "state": "Odisha",
+      "identity_url": "https://aiimsbhubaneswar.nic.in/contact-us/",
+      "identity_basis": "The AIIMS Bhubaneswar name, Sijua/Patrapada campus, and exact FDR officialPhone (+91 674 2476789, official OPD Help Desk) identify the same institution. The hospital uses PIN 751019 and the release uses 751024."
+    },
+    "aiims_nagpur": {
+      "facility": "AIIMS Nagpur",
+      "facility_id": "fdr:ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c",
+      "release_pin": "441108",
+      "state": "Maharashtra",
+      "identity_url": "https://aiimsnagpur.edu.in/hospital",
+      "identity_basis": "The hospital name, MIHAN campus at Plot No. 2 in Sector 20, and helpline 9404044944 match the release. The release uses the earlier hospital PIN 441108 and the current hospital page uses 441124."
+    }
+  },
+  "series": [
+    {
+      "id": "whitefield_mri_annual",
+      "site": "whitefield",
+      "service": "MRI",
+      "scope": "Whitefield campus radiology MRI investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2024-04",
+          "counts": [
+            10832,
+            8096
+          ],
+          "source": "whitefield_2025_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "Direct fiscal-year count in the branch annual report, April 2025 through March 2026."
+        }
+      ]
+    },
+    {
+      "id": "whitefield_ct_annual",
+      "site": "whitefield",
+      "service": "CT scan",
+      "scope": "Whitefield campus radiology CT scan investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2024-04",
+          "counts": [
+            6498,
+            5139
+          ],
+          "source": "whitefield_2025_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "Direct fiscal-year count in the branch annual report, April 2025 through March 2026."
+        }
+      ]
+    },
+    {
+      "id": "whitefield_cardiac_surgery_annual",
+      "site": "whitefield",
+      "service": "Cardiac surgery",
+      "scope": "Whitefield campus cardiac surgeries excluding cardiac catheterisation",
+      "unit": "operations",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2024-04",
+          "counts": [
+            949,
+            925
+          ],
+          "source": "whitefield_2025_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "Direct fiscal-year count in Total (Cardiac Surgeries), April 2025 through March 2026."
+        }
+      ]
+    },
+    {
+      "id": "whitefield_cardiology_annual",
+      "site": "whitefield",
+      "service": "Cardiology consultation",
+      "scope": "Whitefield campus tertiary cardiology outpatient consultations excluding Cardiac Surgery outpatients",
+      "unit": "visits",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2025-04",
+          "counts": [
+            29158
+          ],
+          "source": "whitefield_2025_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "Direct cardiology consultation count, April 2025 through March 2026. The prior-year figure also includes Cardiac Surgery outpatient visits and is omitted."
+        }
+      ]
+    },
+    {
+      "id": "whitefield_maternity_annual",
+      "site": "whitefield",
+      "service": "Maternity / delivery",
+      "scope": "Whitefield campus Obstetrics & Gynaecology deliveries",
+      "unit": "deliveries",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2025-04",
+          "counts": [
+            552
+          ],
+          "source": "whitefield_2025_26"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "Direct deliveries count, April 2025 through March 2026. The hospital reports cesarean sections within its surgical table and the delivery count is used alone."
+        }
+      ]
+    },
+    {
+      "id": "unmehta_mri_monthly",
+      "site": "unmehta",
+      "service": "MRI",
+      "scope": "Ahmedabad main campus MRI clinical material Grand Total",
+      "unit": "scans",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2025-01",
+          "counts": [
+            150,
+            132,
+            123,
+            107,
+            146,
+            149,
+            176,
+            112,
+            159,
+            127,
+            135
+          ],
+          "source": "unmehta_2025"
+        },
+        {
+          "start": "2026-01",
+          "counts": [
+            166,
+            147
+          ],
+          "source": "unmehta_2026"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-12",
+          "basis": "The public 2025 monthly disclosure ends in November and the next located disclosure begins in January 2026. The institution's annual modality statistics lack an MRI row, leaving December MRI unobserved. Retrospective testing and estimation use only pre-December data."
+        },
+        {
+          "period": "2026-02",
+          "basis": "Direct count in the February 2026 column of the main campus clinical-material disclosure."
+        }
+      ]
+    },
+    {
+      "id": "unmehta_ct_monthly",
+      "site": "unmehta",
+      "service": "CT scan",
+      "scope": "Ahmedabad main campus CT scan clinical material Grand Total",
+      "unit": "scans",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2025-01",
+          "counts": [
+            990,
+            823,
+            724,
+            666,
+            717,
+            751,
+            856,
+            847,
+            946,
+            819,
+            837
+          ],
+          "source": "unmehta_2025"
+        },
+        {
+          "start": "2026-01",
+          "counts": [
+            980,
+            887
+          ],
+          "source": "unmehta_2026"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-02",
+          "basis": "Direct count in the February 2026 column of the main campus clinical-material disclosure. The institution posts CY2025 CT statistics in a separate annual series with unconfirmed reconciliation, so the missing December monthly count is not targeted."
+        }
+      ]
+    },
+    {
+      "id": "aiims_bhubaneswar_mri_annual",
+      "site": "aiims_bhubaneswar",
+      "service": "MRI",
+      "scope": "AIIMS Bhubaneswar hospital Radio-diagnosis MRI investigations",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2018-04",
+          "counts": [
+            5066
+          ],
+          "source": "aiims_bhubaneswar_2018_19"
+        },
+        {
+          "start": "2019-04",
+          "counts": [
+            7350
+          ],
+          "source": "aiims_bhubaneswar_2019_20"
+        },
+        {
+          "start": "2020-04",
+          "counts": [
+            5088
+          ],
+          "source": "aiims_bhubaneswar_2020_21"
+        },
+        {
+          "start": "2021-04",
+          "counts": [
+            8056
+          ],
+          "source": "aiims_bhubaneswar_2021_22"
+        },
+        {
+          "start": "2022-04",
+          "counts": [
+            9444
+          ],
+          "source": "aiims_bhubaneswar_2022_23"
+        },
+        {
+          "start": "2023-04",
+          "counts": [
+            14297
+          ],
+          "source": "aiims_bhubaneswar_2023_24"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            14940
+          ],
+          "source": "aiims_bhubaneswar_2024_25"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "The institute's public annual-report archive lists the clinical annual series through FY2024–25. No equivalent FY2025–26 report was located. The target covers April 2025 through March 2026."
+        }
+      ]
+    },
+    {
+      "id": "aiims_bhubaneswar_ct_annual",
+      "site": "aiims_bhubaneswar",
+      "service": "CT scan",
+      "scope": "AIIMS Bhubaneswar hospital Radio-diagnosis CT Scan column excluding separately reported CT Angiography",
+      "unit": "scans",
+      "grain": "fiscal_year",
+      "observations": [
+        {
+          "start": "2018-04",
+          "counts": [
+            25655
+          ],
+          "source": "aiims_bhubaneswar_2018_19"
+        },
+        {
+          "start": "2019-04",
+          "counts": [
+            29933
+          ],
+          "source": "aiims_bhubaneswar_2019_20"
+        },
+        {
+          "start": "2020-04",
+          "counts": [
+            24248
+          ],
+          "source": "aiims_bhubaneswar_2020_21"
+        },
+        {
+          "start": "2021-04",
+          "counts": [
+            35614
+          ],
+          "source": "aiims_bhubaneswar_2021_22"
+        },
+        {
+          "start": "2022-04",
+          "counts": [
+            40339
+          ],
+          "source": "aiims_bhubaneswar_2022_23"
+        },
+        {
+          "start": "2023-04",
+          "counts": [
+            43391
+          ],
+          "source": "aiims_bhubaneswar_2023_24"
+        },
+        {
+          "start": "2024-04",
+          "counts": [
+            45904
+          ],
+          "source": "aiims_bhubaneswar_2024_25"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2025-04",
+          "basis": "The institute's public annual-report archive lists the clinical annual series through FY2024–25. No equivalent FY2025–26 report was located. The target covers April 2025 through March 2026."
+        }
+      ]
+    },
+    {
+      "id": "aiims_nagpur_emergency_monthly",
+      "site": "aiims_nagpur",
+      "service": "Trauma / emergency",
+      "scope": "AIIMS Nagpur Trauma & Emergency OPD attendances excluding separately reported IPD",
+      "unit": "visits",
+      "grain": "month",
+      "observations": [
+        {
+          "start": "2025-03",
+          "counts": [
+            1723
+          ],
+          "source": "aiims_nagpur_2025_03"
+        },
+        {
+          "start": "2025-04",
+          "counts": [
+            1606
+          ],
+          "source": "aiims_nagpur_2025_04"
+        },
+        {
+          "start": "2025-05",
+          "counts": [
+            2036
+          ],
+          "source": "aiims_nagpur_2025_05"
+        },
+        {
+          "start": "2025-06",
+          "counts": [
+            1763
+          ],
+          "source": "aiims_nagpur_2025_06"
+        },
+        {
+          "start": "2025-07",
+          "counts": [
+            1856
+          ],
+          "source": "aiims_nagpur_2025_07"
+        },
+        {
+          "start": "2025-08",
+          "counts": [
+            2084
+          ],
+          "source": "aiims_nagpur_2025_08"
+        },
+        {
+          "start": "2025-09",
+          "counts": [
+            2711
+          ],
+          "source": "aiims_nagpur_2025_09"
+        },
+        {
+          "start": "2025-10",
+          "counts": [
+            2411
+          ],
+          "source": "aiims_nagpur_2025_10"
+        },
+        {
+          "start": "2025-11",
+          "counts": [
+            2009
+          ],
+          "source": "aiims_nagpur_2025_11"
+        },
+        {
+          "start": "2025-12",
+          "counts": [
+            2370
+          ],
+          "source": "aiims_nagpur_2025_12"
+        },
+        {
+          "start": "2026-01",
+          "counts": [
+            2795
+          ],
+          "source": "aiims_nagpur_2026_01"
+        },
+        {
+          "start": "2026-02",
+          "counts": [
+            2308
+          ],
+          "source": "aiims_nagpur_2026_02"
+        },
+        {
+          "start": "2026-03",
+          "counts": [
+            2566
+          ],
+          "source": "aiims_nagpur_2026_03"
+        },
+        {
+          "start": "2026-04",
+          "counts": [
+            2241
+          ],
+          "source": "aiims_nagpur_2026_04"
+        },
+        {
+          "start": "2026-05",
+          "counts": [
+            2368
+          ],
+          "source": "aiims_nagpur_2026_05"
+        },
+        {
+          "start": "2026-06",
+          "counts": [
+            2559
+          ],
+          "source": "aiims_nagpur_2026_06"
+        },
+        {
+          "start": "2026-07",
+          "counts": [
+            2316
+          ],
+          "source": "aiims_nagpur_2026_07"
+        },
+        {
+          "start": "2026-08",
+          "counts": [
+            3011
+          ],
+          "source": "aiims_nagpur_2026_08"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2026-08",
+          "basis": "Direct count in the institution's August 2026 newsletter, Hospital Services, Trauma & Emergency OPD."
+        },
+        {
+          "period": "2026-09",
+          "basis": "The hospital monthly newsletter archive ends in August 2026. No September 2026 report for this measure was located. The target is the next month after 18 consecutive reported months."
+        },
+        {
+          "period": "2026-10",
+          "basis": "The hospital monthly newsletter archive ends in August 2026. No October 2026 report for this measure was located. Use a two-month-ahead backtest from the last verified August count."
+        }
+      ]
+    },
+    {
+      "id": "aiims_bhubaneswar_nicu_calendar",
+      "site": "aiims_bhubaneswar",
+      "service": "NICU",
+      "scope": "AIIMS Bhubaneswar Level III neonatal intensive care admissions, excluding neonatal OPD and SNCU",
+      "unit": "admissions",
+      "grain": "calendar_year",
+      "observations": [
+        {
+          "start": "2023-01",
+          "counts": [
+            463
+          ],
+          "source": "aiims_bhubaneswar_icu_2023"
+        },
+        {
+          "start": "2024-01",
+          "counts": [
+            424
+          ],
+          "source": "aiims_bhubaneswar_icu_2024"
+        }
+      ],
+      "targets": [
+        {
+          "period": "2024-01",
+          "basis": "Direct calendar-year Level III NICU admission count in the Neonatology chapter of the FY2024–25 report."
+        },
+        {
+          "period": "2025-01",
+          "basis": "The newest public Neonatology chapter reports CY2024. No equivalent CY2025 count was located. Earlier published NICU totals use fiscal years, which do not provide equivalent annual observations."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "purpose": "Offline planning replay with observed historical activity and predicted throughput",
+  "facility_source": {
+    "file": "facilities_newest_capacity.csv",
+    "sha256": "0aecdb730ed177ac05f8787c9c024d3f88dd8d7c97f702b8fdc3d0b1e4d1af94"
+  },
+  "pressure_source": "load_evidence.json",
+  "pressure_period": "2025-03",
+  "pressure_basis": "historical planning with predicted monthly dialysis throughput",
+  "scope": "Himachal Pradesh PMNDP haemodialysis",
+  "settings": {
+    "as_of": "2026-11-22",
+    "load_context": "planning",
+    "distance_metric": "straight_line_km",
+    "max_radius_km": 50,
+    "max_extra_km": 10,
+    "travel_weight": 0.5
+  },
+  "summary": {
+    "reviewed_branches": 5,
+    "cases": 6,
+    "cases_with_comparable_planning_sites": 1,
+    "cases_with_changed_first_facility": 0
+  },
+  "cases": [
+    {
+      "origin": {
+        "kind": "facility_coordinates",
+        "name": "Zonal Hospital Dharamshala",
+        "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+        "lat": 32.21305847167969,
+        "lon": 76.31936645507812
+      },
+      "nearest_eligible": {
+        "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+        "name": "Zonal Hospital Dharamshala",
+        "straight_line_km": 0.0
+      },
+      "planning_selection": {
+        "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+        "name": "Zonal Hospital Dharamshala",
+        "straight_line_km": 0.0
+      },
+      "added_straight_line_km": 0.0,
+      "load_status": "no_comparable_alternative_within_detour",
+      "comparable_planning_sites": []
+    },
+    {
+      "origin": {
+        "kind": "facility_coordinates",
+        "name": "Government Medical College Chamba",
+        "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+        "lat": 32.558677673339844,
+        "lon": 76.12251281738281
+      },
+      "nearest_eligible": {
+        "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+        "name": "Government Medical College Chamba",
+        "straight_line_km": 0.0
+      },
+      "planning_selection": {
+        "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+        "name": "Government Medical College Chamba",
+        "straight_line_km": 0.0
+      },
+      "added_straight_line_km": 0.0,
+      "load_status": "no_comparable_alternative_within_detour",
+      "comparable_planning_sites": []
+    },
+    {
+      "origin": {
+        "kind": "facility_coordinates",
+        "name": "Regional Hospital Kullu",
+        "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+        "lat": 31.95667266845703,
+        "lon": 77.11154174804688
+      },
+      "nearest_eligible": {
+        "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+        "name": "Regional Hospital Kullu",
+        "straight_line_km": 0.0
+      },
+      "planning_selection": {
+        "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+        "name": "Regional Hospital Kullu",
+        "straight_line_km": 0.0
+      },
+      "added_straight_line_km": 0.0,
+      "load_status": "no_comparable_alternative_within_detour",
+      "comparable_planning_sites": []
+    },
+    {
+      "origin": {
+        "kind": "facility_coordinates",
+        "name": "Netaji Subhash Chandra Bose Zonal Hospital",
+        "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+        "lat": 31.71145248413086,
+        "lon": 76.92701721191406
+      },
+      "nearest_eligible": {
+        "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+        "name": "Netaji Subhash Chandra Bose Zonal Hospital",
+        "straight_line_km": 0.0
+      },
+      "planning_selection": {
+        "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+        "name": "Netaji Subhash Chandra Bose Zonal Hospital",
+        "straight_line_km": 0.0
+      },
+      "added_straight_line_km": 0.0,
+      "load_status": "no_comparable_alternative_within_detour",
+      "comparable_planning_sites": []
+    },
+    {
+      "origin": {
+        "kind": "facility_coordinates",
+        "name": "Regional Hospital, Bilaspur",
+        "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+        "lat": 31.33622932434082,
+        "lon": 76.76512145996094
+      },
+      "nearest_eligible": {
+        "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+        "name": "Regional Hospital, Bilaspur",
+        "straight_line_km": 0.0
+      },
+      "planning_selection": {
+        "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+        "name": "Regional Hospital, Bilaspur",
+        "straight_line_km": 0.0
+      },
+      "added_straight_line_km": 0.0,
+      "load_status": "no_comparable_alternative_within_detour",
+      "comparable_planning_sites": []
+    },
+    {
+      "origin": {
+        "kind": "hypothetical_midpoint",
+        "name": "Coordinate midpoint of closest facility pair",
+        "facility_ids": [
+          "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+          "fdr:c259a369-d940-4fdc-a51b-1784d5966941"
+        ],
+        "lat": 31.834062576293945,
+        "lon": 77.01927947998047
+      },
+      "nearest_eligible": {
+        "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+        "name": "Regional Hospital Kullu",
+        "straight_line_km": 16.178456
+      },
+      "planning_selection": {
+        "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+        "name": "Regional Hospital Kullu",
+        "straight_line_km": 16.178456
+      },
+      "added_straight_line_km": 0.0,
+      "load_status": "baseline_has_best_weighted_score",
+      "comparable_planning_sites": [
+        {
+          "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+          "name": "Regional Hospital Kullu",
+          "straight_line_km": 16.178456,
+          "completed_sessions": 329.0,
+          "predicted_throughput": 377.6,
+          "capacity_predicted": true,
+          "throughput_ratio": 0.871292,
+          "planning_score": 0.232805
+        },
+        {
+          "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+          "name": "Netaji Subhash Chandra Bose Zonal Hospital",
+          "straight_line_km": 16.184694,
+          "completed_sessions": 405.0,
+          "predicted_throughput": 424.8,
+          "capacity_predicted": true,
+          "throughput_ratio": 0.95339,
+          "planning_score": 0.244347
+        }
+      ]
+    }
+  ]
+}

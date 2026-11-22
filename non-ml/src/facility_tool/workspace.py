@@ -67,6 +67,12 @@ class Store:
         header = json.dumps({'columns': list(frame.columns)}, ensure_ascii=False)
         self._replace(target, header + '\n' + data)
 
+    def write_csv(self, name, frame):
+        """Save a portable table alongside the snapshot checkpoints."""
+        target = self._path(name).with_suffix('.csv')
+        self._replace(target, frame.to_csv(index=False))
+        return target
+
     def read(self, name, *, optional=False):
         target = self._path(name)
         if not target.exists():

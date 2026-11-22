@@ -1,0 +1,420 @@
+{
+  "target_period": "FY2025–26",
+  "dataset": {
+    "source_rows": 10088,
+    "unique_facility_ids": 10073,
+    "rows_without_facility_id": 4,
+    "additional_rows_with_repeated_id": 11,
+    "routing_eligible_unique_facility_ids": 9574,
+    "source_file": "facilities_newest_capacity.csv",
+    "sha256": "0aecdb730ed177ac05f8787c9c024d3f88dd8d7c97f702b8fdc3d0b1e4d1af94"
+  },
+  "summary": [
+    {
+      "care_needed": "Dialysis",
+      "release_documented_sites": 7,
+      "release_verified_service_sites": 2,
+      "baseline_fills": 5,
+      "basis": "Prior programme-year average at the same reviewed branch"
+    },
+    {
+      "care_needed": "Emergency C-section",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Maternity / delivery",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "All sites in the tested CEmONC cohort have observed target totals"
+    },
+    {
+      "care_needed": "NICU",
+      "release_documented_sites": 4,
+      "release_verified_service_sites": 1,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Pediatric care",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Cardiac surgery",
+      "release_documented_sites": 1,
+      "release_verified_service_sites": 1,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Cardiology consultation",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "MRI",
+      "release_documented_sites": 5,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "CT scan",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Burn care",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Orthopedic surgery",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Fracture care",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Dental care",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Oral surgery",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Cataract surgery",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Stroke care",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Chemotherapy",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    },
+    {
+      "care_needed": "Trauma / emergency",
+      "release_documented_sites": 0,
+      "release_verified_service_sites": 0,
+      "baseline_fills": 0,
+      "basis": "No evaluated fiscal-year baseline with supported application rows"
+    }
+  ],
+  "validation": {
+    "Dialysis": {
+      "test": "Later fiscal year at previously observed programme sites",
+      "sites": 23,
+      "method": "last_observed_or_peer",
+      "mae": 45.85,
+      "median_absolute_error": 43.17,
+      "p90_absolute_error": 112.25,
+      "mean_signed_error": -24.0,
+      "xgboost_mae": 59.95
+    },
+    "Maternity / delivery": {
+      "test": "District holdout in the Tamil Nadu DMS CEmONC cohort",
+      "sites": 94,
+      "method": "capacity_scaled_median",
+      "mae": 36.86,
+      "median_absolute_error": 22.28,
+      "p90_absolute_error": 80.56,
+      "mean_signed_error": -13.09,
+      "xgboost_mae": 39.76,
+      "programme_sites_with_observed_target": 94
+    }
+  },
+  "programme_dialysis_candidates": 24,
+  "programme_dialysis_candidates_withheld": [
+    {
+      "programme_site_id": "hp_pmndp:hamirpur",
+      "facility": "Dr. Radhakrishnan Government Medical College, Hamirpur",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:nurpur",
+      "facility": "Civil Hospital Nurpur",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:palampur",
+      "facility": "Civil Hospital Palampur",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:reckong_peo",
+      "facility": "Regional Hospital Reckong Peo",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:manali",
+      "facility": "Civil Hospital Manali",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:sundernagar",
+      "facility": "Civil Hospital Sundernagar",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:ner_chowk",
+      "facility": "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:joginder_nagar",
+      "facility": "Civil Hospital Joginder Nagar",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:sarkaghat",
+      "facility": "Civil Hospital Sarkaghat",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:karsog",
+      "facility": "Civil Hospital Karsog",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:nahan",
+      "facility": "Dr. Yashwant Singh Parmar Government Medical College, Nahan",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:paonta_sahib",
+      "facility": "Civil Hospital Paonta Sahib",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:shimla",
+      "facility": "Deen Dayal Upadhyay Zonal Hospital, Shimla",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:rohru",
+      "facility": "Civil Hospital Rohru",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:rampur",
+      "facility": "Civil Hospital Rampur",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:solan",
+      "facility": "Regional Hospital Solan",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:nalagarh",
+      "facility": "Civil Hospital Nalagarh",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:dharampur",
+      "facility": "Community Health Centre Dharampur",
+      "reason": "no_reviewed_project_facility_link"
+    },
+    {
+      "programme_site_id": "hp_pmndp:una",
+      "facility": "Regional Hospital Una",
+      "reason": "no_reviewed_project_facility_link"
+    }
+  ],
+  "unique_project_facilities_with_fills": 5,
+  "estimates": [
+    {
+      "facility_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+      "facility": "Regional Hospital, Bilaspur",
+      "programme_site_id": "hp_pmndp:bilaspur",
+      "programme_facility": "Regional Hospital Bilaspur",
+      "district": "Bilaspur",
+      "service": "Dialysis",
+      "unit": "PMNDP haemodialysis sessions",
+      "target_period": "FY2025–26",
+      "status": "baseline_estimate",
+      "method": "prior_fiscal_year_monthly_average",
+      "estimated_typical_month": 256.5,
+      "historical_error_band": [
+        144.25,
+        368.75
+      ],
+      "prior_period": "FY2024–25",
+      "prior_reported_total": 3078,
+      "prior_reported_months": 12,
+      "prior_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      },
+      "facility_link": {
+        "fdr_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+        "pin": "174001",
+        "source_url": "https://hpbilaspur.nic.in/public-utility-category/hospitals/",
+        "match_basis": "Regional Hospital Bilaspur, Changer Sector, PIN 174001"
+      }
+    },
+    {
+      "facility_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+      "facility": "Government Medical College Chamba",
+      "programme_site_id": "hp_pmndp:chamba",
+      "programme_facility": "Regional Hospital Chamba",
+      "district": "Chamba",
+      "service": "Dialysis",
+      "unit": "PMNDP haemodialysis sessions",
+      "target_period": "FY2025–26",
+      "status": "baseline_estimate",
+      "method": "prior_fiscal_year_monthly_average",
+      "estimated_typical_month": 430.08,
+      "historical_error_band": [
+        317.83,
+        542.33
+      ],
+      "prior_period": "FY2024–25",
+      "prior_reported_total": 5161,
+      "prior_reported_months": 12,
+      "prior_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      },
+      "facility_link": {
+        "fdr_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+        "pin": "176310",
+        "source_url": "https://hpchamba.nic.in/public-utility/pt-jawaharlal-govt-medical-college-chamba/",
+        "related_source_url": "https://gmcchamba.edu.in/about-us/",
+        "match_basis": "Government Medical College Chamba, Akhand Chandi Palace by Luxmi Narayan Temple. The college documents its establishment by upgrading Regional Hospital Chamba. Link is to the historic site for the reporting periods."
+      }
+    },
+    {
+      "facility_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+      "facility": "Zonal Hospital Dharamshala",
+      "programme_site_id": "hp_pmndp:dharamshala",
+      "programme_facility": "Zonal Hospital Dharamshala",
+      "district": "Kangra",
+      "service": "Dialysis",
+      "unit": "PMNDP haemodialysis sessions",
+      "target_period": "FY2025–26",
+      "status": "baseline_estimate",
+      "method": "prior_fiscal_year_monthly_average",
+      "estimated_typical_month": 464.17,
+      "historical_error_band": [
+        351.92,
+        576.42
+      ],
+      "prior_period": "FY2024–25",
+      "prior_reported_total": 5570,
+      "prior_reported_months": 12,
+      "prior_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      },
+      "facility_link": {
+        "fdr_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+        "pin": "176215",
+        "source_url": "https://hpkangra.nic.in/public-utility/zonal-hospital/",
+        "match_basis": "Zonal Hospital Dharamshala, Kangra district, PIN 176215"
+      }
+    },
+    {
+      "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+      "facility": "Regional Hospital Kullu",
+      "programme_site_id": "hp_pmndp:kullu",
+      "programme_facility": "Regional Hospital Kullu",
+      "district": "Kullu",
+      "service": "Dialysis",
+      "unit": "PMNDP haemodialysis sessions",
+      "target_period": "FY2025–26",
+      "status": "baseline_estimate",
+      "method": "prior_fiscal_year_monthly_average",
+      "estimated_typical_month": 275.92,
+      "historical_error_band": [
+        163.67,
+        388.17
+      ],
+      "prior_period": "FY2024–25",
+      "prior_reported_total": 3311,
+      "prior_reported_months": 12,
+      "prior_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      },
+      "facility_link": {
+        "fdr_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+        "pin": "175101",
+        "source_url": "https://hpkullu.nic.in/public-utility/government-regional-hospital-kullu/",
+        "match_basis": "Regional Hospital Kullu, Kullu town, PIN 175101"
+      }
+    },
+    {
+      "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+      "facility": "Netaji Subhash Chandra Bose Zonal Hospital",
+      "programme_site_id": "hp_pmndp:mandi",
+      "programme_facility": "Zonal Hospital Mandi",
+      "district": "Mandi",
+      "service": "Dialysis",
+      "unit": "PMNDP haemodialysis sessions",
+      "target_period": "FY2025–26",
+      "status": "baseline_estimate",
+      "method": "prior_fiscal_year_monthly_average",
+      "estimated_typical_month": 385.33,
+      "historical_error_band": [
+        273.08,
+        497.58
+      ],
+      "prior_period": "FY2024–25",
+      "prior_reported_total": 4624,
+      "prior_reported_months": 12,
+      "prior_source": {
+        "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+        "title": "Himachal Pradesh State Health Society annual report 2024–25",
+        "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+      },
+      "facility_link": {
+        "fdr_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+        "pin": "175001",
+        "source_url": "https://hpmandi.nic.in/health/",
+        "match_basis": "Netaji Subhash Chandra Bose Zonal Hospital Mandi, Hospital Road, Palace Colony, PIN 175001"
+      }
+    }
+  ]
+}

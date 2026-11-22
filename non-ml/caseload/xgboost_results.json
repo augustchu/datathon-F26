@@ -1,0 +1,3401 @@
+{
+  "xgboost_version": "3.4.1",
+  "parameters": {
+    "objective": "count:poisson",
+    "tree_method": "hist",
+    "max_depth": 2,
+    "eta": 0.05,
+    "reg_lambda": 10,
+    "nthread": 1,
+    "seed": 42
+  },
+  "boost_rounds": 100,
+  "cohorts": [
+    {
+      "cohort": "Himachal Pradesh PMNDP public-private haemodialysis centres",
+      "service": "Dialysis",
+      "unit": "PMNDP haemodialysis sessions",
+      "features": [
+        "machines"
+      ],
+      "training_rows_by_period": {
+        "FY2023–24": 23,
+        "FY2024–25": 24
+      },
+      "sources": {
+        "hp_nhm_fy2023_24": {
+          "url": "https://nhm.hp.gov.in/storage/app/media/uploaded-files/PMNDP%202023-24.pdf",
+          "title": "Himachal Pradesh NHM, PMNDP March 2024 and FY 2023–24 report",
+          "locator": "March 2024 monthly reporting table, first page, columns 'Number of functional Dialysis machines', 'Number of dialysis sessions conducted during the month' and 'Number of dialysis sessions conducted up to the month in 2023-24'"
+        },
+        "hp_shs_fy2024_25": {
+          "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+          "title": "Himachal Pradesh State Health Society annual report 2024–25",
+          "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+        },
+        "hp_economic_survey_fy2025_26": {
+          "url": "https://himachalservices.nic.in/economics/pdf/en-economic_survey_2025-26.pdf",
+          "title": "Himachal Pradesh Economic Survey 2025–26",
+          "locator": "Printed page 310, PMNDP row reports 24 operational units and 48,048 sessions statewide by November 2025"
+        },
+        "mohfw_centres_fy2025_26": {
+          "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297506&lang=2&reg=48",
+          "title": "MoHFW Update on Pradhan Mantri National Dialysis Programme",
+          "locator": "Annexure I shows 24 established Himachal Pradesh centres at both FY2024–25 and FY2025–26 year-end"
+        }
+      },
+      "evaluation": {
+        "unseen_district": {
+          "rows": 47,
+          "facilities": 24,
+          "districts": 11,
+          "metrics": {
+            "xgboost": {
+              "mae": 60.21,
+              "median_absolute_error": 53.44,
+              "p90_absolute_error": 143.83,
+              "mean_signed_error": -1.04
+            },
+            "pooled_median": {
+              "mae": 102.94,
+              "median_absolute_error": 74.58,
+              "p90_absolute_error": 221.67,
+              "mean_signed_error": -29.79
+            },
+            "capacity_scaled_median": {
+              "mae": 51.75,
+              "median_absolute_error": 40.42,
+              "p90_absolute_error": 133.05,
+              "mean_signed_error": -3.71
+            }
+          }
+        },
+        "later_period_unseen_district": {
+          "rows": 24,
+          "facilities": 24,
+          "districts": 11,
+          "metrics": {
+            "xgboost": {
+              "mae": 61.32,
+              "median_absolute_error": 48.77,
+              "p90_absolute_error": 143.87,
+              "mean_signed_error": -20.36
+            },
+            "pooled_median": {
+              "mae": 106.84,
+              "median_absolute_error": 78.69,
+              "p90_absolute_error": 263.71,
+              "mean_signed_error": -38.78
+            },
+            "capacity_scaled_median": {
+              "mae": 52.83,
+              "median_absolute_error": 43.17,
+              "p90_absolute_error": 140.42,
+              "mean_signed_error": -22.76
+            }
+          }
+        },
+        "later_period_known_facility": {
+          "rows": 23,
+          "facilities": 23,
+          "districts": 11,
+          "metrics": {
+            "xgboost": {
+              "mae": 59.95,
+              "median_absolute_error": 36.18,
+              "p90_absolute_error": 134.12,
+              "mean_signed_error": -23.98
+            },
+            "pooled_median": {
+              "mae": 101.2,
+              "median_absolute_error": 83.75,
+              "p90_absolute_error": 255.33,
+              "mean_signed_error": -45.94
+            },
+            "capacity_scaled_median": {
+              "mae": 54.65,
+              "median_absolute_error": 47.25,
+              "p90_absolute_error": 132.17,
+              "mean_signed_error": -24.62
+            },
+            "last_observed_or_peer": {
+              "mae": 45.85,
+              "median_absolute_error": 43.17,
+              "p90_absolute_error": 112.25,
+              "mean_signed_error": -24.0
+            }
+          }
+        }
+      },
+      "heldout_predictions": {
+        "unseen_district": [
+          {
+            "facility_id": "hp_pmndp:bilaspur",
+            "facility": "Regional Hospital Bilaspur",
+            "district": "Bilaspur",
+            "period": "FY2023–24",
+            "actual": 205.25,
+            "predictions": {
+              "xgboost": 167.50299072265625,
+              "pooled_median": 165.25,
+              "capacity_scaled_median": 148.51851851851853
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:bilaspur",
+            "facility": "Regional Hospital Bilaspur",
+            "district": "Bilaspur",
+            "period": "FY2024–25",
+            "actual": 256.5,
+            "predictions": {
+              "xgboost": 196.16000366210938,
+              "pooled_median": 165.25,
+              "capacity_scaled_median": 222.7777777777778
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:chamba",
+            "facility": "Regional Hospital Chamba",
+            "district": "Chamba",
+            "period": "FY2023–24",
+            "actual": 386.9166666666667,
+            "predictions": {
+              "xgboost": 180.95828247070312,
+              "pooled_median": 165.25,
+              "capacity_scaled_median": 222.7777777777778
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:chamba",
+            "facility": "Regional Hospital Chamba",
+            "district": "Chamba",
+            "period": "FY2024–25",
+            "actual": 430.0833333333333,
+            "predictions": {
+              "xgboost": 280.0293273925781,
+              "pooled_median": 165.25,
+              "capacity_scaled_median": 297.03703703703707
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:hamirpur",
+            "facility": "Dr. Radhakrishnan Government Medical College, Hamirpur",
+            "district": "Hamirpur",
+            "period": "FY2023–24",
+            "actual": 200.0,
+            "predictions": {
+              "xgboost": 196.70663452148438,
+              "pooled_median": 165.25,
+              "capacity_scaled_median": 225.83333333333337
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:hamirpur",
+            "facility": "Dr. Radhakrishnan Government Medical College, Hamirpur",
+            "district": "Hamirpur",
+            "period": "FY2024–25",
+            "actual": 244.91666666666666,
+            "predictions": {
+              "xgboost": 196.70663452148438,
+              "pooled_median": 165.25,
+              "capacity_scaled_median": 225.83333333333337
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:dharamshala",
+            "facility": "Zonal Hospital Dharamshala",
+            "district": "Kangra",
+            "period": "FY2023–24",
+            "actual": 351.9166666666667,
+            "predictions": {
+              "xgboost": 344.60888671875,
+              "pooled_median": 156.0,
+              "capacity_scaled_median": 333.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nurpur",
+            "facility": "Civil Hospital Nurpur",
+            "district": "Kangra",
+            "period": "FY2023–24",
+            "actual": 183.5,
+            "predictions": {
+              "xgboost": 104.46453094482422,
+              "pooled_median": 156.0,
+              "capacity_scaled_median": 111.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:palampur",
+            "facility": "Civil Hospital Palampur",
+            "district": "Kangra",
+            "period": "FY2023–24",
+            "actual": 224.16666666666666,
+            "predictions": {
+              "xgboost": 154.1403045654297,
+              "pooled_median": 156.0,
+              "capacity_scaled_median": 148.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:dharamshala",
+            "facility": "Zonal Hospital Dharamshala",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 464.1666666666667,
+            "predictions": {
+              "xgboost": 344.60888671875,
+              "pooled_median": 156.0,
+              "capacity_scaled_median": 333.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nurpur",
+            "facility": "Civil Hospital Nurpur",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 130.5,
+            "predictions": {
+              "xgboost": 104.46453094482422,
+              "pooled_median": 156.0,
+              "capacity_scaled_median": 111.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:palampur",
+            "facility": "Civil Hospital Palampur",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 207.58333333333334,
+            "predictions": {
+              "xgboost": 154.1403045654297,
+              "pooled_median": 156.0,
+              "capacity_scaled_median": 148.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:reckong_peo",
+            "facility": "Regional Hospital Reckong Peo",
+            "district": "Kinnaur",
+            "period": "FY2023–24",
+            "actual": 58.166666666666664,
+            "predictions": {
+              "xgboost": 117.0242919921875,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 114.08333333333334
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:reckong_peo",
+            "facility": "Regional Hospital Reckong Peo",
+            "district": "Kinnaur",
+            "period": "FY2024–25",
+            "actual": 68.08333333333333,
+            "predictions": {
+              "xgboost": 117.0242919921875,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 114.08333333333334
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:kullu",
+            "facility": "Regional Hospital Kullu",
+            "district": "Kullu",
+            "period": "FY2023–24",
+            "actual": 228.25,
+            "predictions": {
+              "xgboost": 348.584228515625,
+              "pooled_median": 167.58333333333331,
+              "capacity_scaled_median": 306.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:kullu",
+            "facility": "Regional Hospital Kullu",
+            "district": "Kullu",
+            "period": "FY2024–25",
+            "actual": 275.9166666666667,
+            "predictions": {
+              "xgboost": 348.584228515625,
+              "pooled_median": 167.58333333333331,
+              "capacity_scaled_median": 306.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:manali",
+            "facility": "Civil Hospital Manali",
+            "district": "Kullu",
+            "period": "FY2024–25",
+            "actual": 72.08333333333333,
+            "predictions": {
+              "xgboost": 113.44660949707031,
+              "pooled_median": 167.58333333333331,
+              "capacity_scaled_median": 114.75
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:mandi",
+            "facility": "Zonal Hospital Mandi",
+            "district": "Mandi",
+            "period": "FY2023–24",
+            "actual": 334.1666666666667,
+            "predictions": {
+              "xgboost": 392.23846435546875,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 346.25
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:sundernagar",
+            "facility": "Civil Hospital Sundernagar",
+            "district": "Mandi",
+            "period": "FY2023–24",
+            "actual": 282.0833333333333,
+            "predictions": {
+              "xgboost": 232.91421508789062,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 269.30555555555554
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:ner_chowk",
+            "facility": "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk",
+            "district": "Mandi",
+            "period": "FY2023–24",
+            "actual": 89.08333333333333,
+            "predictions": {
+              "xgboost": 232.91421508789062,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 230.83333333333331
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:joginder_nagar",
+            "facility": "Civil Hospital Joginder Nagar",
+            "district": "Mandi",
+            "period": "FY2023–24",
+            "actual": 114.08333333333333,
+            "predictions": {
+              "xgboost": 115.18402099609375,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 115.41666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:sarkaghat",
+            "facility": "Civil Hospital Sarkaghat",
+            "district": "Mandi",
+            "period": "FY2023–24",
+            "actual": 111.0,
+            "predictions": {
+              "xgboost": 115.18402099609375,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 115.41666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:karsog",
+            "facility": "Civil Hospital Karsog",
+            "district": "Mandi",
+            "period": "FY2023–24",
+            "actual": 22.416666666666668,
+            "predictions": {
+              "xgboost": 115.18402099609375,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 115.41666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:mandi",
+            "facility": "Zonal Hospital Mandi",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 385.3333333333333,
+            "predictions": {
+              "xgboost": 392.23846435546875,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 346.25
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:sundernagar",
+            "facility": "Civil Hospital Sundernagar",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 258.0833333333333,
+            "predictions": {
+              "xgboost": 232.91421508789062,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 269.30555555555554
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:ner_chowk",
+            "facility": "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 64.08333333333333,
+            "predictions": {
+              "xgboost": 232.91421508789062,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 230.83333333333331
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:joginder_nagar",
+            "facility": "Civil Hospital Joginder Nagar",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 165.25,
+            "predictions": {
+              "xgboost": 115.18402099609375,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 115.41666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:sarkaghat",
+            "facility": "Civil Hospital Sarkaghat",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 134.0,
+            "predictions": {
+              "xgboost": 115.18402099609375,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 115.41666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:karsog",
+            "facility": "Civil Hospital Karsog",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 44.166666666666664,
+            "predictions": {
+              "xgboost": 115.18402099609375,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 115.41666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:shimla",
+            "facility": "Deen Dayal Upadhyay Zonal Hospital, Shimla",
+            "district": "Shimla",
+            "period": "FY2023–24",
+            "actual": 172.75,
+            "predictions": {
+              "xgboost": 208.55718994140625,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 228.16666666666669
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:rohru",
+            "facility": "Civil Hospital Rohru",
+            "district": "Shimla",
+            "period": "FY2023–24",
+            "actual": 156.0,
+            "predictions": {
+              "xgboost": 208.55718994140625,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 228.16666666666669
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:rampur",
+            "facility": "Civil Hospital Rampur",
+            "district": "Shimla",
+            "period": "FY2023–24",
+            "actual": 110.66666666666667,
+            "predictions": {
+              "xgboost": 110.86872863769531,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 114.08333333333334
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:shimla",
+            "facility": "Deen Dayal Upadhyay Zonal Hospital, Shimla",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 169.91666666666666,
+            "predictions": {
+              "xgboost": 208.55718994140625,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 228.16666666666669
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:rohru",
+            "facility": "Civil Hospital Rohru",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 268.5833333333333,
+            "predictions": {
+              "xgboost": 208.55718994140625,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 228.16666666666669
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:rampur",
+            "facility": "Civil Hospital Rampur",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 115.41666666666667,
+            "predictions": {
+              "xgboost": 110.86872863769531,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 114.08333333333334
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nahan",
+            "facility": "Dr. Yashwant Singh Parmar Government Medical College, Nahan",
+            "district": "Sirmour",
+            "period": "FY2023–24",
+            "actual": 130.16666666666666,
+            "predictions": {
+              "xgboost": 206.16989135742188,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 153.88888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:paonta_sahib",
+            "facility": "Civil Hospital Paonta Sahib",
+            "district": "Sirmour",
+            "period": "FY2023–24",
+            "actual": 117.58333333333333,
+            "predictions": {
+              "xgboost": 206.16989135742188,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 153.88888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nahan",
+            "facility": "Dr. Yashwant Singh Parmar Government Medical College, Nahan",
+            "district": "Sirmour",
+            "period": "FY2024–25",
+            "actual": 139.33333333333334,
+            "predictions": {
+              "xgboost": 206.16989135742188,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 153.88888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:paonta_sahib",
+            "facility": "Civil Hospital Paonta Sahib",
+            "district": "Sirmour",
+            "period": "FY2024–25",
+            "actual": 148.33333333333334,
+            "predictions": {
+              "xgboost": 206.16989135742188,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 153.88888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:solan",
+            "facility": "Regional Hospital Solan",
+            "district": "Solan",
+            "period": "FY2023–24",
+            "actual": 272.6666666666667,
+            "predictions": {
+              "xgboost": 303.2414855957031,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 297.03703703703707
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nalagarh",
+            "facility": "Civil Hospital Nalagarh",
+            "district": "Solan",
+            "period": "FY2023–24",
+            "actual": 112.91666666666667,
+            "predictions": {
+              "xgboost": 110.90007781982422,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 111.3888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:dharampur",
+            "facility": "Community Health Centre Dharampur",
+            "district": "Solan",
+            "period": "FY2023–24",
+            "actual": 56.25,
+            "predictions": {
+              "xgboost": 110.90007781982422,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 111.3888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:solan",
+            "facility": "Regional Hospital Solan",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 373.1666666666667,
+            "predictions": {
+              "xgboost": 303.2414855957031,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 297.03703703703707
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nalagarh",
+            "facility": "Civil Hospital Nalagarh",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 133.5,
+            "predictions": {
+              "xgboost": 110.90007781982422,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 111.3888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:dharampur",
+            "facility": "Community Health Centre Dharampur",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 124.91666666666667,
+            "predictions": {
+              "xgboost": 110.90007781982422,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 111.3888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:una",
+            "facility": "Regional Hospital Una",
+            "district": "Una",
+            "period": "FY2023–24",
+            "actual": 558.0,
+            "predictions": {
+              "xgboost": 362.02496337890625,
+              "pooled_median": 165.25,
+              "capacity_scaled_median": 371.2962962962963
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:una",
+            "facility": "Regional Hospital Una",
+            "district": "Una",
+            "period": "FY2024–25",
+            "actual": 428.0833333333333,
+            "predictions": {
+              "xgboost": 362.02496337890625,
+              "pooled_median": 165.25,
+              "capacity_scaled_median": 371.2962962962963
+            }
+          }
+        ],
+        "later_period_unseen_district": [
+          {
+            "facility_id": "hp_pmndp:bilaspur",
+            "facility": "Regional Hospital Bilaspur",
+            "district": "Bilaspur",
+            "period": "FY2024–25",
+            "actual": 256.5,
+            "predictions": {
+              "xgboost": 202.1869354248047,
+              "pooled_median": 164.375,
+              "capacity_scaled_median": 212.91666666666669
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:chamba",
+            "facility": "Regional Hospital Chamba",
+            "district": "Chamba",
+            "period": "FY2024–25",
+            "actual": 430.0833333333333,
+            "predictions": {
+              "xgboost": 258.64947509765625,
+              "pooled_median": 164.375,
+              "capacity_scaled_median": 283.8888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:hamirpur",
+            "facility": "Dr. Radhakrishnan Government Medical College, Hamirpur",
+            "district": "Hamirpur",
+            "period": "FY2024–25",
+            "actual": 244.91666666666666,
+            "predictions": {
+              "xgboost": 201.94970703125,
+              "pooled_median": 164.375,
+              "capacity_scaled_median": 221.66666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:dharamshala",
+            "facility": "Zonal Hospital Dharamshala",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 464.1666666666667,
+            "predictions": {
+              "xgboost": 320.2923583984375,
+              "pooled_median": 143.08333333333331,
+              "capacity_scaled_median": 303.375
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nurpur",
+            "facility": "Civil Hospital Nurpur",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 130.5,
+            "predictions": {
+              "xgboost": 92.1640853881836,
+              "pooled_median": 143.08333333333331,
+              "capacity_scaled_median": 101.125
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:palampur",
+            "facility": "Civil Hospital Palampur",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 207.58333333333334,
+            "predictions": {
+              "xgboost": 155.83363342285156,
+              "pooled_median": 143.08333333333331,
+              "capacity_scaled_median": 134.83333333333334
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:reckong_peo",
+            "facility": "Regional Hospital Reckong Peo",
+            "district": "Kinnaur",
+            "period": "FY2024–25",
+            "actual": 68.08333333333333,
+            "predictions": {
+              "xgboost": 109.75810241699219,
+              "pooled_median": 178.125,
+              "capacity_scaled_median": 110.83333333333333
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:kullu",
+            "facility": "Regional Hospital Kullu",
+            "district": "Kullu",
+            "period": "FY2024–25",
+            "actual": 275.9166666666667,
+            "predictions": {
+              "xgboost": 269.898193359375,
+              "pooled_median": 164.375,
+              "capacity_scaled_median": 295.55555555555554
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:manali",
+            "facility": "Civil Hospital Manali",
+            "district": "Kullu",
+            "period": "FY2024–25",
+            "actual": 72.08333333333333,
+            "predictions": {
+              "xgboost": 104.13727569580078,
+              "pooled_median": 164.375,
+              "capacity_scaled_median": 110.83333333333333
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:mandi",
+            "facility": "Zonal Hospital Mandi",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 385.3333333333333,
+            "predictions": {
+              "xgboost": 339.5361633300781,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 306.75
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:sundernagar",
+            "facility": "Civil Hospital Sundernagar",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 258.0833333333333,
+            "predictions": {
+              "xgboost": 229.1072540283203,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 238.58333333333334
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:ner_chowk",
+            "facility": "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 64.08333333333333,
+            "predictions": {
+              "xgboost": 229.1072540283203,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 204.5
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:joginder_nagar",
+            "facility": "Civil Hospital Joginder Nagar",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 165.25,
+            "predictions": {
+              "xgboost": 113.17218780517578,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 102.25
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:sarkaghat",
+            "facility": "Civil Hospital Sarkaghat",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 134.0,
+            "predictions": {
+              "xgboost": 113.17218780517578,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 102.25
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:karsog",
+            "facility": "Civil Hospital Karsog",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 44.166666666666664,
+            "predictions": {
+              "xgboost": 113.17218780517578,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 102.25
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:shimla",
+            "facility": "Deen Dayal Upadhyay Zonal Hospital, Shimla",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 169.91666666666666,
+            "predictions": {
+              "xgboost": 226.54920959472656,
+              "pooled_median": 191.75,
+              "capacity_scaled_median": 222.3888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:rohru",
+            "facility": "Civil Hospital Rohru",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 268.5833333333333,
+            "predictions": {
+              "xgboost": 226.54920959472656,
+              "pooled_median": 191.75,
+              "capacity_scaled_median": 222.3888888888889
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:rampur",
+            "facility": "Civil Hospital Rampur",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 115.41666666666667,
+            "predictions": {
+              "xgboost": 102.9752426147461,
+              "pooled_median": 191.75,
+              "capacity_scaled_median": 111.19444444444446
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nahan",
+            "facility": "Dr. Yashwant Singh Parmar Government Medical College, Nahan",
+            "district": "Sirmour",
+            "period": "FY2024–25",
+            "actual": 139.33333333333334,
+            "predictions": {
+              "xgboost": 207.35891723632812,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 148.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:paonta_sahib",
+            "facility": "Civil Hospital Paonta Sahib",
+            "district": "Sirmour",
+            "period": "FY2024–25",
+            "actual": 148.33333333333334,
+            "predictions": {
+              "xgboost": 207.35891723632812,
+              "pooled_median": 183.5,
+              "capacity_scaled_median": 148.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:solan",
+            "facility": "Regional Hospital Solan",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 373.1666666666667,
+            "predictions": {
+              "xgboost": 248.9179229736328,
+              "pooled_median": 178.125,
+              "capacity_scaled_median": 295.55555555555554
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nalagarh",
+            "facility": "Civil Hospital Nalagarh",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 133.5,
+            "predictions": {
+              "xgboost": 108.40900421142578,
+              "pooled_median": 178.125,
+              "capacity_scaled_median": 110.83333333333333
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:dharampur",
+            "facility": "Community Health Centre Dharampur",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 124.91666666666667,
+            "predictions": {
+              "xgboost": 108.40900421142578,
+              "pooled_median": 178.125,
+              "capacity_scaled_median": 110.83333333333333
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:una",
+            "facility": "Regional Hospital Una",
+            "district": "Una",
+            "period": "FY2024–25",
+            "actual": 428.0833333333333,
+            "predictions": {
+              "xgboost": 324.65234375,
+              "pooled_median": 164.375,
+              "capacity_scaled_median": 354.86111111111114
+            }
+          }
+        ],
+        "later_period_known_facility": [
+          {
+            "facility_id": "hp_pmndp:bilaspur",
+            "facility": "Regional Hospital Bilaspur",
+            "district": "Bilaspur",
+            "period": "FY2024–25",
+            "actual": 256.5,
+            "predictions": {
+              "xgboost": 173.7992401123047,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 147.55555555555557,
+              "last_observed_or_peer": 205.25
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:chamba",
+            "facility": "Regional Hospital Chamba",
+            "district": "Chamba",
+            "period": "FY2024–25",
+            "actual": 430.0833333333333,
+            "predictions": {
+              "xgboost": 201.74893188476562,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 221.33333333333337,
+              "last_observed_or_peer": 386.9166666666667
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:hamirpur",
+            "facility": "Dr. Radhakrishnan Government Medical College, Hamirpur",
+            "district": "Hamirpur",
+            "period": "FY2024–25",
+            "actual": 244.91666666666666,
+            "predictions": {
+              "xgboost": 201.74893188476562,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 221.33333333333337,
+              "last_observed_or_peer": 200.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:dharamshala",
+            "facility": "Zonal Hospital Dharamshala",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 464.1666666666667,
+            "predictions": {
+              "xgboost": 330.04425048828125,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 332.00000000000006,
+              "last_observed_or_peer": 351.9166666666667
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nurpur",
+            "facility": "Civil Hospital Nurpur",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 130.5,
+            "predictions": {
+              "xgboost": 104.2635269165039,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 110.66666666666669,
+              "last_observed_or_peer": 183.5
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:palampur",
+            "facility": "Civil Hospital Palampur",
+            "district": "Kangra",
+            "period": "FY2024–25",
+            "actual": 207.58333333333334,
+            "predictions": {
+              "xgboost": 173.7992401123047,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 147.55555555555557,
+              "last_observed_or_peer": 224.16666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:reckong_peo",
+            "facility": "Regional Hospital Reckong Peo",
+            "district": "Kinnaur",
+            "period": "FY2024–25",
+            "actual": 68.08333333333333,
+            "predictions": {
+              "xgboost": 104.2635269165039,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 110.66666666666669,
+              "last_observed_or_peer": 58.166666666666664
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:kullu",
+            "facility": "Regional Hospital Kullu",
+            "district": "Kullu",
+            "period": "FY2024–25",
+            "actual": 275.9166666666667,
+            "predictions": {
+              "xgboost": 254.27464294433594,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 295.11111111111114,
+              "last_observed_or_peer": 228.25
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:mandi",
+            "facility": "Zonal Hospital Mandi",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 385.3333333333333,
+            "predictions": {
+              "xgboost": 330.04425048828125,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 332.00000000000006,
+              "last_observed_or_peer": 334.1666666666667
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:sundernagar",
+            "facility": "Civil Hospital Sundernagar",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 258.0833333333333,
+            "predictions": {
+              "xgboost": 255.57957458496094,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 258.22222222222223,
+              "last_observed_or_peer": 282.0833333333333
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:ner_chowk",
+            "facility": "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 64.08333333333333,
+            "predictions": {
+              "xgboost": 201.74893188476562,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 221.33333333333337,
+              "last_observed_or_peer": 89.08333333333333
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:joginder_nagar",
+            "facility": "Civil Hospital Joginder Nagar",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 165.25,
+            "predictions": {
+              "xgboost": 104.2635269165039,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 110.66666666666669,
+              "last_observed_or_peer": 114.08333333333333
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:sarkaghat",
+            "facility": "Civil Hospital Sarkaghat",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 134.0,
+            "predictions": {
+              "xgboost": 104.2635269165039,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 110.66666666666669,
+              "last_observed_or_peer": 111.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:karsog",
+            "facility": "Civil Hospital Karsog",
+            "district": "Mandi",
+            "period": "FY2024–25",
+            "actual": 44.166666666666664,
+            "predictions": {
+              "xgboost": 104.2635269165039,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 110.66666666666669,
+              "last_observed_or_peer": 22.416666666666668
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nahan",
+            "facility": "Dr. Yashwant Singh Parmar Government Medical College, Nahan",
+            "district": "Sirmour",
+            "period": "FY2024–25",
+            "actual": 139.33333333333334,
+            "predictions": {
+              "xgboost": 173.7992401123047,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 147.55555555555557,
+              "last_observed_or_peer": 130.16666666666666
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:paonta_sahib",
+            "facility": "Civil Hospital Paonta Sahib",
+            "district": "Sirmour",
+            "period": "FY2024–25",
+            "actual": 148.33333333333334,
+            "predictions": {
+              "xgboost": 173.7992401123047,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 147.55555555555557,
+              "last_observed_or_peer": 117.58333333333333
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:shimla",
+            "facility": "Deen Dayal Upadhyay Zonal Hospital, Shimla",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 169.91666666666666,
+            "predictions": {
+              "xgboost": 201.74893188476562,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 221.33333333333337,
+              "last_observed_or_peer": 172.75
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:rohru",
+            "facility": "Civil Hospital Rohru",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 268.5833333333333,
+            "predictions": {
+              "xgboost": 201.74893188476562,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 221.33333333333337,
+              "last_observed_or_peer": 156.0
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:rampur",
+            "facility": "Civil Hospital Rampur",
+            "district": "Shimla",
+            "period": "FY2024–25",
+            "actual": 115.41666666666667,
+            "predictions": {
+              "xgboost": 104.2635269165039,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 110.66666666666669,
+              "last_observed_or_peer": 110.66666666666667
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:solan",
+            "facility": "Regional Hospital Solan",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 373.1666666666667,
+            "predictions": {
+              "xgboost": 254.27464294433594,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 295.11111111111114,
+              "last_observed_or_peer": 272.6666666666667
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:nalagarh",
+            "facility": "Civil Hospital Nalagarh",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 133.5,
+            "predictions": {
+              "xgboost": 104.2635269165039,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 110.66666666666669,
+              "last_observed_or_peer": 112.91666666666667
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:dharampur",
+            "facility": "Community Health Centre Dharampur",
+            "district": "Solan",
+            "period": "FY2024–25",
+            "actual": 124.91666666666667,
+            "predictions": {
+              "xgboost": 104.2635269165039,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 110.66666666666669,
+              "last_observed_or_peer": 56.25
+            }
+          },
+          {
+            "facility_id": "hp_pmndp:una",
+            "facility": "Regional Hospital Una",
+            "district": "Una",
+            "period": "FY2024–25",
+            "actual": 428.0833333333333,
+            "predictions": {
+              "xgboost": 516.04052734375,
+              "pooled_median": 172.75,
+              "capacity_scaled_median": 368.8888888888889,
+              "last_observed_or_peer": 558.0
+            }
+          }
+        ]
+      },
+      "application_evaluation": "later_period_known_facility",
+      "application_basis": "Conditional FY2025–26 site-year estimates assume the March 2025 roster and machine counts continued. The state reported 48,048 programme sessions from April through November 2025 across 24 operational units. This is an eight-month statewide total, with no validated FY2025–26 site totals in the sources used here.",
+      "application_sources": [
+        {
+          "url": "https://himachalservices.nic.in/economics/pdf/en-economic_survey_2025-26.pdf",
+          "title": "Himachal Pradesh Economic Survey 2025–26",
+          "locator": "Printed page 310, PMNDP row reports 24 operational units and 48,048 sessions statewide by November 2025"
+        },
+        {
+          "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297506&lang=2&reg=48",
+          "title": "MoHFW Update on Pradhan Mantri National Dialysis Programme",
+          "locator": "Annexure I shows 24 established Himachal Pradesh centres at both FY2024–25 and FY2025–26 year-end"
+        }
+      ],
+      "applications": [
+        {
+          "facility_id": "hp_pmndp:bilaspur",
+          "facility": "Regional Hospital Bilaspur",
+          "district": "Bilaspur",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 6,
+          "march_sessions": null,
+          "district_population_2011": 381956,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "facility_link": {
+            "fdr_id": "fdr:f14b8790-5fd5-4da8-9599-db45874396b5",
+            "pin": "174001",
+            "source_url": "https://hpbilaspur.nic.in/public-utility-category/hospitals/",
+            "match_basis": "Regional Hospital Bilaspur, Changer Sector, PIN 174001"
+          },
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 202.08,
+          "comparator_typical_month": 256.5,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            67.96,
+            336.2
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:chamba",
+          "facility": "Regional Hospital Chamba",
+          "district": "Chamba",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 8,
+          "march_sessions": null,
+          "district_population_2011": 519080,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "facility_link": {
+            "fdr_id": "fdr:481aafee-f67e-441c-80c0-995902a6ff98",
+            "pin": "176310",
+            "source_url": "https://hpchamba.nic.in/public-utility/pt-jawaharlal-govt-medical-college-chamba/",
+            "related_source_url": "https://gmcchamba.edu.in/about-us/",
+            "match_basis": "Government Medical College Chamba, Akhand Chandi Palace by Luxmi Narayan Temple. The college documents its establishment by upgrading Regional Hospital Chamba. Link is to the historic site for the reporting periods."
+          },
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 307.38,
+          "comparator_typical_month": 430.08,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            173.26,
+            441.5
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:hamirpur",
+          "facility": "Dr. Radhakrishnan Government Medical College, Hamirpur",
+          "district": "Hamirpur",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 6,
+          "march_sessions": null,
+          "district_population_2011": 454768,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 202.08,
+          "comparator_typical_month": 244.92,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            67.96,
+            336.2
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:dharamshala",
+          "facility": "Zonal Hospital Dharamshala",
+          "district": "Kangra",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 9,
+          "march_sessions": null,
+          "district_population_2011": 1510075,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "facility_link": {
+            "fdr_id": "fdr:016b778f-cbd5-4303-a613-387a533ffe3a",
+            "pin": "176215",
+            "source_url": "https://hpkangra.nic.in/public-utility/zonal-hospital/",
+            "match_basis": "Zonal Hospital Dharamshala, Kangra district, PIN 176215"
+          },
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 368.67,
+          "comparator_typical_month": 464.17,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            234.55,
+            502.79
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:nurpur",
+          "facility": "Civil Hospital Nurpur",
+          "district": "Kangra",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 1510075,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 130.5,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:palampur",
+          "facility": "Civil Hospital Palampur",
+          "district": "Kangra",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 4,
+          "march_sessions": null,
+          "district_population_2011": 1510075,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 173.0,
+          "comparator_typical_month": 207.58,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            38.88,
+            307.12
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:reckong_peo",
+          "facility": "Regional Hospital Reckong Peo",
+          "district": "Kinnaur",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 84121,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 68.08,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:kullu",
+          "facility": "Regional Hospital Kullu",
+          "district": "Kullu",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 8,
+          "march_sessions": null,
+          "district_population_2011": 437903,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "facility_link": {
+            "fdr_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+            "pin": "175101",
+            "source_url": "https://hpkullu.nic.in/public-utility/government-regional-hospital-kullu/",
+            "match_basis": "Regional Hospital Kullu, Kullu town, PIN 175101"
+          },
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 307.38,
+          "comparator_typical_month": 275.92,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            173.26,
+            441.5
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:manali",
+          "facility": "Civil Hospital Manali",
+          "district": "Kullu",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 437903,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 72.08,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:mandi",
+          "facility": "Zonal Hospital Mandi",
+          "district": "Mandi",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 9,
+          "march_sessions": null,
+          "district_population_2011": 999777,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "facility_link": {
+            "fdr_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+            "pin": "175001",
+            "source_url": "https://hpmandi.nic.in/health/",
+            "match_basis": "Netaji Subhash Chandra Bose Zonal Hospital Mandi, Hospital Road, Palace Colony, PIN 175001"
+          },
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 368.67,
+          "comparator_typical_month": 385.33,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            234.55,
+            502.79
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:sundernagar",
+          "facility": "Civil Hospital Sundernagar",
+          "district": "Mandi",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 7,
+          "march_sessions": null,
+          "district_population_2011": 999777,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 267.51,
+          "comparator_typical_month": 258.08,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            133.39,
+            401.63
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:ner_chowk",
+          "facility": "Shri Lal Bahadur Shastri Government Medical College, Ner Chowk",
+          "district": "Mandi",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 6,
+          "march_sessions": null,
+          "district_population_2011": 999777,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 202.08,
+          "comparator_typical_month": 64.08,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            67.96,
+            336.2
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:joginder_nagar",
+          "facility": "Civil Hospital Joginder Nagar",
+          "district": "Mandi",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 999777,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 165.25,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:sarkaghat",
+          "facility": "Civil Hospital Sarkaghat",
+          "district": "Mandi",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 999777,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 134.0,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:karsog",
+          "facility": "Civil Hospital Karsog",
+          "district": "Mandi",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 999777,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 44.17,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:nahan",
+          "facility": "Dr. Yashwant Singh Parmar Government Medical College, Nahan",
+          "district": "Sirmour",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 4,
+          "march_sessions": null,
+          "district_population_2011": 529855,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 173.0,
+          "comparator_typical_month": 139.33,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            38.88,
+            307.12
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:paonta_sahib",
+          "facility": "Civil Hospital Paonta Sahib",
+          "district": "Sirmour",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 4,
+          "march_sessions": null,
+          "district_population_2011": 529855,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 173.0,
+          "comparator_typical_month": 148.33,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            38.88,
+            307.12
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:shimla",
+          "facility": "Deen Dayal Upadhyay Zonal Hospital, Shimla",
+          "district": "Shimla",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 6,
+          "march_sessions": null,
+          "district_population_2011": 814010,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 202.08,
+          "comparator_typical_month": 169.92,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            67.96,
+            336.2
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:rohru",
+          "facility": "Civil Hospital Rohru",
+          "district": "Shimla",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 6,
+          "march_sessions": null,
+          "district_population_2011": 814010,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 202.08,
+          "comparator_typical_month": 268.58,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            67.96,
+            336.2
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:rampur",
+          "facility": "Civil Hospital Rampur",
+          "district": "Shimla",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 814010,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 115.42,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:solan",
+          "facility": "Regional Hospital Solan",
+          "district": "Solan",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 8,
+          "march_sessions": null,
+          "district_population_2011": 580320,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 307.38,
+          "comparator_typical_month": 373.17,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            173.26,
+            441.5
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:nalagarh",
+          "facility": "Civil Hospital Nalagarh",
+          "district": "Solan",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 580320,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 133.5,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:dharampur",
+          "facility": "Community Health Centre Dharampur",
+          "district": "Solan",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 3,
+          "march_sessions": null,
+          "district_population_2011": 580320,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 111.59,
+          "comparator_typical_month": 124.92,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            0,
+            245.71
+          ]
+        },
+        {
+          "facility_id": "hp_pmndp:una",
+          "facility": "Regional Hospital Una",
+          "district": "Una",
+          "period": "FY2025–26",
+          "months": 12,
+          "source": {
+            "url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+            "title": "Himachal Pradesh State Health Society annual report 2024–25",
+            "locator": "Printed pages 32–33, PMNDP narrative through March 2025 and hospital table columns for functional dialysis machines and monthly and FY 2024–25 session totals"
+          },
+          "machines": 10,
+          "march_sessions": null,
+          "district_population_2011": 521173,
+          "service": "Dialysis",
+          "unit": "PMNDP haemodialysis sessions",
+          "older_observations_in_cohort": true,
+          "status": "experimental_estimate",
+          "xgboost_typical_month": 453.47,
+          "comparator_typical_month": 428.08,
+          "comparator": "last_observed_or_peer",
+          "lower_mae_method": "last_observed_or_peer",
+          "error_band": [
+            319.35,
+            587.59
+          ]
+        }
+      ],
+      "feature_ablation": {
+        "added_features": [
+          "district_population_2011"
+        ],
+        "base": {
+          "rows": 47,
+          "facilities": 24,
+          "districts": 11,
+          "metrics": {
+            "xgboost": {
+              "mae": 60.21,
+              "median_absolute_error": 53.44,
+              "p90_absolute_error": 143.83,
+              "mean_signed_error": -1.04
+            },
+            "pooled_median": {
+              "mae": 102.94,
+              "median_absolute_error": 74.58,
+              "p90_absolute_error": 221.67,
+              "mean_signed_error": -29.79
+            },
+            "capacity_scaled_median": {
+              "mae": 51.75,
+              "median_absolute_error": 40.42,
+              "p90_absolute_error": 133.05,
+              "mean_signed_error": -3.71
+            }
+          }
+        },
+        "enriched": {
+          "rows": 47,
+          "facilities": 24,
+          "districts": 11,
+          "metrics": {
+            "xgboost": {
+              "mae": 66.09,
+              "median_absolute_error": 60.65,
+              "p90_absolute_error": 151.57,
+              "mean_signed_error": -0.15
+            },
+            "pooled_median": {
+              "mae": 102.94,
+              "median_absolute_error": 74.58,
+              "p90_absolute_error": 221.67,
+              "mean_signed_error": -29.79
+            },
+            "capacity_scaled_median": {
+              "mae": 51.75,
+              "median_absolute_error": 40.42,
+              "p90_absolute_error": 133.05,
+              "mean_signed_error": -3.71
+            }
+          }
+        }
+      }
+    },
+    {
+      "cohort": "Tamil Nadu Directorate of Medical and Rural Health Services (DMS) CEmONC centres, FY2025–26",
+      "service": "Maternity / delivery",
+      "unit": "deliveries",
+      "features": [
+        "beds",
+        "facility_type"
+      ],
+      "training_rows_by_period": {
+        "FY2025–26": 94
+      },
+      "sources": {
+        "tn-nhm-51ec-table-1": {
+          "title": "National Health Mission Tamil Nadu 51st Executive Committee Agenda, Part A",
+          "url": "https://nhm.tn.gov.in/wp-content/uploads/2026/51st_EC-Part-A-Final.pdf",
+          "locator": "Agenda 24/51/2026, Annexure 1, Table 1, printed pp. 109–113",
+          "notes": "Source reports FY2025–26 observed deliveries and the CEmONC beds for all 94 DMS facilities. Bed occupancy rate, staffing proposal, priority, and the publisher's rounded monthly value are excluded. DME medical college hospitals are a separate cohort. Centre and district names retain the report's printed spelling. The 94 site rows sum to the published Table 1 totals of 137,712 deliveries and 6,173 CEmONC beds. The narrative's all-DMS count is a separately published aggregate and is not the source of these targets."
+        },
+        "tn-des-population-2022": {
+          "title": "Statistical Hand Book of Tamil Nadu 2022–23, Vital Statistics",
+          "url": "https://www.des.tn.gov.in/sites/default/files/2025-07/2.VITAL%20STATISTICS.pdf",
+          "locator": "Printed p. 84, Table 2.1, Mid Year Estimated Population 2022 column",
+          "notes": "District population estimates as of mid-2022. The district population is a geographic proxy and differs from an individual facility catchment. The 38-row population table sums to the published state total of 76,707,000. Chennai has no centre in the DMS delivery cohort."
+        }
+      },
+      "evaluation": {
+        "unseen_district": {
+          "rows": 94,
+          "facilities": 94,
+          "districts": 37,
+          "metrics": {
+            "xgboost": {
+              "mae": 39.76,
+              "median_absolute_error": 26.2,
+              "p90_absolute_error": 80.82,
+              "mean_signed_error": -1.8
+            },
+            "pooled_median": {
+              "mae": 80.76,
+              "median_absolute_error": 69.29,
+              "p90_absolute_error": 148.12,
+              "mean_signed_error": -23.48
+            },
+            "peer_type_median": {
+              "mae": 59.9,
+              "median_absolute_error": 38.92,
+              "p90_absolute_error": 151.67,
+              "mean_signed_error": -22.01
+            },
+            "capacity_scaled_median": {
+              "mae": 36.86,
+              "median_absolute_error": 22.28,
+              "p90_absolute_error": 80.56,
+              "mean_signed_error": -13.09
+            }
+          }
+        },
+        "later_period_unseen_district": null,
+        "later_period_known_facility": null
+      },
+      "heldout_predictions": {
+        "unseen_district": [
+          {
+            "facility_id": "tn-dms:ariyalur:jayamkondan",
+            "facility": "Jayamkondan DMS CEmONC Centre",
+            "district": "Ariyalur",
+            "period": "FY2025–26",
+            "actual": 186.5,
+            "predictions": {
+              "xgboost": 135.77554321289062,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 146.66666666666666
+            }
+          },
+          {
+            "facility_id": "tn-dms:chengalpattu:madhuranthagam",
+            "facility": "Madhuranthagam DMS CEmONC Centre",
+            "district": "Chengalpattu",
+            "period": "FY2025–26",
+            "actual": 37.0,
+            "predictions": {
+              "xgboost": 75.80990600585938,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 56.436698717948715
+            }
+          },
+          {
+            "facility_id": "tn-dms:chengalpattu:tambaram",
+            "facility": "Tambaram DMS CEmONC Centre",
+            "district": "Chengalpattu",
+            "period": "FY2025–26",
+            "actual": 180.25,
+            "predictions": {
+              "xgboost": 269.1436767578125,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 233.11567164179104
+            }
+          },
+          {
+            "facility_id": "tn-dms:coimbatore:mettupalayam",
+            "facility": "Mettupalayam DMS CEmONC Centre",
+            "district": "Coimbatore",
+            "period": "FY2025–26",
+            "actual": 91.0,
+            "predictions": {
+              "xgboost": 123.18659210205078,
+              "pooled_median": 99.5,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 84.40384615384615
+            }
+          },
+          {
+            "facility_id": "tn-dms:coimbatore:pollachi",
+            "facility": "Pollachi DMS CEmONC Centre",
+            "district": "Coimbatore",
+            "period": "FY2025–26",
+            "actual": 206.58333333333334,
+            "predictions": {
+              "xgboost": 266.68548583984375,
+              "pooled_median": 99.5,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 276.21268656716416
+            }
+          },
+          {
+            "facility_id": "tn-dms:coimbatore:valparai",
+            "facility": "Valparai DMS CEmONC Centre",
+            "district": "Coimbatore",
+            "period": "FY2025–26",
+            "actual": 5.583333333333333,
+            "predictions": {
+              "xgboost": 31.726465225219727,
+              "pooled_median": 99.5,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 25.576923076923073
+            }
+          },
+          {
+            "facility_id": "tn-dms:cuddalore:chidambaram",
+            "facility": "Chidambaram DMS CEmONC Centre",
+            "district": "Cuddalore",
+            "period": "FY2025–26",
+            "actual": 291.9166666666667,
+            "predictions": {
+              "xgboost": 217.4418182373047,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 151.80208333333331
+            }
+          },
+          {
+            "facility_id": "tn-dms:cuddalore:cuddalore",
+            "facility": "Cuddalore DMS CEmONC Centre",
+            "district": "Cuddalore",
+            "period": "FY2025–26",
+            "actual": 415.8333333333333,
+            "predictions": {
+              "xgboost": 247.74940490722656,
+              "pooled_median": 99.5,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 262.0444444444444
+            }
+          },
+          {
+            "facility_id": "tn-dms:cuddalore:virudhachalam",
+            "facility": "Virudhachalam DMS CEmONC Centre",
+            "district": "Cuddalore",
+            "period": "FY2025–26",
+            "actual": 219.58333333333334,
+            "predictions": {
+              "xgboost": 123.20926666259766,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 99.05729166666666
+            }
+          },
+          {
+            "facility_id": "tn-dms:cuddalore:kattumannarkoil",
+            "facility": "Kattumannarkoil DMS CEmONC Centre",
+            "district": "Cuddalore",
+            "period": "FY2025–26",
+            "actual": 14.833333333333334,
+            "predictions": {
+              "xgboost": 31.956573486328125,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 27.015625
+            }
+          },
+          {
+            "facility_id": "tn-dms:cuddalore:kurinchipadi",
+            "facility": "Kurinchipadi DMS CEmONC Centre",
+            "district": "Cuddalore",
+            "period": "FY2025–26",
+            "actual": 19.083333333333332,
+            "predictions": {
+              "xgboost": 51.456153869628906,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 43.73958333333333
+            }
+          },
+          {
+            "facility_id": "tn-dms:cuddalore:panrutti",
+            "facility": "Panrutti DMS CEmONC Centre",
+            "district": "Cuddalore",
+            "period": "FY2025–26",
+            "actual": 15.333333333333334,
+            "predictions": {
+              "xgboost": 38.242652893066406,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 33.447916666666664
+            }
+          },
+          {
+            "facility_id": "tn-dms:cuddalore:thittakudi",
+            "facility": "Thittakudi DMS CEmONC Centre",
+            "district": "Cuddalore",
+            "period": "FY2025–26",
+            "actual": 4.333333333333333,
+            "predictions": {
+              "xgboost": 31.956573486328125,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 25.729166666666664
+            }
+          },
+          {
+            "facility_id": "tn-dms:dharmapuri:pennagaram",
+            "facility": "Pennagaram DMS CEmONC Centre",
+            "district": "Dharmapuri",
+            "period": "FY2025–26",
+            "actual": 102.41666666666667,
+            "predictions": {
+              "xgboost": 173.07650756835938,
+              "pooled_median": 94.45833333333334,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 152.79850746268656
+            }
+          },
+          {
+            "facility_id": "tn-dms:dharmapuri:harur",
+            "facility": "Harur DMS CEmONC Centre",
+            "district": "Dharmapuri",
+            "period": "FY2025–26",
+            "actual": 99.5,
+            "predictions": {
+              "xgboost": 121.42436981201172,
+              "pooled_median": 94.45833333333334,
+              "peer_type_median": 49.583333333333336,
+              "capacity_scaled_median": 74.72902097902099
+            }
+          },
+          {
+            "facility_id": "tn-dms:dindugal:kodaikanal",
+            "facility": "Kodaikanal DMS CEmONC Centre",
+            "district": "Dindugal",
+            "period": "FY2025–26",
+            "actual": 26.666666666666668,
+            "predictions": {
+              "xgboost": 30.012378692626953,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 28.302083333333332
+            }
+          },
+          {
+            "facility_id": "tn-dms:dindugal:nilakottai",
+            "facility": "Nilakottai DMS CEmONC Centre",
+            "district": "Dindugal",
+            "period": "FY2025–26",
+            "actual": 19.5,
+            "predictions": {
+              "xgboost": 37.91374588012695,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 34.734375
+            }
+          },
+          {
+            "facility_id": "tn-dms:dindugal:palani",
+            "facility": "Palani DMS CEmONC Centre",
+            "district": "Dindugal",
+            "period": "FY2025–26",
+            "actual": 147.0,
+            "predictions": {
+              "xgboost": 130.3287353515625,
+              "pooled_median": 99.5,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 105.6
+            }
+          },
+          {
+            "facility_id": "tn-dms:erode:erode",
+            "facility": "Erode DMS CEmONC Centre",
+            "district": "Erode",
+            "period": "FY2025–26",
+            "actual": 240.5,
+            "predictions": {
+              "xgboost": 263.1125183105469,
+              "pooled_median": 99.5,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 260.5410447761194
+            }
+          },
+          {
+            "facility_id": "tn-dms:erode:gobichettypalayam",
+            "facility": "Gobichettypalayam DMS CEmONC Centre",
+            "district": "Erode",
+            "period": "FY2025–26",
+            "actual": 82.33333333333333,
+            "predictions": {
+              "xgboost": 127.89323425292969,
+              "pooled_median": 99.5,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 81.84615384615384
+            }
+          },
+          {
+            "facility_id": "tn-dms:erode:sathiyamangalam",
+            "facility": "Sathiyamangalam DMS CEmONC Centre",
+            "district": "Erode",
+            "period": "FY2025–26",
+            "actual": 66.0,
+            "predictions": {
+              "xgboost": 127.89323425292969,
+              "pooled_median": 99.5,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 81.84615384615384
+            }
+          },
+          {
+            "facility_id": "tn-dms:kallakurichi:tirukoilur",
+            "facility": "Tirukoilur DMS CEmONC Centre",
+            "district": "Kallakurichi",
+            "period": "FY2025–26",
+            "actual": 119.5,
+            "predictions": {
+              "xgboost": 38.68021774291992,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 56.71111111111111
+            }
+          },
+          {
+            "facility_id": "tn-dms:kancheepuram:kancheepuram",
+            "facility": "Kancheepuram DMS CEmONC Centre",
+            "district": "Kancheepuram",
+            "period": "FY2025–26",
+            "actual": 441.0833333333333,
+            "predictions": {
+              "xgboost": 205.8710479736328,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 205.33333333333331
+            }
+          },
+          {
+            "facility_id": "tn-dms:kanyakumari:kuzhithurai",
+            "facility": "Kuzhithurai DMS CEmONC Centre",
+            "district": "Kanyakumari",
+            "period": "FY2025–26",
+            "actual": 110.41666666666667,
+            "predictions": {
+              "xgboost": 143.40980529785156,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 83.63636363636364
+            }
+          },
+          {
+            "facility_id": "tn-dms:kanyakumari:padhmanabapuram",
+            "facility": "Padhmanabapuram DMS CEmONC Centre",
+            "district": "Kanyakumari",
+            "period": "FY2025–26",
+            "actual": 105.83333333333333,
+            "predictions": {
+              "xgboost": 156.3452606201172,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 137.12686567164178
+            }
+          },
+          {
+            "facility_id": "tn-dms:kanyakumari:boothapandi",
+            "facility": "Boothapandi DMS CEmONC Centre",
+            "district": "Kanyakumari",
+            "period": "FY2025–26",
+            "actual": 39.166666666666664,
+            "predictions": {
+              "xgboost": 36.05846405029297,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 29.090909090909093
+            }
+          },
+          {
+            "facility_id": "tn-dms:karur:kulithalai",
+            "facility": "Kulithalai DMS CEmONC Centre",
+            "district": "Karur",
+            "period": "FY2025–26",
+            "actual": 118.33333333333333,
+            "predictions": {
+              "xgboost": 141.71478271484375,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 49.583333333333336,
+              "capacity_scaled_median": 93.41127622377623
+            }
+          },
+          {
+            "facility_id": "tn-dms:krishnagiri:hosur",
+            "facility": "Hosur DMS CEmONC Centre",
+            "district": "Krishnagiri",
+            "period": "FY2025–26",
+            "actual": 347.25,
+            "predictions": {
+              "xgboost": 260.15740966796875,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 362.40671641791045
+            }
+          },
+          {
+            "facility_id": "tn-dms:krishnagiri:denkanikottai",
+            "facility": "Denkanikottai DMS CEmONC Centre",
+            "district": "Krishnagiri",
+            "period": "FY2025–26",
+            "actual": 43.916666666666664,
+            "predictions": {
+              "xgboost": 77.84640502929688,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 59.002003205128204
+            }
+          },
+          {
+            "facility_id": "tn-dms:madurai:melur",
+            "facility": "Melur DMS CEmONC Centre",
+            "district": "Madurai",
+            "period": "FY2025–26",
+            "actual": 111.5,
+            "predictions": {
+              "xgboost": 66.28553009033203,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 48.484848484848484
+            }
+          },
+          {
+            "facility_id": "tn-dms:madurai:tirumangalam",
+            "facility": "Tirumangalam DMS CEmONC Centre",
+            "district": "Madurai",
+            "period": "FY2025–26",
+            "actual": 82.91666666666667,
+            "predictions": {
+              "xgboost": 66.28553009033203,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 48.484848484848484
+            }
+          },
+          {
+            "facility_id": "tn-dms:madurai:usilampatti",
+            "facility": "Usilampatti DMS CEmONC Centre",
+            "district": "Madurai",
+            "period": "FY2025–26",
+            "actual": 204.41666666666666,
+            "predictions": {
+              "xgboost": 209.00657653808594,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 199.46666666666667
+            }
+          },
+          {
+            "facility_id": "tn-dms:mayiladuthurai:mayiladuthurai",
+            "facility": "Mayiladuthurai DMS CEmONC Centre",
+            "district": "Mayiladuthurai",
+            "period": "FY2025–26",
+            "actual": 387.75,
+            "predictions": {
+              "xgboost": 284.4676513671875,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 385.2444444444444
+            }
+          },
+          {
+            "facility_id": "tn-dms:mayiladuthurai:sirkazhi",
+            "facility": "Sirkazhi DMS CEmONC Centre",
+            "district": "Mayiladuthurai",
+            "period": "FY2025–26",
+            "actual": 88.83333333333333,
+            "predictions": {
+              "xgboost": 123.083251953125,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 49.583333333333336,
+              "capacity_scaled_median": 84.69289044289044
+            }
+          },
+          {
+            "facility_id": "tn-dms:nagapattinam:vedaranyam",
+            "facility": "Vedaranyam DMS CEmONC Centre",
+            "district": "Nagapattinam",
+            "period": "FY2025–26",
+            "actual": 53.25,
+            "predictions": {
+              "xgboost": 81.72705841064453,
+              "pooled_median": 99.5,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 86.19402985074626
+            }
+          },
+          {
+            "facility_id": "tn-dms:namakkal:tiruchengode",
+            "facility": "Tiruchengode DMS CEmONC Centre",
+            "district": "Namakkal",
+            "period": "FY2025–26",
+            "actual": 97.91666666666667,
+            "predictions": {
+              "xgboost": 122.36761474609375,
+              "pooled_median": 99.5,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 73.93939393939394
+            }
+          },
+          {
+            "facility_id": "tn-dms:namakkal:komarapalayam",
+            "facility": "Komarapalayam DMS CEmONC Centre",
+            "district": "Namakkal",
+            "period": "FY2025–26",
+            "actual": 33.25,
+            "predictions": {
+              "xgboost": 36.702293395996094,
+              "pooled_median": 99.5,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 31.515151515151516
+            }
+          },
+          {
+            "facility_id": "tn-dms:namakkal:rasipuram",
+            "facility": "Rasipuram DMS CEmONC Centre",
+            "district": "Namakkal",
+            "period": "FY2025–26",
+            "actual": 131.41666666666666,
+            "predictions": {
+              "xgboost": 75.4990463256836,
+              "pooled_median": 99.5,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 99.73333333333333
+            }
+          },
+          {
+            "facility_id": "tn-dms:perambalur:perambalur",
+            "facility": "Perambalur DMS CEmONC Centre",
+            "district": "Perambalur",
+            "period": "FY2025–26",
+            "actual": 324.0833333333333,
+            "predictions": {
+              "xgboost": 301.1552429199219,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 370.2425373134328
+            }
+          },
+          {
+            "facility_id": "tn-dms:pudukottai:aranthangi",
+            "facility": "Aranthangi DMS CEmONC Centre",
+            "district": "Pudukottai",
+            "period": "FY2025–26",
+            "actual": 179.25,
+            "predictions": {
+              "xgboost": 122.88480377197266,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 101.68888888888888
+            }
+          },
+          {
+            "facility_id": "tn-dms:pudukottai:gandarvakottai",
+            "facility": "Gandarvakottai DMS CEmONC Centre",
+            "district": "Pudukottai",
+            "period": "FY2025–26",
+            "actual": 3.0,
+            "predictions": {
+              "xgboost": 32.588165283203125,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 25.653044871794872
+            }
+          },
+          {
+            "facility_id": "tn-dms:ramanathapuram:paramakudi",
+            "facility": "Paramakudi DMS CEmONC Centre",
+            "district": "Ramanathapuram",
+            "period": "FY2025–26",
+            "actual": 131.25,
+            "predictions": {
+              "xgboost": 131.63162231445312,
+              "pooled_median": 99.5,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 131.0222222222222
+            }
+          },
+          {
+            "facility_id": "tn-dms:ramanathapuram:mudukalathur",
+            "facility": "Mudukalathur DMS CEmONC Centre",
+            "district": "Ramanathapuram",
+            "period": "FY2025–26",
+            "actual": 11.916666666666666,
+            "predictions": {
+              "xgboost": 32.837547302246094,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 14.151041666666666
+            }
+          },
+          {
+            "facility_id": "tn-dms:ramanathapuram:rameswaram",
+            "facility": "Rameswaram DMS CEmONC Centre",
+            "district": "Ramanathapuram",
+            "period": "FY2025–26",
+            "actual": 20.75,
+            "predictions": {
+              "xgboost": 37.714134216308594,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 30.875
+            }
+          },
+          {
+            "facility_id": "tn-dms:ranipet:walajapet",
+            "facility": "Walajapet DMS CEmONC Centre",
+            "district": "Ranipet",
+            "period": "FY2025–26",
+            "actual": 200.08333333333334,
+            "predictions": {
+              "xgboost": 124.17578887939453,
+              "pooled_median": 99.5,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 109.5111111111111
+            }
+          },
+          {
+            "facility_id": "tn-dms:ranipet:arakkonam",
+            "facility": "Arakkonam DMS CEmONC Centre",
+            "district": "Ranipet",
+            "period": "FY2025–26",
+            "actual": 33.75,
+            "predictions": {
+              "xgboost": 49.78468704223633,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 38.47956730769231
+            }
+          },
+          {
+            "facility_id": "tn-dms:ranipet:sholingur",
+            "facility": "Sholingur DMS CEmONC Centre",
+            "district": "Ranipet",
+            "period": "FY2025–26",
+            "actual": 21.0,
+            "predictions": {
+              "xgboost": 48.76581954956055,
+              "pooled_median": 99.5,
+              "peer_type_median": 99.5,
+              "capacity_scaled_median": 38.405797101449274
+            }
+          },
+          {
+            "facility_id": "tn-dms:salem:attur",
+            "facility": "Attur DMS CEmONC Centre",
+            "district": "Salem",
+            "period": "FY2025–26",
+            "actual": 182.25,
+            "predictions": {
+              "xgboost": 137.9397430419922,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 104.24242424242425
+            }
+          },
+          {
+            "facility_id": "tn-dms:salem:mettur-dam",
+            "facility": "Mettur Dam DMS CEmONC Centre",
+            "district": "Salem",
+            "period": "FY2025–26",
+            "actual": 175.0,
+            "predictions": {
+              "xgboost": 149.81423950195312,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 168.17777777777778
+            }
+          },
+          {
+            "facility_id": "tn-dms:salem:omalur",
+            "facility": "Omalur DMS CEmONC Centre",
+            "district": "Salem",
+            "period": "FY2025–26",
+            "actual": 57.166666666666664,
+            "predictions": {
+              "xgboost": 73.8936996459961,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 53.333333333333336
+            }
+          },
+          {
+            "facility_id": "tn-dms:sivaganga:devakottai",
+            "facility": "Devakottai DMS CEmONC Centre",
+            "district": "Sivaganga",
+            "period": "FY2025–26",
+            "actual": 22.916666666666668,
+            "predictions": {
+              "xgboost": 37.59737777709961,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 36.02083333333333
+            }
+          },
+          {
+            "facility_id": "tn-dms:sivaganga:karaikudi",
+            "facility": "Karaikudi DMS CEmONC Centre",
+            "district": "Sivaganga",
+            "period": "FY2025–26",
+            "actual": 172.75,
+            "predictions": {
+              "xgboost": 224.91741943359375,
+              "pooled_median": 99.5,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 203.73134328358208
+            }
+          },
+          {
+            "facility_id": "tn-dms:sivaganga:manamadurai",
+            "facility": "Manamadurai DMS CEmONC Centre",
+            "district": "Sivaganga",
+            "period": "FY2025–26",
+            "actual": 18.916666666666668,
+            "predictions": {
+              "xgboost": 30.140003204345703,
+              "pooled_median": 99.5,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 25.729166666666664
+            }
+          },
+          {
+            "facility_id": "tn-dms:tenkasi:tenkasi",
+            "facility": "Tenkasi DMS CEmONC Centre",
+            "district": "Tenkasi",
+            "period": "FY2025–26",
+            "actual": 246.83333333333334,
+            "predictions": {
+              "xgboost": 262.1143493652344,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 301.67910447761193
+            }
+          },
+          {
+            "facility_id": "tn-dms:tenkasi:sankaran-kovil",
+            "facility": "Sankaran Kovil DMS CEmONC Centre",
+            "district": "Tenkasi",
+            "period": "FY2025–26",
+            "actual": 73.0,
+            "predictions": {
+              "xgboost": 138.71151733398438,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 49.583333333333336,
+              "capacity_scaled_median": 94.91626602564102
+            }
+          },
+          {
+            "facility_id": "tn-dms:thanjavur:kumbakonam",
+            "facility": "Kumbakonam DMS CEmONC Centre",
+            "district": "Thanjavur",
+            "period": "FY2025–26",
+            "actual": 331.9166666666667,
+            "predictions": {
+              "xgboost": 300.1156311035156,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 403.54477611940297
+            }
+          },
+          {
+            "facility_id": "tn-dms:thanjavur:pattukottai",
+            "facility": "Pattukottai DMS CEmONC Centre",
+            "district": "Thanjavur",
+            "period": "FY2025–26",
+            "actual": 202.25,
+            "predictions": {
+              "xgboost": 251.9296875,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 158.57692307692307
+            }
+          },
+          {
+            "facility_id": "tn-dms:thanjavur:peravurani",
+            "facility": "Peravurani DMS CEmONC Centre",
+            "district": "Thanjavur",
+            "period": "FY2025–26",
+            "actual": 11.75,
+            "predictions": {
+              "xgboost": 30.23520851135254,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 23.019230769230766
+            }
+          },
+          {
+            "facility_id": "tn-dms:the-nilgiris:coonoor",
+            "facility": "Coonoor DMS CEmONC Centre",
+            "district": "The Nilgiris",
+            "period": "FY2025–26",
+            "actual": 20.25,
+            "predictions": {
+              "xgboost": 37.825950622558594,
+              "pooled_median": 102.41666666666667,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 32.16145833333333
+            }
+          },
+          {
+            "facility_id": "tn-dms:the-nilgiris:gudalur",
+            "facility": "Gudalur DMS CEmONC Centre",
+            "district": "The Nilgiris",
+            "period": "FY2025–26",
+            "actual": 47.75,
+            "predictions": {
+              "xgboost": 81.54114532470703,
+              "pooled_median": 102.41666666666667,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 88.15298507462687
+            }
+          },
+          {
+            "facility_id": "tn-dms:the-nilgiris:kothagiri",
+            "facility": "Kothagiri DMS CEmONC Centre",
+            "district": "The Nilgiris",
+            "period": "FY2025–26",
+            "actual": 15.083333333333334,
+            "predictions": {
+              "xgboost": 30.65558433532715,
+              "pooled_median": 102.41666666666667,
+              "peer_type_median": 51.916666666666664,
+              "capacity_scaled_median": 25.729166666666664
+            }
+          },
+          {
+            "facility_id": "tn-dms:theni:cumbum",
+            "facility": "Cumbum DMS CEmONC Centre",
+            "district": "Theni",
+            "period": "FY2025–26",
+            "actual": 170.33333333333334,
+            "predictions": {
+              "xgboost": 120.29786682128906,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 97.91666666666667,
+              "capacity_scaled_median": 88.35555555555555
+            }
+          },
+          {
+            "facility_id": "tn-dms:theni:periakulam",
+            "facility": "Periakulam DMS CEmONC Centre",
+            "district": "Theni",
+            "period": "FY2025–26",
+            "actual": 146.66666666666666,
+            "predictions": {
+              "xgboost": 146.73712158203125,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 146.92164179104478
+            }
+          },
+          {
+            "facility_id": "tn-dms:theni:bodinaickannur",
+            "facility": "Bodinaickannur DMS CEmONC Centre",
+            "district": "Theni",
+            "period": "FY2025–26",
+            "actual": 45.5,
+            "predictions": {
+              "xgboost": 35.30851364135742,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 29.891608391608393
+            }
+          },
+          {
+            "facility_id": "tn-dms:thirupattur:tirupathur",
+            "facility": "Tirupathur DMS CEmONC Centre",
+            "district": "Thirupattur",
+            "period": "FY2025–26",
+            "actual": 439.5833333333333,
+            "predictions": {
+              "xgboost": 247.17311096191406,
+              "pooled_median": 94.45833333333334,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 238.57777777777778
+            }
+          },
+          {
+            "facility_id": "tn-dms:thirupattur:vaniyambadi",
+            "facility": "Vaniyambadi DMS CEmONC Centre",
+            "district": "Thirupattur",
+            "period": "FY2025–26",
+            "actual": 211.08333333333334,
+            "predictions": {
+              "xgboost": 115.39979553222656,
+              "pooled_median": 94.45833333333334,
+              "peer_type_median": 49.583333333333336,
+              "capacity_scaled_median": 85.93837412587413
+            }
+          },
+          {
+            "facility_id": "tn-dms:thoothukudi:kovilpatti",
+            "facility": "Kovilpatti DMS CEmONC Centre",
+            "district": "Thoothukudi",
+            "period": "FY2025–26",
+            "actual": 240.41666666666666,
+            "predictions": {
+              "xgboost": 263.6779479980469,
+              "pooled_median": 99.5,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 234.66666666666666
+            }
+          },
+          {
+            "facility_id": "tn-dms:thoothukudi:srivaikundam",
+            "facility": "Srivaikundam DMS CEmONC Centre",
+            "district": "Thoothukudi",
+            "period": "FY2025–26",
+            "actual": 32.25,
+            "predictions": {
+              "xgboost": 56.433067321777344,
+              "pooled_median": 99.5,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 49.87499999999999
+            }
+          },
+          {
+            "facility_id": "tn-dms:thoothukudi:tiruchendur",
+            "facility": "Tiruchendur DMS CEmONC Centre",
+            "district": "Thoothukudi",
+            "period": "FY2025–26",
+            "actual": 83.16666666666667,
+            "predictions": {
+              "xgboost": 71.71530151367188,
+              "pooled_median": 99.5,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 51.153846153846146
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruchirapalli:manapparai",
+            "facility": "Manapparai DMS CEmONC Centre",
+            "district": "Tiruchirapalli",
+            "period": "FY2025–26",
+            "actual": 248.33333333333334,
+            "predictions": {
+              "xgboost": 263.5187072753906,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 209.24444444444444
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruchirapalli:musiri",
+            "facility": "Musiri DMS CEmONC Centre",
+            "district": "Tiruchirapalli",
+            "period": "FY2025–26",
+            "actual": 23.0,
+            "predictions": {
+              "xgboost": 32.418460845947266,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 30.783653846153847
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruchirapalli:srirangam",
+            "facility": "Srirangam DMS CEmONC Centre",
+            "district": "Tiruchirapalli",
+            "period": "FY2025–26",
+            "actual": 88.0,
+            "predictions": {
+              "xgboost": 32.418460845947266,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 29.501001602564102
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruchirapalli:thuraiyur",
+            "facility": "Thuraiyur DMS CEmONC Centre",
+            "district": "Tiruchirapalli",
+            "period": "FY2025–26",
+            "actual": 30.25,
+            "predictions": {
+              "xgboost": 51.104434967041016,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 38.47956730769231
+            }
+          },
+          {
+            "facility_id": "tn-dms:tirunelveli:ambasamudram",
+            "facility": "Ambasamudram DMS CEmONC Centre",
+            "district": "Tirunelveli",
+            "period": "FY2025–26",
+            "actual": 151.16666666666666,
+            "predictions": {
+              "xgboost": 134.26040649414062,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 90.9090909090909
+            }
+          },
+          {
+            "facility_id": "tn-dms:tirunelveli:nanguneri",
+            "facility": "Nanguneri DMS CEmONC Centre",
+            "district": "Tirunelveli",
+            "period": "FY2025–26",
+            "actual": 50.333333333333336,
+            "predictions": {
+              "xgboost": 25.802209854125977,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 14.545454545454547
+            }
+          },
+          {
+            "facility_id": "tn-dms:tirupur:udumalpet",
+            "facility": "Udumalpet DMS CEmONC Centre",
+            "district": "Tirupur",
+            "period": "FY2025–26",
+            "actual": 116.66666666666667,
+            "predictions": {
+              "xgboost": 142.0743865966797,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 90.9090909090909
+            }
+          },
+          {
+            "facility_id": "tn-dms:tirupur:dharapuram",
+            "facility": "Dharapuram DMS CEmONC Centre",
+            "district": "Tirupur",
+            "period": "FY2025–26",
+            "actual": 73.25,
+            "predictions": {
+              "xgboost": 72.15225982666016,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 55.75757575757576
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvallur:ponneri",
+            "facility": "Ponneri DMS CEmONC Centre",
+            "district": "Tiruvallur",
+            "period": "FY2025–26",
+            "actual": 51.916666666666664,
+            "predictions": {
+              "xgboost": 46.727725982666016,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 49.583333333333336,
+              "capacity_scaled_median": 39.85547785547786
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvallur:tiruthani",
+            "facility": "Tiruthani DMS CEmONC Centre",
+            "district": "Tiruvallur",
+            "period": "FY2025–26",
+            "actual": 122.25,
+            "predictions": {
+              "xgboost": 163.82444763183594,
+              "pooled_median": 98.70833333333334,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 164.55223880597015
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvannamalai:arani",
+            "facility": "Arani DMS CEmONC Centre",
+            "district": "Tiruvannamalai",
+            "period": "FY2025–26",
+            "actual": 48.833333333333336,
+            "predictions": {
+              "xgboost": 75.09036254882812,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 54.29971590909091
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvannamalai:chengam",
+            "facility": "Chengam DMS CEmONC Centre",
+            "district": "Tiruvannamalai",
+            "period": "FY2025–26",
+            "actual": 54.833333333333336,
+            "predictions": {
+              "xgboost": 128.54725646972656,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 71.10677083333333
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvannamalai:cheyyar",
+            "facility": "Cheyyar DMS CEmONC Centre",
+            "district": "Tiruvannamalai",
+            "period": "FY2025–26",
+            "actual": 129.83333333333334,
+            "predictions": {
+              "xgboost": 133.3354949951172,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 121.24444444444444
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvannamalai:polur",
+            "facility": "Polur DMS CEmONC Centre",
+            "district": "Tiruvannamalai",
+            "period": "FY2025–26",
+            "actual": 41.083333333333336,
+            "predictions": {
+              "xgboost": 48.20603561401367,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 51.125,
+              "capacity_scaled_median": 43.956912878787875
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvarur:mannargudi",
+            "facility": "Mannargudi DMS CEmONC Centre",
+            "district": "Tiruvarur",
+            "period": "FY2025–26",
+            "actual": 168.83333333333334,
+            "predictions": {
+              "xgboost": 270.0301513671875,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 262.5
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvarur:tiruthuraipoondi",
+            "facility": "Tiruthuraipoondi DMS CEmONC Centre",
+            "district": "Tiruvarur",
+            "period": "FY2025–26",
+            "actual": 62.416666666666664,
+            "predictions": {
+              "xgboost": 73.44003295898438,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 54.99038461538461
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvarur:nannilam",
+            "facility": "Nannilam DMS CEmONC Centre",
+            "district": "Tiruvarur",
+            "period": "FY2025–26",
+            "actual": 18.0,
+            "predictions": {
+              "xgboost": 37.51306915283203,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 50.333333333333336,
+              "capacity_scaled_median": 33.25
+            }
+          },
+          {
+            "facility_id": "tn-dms:tiruvarur:vijayapuram",
+            "facility": "Vijayapuram DMS CEmONC Centre",
+            "district": "Tiruvarur",
+            "period": "FY2025–26",
+            "actual": 63.25,
+            "predictions": {
+              "xgboost": 47.92312240600586,
+              "pooled_median": 100.95833333333334,
+              "peer_type_median": 100.95833333333334,
+              "capacity_scaled_median": 57.65499717673631
+            }
+          },
+          {
+            "facility_id": "tn-dms:vellore:gudiyatham",
+            "facility": "Gudiyatham DMS CEmONC Centre",
+            "district": "Vellore",
+            "period": "FY2025–26",
+            "actual": 249.08333333333334,
+            "predictions": {
+              "xgboost": 172.00128173828125,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 191.64444444444445
+            }
+          },
+          {
+            "facility_id": "tn-dms:villupuram:tindivanam",
+            "facility": "Tindivanam DMS CEmONC Centre",
+            "district": "Villupuram",
+            "period": "FY2025–26",
+            "actual": 131.25,
+            "predictions": {
+              "xgboost": 196.70701599121094,
+              "pooled_median": 97.91666666666667,
+              "peer_type_median": 186.5,
+              "capacity_scaled_median": 190.0186567164179
+            }
+          },
+          {
+            "facility_id": "tn-dms:virudhunagar:sivakasi",
+            "facility": "Sivakasi DMS CEmONC Centre",
+            "district": "Virudhunagar",
+            "period": "FY2025–26",
+            "actual": 108.16666666666667,
+            "predictions": {
+              "xgboost": 68.27454376220703,
+              "pooled_median": 91.0,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 48.484848484848484
+            }
+          },
+          {
+            "facility_id": "tn-dms:virudhunagar:aruppukottai",
+            "facility": "Aruppukottai DMS CEmONC Centre",
+            "district": "Virudhunagar",
+            "period": "FY2025–26",
+            "actual": 211.5,
+            "predictions": {
+              "xgboost": 266.38580322265625,
+              "pooled_median": 91.0,
+              "peer_type_median": 180.25,
+              "capacity_scaled_median": 242.91044776119404
+            }
+          },
+          {
+            "facility_id": "tn-dms:virudhunagar:rajapalayam",
+            "facility": "Rajapalayam DMS CEmONC Centre",
+            "district": "Virudhunagar",
+            "period": "FY2025–26",
+            "actual": 194.5,
+            "predictions": {
+              "xgboost": 149.6037139892578,
+              "pooled_median": 91.0,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 113.93939393939394
+            }
+          },
+          {
+            "facility_id": "tn-dms:virudhunagar:sathur",
+            "facility": "Sathur DMS CEmONC Centre",
+            "district": "Virudhunagar",
+            "period": "FY2025–26",
+            "actual": 39.333333333333336,
+            "predictions": {
+              "xgboost": 51.66261291503906,
+              "pooled_median": 91.0,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 43.63636363636364
+            }
+          },
+          {
+            "facility_id": "tn-dms:virudhunagar:srivilliputhur",
+            "facility": "Srivilliputhur DMS CEmONC Centre",
+            "district": "Virudhunagar",
+            "period": "FY2025–26",
+            "actual": 139.5,
+            "predictions": {
+              "xgboost": 116.93632507324219,
+              "pooled_median": 91.0,
+              "peer_type_median": 48.833333333333336,
+              "capacity_scaled_median": 76.36363636363636
+            }
+          }
+        ],
+        "later_period_unseen_district": [],
+        "later_period_known_facility": []
+      },
+      "application_evaluation": "unseen_district",
+      "application_basis": null,
+      "application_sources": [],
+      "applications": [],
+      "feature_ablation": {
+        "added_features": [
+          "district_population"
+        ],
+        "base": {
+          "rows": 94,
+          "facilities": 94,
+          "districts": 37,
+          "metrics": {
+            "xgboost": {
+              "mae": 39.76,
+              "median_absolute_error": 26.2,
+              "p90_absolute_error": 80.82,
+              "mean_signed_error": -1.8
+            },
+            "pooled_median": {
+              "mae": 80.76,
+              "median_absolute_error": 69.29,
+              "p90_absolute_error": 148.12,
+              "mean_signed_error": -23.48
+            },
+            "peer_type_median": {
+              "mae": 59.9,
+              "median_absolute_error": 38.92,
+              "p90_absolute_error": 151.67,
+              "mean_signed_error": -22.01
+            },
+            "capacity_scaled_median": {
+              "mae": 36.86,
+              "median_absolute_error": 22.28,
+              "p90_absolute_error": 80.56,
+              "mean_signed_error": -13.09
+            }
+          }
+        },
+        "enriched": {
+          "rows": 94,
+          "facilities": 94,
+          "districts": 37,
+          "metrics": {
+            "xgboost": {
+              "mae": 40.19,
+              "median_absolute_error": 27.61,
+              "p90_absolute_error": 81.32,
+              "mean_signed_error": -1.92
+            },
+            "pooled_median": {
+              "mae": 80.76,
+              "median_absolute_error": 69.29,
+              "p90_absolute_error": 148.12,
+              "mean_signed_error": -23.48
+            },
+            "peer_type_median": {
+              "mae": 59.9,
+              "median_absolute_error": 38.92,
+              "p90_absolute_error": 151.67,
+              "mean_signed_error": -22.01
+            },
+            "capacity_scaled_median": {
+              "mae": 36.86,
+              "median_absolute_error": 22.28,
+              "p90_absolute_error": 80.56,
+              "mean_signed_error": -13.09
+            }
+          }
+        }
+      }
+    }
+  ]
+}

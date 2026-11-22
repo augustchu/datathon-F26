@@ -1,0 +1,102 @@
+{
+  "system": "macOS 14.5 (arm64)",
+  "browser": "Chrome/158.0.8127.36",
+  "fixture_size_pixels": [
+    1360,
+    4471
+  ],
+  "pages_per_trial": 20,
+  "paired_trials": 6,
+  "samples": {
+    "open_link": [
+      {
+        "chrome_cpu_seconds": 0.661886,
+        "elapsed_seconds": 0.3499506670050323,
+        "full_page_png_bytes": 0,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 0.8674169999999989,
+        "elapsed_seconds": 0.5905708749778569,
+        "full_page_png_bytes": 0,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 0.6637940000000002,
+        "elapsed_seconds": 0.24022654199507087,
+        "full_page_png_bytes": 0,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 0.6592049999999989,
+        "elapsed_seconds": 0.2709116250043735,
+        "full_page_png_bytes": 0,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 0.6089139999999993,
+        "elapsed_seconds": 0.2057145000435412,
+        "full_page_png_bytes": 0,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 0.6283659999999994,
+        "elapsed_seconds": 0.23863312508910894,
+        "full_page_png_bytes": 0,
+        "processes_missing_at_endpoint": 0
+      }
+    ],
+    "open_and_capture": [
+      {
+        "chrome_cpu_seconds": 5.040102,
+        "elapsed_seconds": 5.854741582996212,
+        "full_page_png_bytes": 14481281,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 5.105533,
+        "elapsed_seconds": 5.866216707974672,
+        "full_page_png_bytes": 14481281,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 5.148437,
+        "elapsed_seconds": 6.049251332995482,
+        "full_page_png_bytes": 14481281,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 5.072863000000002,
+        "elapsed_seconds": 5.738106208969839,
+        "full_page_png_bytes": 14481281,
+        "processes_missing_at_endpoint": 0
+      },
+      {
+        "chrome_cpu_seconds": 5.1353800000000005,
+        "elapsed_seconds": 5.945849583018571,
+        "full_page_png_bytes": 14481281,
+        "processes_missing_at_endpoint": 3
+      },
+      {
+        "chrome_cpu_seconds": 5.152394000000001,
+        "elapsed_seconds": 5.86982004204765,
+        "full_page_png_bytes": 14481281,
+        "processes_missing_at_endpoint": 0
+      }
+    ]
+  },
+  "medians_per_trial": {
+    "open_link": {
+      "chrome_cpu_seconds": 0.6605454999999995,
+      "elapsed_seconds": 0.2555690834997222,
+      "full_page_png_bytes": 0.0,
+      "processes_missing_at_endpoint": 0.0
+    },
+    "open_and_capture": {
+      "chrome_cpu_seconds": 5.1204565,
+      "elapsed_seconds": 5.868018375011161,
+      "full_page_png_bytes": 14481281.0,
+      "processes_missing_at_endpoint": 0.0
+    }
+  }
+}

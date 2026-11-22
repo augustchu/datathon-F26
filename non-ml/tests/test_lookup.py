@@ -1,5 +1,6 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from datetime import datetime, timedelta, timezone
 import json
 import unittest
 from unittest.mock import patch
@@ -7,6 +8,7 @@ from unittest.mock import patch
 import pandas as pd
 
 from facility_tool.data import extract_claims, link_entities, load_records
+from facility_tool.equity import synthetic_equity_evidence
 from facility_tool.examples import demo_inputs, demo_overlays, demo_pressure
 from facility_tool.geo_audit import attach_routing_review, audit_locations
 from facility_tool.geography import build_postal_areas
@@ -78,6 +80,76 @@ class TravelLookupTest(unittest.TestCase):
     @staticmethod
     def _confirmed(result):
         return result['rows'].query("mode == 'confirmed' and kind == 'recommendation'")
+
+    def test_equity_applies_only_in_balanced_sort(self):
+        today = datetime.now(timezone.utc).date()
+        evidence = synthetic_equity_evidence('dialysis', 'branch-1', 'branch-2', as_of=today)
+        options = dict(traveltime_enabled=False, consider_equity=True, equity_evidence=evidence)
+        balanced = self._lookup(facility_sort='balanced', **options)
+        closest = self._lookup(facility_sort='closest', **options)
+        self.assertEqual(self._confirmed(balanced).iloc[0]['facility_id'], 'branch-2')
+        self.assertEqual(self._confirmed(closest).iloc[0]['facility_id'], 'branch-1')
+        self.assertEqual(set(closest['summary']['equity_status']), {'off'})
+
+    def test_lookup_defaults_to_operational_load_with_a_provider_window(self):
+        now = datetime.now(timezone.utc)
+        measured = pd.DataFrame([
+            dict(facility_id=ident, service='dialysis', unit='dialysis slots', available_units=count,
+                 source_url='https://example.invalid/availability', basis='observed',
+                 as_of=(now - timedelta(minutes=5)).isoformat(),
+                 window_start=(now - timedelta(hours=1)).isoformat(),
+                 window_end=(now + timedelta(hours=4)).isoformat())
+            for ident, count in [('far', 1), ('branch-1', 3)]
+        ])
+        with patch('facility_tool.travel._post_json', side_effect=lambda payload, **_: self._route_matrix(payload)):
+            result = self._lookup(spread_demand=True, measured_load=measured, traveltime_enabled=True)
+        self.assertEqual(set(result['summary']['load_context']), {'operational'})
+        self.assertEqual(self._confirmed(result).head(2)['facility_id'].tolist(), ['branch-1', 'far'])
+
+    def test_network_forecast_requires_routine_planning_and_preserves_prediction_flags(self):
+        path = self.store.path / 'network.csv.gz'
+        rows = [
+            dict(facility_id=ident, service='dialysis', care_needed='Dialysis', unit='sessions',
+                 scope='Programme haemodialysis', period='Historical typical month through 2026-11',
+                 caseload=cases, capacity=100, caseload_predicted=predicted, capacity_predicted=True,
+                 caseload_method='fixture', capacity_method='fixture', source_url='https://example.invalid/report',
+                 capacity_source_url='https://example.invalid/capacity', routing_eligible=True,
+                 service_evidence=evidence)
+            for ident, cases, predicted, evidence in [
+                ('branch-1', 100, False, 'reported_activity_in_scope'),
+                ('branch-2', 20, True, 'reported_activity_in_scope'),
+                ('branch-3', 0, True, 'service_unknown_conditional_only'),
+            ]
+        ]
+        pd.DataFrame(rows).to_csv(path, index=False)
+        options = dict(traveltime_enabled=False, spread_demand=True, network_forecasts=path)
+        with self.assertRaisesRegex(ValueError, 'Choose planning mode'):
+            self._lookup(**options)
+        result = self._lookup(**options, load_context='planning', facility_sort='closest')
+        ranked = self._confirmed(result).set_index('facility_id')
+        self.assertEqual(ranked.index[0], 'branch-2')
+        self.assertFalse(ranked.loc['branch-1', 'pressure_caseload_predicted'])
+        self.assertTrue(ranked.loc['branch-2', 'pressure_caseload_predicted'])
+        self.assertTrue(ranked.loc['branch-2', 'pressure_capacity_predicted'])
+        self.assertTrue(pd.isna(ranked.loc['branch-3', 'pressure_caseload_predicted']))
+        for concern, hold in [('peritoneal dialysis', 'no_comparable_load_modality'),
+                              ('urgent dialysis', 'non_emergency_only')]:
+            with self.subTest(concern=concern):
+                held = lookup(self.store, self.config, concern=concern, location='28, 77',
+                              **options, load_context='planning')
+                self.assertEqual(set(held['summary']['load_status']), {hold})
+                self.assertEqual(self._confirmed(held).iloc[0]['facility_id'], 'branch-1')
+
+    def test_equity_does_not_move_a_branch_for_explicitly_peritoneal_or_urgent_care(self):
+        today = datetime.now(timezone.utc).date()
+        evidence = synthetic_equity_evidence('dialysis', 'branch-1', 'branch-2', as_of=today)
+        options = dict(traveltime_enabled=False, facility_sort='balanced',
+                       consider_equity=True, equity_evidence=evidence)
+        self.assertEqual(self._confirmed(self._lookup(**options)).iloc[0]['facility_id'], 'branch-2')
+        for concern in ('peritoneal dialysis', 'urgent dialysis'):
+            with self.subTest(concern=concern):
+                result = lookup(self.store, self.config, concern=concern, location='28, 77', **options)
+                self.assertEqual(self._confirmed(result).iloc[0]['facility_id'], 'branch-1')
 
     @patch('facility_tool.travel._post_json')
     def test_all_documented_branches_routed_and_only_five_ranked(self, post):

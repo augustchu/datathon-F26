@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
+from dataclasses import asdict
 from datetime import date
 import json
 from math import asin, cos, isfinite, radians, sin, sqrt
@@ -11,6 +13,7 @@ from urllib.parse import urlparse
 
 import pandas as pd
 
+from .equity import EquityCandidate, PairedEquityEvidence, load_paired_equity_evidence, rank_for_paired_equity
 from .travel import MODES as TRANSPORT_MODES, SOURCE as TRAVELTIME_SOURCE
 
 MODES = ("confirmed", "ml", "regression")
@@ -45,6 +48,7 @@ CLAIM_COLUMNS = (
 )
 UPDATE_COLUMNS = ("facility_id", "field", "method", "value")
 MEASURED_LOAD_COLUMNS = ("facility_id", "service", "unit", "as_of", "source_url", "available_units")
+MEASURED_LOAD_WINDOW_COLUMNS = ("basis", "window_start", "window_end")
 PRESSURE_COLUMNS = ("facility_id", "service", "demand", "capacity", "unit", "period", "basis", "source_url")
 TRAVEL_COLUMNS = ("facility_id", "travel_source")
 REASON_COLUMNS = (
@@ -60,18 +64,31 @@ FIELD_COLUMNS = (
 )
 RESULT_COLUMNS = (
     "mode", "service", "kind", "decision", "selected", "rank", "baseline_rank",
+    "pre_equity_rank", "equity_score", "equity_score_lower", "equity_score_upper", "equity_evidence",
     *IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS, *QUALITY_EVIDENCE_COLUMNS, *PATIENT_EVIDENCE_COLUMNS,
     *QUALITY_RANK_COLUMNS,
     "evidence_as_of", *REASON_COLUMNS, *FIELD_COLUMNS,
     "model_lead_score", "model_lead_provenance", "model_lead_detail",
     "load_status", "load_available_units", "load_unit", "load_as_of", "load_source_url",
+    "load_window_start", "load_window_end",
     "extra_km_vs_baseline", "route_distance_km", "travel_minutes", "travel_mode",
     "travel_source", "travel_source_url", "travel_status", "route_sort", "ranking_travel_metric", "ranking_travel_reason",
     "extra_route_km_vs_baseline", "extra_minutes_vs_baseline", "pressure_demand", "pressure_capacity", "pressure_unit",
     "pressure_period", "pressure_basis", "pressure_source_url", "pressure_ratio", "pressure_grade",
+    "pressure_caseload_predicted", "pressure_caseload_method",
+    "pressure_capacity_predicted", "pressure_capacity_method", "pressure_capacity_source_url",
     "travel_penalty", "pressure_penalty", "travel_weight", "pressure_weight", "weighted_score",
     "weighted_travel_metric", "weighted_extra_travel", "weighted_detour_limit", "weighted_status",
 )
+EQUITY_STATUS_REASONS = {
+    "off": "Equity score consideration is off.",
+    "measured_load": "This comparison uses the requested measured availability order.",
+    "urgent": "Time-critical searches use the ordinary order.",
+    "no_evidence": "There is no eligible paired clinical outcome and patient-reported respect evidence for this search. The ordinary order applies.",
+    "incomparable": "There is insufficient comparable equity evidence among nearby options. The ordinary order applies.",
+    "matched": "Comparable equity evidence is available. The ordinary order applies.",
+    "reranked": "Equity scores adjusted the order of nearby options with comparable service and equity evidence.",
+}
 _REQUIRED_PREPARED_COLUMNS = (
     "service", *IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS, "site_lat", "site_lon",
     "evidence_as_of", "evidence_tier", "evidence_hold_reason", "service_contradiction",
@@ -684,6 +701,10 @@ def _within_detour(site, reference, routes, km_cap, minute_cap, *, require_route
     return kilometers <= km_cap and within_minutes
 
 
+def _capacity_prediction_flag(value):
+    return {"true": True, "1": True, "false": False, "0": False}.get(_text(value).casefold())
+
+
 def _pressure_index(pressure, service):
     by_facility = {}
     for row in pressure.to_dict("records"):
@@ -706,12 +727,19 @@ def _pressure_index(pressure, service):
             "pressure_period": period,
             "pressure_basis": basis,
             "pressure_source_url": _text(row["source_url"]),
+            "pressure_caseload_predicted": _capacity_prediction_flag(row.get("caseload_predicted")),
+            "pressure_caseload_method": _text(row.get("caseload_method")) or None,
+            "pressure_capacity_predicted": _capacity_prediction_flag(row.get("capacity_predicted")),
+            "pressure_capacity_method": _text(row.get("capacity_method")) or None,
+            "pressure_capacity_source_url": _text(row.get("capacity_source_url"))
+            if _url(row.get("capacity_source_url")) else None,
         })
     return {
         ident: {
             group: min(rows, key=lambda r: r["pressure_source_url"])
             for group, rows in groups.items()
-            if len({(r["pressure_demand"], r["pressure_capacity"]) for r in rows}) == 1
+            if len({(r["pressure_demand"], r["pressure_capacity"], r["pressure_caseload_predicted"], r["pressure_capacity_predicted"])
+                    for r in rows}) == 1
         }
         for ident, groups in by_facility.items()
     }
@@ -785,12 +813,14 @@ def _rank_weighted(baseline, pressure, service, routes, route_sort, opt_in, km_c
     return ranked, scores, "weighted_pressure_rerank"
 
 
-def _load_index(measures, service, as_of, max_age):
+def _load_index(measures, service, as_of, max_age, require_window):
     by_facility = {}
     for row in measures.to_dict("records"):
         if _text(row["service"]) != service:
             continue
-        if _text(row.get("basis")).casefold() not in ("", "measured", "observed"):
+        basis = _text(row.get("basis")).casefold()
+        if ((basis not in ("measured", "observed") and (require_window or basis))
+                or _capacity_prediction_flag(row.get("capacity_predicted"))):
             continue
         ident, unit = _text(row["facility_id"]), _unit_key(row["unit"])
         sampled = _timestamp(row["as_of"], require_timezone=True)
@@ -803,11 +833,20 @@ def _load_index(measures, service, as_of, max_age):
         age = (as_of - sampled).total_seconds() / 3600
         if not 0 <= age <= max_age:
             continue
+        start = end = None
+        if require_window:
+            start = _timestamp(row["window_start"], require_timezone=True)
+            end = _timestamp(row["window_end"], require_timezone=True)
+            if start is None or end is None or not start <= as_of < end:
+                continue
+        key = (unit, start, end)
         slots = by_facility.setdefault(ident, {})
-        previous = slots.get(unit)
-        observation = dict(row, available_units=available, sampled=sampled, as_of=sampled.isoformat())
+        previous = slots.get(key)
+        observation = dict(row, available_units=available, sampled=sampled, as_of=sampled.isoformat(),
+                           window_start=start.isoformat() if start is not None else None,
+                           window_end=end.isoformat() if end is not None else None)
         if previous is None or sampled > previous["sampled"]:
-            slots[unit] = observation
+            slots[key] = observation
         elif sampled == previous["sampled"] and available != previous["available_units"]:
             # Keep the timestamp, but discard a contradictory observation at that time.
             previous["conflict"] = True
@@ -817,8 +856,40 @@ def _load_index(measures, service, as_of, max_age):
     }
 
 
+def compare_observed_availability(measures, service, as_of, reference_id, alternative_ids, *, max_age_hours=24,
+                                  max_gap_hours=2, requested_unit="", require_window=True):
+    """Find one common measure for a reference branch and its comparable alternatives."""
+    if measures is None or measures.empty:
+        return {}, "no_measured_load"
+    columns = (*MEASURED_LOAD_COLUMNS, *MEASURED_LOAD_WINDOW_COLUMNS) if require_window else MEASURED_LOAD_COLUMNS
+    _require(measures, columns, "measured_load")
+    as_of = _check_as_of(as_of)
+    requested_unit = _unit_key(requested_unit)
+    fresh = _load_index(measures, service, as_of, max_age_hours, require_window)
+    ref_measures = fresh.get(reference_id, {})
+    alternatives = {
+        ident: {
+            key: obs
+            for key, obs in fresh.get(ident, {}).items()
+            if key in ref_measures and (not requested_unit or requested_unit == key[0])
+            and abs((obs["sampled"] - ref_measures[key]["sampled"]).total_seconds()) <= max_gap_hours * 3600
+        }
+        for ident in alternative_ids if ident != reference_id
+    }
+    comparable = {key for site in alternatives.values() for key in site}
+    if not comparable:
+        return {}, "no_fresh_comparable_measurements"
+    if len(comparable) > 1:
+        status = "choose_comparable_load_window" if len({key[0] for key in comparable}) == 1 else "choose_comparable_load_unit"
+        return {}, status
+    key = next(iter(comparable))
+    local = {ident: site[key] for ident, site in alternatives.items() if key in site}
+    local[reference_id] = ref_measures[key]
+    return local, "comparable_measurements"
+
+
 def _rank_load(baseline, measures, service, as_of, opt_in, routes, route_sort, km_cap, minute_cap, max_age, max_gap,
-               requested_unit, *, require_route_time=False):
+               requested_unit, *, require_route_time=False, require_window=False):
     if not opt_in:
         return baseline, {}, "off"
     if not baseline:
@@ -826,38 +897,32 @@ def _rank_load(baseline, measures, service, as_of, opt_in, routes, route_sort, k
     if measures is None or measures.empty:
         return baseline, {}, "no_measured_load"
     reference = baseline[0]
-    comparable_sites = _comparable_sites(baseline)
+    if require_window and routes.get(reference["facility_id"], {}).get("travel_minutes") is None:
+        return baseline, {}, "no_comparable_load_routes"
     nearby = [
-        r for r in comparable_sites
-        if _within_detour(r, reference, routes, km_cap, minute_cap, require_route_time=require_route_time)
+        site for site in _comparable_sites(baseline)
+        if _within_detour(site, reference, routes, km_cap, minute_cap, require_route_time=require_route_time)
     ]
-    metric = _travel_metric(nearby, routes, route_sort)
-    fresh = _load_index(measures, service, as_of, max_age)
-    ref_measures = fresh.get(reference["facility_id"], {})
-    alternatives = {
-        r["facility_id"]: {
-            unit: obs
-            for unit, obs in fresh.get(r["facility_id"], {}).items()
-            if unit in ref_measures
-            and abs((obs["sampled"] - ref_measures[unit]["sampled"]).total_seconds()) <= max_gap * 3600
+    local, status = compare_observed_availability(
+        measures, service, as_of, reference["facility_id"], [site["facility_id"] for site in nearby],
+        max_age_hours=max_age, max_gap_hours=max_gap, requested_unit=requested_unit, require_window=require_window,
+    )
+    if not local:
+        return baseline, {}, status
+    if require_window:
+        local = {
+            ident: obs for ident, obs in local.items()
+            if routes[ident]["travel_minutes"] < (_timestamp(obs["window_end"]) - as_of).total_seconds() / 60
         }
-        for r in nearby[1:]
-    }
-    comparable = {unit for site in alternatives.values() for unit in site}
-    if requested_unit:
-        comparable &= {requested_unit}
-    if not comparable:
-        return baseline, {}, "no_fresh_comparable_measurements"
-    if len(comparable) > 1:
-        return baseline, {}, "choose_comparable_load_unit"
-    unit = next(iter(comparable))
-    local = {ident: site[unit] for ident, site in alternatives.items() if unit in site}
-    local[reference["facility_id"]] = ref_measures[unit]
+        if reference["facility_id"] not in local or len(local) < 2:
+            return baseline, {}, "no_load_window_at_arrival"
+    metric = _travel_metric(nearby, routes, route_sort)
     best = min(
         (r for r in nearby if r["facility_id"] in local),
         key=lambda r: (-local[r["facility_id"]]["available_units"], _travel_value(r, routes, metric), r["facility_id"]),
     )
-    if best["facility_id"] == reference["facility_id"]:
+    if (best["facility_id"] == reference["facility_id"]
+            or (require_window and local[best["facility_id"]]["available_units"] <= local[reference["facility_id"]]["available_units"])):
         return baseline, local, "baseline_has_most_measured_availability"
     return [best, *(r for r in baseline if r["facility_id"] != best["facility_id"])], local, "measured_availability_rerank"
 
@@ -870,6 +935,8 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
     load = ranking["measured"].get(ident, {})
     pressure = ranking["weighted"].get(ident, {})
     quality = ranking["quality"].get(ident, {})
+    pre_equity_rank = ranking["pre_equity_positions"].get(ident)
+    equity_score = ranking["equity_scores"].get(ident)
     rank_policy = ranking["quality_policy"]
     chosen = candidate["claim"]
     record = {key: candidate[key] for key in (*IDENTITY_COLUMNS, *LOCATION_AUDIT_COLUMNS)}
@@ -891,11 +958,18 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
             reason = "More measured service availability within your detour limits"
         if rank == 1 and baseline_rank != 1 and ranking["load_status"] == "weighted_pressure_rerank":
             reason = "Lowest weighted travel and demand-to-capacity score within your detour limit"
+        if equity_score and rank < pre_equity_rank:
+            reason = "Higher paired clinical outcome and patient-reported respect score among comparable nearby options"
     elif decision == "lead":
         reason = "Model-inferred lead. Verify the service with the facility."
     record.update(
         mode=mode, service=service, kind="recommendation" if decision == "eligible" else decision,
         decision=decision, selected=selected, rank=rank, baseline_rank=baseline_rank,
+        pre_equity_rank=pre_equity_rank,
+        equity_score=equity_score.value if equity_score else None,
+        equity_score_lower=equity_score.lower if equity_score else None,
+        equity_score_upper=equity_score.upper if equity_score else None,
+        equity_evidence=asdict(equity_score.evidence) if equity_score else None,
         travel_only_rank=ranking["travel_positions"].get(ident), ranking_policy=rank_policy["ranking_policy"],
         ranking_policy_reason=rank_policy["ranking_policy_reason"],
         distance_km=candidate["distance_km"], distance_metric=DISTANCE_METRIC,
@@ -907,6 +981,7 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
         load_status=ranking["load_status"], weighted_status=ranking["weighted_status"],
         load_available_units=load.get("available_units"), load_unit=load.get("unit"),
         load_as_of=load.get("as_of"), load_source_url=load.get("source_url"),
+        load_window_start=load.get("window_start"), load_window_end=load.get("window_end"),
         extra_km_vs_baseline=(
             candidate["distance_km"] - ref["distance_km"]
             if ref is not None and candidate["distance_km"] is not None else None
@@ -929,6 +1004,14 @@ def _as_result(candidate, mode, service, decision, rank, baseline_rank, selected
 def _clear_emergency_service(key):
     tokens = set(key.casefold().replace("_", " ").replace("-", " ").split())
     return bool(tokens & {"emergency", "trauma"})
+
+
+def routine_load_allowed(service):
+    key = re.sub(r"[^a-z0-9]+", "_", service.casefold()).strip("_")
+    return not _clear_emergency_service(key) and key not in {
+        "blood_bank", "blood_storage_unit", "burn_care", "cardiac_surgery", "fracture_care", "nicu",
+        "nicu_level_3", "stroke_care",
+    }
 
 
 def compare_modes(
@@ -967,10 +1050,13 @@ def compare_prepared_modes(
     route_sort: str = "time",
     required_travel_mode: str | None = None,
     quality_policy: dict | None = None,
+    consider_equity: bool = False,
+    equity_evidence: Sequence[PairedEquityEvidence] | None = None,
     as_of=None,
     max_radius_km: float | None = 50,
     top_k: int = 5,
     spread_demand: bool = False,
+    load_context: str | None = None,
     max_extra_km: float = 10,
     max_extra_minutes: float = 15,
     travel_weight: float = 0.5,
@@ -991,6 +1077,12 @@ def compare_prepared_modes(
     the order within a non-emergency evidence tier. Balancing enforces both
     detour limits when the pair has routes, measured from the top recommendation
     before balancing.
+    The optional equity score compares paired clinical outcomes and patient-
+    reported respect among nearby eligible facilities in the same evidence tier.
+    Pass audited paired evidence to override the bundled evidence file.
+    Operational load uses a current measured service window and comparable routes.
+    Planning load compares supplied demand and capacity scenarios. Omitting the
+    context preserves the lower-level caller's existing load comparison.
     """
     origin = _coordinate_pair(lat, lon)
     if origin is None:
@@ -1000,6 +1092,8 @@ def compare_prepared_modes(
         raise ValueError("Provide a canonical service.")
     if route_sort not in ("time", "distance"):
         raise ValueError("route_sort must be time or distance.")
+    if load_context not in (None, "operational", "planning"):
+        raise ValueError("load_context must be operational or planning.")
     if required_travel_mode is not None and required_travel_mode not in TRANSPORT_MODES:
         raise ValueError("required_travel_mode must be a recognized TravelTime mode.")
     if required_travel_mode == "public_transport" and route_sort == "distance":
@@ -1032,7 +1126,7 @@ def compare_prepared_modes(
     evidence_as_of = metadata.get("evidence_as_of")
     if measured_load is not None and not measured_load.empty:
         _require(measured_load, MEASURED_LOAD_COLUMNS, "measured_load")
-    if pressure_inputs is not None and not pressure_inputs.empty:
+    if load_context != "operational" and pressure_inputs is not None and not pressure_inputs.empty:
         _require(pressure_inputs, PRESSURE_COLUMNS, "pressure_inputs")
     routes_supplied = travel_times is not None and not travel_times.empty
     if routes_supplied:
@@ -1067,30 +1161,67 @@ def compare_prepared_modes(
         key=lambda r: (r["evidence_tier"], distances[r["facility_id"]], secondary_travel(r), r["facility_id"]),
     )
     emergency = _clear_emergency_service(service)
+    operational = load_context == "operational"
     baseline, quality, rank_policy = _quality_order(travel_only, distances, baseline_metric, policy, emergency)
-    if spread_demand and emergency:
+    if spread_demand and (emergency or (operational and not routine_load_allowed(service))):
         ranked, load, weighted = baseline, {}, {}
         load_status = weighted_status = "non_emergency_only"
     else:
         ranked, weighted, weighted_status = _rank_weighted(
-            baseline, pressure_inputs, service, routes, route_sort, spread_demand, extra, minutes_cap, weight,
+            baseline, pressure_inputs, service, routes, route_sort, spread_demand and not operational,
+            extra, minutes_cap, weight,
             require_route_time=bool(required_travel_mode),
         )
         if weighted:
             load, load_status = {}, weighted_status
         else:
             ranked, load, load_status = _rank_load(
-                baseline, measured_load, service, as_of, spread_demand, routes, route_sort,
+                travel_only if operational else baseline, measured_load, service, as_of,
+                spread_demand and load_context != "planning", routes, route_sort,
                 extra, minutes_cap, max_age, max_gap, _unit_key(load_unit),
-                require_route_time=bool(required_travel_mode),
+                require_route_time=bool(required_travel_mode) or operational, require_window=operational,
             )
+            if operational:
+                if load:
+                    first, nearest = ranked[0], travel_only[0]
+                    front = [first] if first is nearest else [first, nearest]
+                    shown = {site["facility_id"] for site in front}
+                    ranked = front + [site for site in baseline if site["facility_id"] not in shown]
+                else:
+                    ranked = baseline
+            if spread_demand and load_context == "planning":
+                load_status = weighted_status
+    pre_equity_positions = {r["facility_id"]: i for i, r in enumerate(ranked, start=1)}
+    equity_scores = {}
+    equity_status = "off"
+    if consider_equity and operational and load:
+        equity_status = "measured_load"
+    elif consider_equity:
+        time_critical = emergency or service in {
+            "nicu", "nicu_level_3", "burn_care", "cardiac_surgery", "blood_bank", "blood_storage_unit",
+        }
+        equity_candidates = []
+        for row in ranked:
+            route = routes.get(row["facility_id"], {})
+            equity_candidates.append(EquityCandidate(
+                row["facility_id"], (row["evidence_tier"], _text(row["claim"].get("scope"))),
+                row["distance_km"], route.get("route_distance_km"), route.get("travel_minutes"),
+                _route_context(route) if route else None,
+            ))
+        evidence = load_paired_equity_evidence() if equity_evidence is None and not time_critical else equity_evidence or ()
+        equity = rank_for_paired_equity(equity_candidates, service, enabled=True, evidence=evidence,
+                                        as_of=as_of.date(), urgent=time_critical)
+        equity_status = equity.status
+        equity_scores = {ranked[index]["facility_id"]: score for index, score in equity.scores.items()}
+        ranked = [ranked[index] for index in equity.order]
     ranking = {
-        "reference": baseline[0] if baseline else None, "routes": routes,
+        "reference": travel_only[0] if operational and load else baseline[0] if baseline else None, "routes": routes,
         "travel_metric": baseline_metric, "travel_reason": travel_reason, "route_sort": route_sort,
         "travel_positions": {row["facility_id"]: index for index, row in enumerate(travel_only, start=1)},
         "quality": quality, "quality_policy": rank_policy,
         "measured": load, "weighted": weighted,
         "load_status": load_status, "weighted_status": weighted_status,
+        "pre_equity_positions": pre_equity_positions, "equity_scores": equity_scores,
     }
     base_positions = {r["facility_id"]: i for i, r in enumerate(baseline, start=1)}
     positions = {r["facility_id"]: i for i, r in enumerate(ranked, start=1)}
@@ -1129,12 +1260,15 @@ def compare_prepared_modes(
             n_eligible=len(baseline), n_recommendations=min(len(baseline), top_k),
             n_leads=min(len(leads), top_k), n_excluded=len(candidates) - len(baseline) - len(leads),
             load_status=load_status, spread_demand=spread_demand, max_extra_km=extra,
+            load_context=load_context,
             max_radius_km=radius, distance_metric=DISTANCE_METRIC, as_of=as_of.isoformat(),
             evidence_as_of=evidence_as_of,
             route_sort=route_sort, ranking_travel_metric=baseline_metric, ranking_travel_reason=travel_reason,
             weighted_status=weighted_status,
             weighted_travel_metric=next(iter(weighted.values()))["weighted_travel_metric"] if weighted else None,
             max_extra_minutes=minutes_cap, travel_weight=weight, pressure_weight=1 - weight,
+            equity_status=equity_status, equity_ranking_reason=EQUITY_STATUS_REASONS[equity_status],
+            n_equity_scores=len(equity_scores),
             **routing_summary,
             **rank_policy,
         ))

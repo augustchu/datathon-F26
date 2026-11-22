@@ -65,13 +65,19 @@ Notebook 07 displays a cited phone when available and a fit score with the facto
 
 ## Travel settings and load balancing
 
+The [Care needed caseload benchmarks](caseload/README.md) document historical India service volumes by reporting site and how to reproduce the typical monthly estimates.
+
+The [network caseload and load-balancing report](caseload/NETWORK_CASELOAD.md) documents the full facility–service estimate matrix and how to run the nearest-eligible and load-balanced planning comparison.
+
+The [healthcare load balancing literature review](LOAD_BALANCING_LITERATURE.md) covers Indian referral programmes, observed hospital transfer outcomes, and methods for testing the facility finder against the nearest eligible option.
+
 Within each evidence tier, the default ranking combines distance along TravelTime's estimated driving route with bounded credits for documentation and comparable patient feedback. Use `FACILITY_SORT = "closest"` for travel-only ordering within those tiers. Set `TRANSPORT_MODE` to `walking`, `cycling`, or `public_transport` in 07 to view or sort the same search by that mode. Driving, walking, and cycling can sort by route distance or estimated time. Public transport sorts by estimated time and coverage is partial in India. A route is estimated for the selected mode and departure time. [TravelTime matrix documentation](https://docs.traveltime.com/api/reference/travel-time-distance-matrix) · [Coverage by country](https://docs.traveltime.com/api/overview/supported-countries)
 
 Live routing requires `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` in the environment. It sends the origin and all evidence-eligible branch coordinates in batches, across city and district boundaries. The standard API covers journeys of up to four hours. The selected-mode ranking uses available routes with the requested measure. The routing summary identifies unavailable estimates. Set `USE_TRAVELTIME=False` for an explicit offline comparison by straight-line distance. The fictional demo uses that offline calculation. [TravelTime matrix limits](https://docs.traveltime.com/api/reference/travel-time-distance-matrix)
 
 For walking, cycling, or public transport, the top driving option can take one of the five slots when it lacks a route for the selected transport. If the selected transport yields no routes, the list can show up to five driving alternatives. Each tagged alternative shows its actual travel mode and whether TravelTime reported the selected transport as unreachable or whether its estimate was unavailable.
 
-The non-emergency load setting starts off. When enabled, the selector can trade extra travel against condition-specific demand divided by equivalent service capacity. Evidence and detour limits apply before the weighted selection. Demand and capacity need the same unit and period across compared facilities, with provenance. Total bed counts are resource estimates. Measured current service slots and historical or simulated pressure have different labels and a separate input table.
+The routine load setting starts off. It compares recently measured availability for the requested service among comparable branches within the travel limits. Notebook 08 runs a separate historical planning comparison using same-period workload and throughput, with a flag on predicted capacity. [Load-balancing implementation, data, and results](LOAD_BALANCING.md)
 
 ### Run the live TravelTime check
 
