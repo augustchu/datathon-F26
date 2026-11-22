@@ -1,0 +1,16 @@
+[
+  {
+    "claim_id": "recovery:0b94a11851e84f585a469f75e4b55343",
+    "decision": "approved",
+    "reviewer": "Codex source spot check",
+    "reviewed_on": "2026-11-21",
+    "reason": "Chrome sample: the official homepage explicitly describes its own NICU and displays the matching Plot 458 address and PIN 121001 on the same page."
+  },
+  {
+    "claim_id": "recovery:e2813e5cf0dcc55c78471e452e3a4393",
+    "decision": "approved",
+    "reviewer": "Codex source spot check",
+    "reviewed_on": "2026-11-21",
+    "reason": "Chrome sample: the official homepage states a whole-facility total and displays the matching Plot 458 address and PIN 121001 on the same page."
+  }
+]

@@ -2,7 +2,7 @@
 
 **Why this is a good direction.** Some missing structured values are already present in facility descriptions, source pages, and accreditation scope documents. Recovering those facts can improve the dataset while giving the competition exactly what it asks for: an explanation tied to underlying facility text. The most promising extension is a branch-specific extraction and review layer for capacity, doctor counts, equipment, and explicitly named services. It should preserve the quote, date, unit, scope, and contradictory evidence for every recovered value. This builds directly on the team's description-based capacity experiment and existing verification pipeline. Its value should be measured by correct new facts and better-supported recommendations, even when retraining does not improve prediction error.
 
-**Review date:** 21 November 2026, America/New_York. **Status:** proposed research; no new extraction experiment or model training was performed for this proposal. The literature review is targeted, not systematic.
+**Review date:** 21 November 2026, America/New_York. The original literature review is targeted. The deterministic pilot, attribution and review pipeline, and reproducible sampling workflow are now documented in the [implementation and decision log](../../non-ml/SOURCE_GROUNDED_FIELD_RECOVERY.md). The comparative research design below describes the proposed next evaluation stage.
 
 ## Fit with the prompt and the team's current work
 

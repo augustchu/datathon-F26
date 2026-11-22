@@ -11,7 +11,7 @@ python -m pip install "pandas>=2.2" "numpy>=1.26" matplotlib jupyterlab
 jupyter lab
 ```
 
-Run notebooks 01, 02, 04, 04b, 04c, 05, 06b, and 07 in order for the same evidence date. For fitted overlays, run 03 and 09 after 02 and before 05. Notebook 09 needs scikit-learn. Notebook 06 is optional district context after 02. Notebook 08 exercises the selector using the same checkpoints as 07. The generators are only needed when changing notebook source through code.
+Run notebooks 01, 02, 04, 04a, 04b, 04c, 05, 06b, and 07 in order for the same evidence date. For fitted overlays, run 03 and 09 after 02 and before 05. Notebook 09 needs scikit-learn. Notebook 06 is optional district context after 02. Notebook 08 exercises the selector using the same checkpoints as 07. The generators are only needed when changing notebook source through code.
 
 - **`demo`** is the default. Facilities, contacts, and estimates are fictional. TravelTime stays off.
 - **`public`** reads the saved public extracts. Start Jupyter with `DATATHON_MODE=public`. The default search in 07 is for the demo, so change the location and service to ones covered by the selected public sources.
@@ -28,6 +28,7 @@ Set `DATATHON_REPO_ROOT` if the notebook cannot find the repository. Checkpoints
 | [02 · Facility and geography](notebooks/02_facility_and_geography.ipynb) | Branch linkage, original versus selected points, review flags and postal-area context |
 | [03 · Count EDA](notebooks/03_count_field_eda.ipynb) | Bed/doctor label quality, reporting gaps, supported predictors after `countries`, interactions and group splits |
 | [04 · Service evidence](notebooks/04_service_evidence.ipynb) | Quoted service text, branch, validity, scheme scope, ambiguous matches and contradictions |
+| [04a · Source recovery](notebooks/04a_source_recovery.ipynb) | Cited candidates for missing fields, branch and review decisions, and released evidence sidecars |
 | [04b · Service verification](notebooks/04b_verify_services.ipynb) | Independent published corroboration, exact branch matching, disagreement checks and reviewed links |
 | [04c · Facility assessment and patient feedback](notebooks/04c_facility_quality.ipynb) | Current assessment scope, optional permitted rating aggregates, and branch review search links |
 | [05 · Field updates](notebooks/05_field_updates.ipynb) | Cited reported fields, contact provenance, optional model overlays, and separate load inputs |
@@ -42,6 +43,8 @@ Notebook 02 exports `location_records`, `location_entity_review`, and `location_
 After a reviewer verifies a replacement branch point or corrects a documented address, update the source inputs with their evidence and rerun 02 and 06b. Keep the original source point in the audit record. Lookup uses the prepared decision in all three modes and excludes held points from the routing request.
 
 Notebook 06b consumes those decisions and saves the service evidence as of the snapshot date. It builds approximate city, district and PIN origins, resolves known ambiguities, selects cited contacts, attaches prior field estimates, and partitions the candidates and load inputs by service. Refresh 06b after changing the evidence date, upstream records, contacts, eligibility rules, or model overlays. The search reads the prepared service and place tables. Distance from the request, time-dependent routes or slot age, opt-in ranking, and call feedback are computed per search.
+
+Notebook 04a reads the prepared records and branches. It saves `recovery_claims`, `recovery_decisions`, `recovery_summary`, `recovered_field_updates`, and `recovered_service_claims` under the same mode and evidence date. The `recovery_snapshot` receipt binds the released claims to their upstream checkpoints and service aliases. Set `DATATHON_RECOVERY_DOCUMENTS` and `DATATHON_RECOVERY_REVIEWS` to JSON files containing arrays of saved passages and review decisions. Run 04a after changes to any of these inputs, then refresh 04b, 04c, 05 and 06b. Claims that pass review and publication checks enter the service and field-update paths. The query reads prepared data. Training continues to use the original count audit. [Recovery inputs, review rules and validation](SOURCE_GROUNDED_FIELD_RECOVERY.md)
 
 Notebook 04b checks for explicit corroboration across independent publishers for the same facility branch and service. The [reviewed evidence registry](config/reviewed_service_evidence.json) stores the primary-source statements, dates and branch identifiers for manually checked cases. The notebook records unsuccessful attachments and applicable contradictions. It distinguishes a single direct listing from corroboration. Both are published service evidence with a scope and review date. A call is still needed for current service availability.
 
