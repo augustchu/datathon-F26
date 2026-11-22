@@ -14,7 +14,7 @@ The snapshot preparation carries through the cleaned release’s street address,
 
 ## Import decisions
 
-Recommended is the default and combines travel, service evidence, and available data confidence. **Consider projected load** uses the project’s published monthly caseload and throughput data for nearby routine-care options with comparable evidence. It applies the comparison from `af89658` before the optional equity adjustment. Emergency uses travel and data confidence. Recommended uses TravelTime by default with the prepared snapshot and falls back to straight-line scoring when routing is unavailable. Distance, fit, beds, and recorded occupancy are available as separate sorts. The shipped equity evidence file has no real facility records, and the maternity demo uses clearly labeled fictional evidence.
+Recommended is the default and combines travel, service match, and confidence for the selected service at the exact facility branch. Service confidence combines up to 80 points for service evidence and 20 for branch identity. Active reviewed claims or prepared evidence supply the confidence when available. The original service catalog can also be scored from facility-record text. **Consider projected load** uses the project’s published monthly caseload and throughput data for nearby routine-care options with comparable evidence. It applies the comparison from `af89658` before the optional equity adjustment. Recommended uses TravelTime by default with the prepared snapshot and falls back to straight-line scoring when routing is unavailable. Distance, fit, beds, and recorded occupancy are available as separate sorts. The shipped equity evidence file has no real facility records, and the maternity demo uses clearly labeled fictional evidence.
 
 | # | Change | Where it changed | Decision |
 | --- | --- | --- | --- |
@@ -41,8 +41,8 @@ Recommended is the default and combines travel, service evidence, and available 
 | 21 | Show the scenario's modeled district population, case totals, cases allocated to each facility, bed proxy, and load ratio. Requires item 20. | `01b2a3e`, `ff7dd5e` | Updated to display monthly caseload and modeled throughput |
 | 22 | Show capacity from the release, including estimate labels, intervals, source, withheld values, and discrepancies with the Marketplace count. | `ff7dd5e`, `b649ce3` | Included |
 | 23 | Use released capacity for the load calculation and a disclosed 50-bed fallback when capacity is unavailable. Requires item 20. | `93d2028`, `ff7dd5e` | Updated to use published throughput estimates |
-| 24 | Show the data-quality confidence score and tier on cards. | `ff7dd5e` | Included |
-| 25 | Apply the prototype's confidence penalty to rankings, including emergency results. | `ff7dd5e` | Included |
+| 24 | Show the confidence score and tier on cards. | `ff7dd5e`, `3cc87f7` | Uses confidence for the selected service |
+| 25 | Apply a confidence penalty to Recommended rankings, including emergency results. | `ff7dd5e`, `3cc87f7` | Uses the published service-specific penalty |
 | 26 | Prefer the release's phone number when available and add a phone-source link. The restored cards already have a phone field. | `ff7dd5e` | Included |
 | 27 | Add facility website links. | `ff7dd5e` | Included |
 | 28 | Offer TravelTime driving estimates with straight-line fallback, excluding unreachable destinations when routing works. | `ff7dd5e` | Included |

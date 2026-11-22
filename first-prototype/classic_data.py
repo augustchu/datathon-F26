@@ -327,7 +327,6 @@ def rank_classic_results(classic_results, service, origin, *, population_share_p
             "latitude": float(row["lat"]),
             "longitude": float(row["lon"]),
             "beds_for_scenario": _released_beds(row),
-            "confidence_score": _number(row.get("confidence_score")),
             "nfhs_district": district,
             "nfhs_state": state,
             "regional_population": _number(row.get("regional_population")) if district and state else None,
@@ -391,8 +390,9 @@ def apply_projected_load(candidates, service, *, uses_routes):
     matches = []
     for item, branch_id in zip(candidates, branch_ids):
         row = item["row"]
-        evidence_kind = _text(row.get(claim_field))
-        if not evidence_kind and claim_field not in row:
+        confidence = item.get("service_confidence")
+        evidence_kind = confidence.kind if confidence is not None else _text(row.get(claim_field))
+        if confidence is None and not evidence_kind and claim_field not in row:
             # Older snapshots only carry the classic keyword match.
             evidence_kind = "classic_exact"
         if (item.get("match") != 1.0

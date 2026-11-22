@@ -1,20 +1,19 @@
 """Recommended and personalized ranking for the map-based dashboard."""
 from __future__ import annotations
 
-import pandas as pd
 import streamlit as st
 
-import care_engine
+from classic_confidence import (
+    MATCH_PENALTY_MAX_KM,
+    ROUTE_MINUTES_PER_KM_EQUIVALENT,
+    assess_service_confidence,
+    evidence_penalty_minutes,
+)
 
 RECOMMENDED = "Recommended"
 RANKED_CRITERIA = "Ranked criteria (best match first)"
 SEVERITIES = ("Routine", "Urgent", "Emergency")
 
-ENGINE_SERVICE = {
-    "Maternity / delivery": "maternal care",
-    "Pediatric care": "pediatric illness",
-    "Trauma / emergency": "trauma",
-}
 CRITERIA = {
     "distance": "Distance (closer is better)",
     "evidence": "Service evidence",
@@ -26,52 +25,23 @@ CRITERIA = {
 }
 
 
-def score_recommended(results, service, aliases, severity, *, uses_routes=False):
-    """Combine travel, service evidence, and the snapshot confidence adjustment."""
-    if not results:
-        return
-
-    service_key = ENGINE_SERVICE.get(service, service.lower())
-    # Classic services with no predefined care_engine profile use the original catalog aliases.
-    care_engine.SERVICE_PROFILES.setdefault(service_key, {"terms": [*aliases, service.lower()], "indicators": []})
-    frame = []
-    travel = {}
-    for i, item in enumerate(results):
-        row = item["row"]
-        frame.append({
-            "facility_id": i,
-            "facility_name": row["name"],
-            "facility_type": row.get("facilityTypeId", ""),
-            "service_text": row["service_text"],
-        })
-        travel[i] = {
-            "distance_km": max(item["dist"], 0.01),
-            "travel_time_minutes": item["scenario"]["travel_time_minutes"] if uses_routes else None,
-        }
-
-    severity = severity.lower()
-    emergency = severity == "emergency"
-    # Existing care_engine uses a 2 min/km proxy for routine and urgent straight-line searches.
-    # The snapshot penalties are specified in km equivalents, so convert them to the same units.
-    multiplier = 2 if uses_routes or not emergency else 1
-    units = "min equivalent" if multiplier == 2 else "km equivalent"
-    scored = care_engine.rank_facilities(pd.DataFrame(frame), service_key, severity,
-                                        travel, minimum_evidence=0.0)
-    for engine in scored:
-        item = results[engine["facility_id"]]
-        scenario = item.get("scenario")
-        confidence_penalty = multiplier * float(scenario["confidence_penalty_km"]) if scenario is not None else 0.0
-        travel_cost = engine["travel_time_minutes"]
-        if not uses_routes:
-            travel_cost = multiplier * engine["distance_km"]
+def score_recommended(results, service, aliases, *, uses_routes=False):
+    """Apply the published service match and confidence adjustments to travel."""
+    minutes_per_km = ROUTE_MINUTES_PER_KM_EQUIVALENT
+    multiplier = minutes_per_km if uses_routes else 1.0
+    units = "min equivalent" if uses_routes else "km equivalent"
+    for item in results:
+        confidence = assess_service_confidence(item["row"], service, aliases)
+        item["service_confidence"] = confidence
+        match_penalty = MATCH_PENALTY_MAX_KM * (1 - confidence.match_score / 100) * multiplier
+        confidence_penalty = float(evidence_penalty_minutes(confidence.score)) * multiplier / minutes_per_km
+        travel_cost = item["route_minutes"] if uses_routes else item["dist"]
         item["recommended"] = {
             "travel": travel_cost,
-            "evidence": 0.0 if emergency else 35 * (1 - engine["service_confidence"]),
-            "data_confidence": confidence_penalty,
-            "score": engine["score"] + confidence_penalty,
+            "service_match": match_penalty,
+            "service_confidence": confidence_penalty,
+            "score": travel_cost + match_penalty + confidence_penalty,
             "units": units,
-            "service_confidence": engine["service_confidence"],
-            "matched_terms": engine["matched_terms"],
         }
 
 
@@ -111,7 +81,7 @@ def score_priorities(results, order):
     for item in results:
         values = {
             "distance": 1.0 if farthest == nearest else (farthest - item["dist"]) / (farthest - nearest),
-            "evidence": item["recommended"]["service_confidence"] * item["match"],
+            "evidence": item["service_confidence"].score / 100,
             "capability": item["comps"]["capability"],
             "availability": item["comps"]["availability"],
             "quality": item["comps"]["quality"],

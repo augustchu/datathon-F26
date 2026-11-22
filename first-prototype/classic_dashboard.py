@@ -582,16 +582,24 @@ def score_facilities(df, service, lat, lon, weights):
     return sorted(results, key=lambda x: x["dist"])
 
 
-def render_source_details(result):
+def render_source_details(result, service):
     row = result["row"]
-    evidence = service_evidence(row, result["matched_service"], (), SERVICES)
+    confidence = result["service_confidence"]
+    st.markdown(f"**Service confidence** {confidence.score:g}/100 · {confidence.tier}")
+    st.caption(f"{service} · Service evidence {confidence.evidence_points:g}/80 · "
+               f"Branch identity {confidence.branch_points:g}/20")
+    record_evidence = service_evidence(row, result["matched_service"], (), SERVICES)
+    evidence = confidence if confidence.term else record_evidence
     if evidence.term:
-        st.write(f"**Matched service text** {evidence.term}")
+        label = "Matched service text" if confidence.term else "Facility-record keyword text"
+        st.write(f"**{label}** {evidence.term}")
     if evidence.excerpt:
         st.write(f"**Evidence excerpt** {evidence.excerpt}")
-        if not evidence.urls:
+        if not confidence.urls and not record_evidence.urls:
             st.caption("Source link unavailable for this facility text.")
-    for i, url in enumerate(evidence.urls, 1):
+    for i, url in enumerate(confidence.urls, 1):
+        st.markdown(f"[Open service source {i}](<{url}>)")
+    for i, url in enumerate((url for url in record_evidence.urls if url not in confidence.urls), 1):
         st.markdown(f"[Open facility source {i}](<{url}>)")
 
     if result.get("scenario") is not None:
@@ -609,12 +617,6 @@ def render_source_details(result):
 
 
 def render_load_details(result):
-    scenario = result.get("scenario")
-    if scenario is None:
-        return
-    confidence = scenario["confidence_score"]
-    label = f"{float(confidence):.0f}/100 · {scenario['confidence_tier']}" if pd.notna(confidence) else "Unknown"
-    st.markdown(f"**Data confidence** {label}")
     if projection := result.get("projected_load"):
         demand_label = "Projected demand" if projection["caseload_predicted"] else "Historical demand"
         st.markdown(f"**{demand_label}** {projection['caseload']:,.1f} {projection['unit']}")
@@ -625,8 +627,8 @@ def render_load_details(result):
 
 def render_recommended_breakdown(result):
     score = result["recommended"]
-    labels = ["Travel", "Service evidence penalty", "Data confidence penalty", "Total"]
-    parts = ["travel", "evidence", "data_confidence", "score"]
+    labels = ["Travel", "Service match penalty", "Service confidence penalty", "Total"]
+    parts = ["travel", "service_match", "service_confidence", "score"]
     st.dataframe(pd.DataFrame({"Recommended score component": labels,
                                score["units"]: [round(score[key], 2) for key in parts]}),
                  hide_index=True, use_container_width=True)
@@ -781,7 +783,7 @@ with st.container(border=True):
     st.subheader("3. Options")
     severity = st.selectbox("How urgent is this need?", SEVERITIES, index=1 if m["urgent"] else 0,
                             key=f"severity_{service}",
-                            help="Emergency recommendations use travel and available data confidence. Projected load comparison is available for eligible routine searches.")
+                            help="Recommended uses travel and service evidence at every urgency level. Projected load comparison is available for eligible routine searches.")
     consider_projected_load = False
     use_traveltime = False
     if snapshot_mode:
@@ -857,11 +859,11 @@ if search:
 
         candidates = ranked
 
-        score_recommended(candidates, svc, SERVICES[svc]["aliases"], severity, uses_routes=uses_routes)
+        score_recommended(candidates, svc, SERVICES[svc]["aliases"], uses_routes=uses_routes)
         if sort_by == RECOMMENDED:
             candidates = sorted(candidates, key=lambda item: (
                 item["recommended"]["score"],
-                -item["recommended"]["service_confidence"] if severity != "Emergency" else 0,
+                item["recommended"]["travel"],
                 item["dist"],
             ))
         elif sort_by == "Fit (highest first)":
@@ -969,7 +971,7 @@ if search:
                                 "\n".join(f"- {w}" for w in res["caveats"])
                             )
 
-                        render_source_details(res)
+                        render_source_details(res, svc)
                         render_load_details(res)
                         render_equity_card(equity_view, i - 1)
 
@@ -1037,9 +1039,10 @@ with st.expander("How this prototype decides"):
         """
         - Service matching uses the facility’s own description, equipment, specialties, capabilities, and procedures.
           Related matches are labeled. Links and excerpts help you check the source when available.
-        - Recommended combines travel and available data-confidence penalties. Routine and urgent searches also
-          include service evidence.
-          Straight-line travel uses a two-minute-per-kilometer proxy for routine and urgent searches.
+        - Recommended combines travel, service match, and confidence for the selected service at the facility’s
+          branch. Confidence combines up to 80 points for service evidence and 20 for branch identity.
+          A branch earns zero confidence for a service with no supporting evidence.
+          With straight-line distance, the confidence penalty converts to kilometers at two minutes per kilometer.
         - TravelTime estimates weekday-morning drives for Recommended results from the Databricks snapshot.
           A successful route search shows reachable facilities. The dashboard falls back to straight-line estimates
           if routing is unavailable or cannot find any routes within three hours.
