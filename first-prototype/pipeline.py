@@ -23,13 +23,15 @@ SERVICE_TERMS = {
 }
 FIELD_CANDIDATES = {
     "name": ["name", "facility_name", "facilityName", "hospital_name"],
-    "city": ["address_city", "city", "addressCity"],
-    "district": ["address_district", "district", "addressDistrict"],
-    "state": ["address_stateOrRegion", "state", "state_name", "address_state"],
-    "pin": ["address_zipOrPostcode", "postcode", "pincode", "pin", "postal_code"],
+    "city": ["city", "address_city", "addressCity"],
+    "district": ["district", "address_district", "addressDistrict"],
+    "state": ["state", "address_stateOrRegion", "state_name", "address_state"],
+    "pin": ["pin", "address_zipOrPostcode", "postcode", "pincode", "postal_code"],
     "lat": ["latitude", "lat"],
     "lon": ["longitude", "lon", "lng"],
     "capacity": ["capacity", "bed_capacity", "beds", "number_of_beds"],
+    "phone": ["published_phone", "officialPhone", "phone", "telephone", "contact_phone"],
+    "website": ["officialWebsite", "website", "websites", "url"],
     "id": ["unique_id", "facility_id", "id", "facilityId"],
     "url": ["source_urls", "sourceUrls", "source_url", "url", "website", "sources"],
 }
@@ -86,6 +88,163 @@ def _number(value):
     return float(match.group(1)) if match else None
 
 
+def _clean_id(value):
+    if value is None or pd.isna(value):
+        return ""
+    if isinstance(value, (float, np.floating)) and float(value).is_integer():
+        return str(int(value))
+    return str(value).strip()
+
+
+def _contact_text(value):
+    items = _items(value)
+    return " / ".join(dict.fromkeys(str(x).strip() for x in items if str(x).strip()))
+
+
+def _website_urls(value):
+    urls = []
+    for item in _items(value):
+        candidate = str(item).strip().rstrip(".,;)")
+        if not candidate:
+            continue
+        if not re.match(r"^https?://", candidate, flags=re.I):
+            candidate = "https://" + candidate.lstrip("/")
+        parsed = urlparse(candidate)
+        if parsed.scheme in {"http", "https"} and parsed.netloc and "." in parsed.netloc:
+            urls.append(candidate)
+    return list(dict.fromkeys(urls))
+
+
+def attach_capacity_release(raw: pd.DataFrame, capacity_release: pd.DataFrame,
+                           confidence: pd.DataFrame) -> pd.DataFrame:
+    """Use cleaned release rows as display data and cross-check them against Marketplace IDs/capacity."""
+    raw_id_col = _col(raw, FIELD_CANDIDATES["id"])
+    release_id_col = _col(capacity_release, ["unique_id", "facility_id", "facilityid", "id"])
+    capacity_col = _col(capacity_release, ["capacity", "beds", "bed_capacity"])
+    status_col = _col(capacity_release, ["capacity_status", "capacitystatus"])
+    row_index_col = _col(capacity_release, ["row_index", "source_row_index"])
+    confidence_col = _col(confidence, ["confidence_score"])
+    if not all((raw_id_col, release_id_col, capacity_col, status_col, row_index_col, confidence_col)):
+        raise ValueError("Capacity/confidence release is missing required facility ID, row_index, capacity, status, or confidence columns.")
+    if len(raw) != len(capacity_release) or len(capacity_release) != len(confidence):
+        raise ValueError(
+            f"Row counts do not align: facilities={len(raw):,}, capacity={len(capacity_release):,}, "
+            f"confidence={len(confidence):,}. No capacity or confidence values were applied."
+        )
+    positions = pd.to_numeric(capacity_release[row_index_col], errors="coerce")
+    if positions.isna().any() or positions.astype(int).tolist() != list(range(len(capacity_release))):
+        raise ValueError("Capacity CSV row_index is not an intact 0-based source order; refusing to pair confidence by position.")
+    confidence_values = pd.to_numeric(confidence[confidence_col], errors="coerce")
+    if confidence_values.isna().any() or not confidence_values.between(0, 100).all():
+        raise ValueError("Confidence scores must be numeric and between 0 and 100.")
+
+    release = capacity_release.copy()
+    release["_facility_key"] = release[release_id_col].map(_clean_id)
+    release["_capacity_value"] = pd.to_numeric(release[capacity_col], errors="coerce")
+    release["_capacity_status"] = release[status_col].fillna("missing").astype(str).str.strip()
+    # The release documentation says the companion confidence CSV has the same exact row order.
+    release["_confidence_score"] = confidence_values.to_numpy()
+    if release._facility_key.eq("").any():
+        raise ValueError("Capacity release contains blank facility IDs; cannot align to the Marketplace table.")
+    raw_keys = raw[raw_id_col].map(_clean_id)
+    if raw_keys.eq("").any():
+        raise ValueError("Marketplace facility table contains blank IDs; cannot safely apply release values.")
+
+    # Duplicate IDs are present in the release. Require every field used by the demo to agree.
+    check_fields = ["_capacity_value", "_capacity_status", "_confidence_score"]
+    for source_name, aliases in {
+        "_capacity_source": ["capacity_source", "capacity_model_id"],
+        "_capacity_source_url": ["capacity_source_url"],
+        "_phone_source_url": ["phone_source_url"],
+        "_capacity_lower": ["capacity_prediction_lower"],
+        "_capacity_upper": ["capacity_prediction_upper"],
+        "_release_original_capacity": ["original_capacity"],
+    }.items():
+        col = _col(release, aliases)
+        if col:
+            release[source_name] = release[col]
+            check_fields.append(source_name)
+    phone_cols = [c for c in ("published_phone", "officialPhone", "phone", "phone_numbers") if c in release]
+    website_cols = [c for c in ("officialWebsite", "website", "websites") if c in release]
+    release["_published_phone"] = release.apply(
+        lambda row: next((row[c] for c in phone_cols if _contact_text(row[c])), pd.NA), axis=1
+    )
+    release["_website"] = release.apply(
+        lambda row: next((row[c] for c in website_cols if _contact_text(row[c])), pd.NA), axis=1
+    )
+    check_fields.extend(["_published_phone", "_website"])
+    duplicated = release.groupby("_facility_key")[check_fields].nunique(dropna=False)
+    if (duplicated > 1).any(axis=None):
+        examples = duplicated[(duplicated > 1).any(axis=1)].index[:5].tolist()
+        raise ValueError(f"Duplicate facility IDs have conflicting release values: {examples}")
+
+    lookup = release.drop_duplicates("_facility_key").set_index("_facility_key")
+    missing = sorted(set(raw_keys) - set(lookup.index))
+    extra = sorted(set(lookup.index) - set(raw_keys))
+    if missing or extra:
+        raise ValueError(
+            f"Facility IDs do not align with release ({len(missing):,} missing, {len(extra):,} extra; "
+            f"examples missing={missing[:5]}, extra={extra[:5]}). Confirm the marketplace table uses "
+            "the same facilities source snapshot."
+        )
+
+    # The release is the display-data source. Marketplace rows are retained only
+    # to compare original capacities and prove that this is the same source snapshot.
+    original_capacity_col = _col(raw, FIELD_CANDIDATES["capacity"])
+    raw_original = raw[original_capacity_col] if original_capacity_col else pd.Series(np.nan, index=raw.index)
+    raw_values = pd.to_numeric(raw_original, errors="coerce")
+    raw_check = pd.DataFrame({"_facility_key": raw_keys, "_original_capacity": raw_values})
+    duplicate_source_counts = raw_check.groupby("_facility_key")["_original_capacity"].nunique(dropna=False)
+    if duplicate_source_counts.gt(1).any():
+        examples = duplicate_source_counts[duplicate_source_counts.gt(1)].index[:5].tolist()
+        raise ValueError(f"Marketplace rows with repeated IDs have inconsistent original capacity values: {examples}")
+    original_lookup = raw_check.drop_duplicates("_facility_key").set_index("_facility_key")["_original_capacity"].to_dict()
+
+    out = capacity_release.copy()
+    out["capacity_release_value"] = release["_capacity_value"].to_numpy()
+    out["capacity_release_status"] = release["_capacity_status"].to_numpy()
+    out["confidence_score"] = release["_confidence_score"].to_numpy()
+    out["capacity_release_source"] = release["_capacity_source"] if "_capacity_source" in release else ""
+    out["capacity_release_source_url"] = release["_capacity_source_url"] if "_capacity_source_url" in release else ""
+    out["phone_source_url"] = release["_phone_source_url"] if "_phone_source_url" in release else ""
+    out["capacity_prediction_lower"] = release["_capacity_lower"] if "_capacity_lower" in release else pd.NA
+    out["capacity_prediction_upper"] = release["_capacity_upper"] if "_capacity_upper" in release else pd.NA
+    out["capacity_release_original"] = release["_release_original_capacity"] if "_release_original_capacity" in release else pd.NA
+    out["release_published_phone"] = release["_published_phone"].to_numpy()
+    out["release_website"] = release["_website"].to_numpy()
+    out["capacity_original_dataset"] = release["_facility_key"].map(original_lookup).to_numpy()
+    original_values = pd.to_numeric(out["capacity_original_dataset"], errors="coerce")
+    release_original = pd.to_numeric(out["capacity_release_original"], errors="coerce")
+    both_missing = original_values.isna() & release_original.isna()
+    comparable = original_values.notna() & release_original.notna()
+    original_alignment = np.select(
+        [both_missing, comparable & np.isclose(original_values.fillna(0), release_original.fillna(0)), comparable],
+        ["both blank", "match", "difference"], default="only one side populated"
+    )
+    out["capacity_source_alignment_status"] = original_alignment
+    selected_values = pd.to_numeric(out["capacity_release_value"], errors="coerce")
+    same_selected = selected_values.notna() & original_values.notna() & np.isclose(selected_values.fillna(0), original_values.fillna(0))
+    selected_both_missing = selected_values.isna() & original_values.isna()
+    out["capacity_crosscheck_status"] = np.select(
+        [same_selected, selected_both_missing, selected_values.notna() & original_values.isna(), selected_values.isna() & original_values.notna()],
+        ["match", "both blank", "release fills original blank", "release withholds original value"],
+        default="released value differs from Marketplace"
+    )
+    return out
+
+
+def confidence_adjustment(score):
+    """Return a transparent 0/40/80 km-equivalent penalty for high/medium/low confidence."""
+    if score is None or pd.isna(score):
+        return "unknown", 80.0
+    score = float(score)
+    if score >= 50:
+        return "High", 0.0
+    if score >= 25:
+        return "Medium", 40.0
+    return "Low", 80.0
+
+
 def _term_match(text, terms):
     low = text.casefold()
     for term in sorted(terms, key=len, reverse=True):
@@ -128,12 +287,26 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
                     field_texts.append(f"{field}: {'; '.join(values)}")
         full_text = " | ".join(field_texts)
         urls = _urls(source[cols["url"]]) if cols["url"] else []
-        beds = _number(source[cols["capacity"]]) if cols["capacity"] else None
+        if "capacity_release_value" in raw.columns:
+            # A withheld release value stays missing even if the older raw field has a number.
+            beds = _number(source.get("capacity_release_value"))
+            release_status = str(source.get("capacity_release_status", "missing")).strip()
+            bed_source = f"release: {release_status}"
+        else:
+            beds = _number(source[cols["capacity"]]) if cols["capacity"] else None
+            release_status = ""
+            bed_source = "reported" if beds is not None else "missing"
         if (beds is None or beds <= 0) and predicted_beds is not None and fid in predicted_beds:
             beds = predicted_beds[fid]
             bed_source = model_label
-        else:
-            bed_source = "reported" if beds is not None else "missing"
+        phone_value = source.get("release_published_phone")
+        if phone_value is None or pd.isna(phone_value) or not str(phone_value).strip():
+            phone_value = source[cols["phone"]] if cols["phone"] else None
+        website_value = source.get("release_website")
+        if website_value is None or pd.isna(website_value) or not _contact_text(website_value):
+            website_value = source[cols["website"]] if cols["website"] else None
+        confidence_score = _number(source.get("confidence_score"))
+        confidence_tier, confidence_penalty = confidence_adjustment(confidence_score)
         row = {
             "facility_id": fid, "source_id": source_id, "facility_name": name,
             "city": str(source[cols["city"]]) if cols["city"] and pd.notna(source[cols["city"]]) else "",
@@ -143,6 +316,21 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
             "latitude": _number(source[cols["lat"]]) if cols["lat"] else None,
             "longitude": _number(source[cols["lon"]]) if cols["lon"] else None,
             "beds_for_scenario": beds, "beds_provenance": bed_source,
+            "capacity_release_status": release_status,
+            "capacity_release_source": _contact_text(source.get("capacity_release_source")),
+            "capacity_release_source_url": _contact_text(source.get("capacity_release_source_url")),
+            "phone_source_url": _contact_text(source.get("_phone_source_url")),
+            "capacity_prediction_lower": _number(source.get("capacity_prediction_lower")),
+            "capacity_prediction_upper": _number(source.get("capacity_prediction_upper")),
+            "capacity_original_dataset": _contact_text(source.get("capacity_original_dataset")),
+            "capacity_release_original": _number(source.get("capacity_release_original")),
+            "capacity_crosscheck_status": _contact_text(source.get("capacity_crosscheck_status")),
+            "capacity_source_alignment_status": _contact_text(source.get("capacity_source_alignment_status")),
+            "confidence_score": confidence_score,
+            "confidence_tier": confidence_tier,
+            "confidence_penalty": confidence_penalty,
+            "phone": _contact_text(phone_value),
+            "website_url": next(iter(_website_urls(website_value)), ""),
             "source_urls_json": json.dumps(urls), "service_text": full_text,
             "service_fields_missing": ",".join(missing),
         }
@@ -252,15 +440,25 @@ def attach_population(facilities, population):
     return out
 
 
-def rank_candidates(frame, service, origin, severity="routine", population_share_pct=0.0, top_k=5):
+def service_candidates(frame, service):
+    """Return service-matched, citable records with valid India coordinates."""
+    key = _service_key(service)
+    cite_col = f"claim_citable_{key}"
+    if cite_col not in frame.columns:
+        return pd.DataFrame()
+    work = frame.loc[frame[cite_col].fillna(False).astype(bool)].copy()
+    work = work.dropna(subset=["latitude", "longitude"])
+    return work.loc[work.latitude.between(6, 38) & work.longitude.between(68, 98)].copy()
+
+
+def rank_candidates(frame, service, origin, severity="routine", population_share_pct=0.0, top_k=5,
+                    travel_times=None):
     """Rank only cited text matches; return score components for transparent rendering."""
     key = _service_key(service)
     term_col, excerpt_col, cite_col = f"term_{key}", f"excerpt_{key}", f"claim_citable_{key}"
     if cite_col not in frame.columns:
         return pd.DataFrame()
-    work = frame.loc[frame[cite_col].fillna(False).astype(bool)].copy()
-    work = work.dropna(subset=["latitude", "longitude"])
-    work = work[work.latitude.between(6, 38) & work.longitude.between(68, 98)]
+    work = service_candidates(frame, service)
     if work.empty:
         return work
     work["distance_km"] = work.apply(lambda r: haversine_km(origin[0], origin[1], float(r.latitude), float(r.longitude)), axis=1)
@@ -279,11 +477,28 @@ def rank_candidates(frame, service, origin, severity="routine", population_share
     work["simulated_load"] = work.regional_expected_cases / work.regional_facility_count.clip(lower=1)
     work["capacity_basis_beds"] = work.beds_for_scenario.where(work.beds_for_scenario > 0, 50.0)
     work["load_ratio"] = work.simulated_load / work.capacity_basis_beds
+    work["confidence_score"] = pd.to_numeric(work.get("confidence_score", pd.Series(index=work.index, dtype=float)), errors="coerce")
+    confidence = work.confidence_score.map(confidence_adjustment)
+    work["confidence_tier"] = confidence.map(lambda x: x[0])
+    work["confidence_penalty_km"] = confidence.map(lambda x: x[1])
+    work["routing_basis"] = "straight-line"
+    work["travel_time_minutes"] = np.nan
+    if travel_times is not None:
+        work["travel_time_minutes"] = work.facility_id.map(lambda fid: travel_times.get(str(fid)))
+        work["travel_time_minutes"] = pd.to_numeric(work.travel_time_minutes, errors="coerce")
+        work = work.dropna(subset=["travel_time_minutes"])
+        work["routing_basis"] = "TravelTime driving matrix"
+    work["score_unit"] = "km"
     if severity == "emergency":
-        # The user's emergency routing stays nearest-first. Scenario outputs are shown for audit.
+        # Emergency demand load is ignored, but evidence confidence still affects ranking.
+        work["load_penalty_km"] = 0.0
+        work["load_penalty_basis"] = "ignored for emergency"
+        work["base_travel_cost"] = work.travel_time_minutes.where(work.travel_time_minutes.notna(), work.distance_km)
+        work["confidence_penalty"] = work.confidence_penalty_km
         work["load_penalty"] = 0.0
-        work["load_penalty_basis"] = "ignored for emergency; distance-first routing"
-        work["score"] = work.distance_km
+        work["score_unit"] = np.where(work.travel_time_minutes.notna(), "minutes", "km")
+        work.loc[work.travel_time_minutes.notna(), "confidence_penalty"] *= 2.0
+        work["score"] = work.base_travel_cost + work.confidence_penalty
     else:
         # Each district's share of population demand is split evenly among every
         # evidence-backed facility candidate for this service in that district.
@@ -293,13 +508,19 @@ def rank_candidates(frame, service, origin, severity="routine", population_share
             work["regional_demand_factor"] = pd.to_numeric(work[burden_col], errors="coerce").fillna(1.0).clip(0.5, 2.0)
         else:
             work["regional_demand_factor"] = 1.0
-        work["load_penalty"] = 12.0 * (1.0 - np.exp(-work.load_ratio * work.regional_demand_factor))
-        work["score"] = work.distance_km + work.load_penalty
-        work["load_penalty_basis"] = "heuristic straight-line-km-equivalent adjustment"
+        work["load_penalty_km"] = 12.0 * (1.0 - np.exp(-work.load_ratio * work.regional_demand_factor))
+        work["base_travel_cost"] = work.travel_time_minutes.where(work.travel_time_minutes.notna(), work.distance_km)
+        work["score_unit"] = np.where(work.travel_time_minutes.notna(), "minutes", "km")
+        multiplier = np.where(work.travel_time_minutes.notna(), 2.0, 1.0)
+        work["load_penalty"] = work.load_penalty_km * multiplier
+        work["confidence_penalty"] = work.confidence_penalty_km * multiplier
+        work["score"] = work.base_travel_cost + work.load_penalty + work.confidence_penalty
+        work["load_penalty_basis"] = "heuristic km-equivalent adjustment, converted to minutes for TravelTime"
     work["matched_term"] = work[term_col]
     work["supporting_excerpt"] = work[excerpt_col]
     work["source_urls"] = work.source_urls_json.map(lambda x: json.loads(x) if isinstance(x, str) else [])
-    return work.sort_values(["score", "distance_km"], ascending=True).head(int(top_k)).reset_index(drop=True)
+    sort_cols = ["score", "distance_km"] if work.travel_time_minutes.isna().all() else ["score", "travel_time_minutes", "distance_km"]
+    return work.sort_values(sort_cols, ascending=True, na_position="last").head(int(top_k)).reset_index(drop=True)
 
 
 def resolve_location(frame, location_text="", lat=None, lon=None):

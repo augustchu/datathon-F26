@@ -21,19 +21,22 @@ PINS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_
 NFHS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.nfhs_5_district_health_indicators"
 BOUNDARY_ZIP = "/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip"
 POPULATION_CSV = "/Volumes/additional_india_data/default/additional_india_data/nfhs_district_population_2020.csv"
+CAPACITY_RELEASE_RELATIVE = Path("max-supplemented-data") / "capacity_and_confidence"
 OUTPUT_CATALOG = "additional_india_data"
 OUTPUT_SCHEMA = "default"
 OUTPUT_PREFIX = "first_prototype"
 
 current = dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get()
 repo_root = "/Workspace" + str(Path(current).parent)
+CAPACITY_RELEASE_CSV = Path(repo_root).parent / CAPACITY_RELEASE_RELATIVE / "facilities_newest_capacity.csv"
+CAPACITY_CONFIDENCE_CSV = Path(repo_root).parent / CAPACITY_RELEASE_RELATIVE / "facility_confidence.csv"
 if repo_root not in sys.path:
     sys.path.insert(0, repo_root)
 pipeline_module = importlib.import_module("pipeline")
 # Notebook kernels retain imported modules after Git folders are refreshed. Reload so this
 # notebook picks up helpers added in the current first-prototype/pipeline.py file.
 pipeline_module = importlib.reload(pipeline_module)
-required_helpers = ("SERVICE_TERMS", "attach_regions", "attach_population", "prepare_facilities", "read_geojson_archive")
+required_helpers = ("SERVICE_TERMS", "attach_regions", "attach_population", "attach_capacity_release", "prepare_facilities", "read_geojson_archive")
 missing_helpers = [name for name in required_helpers if not hasattr(pipeline_module, name)]
 if missing_helpers:
     raise ImportError(
@@ -44,6 +47,7 @@ if missing_helpers:
 SERVICE_TERMS = pipeline_module.SERVICE_TERMS
 attach_regions = pipeline_module.attach_regions
 attach_population = pipeline_module.attach_population
+attach_capacity_release = pipeline_module.attach_capacity_release
 prepare_facilities = pipeline_module.prepare_facilities
 read_geojson_archive = pipeline_module.read_geojson_archive
 
@@ -62,25 +66,31 @@ nfhs = nfhs_spark.toPandas()
 
 # COMMAND ----------
 
-# Apply the saved enriched bed-count model when present. A model failure is non-fatal;
-# service eligibility never comes from a bed-count prediction.
-prepared = prepare_facilities(raw)
-model_status = "not applied"
-try:
-    from capacity_model import CapacityModel
-    model = CapacityModel(str(Path(repo_root) / "models" / "enriched"))
-    detail = model.predict_detailed(raw)
-    predicted = {}
-    for i, row in prepared.iterrows():
-        if pd.isna(row["beds_for_scenario"]) and detail.iloc[i]["status"] == "ok" and bool(detail.iloc[i]["doctors_reported"]):
-            beds = float(detail.iloc[i]["beds"])
-            if 0 < beds <= 5000:
-                predicted[row["facility_id"]] = beds
-    prepared = prepare_facilities(raw, predicted_beds=predicted, model_label="model:enriched capacity MLP")
-    model_status = f"enriched capacity MLP; filled {len(predicted):,} missing bed counts (doctor-reported and guard-eligible only)"
-except Exception as exc:
-    model_status = f"not applied; {type(exc).__name__}: {exc}"
-    print("Capacity model unavailable; reported capacity and missing values are retained.", model_status)
+# Read the tracked capacity and confidence release from the repository. These CSVs
+# arrive through the Databricks Git-folder sync; no separate Volume upload is needed.
+for release_path in (CAPACITY_RELEASE_CSV, CAPACITY_CONFIDENCE_CSV):
+    if not release_path.exists():
+        raise FileNotFoundError(f"Required release file is missing from the Databricks Git folder: {release_path}")
+capacity_release_columns = [
+    "row_index", "facility_id", "unique_id", "name", "state", "district", "city", "pin", "latitude", "longitude",
+    "capacity", "description", "specialties", "capability", "procedure", "equipment", "source_urls",
+    "capacity_status", "capacity_source",
+    "capacity_source_url", "capacity_prediction_lower", "capacity_prediction_upper", "capacity_model_id",
+    "original_capacity", "published_phone", "officialPhone", "phone_numbers", "phone_source_url",
+    "officialWebsite", "website", "websites",
+]
+capacity_release = pd.read_csv(CAPACITY_RELEASE_CSV, usecols=capacity_release_columns, dtype={"unique_id": "string"})
+confidence_release = pd.read_csv(CAPACITY_CONFIDENCE_CSV)
+display_source = attach_capacity_release(raw, capacity_release, confidence_release)
+# From this point, facility display/service/location fields come from the cleaned
+# release rows. The Marketplace snapshot is used only for capacity cross-checks.
+prepared = prepare_facilities(display_source)
+capacity_release_summary = (
+    f"newest-source capacity release; {int(prepared['beds_for_scenario'].notna().sum()):,} capacity values; "
+    f"{int(prepared['capacity_release_status'].astype(str).str.casefold().eq('xgboost_estimate').sum()):,} marked estimates"
+)
+print("Capacity source:", capacity_release_summary)
+print("Capacity cross-check against Marketplace source:", prepared["capacity_crosscheck_status"].value_counts(dropna=False).to_dict())
 
 # Read the GeoJSON member from the supplied Unity Catalog Volume ZIP with Python's
 # standard library. No geopandas/geospatial package is needed in serverless compute.
@@ -100,7 +110,8 @@ prepared = attach_population(prepared, population)
 # Include source-row traceability and a stable timestamp with each preparation run.
 prepared["snapshot_prepared_at"] = datetime.now(timezone.utc).isoformat()
 prepared["facility_source_table"] = FACILITIES_SOURCE
-prepared["capacity_model_status"] = model_status
+prepared["facility_display_source"] = "max-supplemented-data/capacity_and_confidence/facilities_newest_capacity.csv"
+prepared["capacity_release_summary"] = capacity_release_summary
 
 # COMMAND ----------
 
@@ -114,7 +125,10 @@ spark.sql(f"DESCRIBE SCHEMA `{OUTPUT_CATALOG}`.`{OUTPUT_SCHEMA}`").show(truncate
 print(f"Publishing prototype tables under {output_schema}")
 
 # Use explicit scalar types so nullable model outputs and claim flags stay consistent in Delta.
-numeric_cols = {"latitude", "longitude", "beds_for_scenario", "regional_population"}
+numeric_cols = {
+    "latitude", "longitude", "beds_for_scenario", "regional_population", "confidence_score", "confidence_penalty",
+    "capacity_prediction_lower", "capacity_prediction_upper", "capacity_release_original",
+}
 boolean_cols = {c for c in prepared.columns if c.startswith("claim_citable_")}
 for col in numeric_cols:
     prepared[col] = pd.to_numeric(prepared[col], errors="coerce")
@@ -139,20 +153,30 @@ nfhs_spark.write.format("delta").mode("overwrite").option("overwriteSchema", "tr
 metadata = spark.createDataFrame([{
     "prepared_at": datetime.now(timezone.utc).isoformat(),
     "facility_source_table": FACILITIES_SOURCE,
+    "facility_display_source": "max-supplemented-data/capacity_and_confidence/facilities_newest_capacity.csv",
     "pin_source_table": PINS_SOURCE,
     "nfhs_source_table": NFHS_SOURCE,
     "boundary_archive": BOUNDARY_ZIP,
     "population_estimates": POPULATION_CSV,
+    "capacity_release": str(CAPACITY_RELEASE_CSV),
+    "confidence_release": str(CAPACITY_CONFIDENCE_CSV),
     "facility_rows": int(len(prepared)),
+    "capacity_values": int(prepared["beds_for_scenario"].notna().sum()),
+    "capacity_estimates": int(prepared["capacity_release_status"].astype(str).str.casefold().eq("xgboost_estimate").sum()),
+    "capacity_crosscheck_nonmatches": int((~prepared["capacity_crosscheck_status"].isin(["match", "both blank"])).sum()),
+    "capacity_source_alignment_differences": int(prepared["capacity_source_alignment_status"].eq("difference").sum()),
+    "confidence_mean": float(prepared["confidence_score"].mean()),
     "citable_service_claims": int(sum(prepared[f"claim_citable_{key}"].sum() for key in [
         "dialysis", "emergency_c_section", "nicu", "cardiac_surgery", "mri", "burn_care",
         "trauma_emergency", "maternity_delivery", "general_care"])),
-    "capacity_model_status": model_status,
+    "capacity_release_summary": capacity_release_summary,
 }])
 metadata.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(metadata_table)
 
-display(prepared[["facility_name", "city", "state", "adm2_district", "nfhs_district", "region_match_status", "regional_population", "population_status", "beds_for_scenario", "beds_provenance"]].head(20))
+display(prepared[["facility_name", "city", "state", "adm2_district", "nfhs_district", "region_match_status", "regional_population", "population_status", "beds_for_scenario", "beds_provenance", "capacity_crosscheck_status", "capacity_source_alignment_status", "confidence_score", "confidence_tier", "phone", "website_url"]].head(20))
 display(spark.table(metadata_table))
 print(f"Published {len(prepared):,} facility rows to {facility_table}")
 print(f"Population matched: {prepared.regional_population.notna().sum():,} / {len(prepared):,} facility rows")
+print("Capacity cross-check against Marketplace field:", prepared.capacity_crosscheck_status.value_counts(dropna=False).to_dict())
+print(f"Capacity release estimates: {prepared.capacity_release_status.astype(str).str.casefold().eq('xgboost_estimate').sum():,}")
 print(f"App tables: {facility_table}, {metadata_table}")

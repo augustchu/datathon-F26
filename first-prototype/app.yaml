@@ -6,3 +6,7 @@ env:
     valueFrom: facilities-table
   - name: SNAPSHOT_METADATA_TABLE
     valueFrom: snapshot-table
+  - name: TRAVELTIME_APP_ID
+    valueFrom: traveltime-app-id
+  - name: TRAVELTIME_API_KEY
+    valueFrom: traveltime-api-key

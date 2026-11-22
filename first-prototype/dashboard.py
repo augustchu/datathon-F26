@@ -10,7 +10,8 @@ import streamlit as st
 from databricks import sql
 from databricks.sdk.core import Config
 
-from pipeline import SERVICE_TERMS, rank_candidates, resolve_location
+from pipeline import SERVICE_TERMS, rank_candidates, resolve_location, service_candidates
+from traveltime_adapter import travel_time_matrix
 
 st.set_page_config(page_title="Find the right care", page_icon="🏥", layout="wide")
 FACILITY_TABLE = os.getenv("FACILITY_SNAPSHOT_TABLE", "additional_india_data.default.first_prototype_facilities")
@@ -47,6 +48,12 @@ def source_urls(value):
         return []
 
 
+@st.cache_data(ttl=1800, max_entries=32, show_spinner="Getting driving times from TravelTime...")
+def cached_travel_times(origin, facility_records):
+    destinations = pd.DataFrame(facility_records, columns=["facility_id", "latitude", "longitude"])
+    return travel_time_matrix(origin, destinations)
+
+
 st.title("Find the right care")
 st.caption("Evidence-linked facility options from the prepared Virtue Foundation snapshot. This prototype is not a diagnosis or live availability service.")
 
@@ -70,10 +77,12 @@ with st.sidebar:
     st.header("Search")
     service = st.selectbox("Care needed", list(SERVICE_TERMS))
     severity = st.radio("Urgency", ["routine", "urgent", "emergency"], horizontal=False,
-                        help="Emergency ranking is nearest-first and ignores the simulated load adjustment.")
+                        help="Emergency ranking skips the regional demand load adjustment, but still accounts for data confidence.")
     population_share_pct = st.slider("Regional population needing this care", 0.0, 2.0, 1.0, 0.1, format="%.1f%%",
                                      help="Scenario: this share of each hospital district's modeled population needs this service. Expected cases are split evenly across evidence-backed hospitals in that district; this is not a forecast.")
     top_k = st.slider("Options to show", 1, 10, 5)
+    use_traveltime = st.toggle("Use TravelTime driving estimates", value=True,
+                              help="When credentials and routing work, ranks by weekday-morning driving minutes. If unavailable, the app automatically uses its straight-line kilometer score.")
     coordinate_mode = st.toggle("Enter coordinates", value=False)
     if coordinate_mode:
         lat = st.number_input("Latitude", min_value=6.0, max_value=38.0, value=19.0760, format="%.5f")
@@ -92,26 +101,59 @@ if st.button("Find facility options", type="primary"):
 if st.session_state.get("search_started", False):
     try:
         origin, origin_basis = resolve_location(facilities, location_text, lat, lon)
-        ranked = rank_candidates(facilities, service, origin, severity=severity, population_share_pct=population_share_pct, top_k=top_k)
+        travel_times = None
+        travel_status = "Straight-line distance mode"
+        if use_traveltime:
+            candidates = service_candidates(facilities, service)
+            destination_records = tuple(
+                (str(r.facility_id), float(r.latitude), float(r.longitude))
+                for r in candidates[["facility_id", "latitude", "longitude"]].itertuples(index=False)
+            )
+            try:
+                travel_times = cached_travel_times(tuple(origin), destination_records)
+                reachable = sum(value is not None for value in travel_times.values())
+                if reachable:
+                    travel_status = f"TravelTime driving estimates ({reachable:,} reachable within 3 hours)"
+                else:
+                    travel_times = None
+                    travel_status = "Straight-line fallback: TravelTime returned no reachable destinations"
+                    st.warning("TravelTime returned no reachable destinations within its 3-hour limit. Showing the straight-line kilometer ranking instead.")
+            except Exception as exc:
+                travel_times = None
+                travel_status = "Straight-line fallback: TravelTime unavailable"
+                st.warning(f"TravelTime could not be used ({type(exc).__name__}); showing the straight-line kilometer ranking.")
+        ranked = rank_candidates(facilities, service, origin, severity=severity, population_share_pct=population_share_pct, top_k=top_k, travel_times=travel_times)
     except Exception as exc:
         st.error(str(exc))
         st.stop()
     st.subheader(f"Options for {service}")
-    st.caption(f"Origin: {origin[0]:.5f}, {origin[1]:.5f} · {origin_basis} · distance is straight-line, not road travel time")
+    using_routes = travel_times is not None and not ranked.empty
+    st.caption(f"Origin: {origin[0]:.5f}, {origin[1]:.5f} · {origin_basis} · {travel_status}")
     if ranked.empty:
-        st.warning("No facility in this snapshot passed the text match, source-link, and coordinate checks. This does not establish that care is unavailable.")
+        if travel_times is not None:
+            st.warning("No evidence-backed facility was returned as reachable within TravelTime's 3-hour search limit. This does not establish that care is unavailable.")
+        else:
+            st.warning("No facility in this snapshot passed the text match, source-link, and coordinate checks. This does not establish that care is unavailable.")
     else:
         if severity == "emergency":
-            st.info(f"Emergency ranking is nearest-first and ignores the {population_share_pct:.1f}% demand scenario. Routine/urgent score = straight-line km + a heuristic load penalty. Bed counts are only coarse facility-size proxies.")
+            st.info(f"Emergency ranking skips the {population_share_pct:.1f}% demand load adjustment. All rankings include a data-confidence penalty. Score = {'route minutes' if using_routes else 'straight-line km'} + confidence adjustment.")
         else:
-            st.info(f"Scenario: {population_share_pct:.1f}% of each district's modeled population needs {service.lower()}. That district's expected cases are divided equally across all citable, coordinate-valid facilities in this snapshot that mention the service. Score = straight-line km + heuristic load penalty. The scenario is illustrative, not an incidence estimate or forecast.")
+            st.info(f"Scenario: {population_share_pct:.1f}% of each district's modeled population needs {service.lower()}. That district's expected cases are divided equally across all citable, coordinate-valid facilities in this snapshot that mention the service. Score = {'route minutes' if using_routes else 'straight-line km'} + load penalty + confidence adjustment. In TravelTime mode, each km-equivalent penalty is converted at 2 minutes per km (1 minute ≈ 0.5 km). Confidence is a data-quality score, not a probability the hospital is good or currently available.")
         for rank, row in ranked.iterrows():
-            title = f"{rank + 1}. {row.facility_name} · {row.distance_km:.1f} km"
+            distance_label = f"{row.travel_time_minutes:.0f} min drive" if using_routes else f"{row.distance_km:.1f} km straight-line"
+            unit = "minutes" if using_routes else "km-equivalent"
+            title = f"{rank + 1}. {row.facility_name} · {distance_label}"
             with st.expander(title, expanded=(rank == 0)):
-                c1, c2, c3 = st.columns(3)
-                c1.metric("Distance", f"{row.distance_km:.1f} km")
-                c2.metric("Score", f"{row.score:.2f}")
-                c3.metric("Load stress penalty", f"{row.load_penalty:.2f} km-equivalent")
+                c1, c2, c3, c4 = st.columns(4)
+                c1.metric("TravelTime drive" if using_routes else "Straight-line distance", f"{row.travel_time_minutes:.0f} min" if using_routes else f"{row.distance_km:.1f} km")
+                c2.metric("Adjusted score", f"{row.score:.1f} {unit}")
+                confidence_score = row.get("confidence_score")
+                confidence_label = (f"{float(confidence_score):.0f}/100 · {row.confidence_tier}"
+                                    if pd.notna(confidence_score) else "Unknown")
+                c3.metric("Data confidence", confidence_label)
+                c4.metric("Confidence adjustment", f"+{row.confidence_penalty:.0f} {unit}")
+                st.write(f"**Regional-demand load penalty:** +{row.load_penalty:.1f} {unit}")
+                st.caption(f"Scoring base: {row.routing_basis}; straight-line reference: {row.distance_km:.1f} km.")
                 region_pop = row.get("regional_population")
                 if pd.notna(region_pop):
                     st.write(f"**Modeled district population (2020):** {float(region_pop):,.0f}")
@@ -131,12 +173,29 @@ if st.session_state.get("search_started", False):
                 st.write(f"**Evidence excerpt:** {row.supporting_excerpt}")
                 if row.get("region_match_status") not in (None, "matched_adm2"):
                     st.caption(f"Geography review flag: {row.get('region_match_status')}. The recommendation distance still uses the source coordinates.")
-                if row.beds_provenance == "reported":
-                    st.caption(f"Capacity input: {row.beds_for_scenario:g} reported beds (not current availability).")
-                elif str(row.beds_provenance).startswith("model:"):
-                    st.caption(f"Capacity input: about {row.beds_for_scenario:g} estimated beds (model estimate, not a count or current availability).")
+                if str(row.capacity_release_status).casefold() == "xgboost_estimate" and pd.notna(row.beds_for_scenario):
+                    lower, upper = row.get("capacity_prediction_lower"), row.get("capacity_prediction_upper")
+                    interval = f" Estimated interval: {float(lower):g}–{float(upper):g} beds." if pd.notna(lower) and pd.notna(upper) else ""
+                    st.caption(f"This is an estimated capacity: {row.beds_for_scenario:g} beds.{interval} It is not current availability.")
+                elif pd.notna(row.beds_for_scenario):
+                    st.caption(f"Capacity value: {row.beds_for_scenario:g} beds ({row.capacity_release_status}; {row.capacity_release_source or 'source not specified'}). This is not current availability.")
                 else:
-                    st.caption("Capacity input missing; load calculation used a 50-bed fallback and is especially uncertain.")
+                    st.caption(f"Capacity unavailable or withheld ({row.capacity_release_status}); the load calculation used a 50-bed fallback and is especially uncertain.")
+                if row.capacity_crosscheck_status not in {"match", "both blank"}:
+                    st.caption(f"Capacity cross-check against the Marketplace field: {row.capacity_crosscheck_status}. The release value above is used for calculations.")
+                phone = str(row.get("phone", "")).strip()
+                st.write(f"**Phone:** {phone if phone and phone.casefold() not in {'nan', 'none', '<na>'} else 'Not listed in the available records.'}")
+                phone_source_url = str(row.get("phone_source_url", "")).strip()
+                if phone_source_url.startswith(("https://", "http://")):
+                    st.markdown(f"[Open phone source]({phone_source_url})")
+                website_url = str(row.get("website_url", "")).strip()
+                if website_url.startswith(("https://", "http://")):
+                    st.markdown(f"[Visit facility website]({website_url})")
+                else:
+                    st.caption("Website: not listed in the available records.")
+                capacity_url = str(row.get("capacity_release_source_url", "")).strip()
+                if capacity_url.startswith(("https://", "http://")):
+                    st.markdown(f"[Open capacity source]({capacity_url})")
                 urls = source_urls(row.source_urls_json)
                 for i, url in enumerate(urls, 1):
                     st.markdown(f"[Open facility source {i}]({url})")
@@ -148,6 +207,8 @@ with st.expander("How this prototype decides"):
     2. It requires a source URL and usable India coordinates before a record can be recommended.
     3. It removes straightforward nearby negation matches and preserves the matched excerpt for inspection.
     4. It estimates district demand as modeled 2020 district population × the selected percentage (0–2%). It divides that demand equally among every citable, coordinate-valid facility record for the selected service in that district. This is a scenario allocation, not a forecast.
-    5. For routine and urgent searches, allocated cases divided by total bed proxy is multiplied by the NFHS relative demand proxy and converted to a capped 0–12 km-equivalent penalty: 12 × (1 − exp(−load ratio × NFHS factor)). Missing population estimates receive no load adjustment; missing bed counts use a disclosed 50-bed fallback. Emergency searches remain nearest-first.
-    6. The score is a prototype heuristic, not a probability, clinical recommendation, route time, or live capacity signal. No suitable citable result means the app abstains.
+    5. When TravelTime is available, the score starts with its weekday-morning driving estimate in minutes. Otherwise it starts with straight-line kilometers. Routine and urgent searches add the demand-load adjustment; emergency searches skip it.
+    6. Load and confidence adjustments are defined in km-equivalent units. TravelTime mode converts them at 2 minutes per km (1 minute ≈ 0.5 km); straight-line mode uses the original kilometer values. Confidence tiers are high (50–100/100) +0 km-equivalent, medium (25–49) +40, low (0–24) +80, and unknown +80. These are explicit prototype rules, not clinical validation.
+    7. Capacity uses the release value when present. `xgboost_estimate` is shown with the note “This is an estimated capacity.” The release's original capacity is cross-checked against the Marketplace field; mismatches are surfaced, while the released value remains the calculation input. Phone and website come from the release when available, then fall back to Marketplace fields.
+    8. TravelTime results are provider driving estimates, not live traffic. A route unavailable within the provider's three-hour search window is omitted. The score is a prototype heuristic, not a clinical recommendation or live capacity signal. No suitable citable result means the app abstains.
     """)
