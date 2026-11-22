@@ -634,7 +634,7 @@ def service_candidates(frame, service):
 
 
 def rank_candidates(frame, service, origin, severity="routine", population_share_pct=0.0, top_k=5,
-                    travel_times=None, *, nearest_only=False):
+                    travel_times=None, *, nearest_only=False, balance_projected_load=False):
     """Rank eligible matches, using distance alone for the no-reachable-routes fallback."""
     key = _service_key(service)
     term_col, excerpt_col, cite_col = f"term_{key}", f"excerpt_{key}", f"claim_citable_{key}"
@@ -697,7 +697,16 @@ def rank_candidates(frame, service, origin, severity="routine", population_share
     work["supporting_excerpt"] = work[excerpt_col]
     work["source_urls"] = work.source_urls_json.map(lambda x: json.loads(x) if isinstance(x, str) else [])
     sort_cols = ["score", "travel_time_minutes", "distance_km"] if routed else ["score", "distance_km"]
-    return work.sort_values(sort_cols, ascending=True, na_position="last").head(int(top_k)).reset_index(drop=True)
+    ranked = work.sort_values(sort_cols, ascending=True, na_position="last")
+    comparable = 0
+    if balance_projected_load and severity == "routine" and not nearest_only:
+        from projected_load import TIME_CRITICAL_SERVICES, prefer_projected_load
+
+        if service not in TIME_CRITICAL_SERVICES:
+            ranked, comparable = prefer_projected_load(ranked, service, routed=routed)
+    ranked = ranked.head(int(top_k)).reset_index(drop=True)
+    ranked.attrs["projected_load_comparable"] = comparable
+    return ranked
 
 
 def resolve_location(frame, location_text="", lat=None, lon=None):

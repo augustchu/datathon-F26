@@ -4,7 +4,6 @@ from __future__ import annotations
 import json
 from math import isfinite
 import os
-import re
 from urllib.parse import quote
 
 import pandas as pd
@@ -16,6 +15,7 @@ from databricks.sdk.core import Config
 from facility_map import build_map
 from metric_explanations import EXPLANATIONS
 from pipeline import SERVICE_TERMS, rank_candidates, resolve_location, service_candidates
+from projected_load import TIME_CRITICAL_SERVICES
 from service_confidence import RECORD_TEXT_KINDS
 from traveltime_adapter import travel_time_matrix
 
@@ -120,11 +120,10 @@ with search_controls:
     with care_col:
         service = st.selectbox("Care needed", list(SERVICE_TERMS), key="search_service")
         severity = st.radio("Urgency", ["routine", "urgent", "emergency"], horizontal=True, key="search_urgency",
-                            help="Emergency ranking uses travel, service match, and evidence confidence, with no regional demand adjustment.")
-        population_share_pct = st.slider("Regional population needing this care", 0.0, 2.0, 1.0, 0.1,
-                                         format="%.1f%%", key="search_population_share",
-                                         help="Scenario share of the modeled district population that needs the selected service.")
-        show_more_info("scenario_share", "Regional population needing this care")
+                            help="Projected load balancing applies only to routine, eligible services.")
+        load_allowed = severity == "routine" and service not in TIME_CRITICAL_SERVICES
+        balance_load = st.toggle("Consider projected load", value=False, disabled=not load_allowed,
+                                 help="Compare published monthly caseload and throughput projections for nearby options.")
         top_k = st.slider("Options to show", 1, 10, 5, key="search_result_count")
     with location_col:
         coordinate_mode = st.toggle("Enter coordinates", value=False, key="search_coordinate_mode")
@@ -205,8 +204,8 @@ else:
                 travel_status = "Straight-line fallback: TravelTime unavailable"
                 st.warning(f"TravelTime could not be used ({type(exc).__name__}); showing the straight-line kilometer ranking.")
         ranked = rank_candidates(facilities, service, origin, severity=severity,
-                                 population_share_pct=population_share_pct, top_k=top_k,
-                                 travel_times=travel_times, nearest_only=nearest_only)
+                                 top_k=top_k, travel_times=travel_times, nearest_only=nearest_only,
+                                 balance_projected_load=load_allowed and balance_load)
     except Exception as exc:
         st.error(str(exc))
         st.stop()
@@ -226,14 +225,19 @@ else:
     else:
         if nearest_only:
             st.warning("TravelTime found no matching facilities it could route to within its three-hour search window. Showing the closest matches by straight-line distance.")
+        comparable = ranked.attrs.get("projected_load_comparable", 0)
         order = "Closest by straight-line distance" if nearest_only else "Lowest ranking score first"
+        if comparable:
+            order = "Projected load preference, then ranking score"
         show_calculated("Result order", order, "result_order", compact=True)
         if not nearest_only:
             base = "driving minutes" if using_routes else "straight-line kilometers"
-            if severity == "emergency":
-                st.info(f"Emergency ranking uses {base}, service match, and evidence confidence.")
+            st.info(f"The baseline ranking uses {base}, service match, and evidence confidence.")
+        if load_allowed and balance_load:
+            if comparable:
+                st.caption(f"Compared projected monthly load for {comparable} nearby facilities with comparable service evidence.")
             else:
-                st.info(f"Ranking uses {base}, service match, evidence confidence, and the selected regional demand scenario.")
+                st.caption("No comparable projected load could be used for this search. The ordinary order applies.")
         result_column, map_column = st.columns([1.25, 1], gap="medium")
         with map_column:
             show_facility_map(origin, ranked, origin_label=location_text or origin_basis, using_routes=using_routes)
@@ -270,36 +274,12 @@ else:
                 if using_routes:
                     show_calculated("Straight-line reference", f"{row.distance_km:.1f} km",
                                     "straight_line_distance", scope, compact=True)
-                region_pop = row.get("regional_population")
-                if pd.notna(region_pop):
-                    st.caption(f"Population region: {row.get('nfhs_district', 'unknown')}, {row.get('nfhs_state', 'unknown')} · {row.get('population_source', 'source not recorded')}")
-                    district_col, allocation_col = st.columns(2)
-                    with district_col:
-                        show_calculated("Modeled district population (2020)", f"{float(region_pop):,.0f}",
-                                        "district_population", scope, compact=True)
-                        show_calculated("Expected district cases in scenario", f"{row.regional_expected_cases:,.1f}",
-                                        "district_cases", scope, compact=True)
-                    with allocation_col:
-                        show_calculated("Eligible district facility records", f"{int(row.regional_facility_count):,}",
-                                        "allocation_count", scope, compact=True)
-                        show_calculated("Scenario cases allocated to this facility", f"{row.simulated_load:,.1f}",
-                                        "facility_cases", scope, compact=True)
-                else:
-                    show_calculated("Modeled district population (2020)", "Unavailable or ambiguous",
-                                    "district_population", scope, compact=True)
-                load_col, factor_col = st.columns(2)
-                with load_col:
-                    show_calculated("Bed proxy used for load calculation", f"{row.capacity_basis_beds:,.0f} beds",
-                                    "bed_proxy", scope, compact=True)
-                    show_calculated("Allocated load per proxy bed", f"{row.load_ratio:.3f}",
-                                    "load_ratio", scope, compact=True)
-                if pd.notna(row.get("regional_demand_factor")):
-                    basis = row.get(f"nfhs_burden_basis_{re.sub(r'[^a-z0-9]+', '_', service.casefold()).strip('_')}", "")
-                    with factor_col:
-                        show_calculated("Relative regional demand factor", f"{row.regional_demand_factor:.2f}",
-                                        "regional_demand_factor", scope, compact=True)
-                        if basis:
-                            st.caption(f"NFHS basis: {basis}")
+                if pd.notna(row.get("projected_capacity")):
+                    demand_label = "Projected demand" if str(row.projected_caseload_predicted).casefold() == "true" else "Historical demand"
+                    st.write(f"**{demand_label}** · {row.projected_caseload:,.1f} {row.projected_unit}")
+                    st.write(f"**Modeled throughput** · {row.projected_capacity:,.1f} {row.projected_unit}")
+                    st.caption(f"{row.projected_scope} · {row.projected_period} · Planning estimate")
+                    st.markdown(f"[Projection methods and data]({REPOSITORY_DOCUMENTS}non-ml/caseload/NETWORK_CASELOAD.md)")
                 st.write(f"**Location:** {row.get('city', '')}, {row.get('district', '')}, {row.get('state', '')} {row.get('pin', '')}")
                 st.write(f"**Matched service text:** {row.matched_term}")
                 st.write(f"**Evidence excerpt:** {row.supporting_excerpt}")
@@ -349,6 +329,7 @@ with st.expander("How this prototype decides"):
     st.markdown(
         "Search includes branches with supporting evidence for the selected service and usable locations. "
         "An explicit service conflict or a documented location hold excludes a branch. "
+        "The optional projected load comparison uses comparable monthly caseload and throughput for nearby routine-care options. "
         "Use **More info** beside each calculated value to see its method and sources."
     )
     st.markdown(f"[Read the prototype decisions and methodology]({REPOSITORY_DOCUMENTS}first-prototype/DECISIONS.md)")

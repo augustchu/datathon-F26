@@ -42,7 +42,7 @@ EXPLANATIONS = {
     ),
     "result_order": Explanation(
         "The facility's position among the options returned by this search.",
-        "The app sorts by lowest ranking score, breaking ties by drive time when available and then straight-line distance. If TravelTime returns zero reachable matches, it orders by straight-line distance alone.",
+        "The app sorts by lowest ranking score, breaking ties by drive time when available and then straight-line distance. The optional projected load comparison can move one nearby routine-care option to the top. If TravelTime returns zero reachable matches, the app orders by straight-line distance alone.",
         "The standard order balances travel with the strength of the service evidence. The distance-only fallback surfaces the closest matches when route times are unavailable for the entire search.",
         (DECISIONS,),
     ),
@@ -83,12 +83,12 @@ EXPLANATIONS = {
         (DECISIONS, LOCATION_AUDIT),
     ),
     "ranking_score": Explanation(
-        "The number the app uses to order facilities within this search. A lower score places a facility higher in the results.",
+        "The baseline score for this search. Lower scores rank higher in the ordinary order.",
         "Start with drive minutes or straight-line kilometers. Add `10 × (1 − match / 100)` for service match in minute-equivalents. "
         "For confidence `c`, use `s(c) = 1 / (1 + exp((c − 55) / 3.5))` and add `60 × (s(c) − s(100)) / (s(0) − s(100))` in minute-equivalents. "
-        "Halve both adjustments for straight-line ranking. Routine and urgent searches also add `12 × (1 − exp(−load ratio × regional demand factor))` in distance mode, doubled in drive mode. Emergency searches omit the demand term.",
+        "Halve both adjustments for straight-line ranking. The optional projected load comparison runs separately from this score.",
         "Stronger evidence can justify a longer trip. The curve changes little across high confidence scores and makes weaker evidence matter more as confidence drops through the 50s. "
-        "The 60-minute ceiling and the shape of the curve are working prototype choices. The demand term lets routine and urgent searches respond to the scenario.",
+        "The 60-minute ceiling and the shape of the curve are working prototype choices.",
         (DECISIONS, ("Confidence-weight tradeoff and worked examples", "first-prototype/DECISIONS.md#confidence-weight-tradeoff")),
     ),
     "geography_status": Explanation(
