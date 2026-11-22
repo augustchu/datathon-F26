@@ -229,5 +229,7 @@ def main(argv=None):
     return 1 if any(row['outcome'] != 'pass' for row in report['cases']) else 0
 
 
-if __name__ == '__main__' and globals().get('__file__'):
-    sys.exit(main())
+if __name__ == '__main__':
+    if globals().get('__file__'):
+        sys.exit(main())
+    print('TravelTime did not run. Open non-ml/notebooks/10_check_traveltime_live.ipynb to run it in Databricks.')
