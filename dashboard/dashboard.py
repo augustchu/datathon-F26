@@ -26,6 +26,68 @@ from capacity_model import CapacityModel, MAX_BEDS, Z_LIMIT, available_models  #
 st.set_page_config(page_title="Facility Finder", page_icon="🏥", layout="wide")
 CALL_PROMPT = "Call this facility before traveling to verify the service, branch, and current availability."
 
+st.markdown("""
+<style>
+/* Make facility cards more compact */
+[data-testid="stVerticalBlock"] {
+    gap: 0.55rem;
+}
+
+/* Metric labels */
+[data-testid="stMetricLabel"] {
+    font-size: 0.95rem !important;
+    line-height: 1.2 !important;
+}
+
+/* Metric values */
+[data-testid="stMetricValue"],
+[data-testid="stMetricValue"] > div {
+    font-size: 1.8rem !important;
+    line-height: 1.25 !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+}
+
+/* Keep metric columns aligned */
+[data-testid="stHorizontalBlock"] {
+    align-items: center;
+}
+
+/* Smaller hospital name */
+[data-testid="stMarkdownContainer"] h3 {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.2rem !important;
+}
+
+/* Smaller descriptive text */
+[data-testid="stMarkdownContainer"] p {
+    font-size: 0.88rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.35rem !important;
+}
+
+/* Smaller bullet points */
+[data-testid="stMarkdownContainer"] li {
+    font-size: 0.86rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 0.15rem !important;
+}
+
+/* Compact section headings */
+[data-testid="stMarkdownContainer"] h4 {
+    font-size: 1rem !important;
+    margin-top: 0.4rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+/* Reduce padding inside bordered facility cards */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    padding: 0.7rem !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ----------------------------------------------------------------------------
 # 1. SERVICE TAXONOMY
 # ----------------------------------------------------------------------------
@@ -540,7 +602,8 @@ def show_html(markup: str, height: int):
 def build_map(origin, top, label) -> str:
     lat0, lon0 = origin
     m = folium.Map(location=[lat0, lon0], zoom_start=11, tiles="OpenStreetMap", control_scale=True)
-    folium.Marker([lat0, lon0], tooltip=f"Your location: {safe(label)}", icon=folium.Icon(color="red", icon="home", prefix="fa")).add_to(m)
+    folium.Marker([lat0, lon0], tooltip=f"Your location: {safe(label)}", 
+                  icon=folium.Icon(color="red", icon="home", prefix="fa")).add_to(m)
     points = [[lat0, lon0]]
     for i, res in enumerate(top, 1):
         r = res["row"]
@@ -556,10 +619,34 @@ def build_map(origin, top, label) -> str:
                  f'<b>{safe(res["cap_label"])}:</b> {safe(res["cap_value"])}<br>'
                  f'<a href="{gmaps}" target="_blank" rel="noopener">Directions</a><br>'
                  f'<i style="color:#666">{safe(CALL_PROMPT)}</i></div>')
-        icon = folium.DivIcon(html=(f'<div style="background:#1d70b8;color:#fff;border:2px solid #fff;border-radius:50% 50% 50% 0;'
-                                    f'transform:rotate(-45deg);width:30px;height:30px;box-shadow:0 1px 4px rgba(0,0,0,.5)">'
-                                    f'<div style="transform:rotate(45deg);text-align:center;line-height:26px;font:bold 13px sans-serif">{i}</div></div>'),
-                              icon_size=(30, 30), icon_anchor=(15, 30))
+        icon = folium.DivIcon(
+            html=(
+                '<div style="'
+                'width:36px;height:42px;position:relative;'
+                '">'
+                '<div style="'
+                'position:absolute;left:3px;top:3px;'
+                'width:30px;height:30px;'
+                'background:#1d70b8;color:#fff;'
+                'border:2px solid #fff;'
+                'border-radius:50% 50% 50% 0;'
+                'transform:rotate(-45deg);'
+                'box-shadow:0 1px 4px rgba(0,0,0,.5);'
+                '">'
+                '<div style="'
+                'width:100%;height:100%;'
+                'display:flex;align-items:center;justify-content:center;'
+                'transform:rotate(45deg);'
+                'font:bold 13px sans-serif;'
+                '">'
+                f'{i}'
+                '</div>'
+                '</div>'
+                '</div>'
+            ),
+            icon_size=(36, 42),
+            icon_anchor=(18, 42),
+        )
         folium.Marker([r["lat"], r["lon"]], icon=icon, tooltip=f"{i}. {safe(r['name'])}",
                       popup=folium.Popup(popup, max_width=320)).add_to(m)
         points.append([r["lat"], r["lon"]])
@@ -701,43 +788,148 @@ if search:
         st.caption("Service matches are keyword matches in each facility's own text, not cited evidence. "
                    "The team's notebooks (04, 04b) provide cited, scope-checked service evidence.")
 
-        for i, res in enumerate(top, 1):
-            r = res["row"]
-            with st.container(border=True):
-                metrics = [("Distance", f"{res['dist']:.1f} km"), ("Fit", f"{res['fit']}/100"), (res["cap_label"], res["cap_value"])]
-                if res["occ"] is not None:
-                    metrics.append(("Occupancy", f"{res['occ']:.0%}"))
-                if balance_on:
-                    metrics.append(("Balance", f"{res['balance']}/100"))
-                cols = st.columns([4] + [1] * len(metrics))
-                cols[0].markdown(f"### {i}. {r['name']}")
-                cols[0].caption(f"{r['city'] or 'city n/a'}, {r['state'] or 'state n/a'} · PIN {r['pin'] or 'n/a'} · {r['ownership'] or 'ownership n/a'}")
-                for col, (lab, val) in zip(cols[1:], metrics):
-                    col.metric(lab, val)
-                phone = f"[{r['phone']}](tel:{re.sub(r'[^+0-9]', '', r['phone'])})" if r["phone"] else "Not listed"
-                st.markdown(f"**Address:** {r['address'] or 'Not listed'}  \n**Phone:** {phone}  \n**Hours:** {r['hours'] or 'Not listed (call to confirm)'}")
-                st.caption(CALL_PROMPT)
-                st.markdown("**Why this facility**")
-                st.markdown("\n".join(f"- {w}" for w in (([res["balance_note"]] if balance_on else []) + res["why"])))
-                if res["caveats"]:
-                    st.markdown("**Caveats**")
-                    st.markdown("\n".join(f"- {w}" for w in res["caveats"]))
-                with st.expander("Fit breakdown and source"):
-                    comp = pd.DataFrame({"component": list(res["comps"]), "value (0-1)": [round(v, 2) for v in res["comps"].values()],
-                                         "weight": [weights[k] for k in res["comps"]]})
-                    st.dataframe(comp, hide_index=True, use_container_width=True)
-                    st.caption(f"Source: {r['source']} · facility_id {r['facility_id']} · last verified: {res['verified'] or 'unknown'}")
+        results_col, map_col = st.columns([1, 1], gap="medium")
 
-        if balance_on and not any(x is nearest for x in top):
-            st.caption(f"For comparison, the closest option is {nearest['row']['name']} ({nearest['dist']:.1f} km).")
+        with results_col:
+            st.subheader("Facility options")
 
-        st.subheader("Map")
-        show_html(build_map((lat, lon), top, label), 520)
-        st.caption("Click a pin for address, phone, hours and directions. Red = your location, numbered blue pins = results.")
-        contacts = pd.DataFrame([{"#": i, "Facility": x["row"]["name"], "Phone": x["row"]["phone"] or "Not listed",
-                                  "Hours": x["row"]["hours"] or "Not listed", "Address": x["row"]["address"] or "Not listed",
-                                  "Distance (km)": round(x["dist"], 1)} for i, x in enumerate(top, 1)])
-        st.dataframe(contacts, hide_index=True, use_container_width=True)
+            # Fixed-height container with independent scrolling
+            with st.container(height=720, border=False):
+                for i, res in enumerate(top, 1):
+                    r = res["row"]
+
+                    with st.container(border=True):
+                        # Hospital name and location
+                        st.markdown(f"### {i}. {r['name']}")
+                        st.caption(
+                            f"{r['city'] or 'city n/a'}, "
+                            f"{r['state'] or 'state n/a'} · "
+                            f"PIN {r['pin'] or 'n/a'} · "
+                            f"{r['ownership'] or 'ownership n/a'}"
+                        )
+
+                        # Metrics below the name, with enough room for values
+                        metrics = [
+                            ("Distance", f"{res['dist']:.1f} km"),
+                            ("Fit (/100)", f"{res['fit']:.1f}"),
+                            (res["cap_label"], res["cap_value"]),
+                        ]
+
+                        if res["occ"] is not None:
+                            metrics.append(
+                                ("Occupancy", f"{res['occ']:.0%}")
+                            )
+
+                        if balance_on:
+                            metrics.append(
+                                ("Balance", f"{res['balance']:.1f}/100")
+                            )
+
+                        metric_cols = st.columns(len(metrics))
+
+                        for col, (lab, val) in zip(metric_cols, metrics):
+                            with col:
+                                st.metric(lab, val)
+
+                        phone = (
+                            f"[{r['phone']}](tel:{re.sub(r'[^+0-9]', '', r['phone'])})"
+                            if r["phone"] else "Not listed"
+                        )
+
+                        st.markdown(
+                            f"**Address:** {r['address'] or 'Not listed'}  \n"
+                            f"**Phone:** {phone}  \n"
+                            f"**Hours:** {r['hours'] or 'Not listed (call to confirm)'}"
+                        )
+
+                        st.caption(CALL_PROMPT)
+
+                        st.markdown("**Why this facility**")
+                        st.markdown(
+                            "\n".join(
+                                f"- {w}"
+                                for w in (
+                                    ([res["balance_note"]] if balance_on else [])
+                                    + res["why"]
+                                )
+                            )
+                        )
+
+                        if res["caveats"]:
+                            st.markdown("**Caveats**")
+                            st.markdown(
+                                "\n".join(f"- {w}" for w in res["caveats"])
+                            )
+
+                        with st.expander("Fit breakdown and source"):
+                            comp = pd.DataFrame({
+                                "component": list(res["comps"]),
+                                "value (0-1)": [
+                                    round(v, 2) for v in res["comps"].values()
+                                ],
+                                "weight": [
+                                    weights[k] for k in res["comps"]
+                                ],
+                            })
+                            st.dataframe(
+                                comp,
+                                hide_index=True,
+                                use_container_width=True,
+                            )
+                            st.caption(
+                                f"Source: {r['source']} · "
+                                f"facility_id {r['facility_id']} · "
+                                f"last verified: {res['verified'] or 'unknown'}"
+                            )
+
+                with map_col:
+                    st.subheader("Map")
+                    show_html(build_map((lat, lon), top, label), 720)
+
+                    st.caption(
+                        "Click a pin for address, phone, hours and directions. "
+                        "Red = your location, numbered blue pins = results."
+                    )
+
+                    contacts = pd.DataFrame([
+                        {
+                            "#": i,
+                            "Facility": x["row"]["name"],
+                            "Phone": x["row"]["phone"] or "Not listed",
+                            "Hours": x["row"]["hours"] or "Not listed",
+                            "Address": x["row"]["address"] or "Not listed",
+                            "Distance (km)": round(x["dist"], 1)
+                        }
+                        for i, x in enumerate(top, 1)
+                    ])
+
+                    with st.expander("View all facility contact details"):
+                        st.dataframe(
+                            contacts,
+                            hide_index=True,
+                            use_container_width=True
+                        )
+
+st.markdown("""
+<style>
+/* Force larger scoring numbers inside Streamlit metrics */
+div[data-testid="stMetricValue"],
+div[data-testid="stMetricValue"] *,
+[data-testid="stMetricValue"] span {
+    font-size: 1.9rem !important;
+    line-height: 1.25 !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+}
+
+/* Make metric labels slightly larger too */
+div[data-testid="stMetricLabel"],
+div[data-testid="stMetricLabel"] * {
+    font-size: 0.95rem !important;
+    line-height: 1.2 !important;
+}
+</style>
+""", unsafe_allow_html=True) 
 
 # ----------------------------------------------------------------------------
 # 7. CAPACITY ESTIMATOR: dashboard inputs -> model -> output
