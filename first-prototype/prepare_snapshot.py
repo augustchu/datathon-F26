@@ -20,7 +20,7 @@ FACILITIES_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_found
 PINS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory"
 NFHS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.nfhs_5_district_health_indicators"
 BOUNDARY_ZIP = "/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip"
-POPULATION_CSV = "/Volumes/additional_india_data/default/additional_india_data/nfhs_district_population_2020.csv"
+POPULATION_CSV_RELATIVE = Path("load-balancing-pipeline") / "outputs" / "nfhs_district_population_2020.csv"
 CAPACITY_RELEASE_RELATIVE = Path("max-supplemented-data") / "capacity_and_confidence"
 OUTPUT_CATALOG = "additional_india_data"
 OUTPUT_SCHEMA = "default"
@@ -28,6 +28,10 @@ OUTPUT_PREFIX = "first_prototype"
 
 current = dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get()
 repo_root = "/Workspace" + str(Path(current).parent)
+POPULATION_CSV = os.getenv(
+    "POPULATION_CSV",
+    str(Path(repo_root).parent / POPULATION_CSV_RELATIVE),
+)
 CAPACITY_RELEASE_CSV = Path(repo_root).parent / CAPACITY_RELEASE_RELATIVE / "facilities_newest_capacity.csv"
 CAPACITY_CONFIDENCE_CSV = Path(repo_root).parent / CAPACITY_RELEASE_RELATIVE / "facility_confidence.csv"
 if repo_root not in sys.path:
@@ -100,9 +104,9 @@ boundaries = read_geojson_archive(BOUNDARY_ZIP)
 prepared = attach_regions(prepared, boundaries, nfhs)
 if not Path(POPULATION_CSV).exists():
     raise FileNotFoundError(
-        f"District population estimates not found at {POPULATION_CSV}. Upload the "
-        "load-balancing-pipeline/outputs/nfhs_district_population_2020.csv file to this Volume "
-        "or update POPULATION_CSV to its actual Volume path."
+        f"District population estimates not found at {POPULATION_CSV}. Confirm the full "
+        "repository is synced to the Databricks Git folder, or set POPULATION_CSV to an "
+        "alternate Volume path."
     )
 population = pd.read_csv(POPULATION_CSV)
 prepared = attach_population(prepared, population)
