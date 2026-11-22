@@ -1,0 +1,34 @@
+[
+  {
+    "case_id": "R37",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://aadharhealth.com/nbems-mandatory-disclosure.html",
+    "identity_url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2018-0555_5th%20Edition.pdf",
+    "alternative_url": "https://aadharhealth.com/?fn=about-aadhar-health-institute",
+    "evidence_date": "",
+    "excerpt": "The institute's NBEMS disclosure lists 200 operational beds for South Bypass Crossing, Tosham Road, Hisar 125005. Its infrastructure page describes a 400-bed hospital.",
+    "rationale": "The regulator-facing disclosure and NABH's 2021–25 certificate identify the same branch. NABH lists 200 sanctioned beds. The hospital's two pages describe different scopes and provide no common observation date. Neither page reconciles the comparable total with the sample's counts."
+  },
+  {
+    "case_id": "R38",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.pawanahospital.com/about-us.php",
+    "identity_url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2016-0405_5th%20Edition_Scope%20Correction_SA.pdf",
+    "evidence_date": "",
+    "excerpt": "Pawana Hospital's About page calls the Somatane Phata facility 203-bed and describes it as 210-bed in the executive director biography on the same page.",
+    "rationale": "The hospital page and NABH certificate agree on Gat No. 167, Somatane Phata, PIN 410506. NABH documented 203 sanctioned beds during an accreditation cycle ending July 2, 2026. The operator gives two undated totals, and the sanctioned figure cannot resolve their operating scope or the conflicting report."
+  },
+  {
+    "case_id": "R39",
+    "status": "supported",
+    "verified_value": 164,
+    "evidence_url": "https://kdmsh.in/#:~:text=Our%20hospital%20is%20164%20bedded%20hospital",
+    "identity_url": "https://www.wbsedcl.in/irj/go/km/docs/internet/new_website/Other_Notification.html#:~:text=Kasturi%20Das%20Memorial%20Superspecialty%20Hospital",
+    "alternative_url": "https://d37e9lgzp3sa8.cloudfront.net/sites/default/files/Public_Disclosure_on_Standards_for_Hospitals_in_the_Provider_Network.pdf",
+    "evidence_date": "",
+    "excerpt": "The operator explicitly describes its Kasturi Das Memorial hospital at Mollargate, Maheshtala as a 164-bed facility.",
+    "rationale": "The statement names the hospital, parent company and exact locality. The West Bengal utility's listing independently matches the New Santoshpur street address and PIN 700142. The operator supplies an undated whole-facility total, distinct from the historical insurer figures. No observation date is assigned to the operator claim."
+  }
+]

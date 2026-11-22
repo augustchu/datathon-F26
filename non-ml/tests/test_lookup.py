@@ -10,18 +10,119 @@ from facility_tool.data import extract_claims, link_entities, load_records
 from facility_tool.examples import demo_inputs, demo_overlays, demo_pressure
 from facility_tool.geo_audit import attach_routing_review, audit_locations
 from facility_tool.geography import build_postal_areas
-from facility_tool.lookup import lookup
+from facility_tool.lookup import lookup, side_by_side
 from facility_tool.moderation import ModerationStack
 from facility_tool.patient_experience import prepare_patient_experience
 from facility_tool.quality import build_quality_profiles
 from facility_tool.query_assets import prepare_lookup_assets
-from facility_tool.response import new_alternatives, record_call, report_unconfirmed_call
+from facility_tool.recommend import prepare_service_candidates
+from facility_tool.response import CONTACT_FIELDS, new_alternatives, record_call, report_unconfirmed_call
 from facility_tool.updates import contact_evidence, load_estimates
 from facility_tool.verification import verify_services
 from facility_tool.workspace import Store, load_inputs, read_config
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+class TravelLookupTest(unittest.TestCase):
+    def setUp(self):
+        temp = TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.config = read_config(ROOT)
+        self.config['traveltime']['max_destinations'] = 3
+        self.store = Store(ROOT, 'public', self.config['as_of'], temp.name)
+        self.branches = {'far': 77.90, **{f'branch-{index}': 77 + index / 100 for index in range(1, 7)},
+                         'location-hold': 77.07, 'evidence-hold': 77.08}
+        entities = pd.DataFrame([
+            dict(facility_id=ident, name=ident, address='Example address', city='Example city',
+                 district='Example district', state='Example state', pin='110001', lat=28.0, lon=lon,
+                 location_quality='source_coordinates_unverified', location_routing_eligible=ident != 'location-hold',
+                 location_hold_reason='Conflicting branch coordinates' if ident == 'location-hold' else '')
+            for ident, lon in self.branches.items()
+        ])
+        claims = pd.DataFrame([
+            dict(facility_id=ident, record_id=f'fixture-{ident}', service='dialysis', stance='supports',
+                 excerpt='Dialysis offered here', source_url='https://example.invalid/branch', source='fixture',
+                 scope='Whole branch', validity='active', citation_quality='candidate_links' if ident == 'evidence-hold' else 'direct')
+            for ident in self.branches
+        ])
+        prepared = prepare_service_candidates(entities, claims, 'dialysis', as_of=self.config['as_of'])
+        self.store.write('lookup_candidates_dialysis', prepared.assign(**dict.fromkeys(CONTACT_FIELDS)))
+        self.store.write('origin_index', pd.DataFrame(columns=['lookup_key']))
+        credentials = patch.dict('os.environ', {'TRAVELTIME_APP_ID': 'test-app', 'TRAVELTIME_API_KEY': 'test-key'})
+        credentials.start()
+        self.addCleanup(credentials.stop)
+
+    def _route_matrix(self, payload, *, unreachable=(), missing=()):
+        search = payload['departure_searches'][0]
+        travel_mode = search['transportation']['type']
+        branches = {lon: ident for ident, lon in self.branches.items()}
+        routes, omitted = [], []
+        for target in payload['locations'][1:]:
+            ident = branches[target['coords']['lng']]
+            self.assertNotIn(ident, {'location-hold', 'evidence-hold'})
+            if (travel_mode, ident) in unreachable:
+                omitted.append(target['id'])
+            elif (travel_mode, ident) not in missing:
+                order = 0 if ident == 'far' else int(ident[-1])
+                properties = {'travel_time': 9_000 + order * 60}
+                if travel_mode == 'driving':
+                    properties['distance'] = 110_000 + 2_000 * order
+                routes.append({'id': target['id'], 'properties': [properties]})
+        return {'results': [{'search_id': search['id'], 'locations': routes, 'unreachable': omitted}]}
+
+    def _lookup(self, **kwargs):
+        return lookup(self.store, self.config, concern='dialysis', location='28, 77', **kwargs)
+
+    @staticmethod
+    def _confirmed(result):
+        return result['rows'].query("mode == 'confirmed' and kind == 'recommendation'")
+
+    @patch('facility_tool.travel._post_json')
+    def test_all_documented_branches_routed_and_only_five_ranked(self, post):
+        post.side_effect = lambda payload, **_: self._route_matrix(payload, missing={('driving', 'branch-6')})
+        result = self._lookup()
+        rows = self._confirmed(result)
+        self.assertEqual(rows['facility_id'].tolist(), ['far', 'branch-1', 'branch-2', 'branch-3', 'branch-4'])
+        self.assertGreater(rows.iloc[0]['distance_km'], 50)
+        self.assertTrue(rows['ranking_travel_metric'].eq('route_distance_km').all())
+        self.assertEqual(post.call_count, 3)
+        self.assertEqual(result['routing']['comparison_status'], 'partial')
+        self.assertEqual(result['routing']['eligible_count'], 7)
+        self.assertEqual(result['routing']['unavailable_count'], 1)
+        self.assertEqual(set(result['route_status']['facility_id']), set(self.branches) - {'location-hold', 'evidence-hold'})
+        self.assertIn('route distance', rows.iloc[0]['fit_score_basis'])
+
+    @patch('facility_tool.travel._post_json')
+    def test_keeps_best_by_car_in_five_when_public_transport_cannot_reach_it(self, post):
+        post.side_effect = lambda payload, **_: self._route_matrix(payload, unreachable={('public_transport', 'far')})
+        result = self._lookup(travel_mode='public_transport')
+        rows = self._confirmed(result)
+        self.assertEqual(rows['facility_id'].tolist(), ['branch-1', 'branch-2', 'branch-3', 'branch-4', 'far'])
+        self.assertEqual(rows['rank'].tolist(), [1, 2, 3, 4, 5])
+        self.assertEqual(rows['travel_mode'].tolist(), ['public_transport'] * 4 + ['driving'])
+        self.assertEqual(rows.iloc[-1]['driving_rank'], 1)
+        self.assertIn('Car only for this search', rows.iloc[-1]['route_note'])
+        self.assertEqual(rows.iloc[-1]['requested_mode_route_status'], 'not_routed_within_limit')
+        self.assertEqual(result['routing']['driving_fallback_count'], 1)
+        self.assertEqual(post.call_count, 6)
+        compared = side_by_side(result['rows']).set_index('facility_id')
+        self.assertEqual(compared.index.tolist(), rows['facility_id'].tolist())
+        self.assertEqual(compared.loc['far', 'travel_mode'], 'driving')
+        self.assertIn('Car only', compared.loc['far', 'route_note'])
+
+    @patch('facility_tool.travel._post_json')
+    def test_missing_alternate_estimate_does_not_assert_car_only(self, post):
+        post.side_effect = lambda payload, **_: self._route_matrix(
+            payload, missing={('cycling', branch) for branch in self.branches},
+        )
+        result = self._lookup(travel_mode='cycling')
+        rows = self._confirmed(result)
+        self.assertEqual(len(rows), 5)
+        self.assertTrue(rows['travel_mode'].eq('driving').all())
+        self.assertTrue(rows['route_note'].str.contains('estimate was unavailable').all())
+        self.assertEqual(result['routing']['comparison_status'], 'unavailable')
 
 
 class LookupWorkflowTest(unittest.TestCase):

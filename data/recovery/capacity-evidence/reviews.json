@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Holy Family Hospital",
+    "pin": "400050",
+    "reviewed_on": "2026-11-21",
+    "verification": "manually verified: passed",
+    "supported_beds": 268,
+    "source_url": "https://holyfamilyhospital.in/about-us",
+    "screenshot": "holy-family-bandra-beds.jpg",
+    "reason": "The hospital's Bandra branch page states 268 beds, consistent with the FDR value. The IFFCO Tokio disclosure reports 232 as of March 2025. The hospital page gives no count observation date. Retain 268 as the hospital-published value."
+  },
+  {
+    "name": "Shri Balaji Metro Hospital, Raigarh",
+    "pin": "496001",
+    "reviewed_on": "2026-11-21",
+    "verification": "manually verified: failed",
+    "supported_beds": null,
+    "source_url": "https://shribalajimetrohospital.in/about",
+    "supporting_url": "https://ocmms.nic.in/OCMMS_NEW/download.action?applicationId=19540650&industryFor=both&industryState=Chhattisgarh&industryType=CTE",
+    "screenshot": "shri-balaji-metro-raigarh-beds.jpg",
+    "reason": "The branch's about page says 450 beds in its introduction and 400 beds in its feature list. The 2025 expansion permission refers to 106 operational beds and a proposed increase to 450. The operating total is unresolved."
+  }
+]

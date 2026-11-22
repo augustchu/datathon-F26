@@ -33,6 +33,41 @@ BOOTSTRAP = '''
 '''
 
 
+RECOVERY_BINDING = '''
+    import json
+    from hashlib import sha256
+
+    RECOVERY_INPUTS = ("records", "links", "entities", "linked_fdr")
+    RECOVERY_RELEASES = ("recovered_field_updates", "recovered_service_claims")
+
+    def recovery_digests(names):
+        digests = {"service_aliases": sha256(json.dumps(config["service_aliases"], sort_keys=True).encode()).hexdigest()}
+        for name in names:
+            digest = sha256()
+            with (STORE.path / f"{name}.jsonl").open("rb") as stream:
+                for block in iter(lambda: stream.read(1024 * 1024), b""):
+                    digest.update(block)
+            digests[name] = digest.hexdigest()
+        return digests
+
+    def read_recovered(name):
+        receipt = STORE.read("recovery_snapshot", optional=True)
+        rows = STORE.read(name, optional=True)
+        if rows.empty:
+            return rows
+        if not {"checkpoint", "sha256"} <= set(receipt.columns) or receipt["checkpoint"].duplicated().any():
+            raise ValueError("Recovery has no valid checkpoint receipt. Rerun notebook 04a.")
+        expected = receipt.set_index("checkpoint")["sha256"].to_dict()
+        try:
+            current = recovery_digests((*RECOVERY_INPUTS, *RECOVERY_RELEASES))
+        except FileNotFoundError as error:
+            raise ValueError("A recovery checkpoint is missing. Rerun notebook 04a for this snapshot.") from error
+        if expected != current:
+            raise ValueError("Recovery inputs or outputs changed. Rerun notebook 04a for this snapshot.")
+        return rows
+'''
+
+
 def markdown(text):
     return {"cell_type": "markdown", "metadata": {}, "source": dedent(text).strip().splitlines(keepends=True)}
 
@@ -377,6 +412,74 @@ def main():
         '''),
     ])
 
+    notebook("04a_source_recovery", "Recover missing fields from cited source passages", '''
+        Read the source records, branch links, entities and linked FDR rows from notebooks
+        01 and 02. Prepare a recovery audit and reviewed outputs for notebooks 04b and 05.
+        Use the same input mode and evidence date across all of these notebooks.
+    ''', [
+        markdown('''
+            ## Extract and review before publishing
+
+            Candidate extraction runs on the saved snapshot. It looks for branch-specific
+            bed and doctor counts, equipment and explicitly offered services. Exact excerpts
+            and offsets let reviewers compare each candidate with the saved passage.
+
+            To add saved passages or completed reviews, set `DATATHON_RECOVERY_DOCUMENTS`
+            or `DATATHON_RECOVERY_REVIEWS` to JSON files containing arrays of objects. An
+            omitted path supplies no entries. Run this notebook to view candidate IDs before
+            preparing decisions. Rerun here after updating the review file, then refresh 04b,
+            04c, 05 and 06b in that order so lookup uses the new evidence.
+            [Recovery inputs, review rules and validation](../SOURCE_GROUNDED_FIELD_RECOVERY.md)
+        '''),
+        code(RECOVERY_BINDING),
+        code('''
+            from facility_tool.field_recovery import prepare_field_recovery
+
+            def read_entries(variable):
+                value = os.environ.get(variable)
+                if not value:
+                    return []
+                path = Path(value).expanduser()
+                entries = json.loads(path.read_text(encoding="utf-8"))
+                if not isinstance(entries, list) or not all(isinstance(row, dict) for row in entries):
+                    raise ValueError(f"{variable} must point to a JSON array of objects.")
+                return entries
+
+            upstream = recovery_digests(RECOVERY_INPUTS)
+            recovery = prepare_field_recovery(
+                STORE.read("records"), STORE.read("links"), STORE.read("entities"), STORE.read("linked_fdr"),
+                config["service_aliases"], as_of=config["as_of"],
+                documents=read_entries("DATATHON_RECOVERY_DOCUMENTS"),
+                reviews=read_entries("DATATHON_RECOVERY_REVIEWS"),
+            )
+            if recovery_digests(RECOVERY_INPUTS) != upstream:
+                raise ValueError("Recovery inputs changed mid-run. Rerun notebook 04a.")
+            names = ("recovery_claims", "recovery_decisions", "recovery_summary", *RECOVERY_RELEASES)
+            frames = {name: recovery[name] for name in names}
+            for name, frame in frames.items():
+                STORE.write(name, frame)
+            receipt = {**upstream, **recovery_digests(RECOVERY_RELEASES)}
+            STORE.write("recovery_snapshot", pd.DataFrame(receipt.items(), columns=["checkpoint", "sha256"]))
+            show(recovery["recovery_summary"], limit=60)
+        '''),
+        markdown('''
+            ## Inspect the evidence and decisions
+
+            Review the exact branch, scope, dates and cited passage for each candidate.
+            Review is a check on what a publication says about a branch. Current slots,
+            staffed beds and treatment availability require their own evidence.
+        '''),
+        code('''
+            claims = recovery["recovery_claims"]
+            columns = ["claim_id", "facility_id", "field", "normalized_value", "unit", "scope",
+                       "source_url", "excerpt", "review_status"]
+            show(claims[[column for column in columns if column in claims]], limit=12)
+            show(recovery["recovery_decisions"], limit=20)
+            print(f"Reviewed field updates saved: {len(recovery['recovered_field_updates']):,}")
+            print(f"Reviewed service claims saved: {len(recovery['recovered_service_claims']):,}")
+        '''),
+    ])
+
     notebook("04b_verify_services", "Verify published services before lookup", '''
         Compare source evidence for the same linked branch and service. This notebook saves
         the corroboration result, disagreements and the quotes used to make the decision.
@@ -388,23 +491,30 @@ def main():
             check requires a second independent publisher with a compatible, explicit service
             statement. Two pages from one publisher count together. Manually reviewed public
             sources attach only when their name and location identify one branch in the snapshot.
+            Released recovery claims from notebook 04a join the same verification path.
             Expired and conflicting statements remain visible. Check current availability by phone.
         '''),
+        code(RECOVERY_BINDING),
         code('''
-            import json
-
             from facility_tool.examples import demo_reviewed_services
+            from facility_tool.field_recovery import merge_recovered_service_claims
             from facility_tool.reviewed_claims import attach_reviewed_claims
             from facility_tool.verification import verify_services
 
             claims = STORE.read("claims")
+            entities = STORE.read("entities")
             entries = demo_reviewed_services(config["as_of"]) if MODE == "demo" else json.loads(
                 (ROOT / "non-ml/config/reviewed_service_evidence.json").read_text(encoding="utf-8")
             )
             reviewed, decisions = attach_reviewed_claims(
-                entries, STORE.read("entities"), config["service_aliases"], config["as_of"],
+                entries, entities, config["service_aliases"], config["as_of"],
             )
             combined = pd.concat([claims, reviewed], ignore_index=True) if not reviewed.empty else claims
+            recovered = read_recovered("recovered_service_claims")
+            if not recovered.empty:
+                if not recovered["facility_id"].isin(entities["facility_id"]).all():
+                    raise ValueError("Recovery contains branches outside this snapshot. Rerun notebook 04a.")
+                combined = merge_recovered_service_claims(combined, recovered, config["as_of"])
             verification = verify_services(combined, config["as_of"])
             STORE.write("reviewed_service_links", decisions)
             STORE.write("verified_claims", combined)
@@ -475,8 +585,9 @@ def main():
 
             An unambiguous exact count is copied from the original FDR field with the
             quoted value and source record ID. Ranges and contradictory counts remain in
-            the audit from notebook 03. Linked phone and email evidence stays traceable
-            to the source listing. Multiple published contacts can coexist.
+            the audit from notebook 03. Reviewed recovered values from notebook 04a enter
+            the same sidecar with their own provenance. Linked phone and email evidence
+            stays traceable to the source listing. Multiple published contacts can coexist.
 
             Set `estimate_file` to an already-reviewed CSV or JSONL with `facility_id`,
             `field`, `method`, `value`, `unit`, `lower`, `upper`, `provenance` and `detail`.
@@ -485,6 +596,7 @@ def main():
             The count-model notebook can also supply a reviewed checkpoint for this snapshot.
             The demo uses hand-written overlay values so each mode can be compared locally.
         '''),
+        code(RECOVERY_BINDING),
         code('''
             from facility_tool.eda import COUNT_UNITS, reported_count_updates
             from facility_tool.examples import demo_overlays, demo_pressure
@@ -496,6 +608,9 @@ def main():
             linked = STORE.read("linked_fdr")
             estimate_file = None  # Optional path to existing results for this snapshot.
             observed = [reported_count_updates(linked, field) for field in COUNT_UNITS if field in linked.columns]
+            recovered = read_recovered("recovered_field_updates")
+            if not recovered.empty and not recovered["facility_id"].isin(entities["facility_id"]).all():
+                raise ValueError("Recovery contains branches outside this snapshot. Rerun notebook 04a.")
             imported = load_estimates(estimate_file, entities["facility_id"], services=config["service_aliases"])
             if not estimate_file and MODE != "demo":
                 fitted = STORE.read("count_model_estimates", optional=True)
@@ -521,7 +636,7 @@ def main():
                 if not estimate_file:
                     imported = fixture_estimates
 
-            frames = [frame for frame in [*observed, imported] if not frame.empty]
+            frames = [frame for frame in [*observed, recovered, imported] if not frame.empty]
             updates = pd.concat(frames, ignore_index=True) if frames else empty_updates()
             STORE.write("field_updates", updates)
             STORE.write("measured_load", measured_load)

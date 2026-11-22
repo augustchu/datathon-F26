@@ -18,7 +18,7 @@ def facilities():
         dict(facility_id="local-id-b", lat=28.0, lon=77.01, name="Example B"),
         dict(facility_id="local-id-a", lat=28.0, lon=77.01, name="Example A"),
         dict(facility_id="local-id-c", lat=28.0, lon=77.02),
-        dict(facility_id="local-id-distant", lat=28.0, lon=77.03),
+        dict(facility_id="local-id-distant", lat=17.38, lon=78.49),
         dict(facility_id="local-id-centroid", lat=28.0, lon=77.0, location_quality="district_centroid"),
         dict(facility_id="local-id-conflict", lat=28.0, lon=77.0, location_conflict=True),
         dict(facility_id="local-id-invalid", lat=0.0, lon=0.0),
@@ -38,17 +38,23 @@ class TravelTests(unittest.TestCase):
         post.assert_not_called()
 
     @patch("facility_tool.travel._post_json")
-    def test_one_matrix_keeps_partial_coverage_visible_and_stable(self, post):
-        post.return_value = {"results": [{
+    def test_batches_route_every_valid_destination_and_keep_partial_coverage_visible(self, post):
+        first_batch = {"results": [{
             "search_id": "from-origin",
             "locations": [{"id": "destination-1", "properties": [{"travel_time": 735, "distance": 1570}]}],
             "unreachable": ["destination-2"],
         }]}
+        second_batch = {"results": [{
+            "search_id": "from-origin",
+            "locations": [{"id": "destination-1", "properties": [{"travel_time": 12600}]}],
+            "unreachable": [],
+        }]}
+        post.side_effect = [first_batch, second_batch] * 2
         original = facilities()
         found = estimate_travel(ORIGIN, original, mode="public_transport", max_destinations=3, **SETTINGS)
         self.assertEqual(found["facility_id"].tolist(), original["facility_id"].tolist())
-        post.assert_called_once()
-        payload = post.call_args.args[0]
+        self.assertEqual(post.call_count, 2)
+        payload, final_payload = [call.args[0] for call in post.call_args_list]
         self.assertEqual(payload["locations"][0], {"id": "origin", "coords": {"lat": 28.0, "lng": 77.0}})
         self.assertEqual(payload["locations"][1]["coords"], {"lat": 28.0, "lng": 77.01})
         self.assertEqual(payload["departure_searches"], [{
@@ -57,11 +63,13 @@ class TravelTests(unittest.TestCase):
             "arrival_location_ids": ["destination-1", "destination-2", "destination-3"],
             "departure_time": "2026-11-21T12:00:00Z",
             "transportation": {"type": "public_transport"},
-            "travel_time": 5400,
+            "travel_time": 14400,
             "properties": ["travel_time"],
         }])
-        self.assertNotIn("local-id", json.dumps(payload))
-        self.assertNotIn("Example", json.dumps(payload))
+        self.assertEqual(final_payload["locations"][1]["coords"], {"lat": 17.38, "lng": 78.49})
+        self.assertEqual(final_payload["departure_searches"][0]["departure_time"], "2026-11-21T12:00:00Z")
+        self.assertNotIn("local-id", json.dumps([payload, final_payload]))
+        self.assertNotIn("Example", json.dumps([payload, final_payload]))
         by_id = found.set_index("facility_id")
         self.assertEqual(by_id.at["local-id-a", "travel_minutes"], 12.25)
         self.assertEqual(by_id.at["local-id-a", "travel_source"], SOURCE)
@@ -70,15 +78,34 @@ class TravelTests(unittest.TestCase):
             "local-id-a": "estimated",
             "local-id-b": "not_routed_within_limit",
             "local-id-c": "missing_result",
-            "local-id-distant": "outside_request_limit",
+            "local-id-distant": "estimated",
             "local-id-centroid": "invalid_destination",
             "local-id-conflict": "invalid_destination",
             "local-id-invalid": "invalid_destination",
         })
+        self.assertEqual(by_id.at["local-id-distant", "travel_minutes"], 210)
         self.assertTrue(by_id.loc[by_id["travel_status"].ne("estimated"), "travel_minutes"].isna().all())
         reordered = estimate_travel(ORIGIN, original.iloc[::-1], mode="public_transport", max_destinations=3, **SETTINGS)
-        self.assertEqual(post.call_args.args[0], payload)
+        self.assertEqual([call.args[0] for call in post.call_args_list[2:]], [payload, final_payload])
         pd.testing.assert_frame_equal(by_id.sort_index(), reordered.set_index("facility_id").sort_index())
+
+    @patch("facility_tool.travel._post_json")
+    def test_failed_batch_does_not_discard_routes_from_other_batches(self, post):
+        post.side_effect = [
+            HTTPError(ENDPOINT, 503, "Private provider response", None, None),
+            {"results": [{
+                "search_id": "from-origin",
+                "locations": [{"id": "destination-1", "properties": [{"travel_time": 120, "distance": 860}]}],
+                "unreachable": ["destination-2"],
+            }]},
+        ]
+        found = estimate_travel(ORIGIN, facilities(), max_destinations=2, **SETTINGS).set_index("facility_id")
+        self.assertEqual(post.call_count, 2)
+        self.assertEqual(found.at["local-id-a", "travel_status"], "provider_unavailable")
+        self.assertEqual(found.at["local-id-b", "travel_status"], "provider_unavailable")
+        self.assertEqual(found.at["local-id-c", "travel_status"], "estimated")
+        self.assertEqual(found.at["local-id-c", "route_distance_km"], 0.86)
+        self.assertEqual(found.at["local-id-distant", "travel_status"], "not_routed_within_limit")
 
     @patch("facility_tool.travel.build_opener")
     def test_transport_uses_fixed_endpoint_and_header_authentication(self, build):
@@ -107,7 +134,8 @@ class TravelTests(unittest.TestCase):
     def test_provider_error_uses_generic_status_and_never_exposes_error_text(self, post):
         post.side_effect = HTTPError(ENDPOINT, 429, "body with test-key", None, None)
         found = estimate_travel(ORIGIN, facilities(), max_destinations=1, **SETTINGS)
-        self.assertIn("rate_limited", set(found["travel_status"]))
+        post.assert_called_once()
+        self.assertEqual(set(found["travel_status"]), {"rate_limited", "not_requested", "invalid_destination"})
         self.assertNotIn("test-key", found.to_string())
         self.assertTrue(found["travel_minutes"].isna().all())
         post.side_effect = None
@@ -143,7 +171,7 @@ class TravelTests(unittest.TestCase):
         }]}
         for mode in ('driving', 'walking', 'cycling'):
             with self.subTest(mode=mode):
-                found = estimate_travel(ORIGIN, facilities(), mode=mode, max_destinations=3, **SETTINGS).set_index('facility_id')
+                found = estimate_travel(ORIGIN, facilities().iloc[:3], mode=mode, **SETTINGS).set_index('facility_id')
                 search = post.call_args.args[0]['departure_searches'][0]
                 self.assertEqual(search['transportation'], {'type': mode})
                 self.assertEqual(search['properties'], ['travel_time', 'distance'])

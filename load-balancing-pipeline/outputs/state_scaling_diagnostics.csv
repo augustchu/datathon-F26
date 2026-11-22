@@ -1,0 +1,37 @@
+state_scale_key,raster_state_total,polygons_in_raster,population_2020,state_scale_factor,scale_flag,unresolved_polygon_count_global,scale_factor_flag,coverage_flag
+andaman and nicobar islands,392298.8353285489,3,399000,1.0170817857917902,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+andhra pradesh,52515188.05477784,14,52504000,0.9997869558275947,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+arunachal pradesh,1716150.2328240161,25,1519000,0.8851206444207422,review_outside_0.9_1.1|partial_unknown_polygon,7,review_outside_0.9_1.1,partial_unknown_polygon
+assam,35611590.72505358,35,34668000,0.973503269417568,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+bihar,125208214.3765859,38,121302000,0.9688022515452759,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+chandigarh,874781.4645521556,1,1193000,1.36376917932384,review_outside_0.9_1.1|partial_unknown_polygon,7,review_outside_0.9_1.1,partial_unknown_polygon
+chhattisgarh,27566847.81255088,26,29109000,1.0559422752262229,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+dadra and nagar haveli and daman and diu,894209.0944453963,3,1018000,1.1384361961017415,review_outside_0.9_1.1|partial_unknown_polygon,7,review_outside_0.9_1.1,partial_unknown_polygon
+delhi,18367447.650481522,10,20193000,1.0993906384957421,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+goa,1552521.1761879756,2,1549000,0.9977319625381076,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+gujarat,68705560.4122199,32,68862000,1.0022769567243393,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+haryana,30012865.97292523,21,29077000,0.9688178405298088,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+himachal pradesh,7438676.300673189,12,7347000,0.9876757238831737,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+jammu and kashmir,14288527.052526817,19,13305000,0.93116665917269,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+jharkhand,39097177.96505089,24,37937000,0.9703257875520331,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+karnataka,68979673.11844687,30,66322000,0.9614716481204063,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+kerala,34028588.109078705,14,35307000,1.0375687609143036,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+ladakh,296315.5612483636,2,295000,0.9955602694545599,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+lakshadweep,63735.978495656775,1,68000,1.0669013264561993,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+madhya pradesh,84012192.39293866,52,83374000,0.9924035741151269,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+maharashtra,126471519.28218976,36,123295000,0.9748835208099134,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+manipur,3424654.2227771,15,3134000,0.9151288848830396,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+meghalaya,3691153.9654692463,11,3256000,0.8821089638795584,review_outside_0.9_1.1|partial_unknown_polygon,7,review_outside_0.9_1.1,partial_unknown_polygon
+mizoram,1324636.1545706505,11,1204000,0.9089288374363057,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+nagaland,1843322.526697364,10,2171000,1.1777645900577842,review_outside_0.9_1.1|partial_unknown_polygon,7,review_outside_0.9_1.1,partial_unknown_polygon
+odisha,46588266.69175137,30,45350000,0.9734210611451959,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+puducherry,1283884.1174653668,3,1537000,1.1971485425291595,review_outside_0.9_1.1|partial_unknown_polygon,7,review_outside_0.9_1.1,partial_unknown_polygon
+punjab,30884850.89729324,22,30099000,0.9745554576285129,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+rajasthan,80326725.36857015,33,78273000,0.974432850845757,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+sikkim,669215.8713824139,4,670000,1.0011717125237427,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+tamil nadu,81085877.84607422,38,76049000,0.9378821814615393,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+telangana,39160595.76684716,33,37473000,0.9569057688270448,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+tripura,3636028.137111234,7,4032000,1.108902309871386,review_outside_0.9_1.1|partial_unknown_polygon,7,review_outside_0.9_1.1,partial_unknown_polygon
+uttar pradesh,231488744.50078946,75,227943000,0.984682864350766,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+uttarakhand,11884948.228124743,13,11270000,0.9482582324869099,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon
+west bengal,99729149.03475417,23,97516000,0.9778084034991322,within_0.9_1.1|partial_unknown_polygon,7,within_0.9_1.1,partial_unknown_polygon

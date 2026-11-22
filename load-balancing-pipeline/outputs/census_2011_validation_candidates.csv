@@ -1,0 +1,707 @@
+nfhs_district_key,district_name,state_ut,pop_2020,census_key,Population,annualized_growth_2011_2020_pct,validation_note
+andaman and nicobar islands::nicobars,Nicobars,Andaman & Nicobar Islands,31643.71919491951,andaman and nicobar islands::nicobars,36842.0,-1.6757866674173227,exact state/name candidate; verify district boundaries were not split
+andaman and nicobar islands::north and middle andaman,North & Middle Andaman ,Andaman & Nicobar Islands,104558.47997546295,andaman and nicobar islands::north and middle andaman,105597.0,-0.10975561230833764,exact state/name candidate; verify district boundaries were not split
+andaman and nicobar islands::south andaman,South Andaman ,Andaman & Nicobar Islands,262797.8008296175,andaman and nicobar islands::south andaman,238142.0,1.1006551704879408,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::srikakulam,Srikakulam ,Andhra Pradesh,2731525.0926308217,andhra pradesh::srikakulam,2703114.0,0.11624143513715435,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::vizianagaram,Vizianagaram ,Andhra Pradesh,2348294.877992345,andhra pradesh::vizianagaram,2344474.0,0.018095095390036064,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::visakhapatnam,Visakhapatnam ,Andhra Pradesh,4630204.153056531,andhra pradesh::visakhapatnam,4290589.0,0.850002637750058,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::east godavari,East Godavari ,Andhra Pradesh,5284228.59571819,andhra pradesh::east godavari,5154296.0,0.2770063543487744,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::west godavari,West Godavari ,Andhra Pradesh,4044694.2600109247,andhra pradesh::west godavari,3936966.0,0.300401270553885,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::krishna,Krishna ,Andhra Pradesh,4633601.393959213,andhra pradesh::krishna,4517398.0,0.28260123586645314,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::guntur,Guntur ,Andhra Pradesh,5258257.499890639,andhra pradesh::guntur,4887813.0,0.8150226383702774,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::prakasam,Prakasam ,Andhra Pradesh,3714719.0980656096,andhra pradesh::prakasam,3397448.0,0.9969198070446827,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::sri potti sriramulu nello,Sri Potti Sriramulu Nello ,Andhra Pradesh,3292815.032889833,andhra pradesh::sri potti sriramulu nello,,,no exact Census 2011 state/name match
+andhra pradesh::y s r,Y.S.R. ,Andhra Pradesh,3066560.512522807,andhra pradesh::y s r,2882469.0,0.6902531271608892,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::kurnool,Kurnool ,Andhra Pradesh,4536356.603267983,andhra pradesh::kurnool,4053463.0,1.2584369751159397,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::anantapur,Anantapur ,Andhra Pradesh,4425353.527829443,andhra pradesh::anantapur,4081148.0,0.9037465407370382,exact state/name candidate; verify district boundaries were not split
+andhra pradesh::chittoor,Chittoor ,Andhra Pradesh,4487456.213062476,andhra pradesh::chittoor,4174064.0,0.8076423614819417,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::tawang,Tawang ,Arunachal Pradesh,55563.59060135461,arunachal pradesh::tawang,49977.0,1.1843501137319468,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::west kameng,West Kameng ,Arunachal Pradesh,58756.95061771469,arunachal pradesh::west kameng,83947.0,-3.8866343668479075,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::east kameng,East Kameng ,Arunachal Pradesh,121909.03440661346,arunachal pradesh::east kameng,78690.0,4.984223032945523,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::papum pare,Papum Pare ,Arunachal Pradesh,248499.680247758,arunachal pradesh::papum pare,176573.0,3.869743660036784,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::upper subansiri,Upper Subansiri ,Arunachal Pradesh,103238.40041586348,arunachal pradesh::upper subansiri,83448.0,2.392814707114721,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::upper siang,Upper Siang ,Arunachal Pradesh,31815.1145401021,arunachal pradesh::upper siang,35320.0,-1.1544829822309977,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::changlang,Changlang ,Arunachal Pradesh,219181.82994987976,arunachal pradesh::changlang,148226.0,4.442094651277473,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::lower subansiri,Lower Subansiri ,Arunachal Pradesh,,arunachal pradesh::lower subansiri,83030.0,,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::dibang valley,Dibang Valley ,Arunachal Pradesh,59718.35578013417,arunachal pradesh::dibang valley,8004.0,25.019530158810777,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::lower dibang valley,Lower Dibang Valley ,Arunachal Pradesh,,arunachal pradesh::lower dibang valley,54080.0,,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::anjaw,Anjaw ,Arunachal Pradesh,,arunachal pradesh::anjaw,21167.0,,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::east siang,East Siang ,Arunachal Pradesh,85624.52779242971,arunachal pradesh::east siang,99214.0,-1.623426406889561,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::kra daadi,Kra Daadi ,Arunachal Pradesh,161247.78039078295,arunachal pradesh::kra daadi,,,no exact Census 2011 state/name match
+arunachal pradesh::kurung kumey,Kurung Kumey ,Arunachal Pradesh,,arunachal pradesh::kurung kumey,92076.0,,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::lohit,Lohit ,Arunachal Pradesh,64050.941927177795,arunachal pradesh::lohit,145726.0,-8.729158858469177,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::longding,Longding ,Arunachal Pradesh,35099.021140743745,arunachal pradesh::longding,,,no exact Census 2011 state/name match
+arunachal pradesh::namsai,Namsai ,Arunachal Pradesh,78280.08012613119,arunachal pradesh::namsai,,,no exact Census 2011 state/name match
+arunachal pradesh::siang,Siang ,Arunachal Pradesh,,arunachal pradesh::siang,,,no exact Census 2011 state/name match
+arunachal pradesh::tirap,Tirap ,Arunachal Pradesh,,arunachal pradesh::tirap,111975.0,,exact state/name candidate; verify district boundaries were not split
+arunachal pradesh::west siang,West Siang ,Arunachal Pradesh,5863.746231484806,arunachal pradesh::west siang,112274.0,-27.964927632639636,exact state/name candidate; verify district boundaries were not split
+assam::kokrajhar,Kokrajhar ,Assam,999772.9910023682,assam::kokrajhar,887142.0,1.3368929405861651,exact state/name candidate; verify district boundaries were not split
+assam::goalpara,Goalpara ,Assam,1003316.5232933164,assam::goalpara,1008183.0,-0.05374849510554336,exact state/name candidate; verify district boundaries were not split
+assam::barpeta,Barpeta ,Assam,2750623.5687283026,assam::barpeta,1693622.0,5.536243188797263,exact state/name candidate; verify district boundaries were not split
+assam::morigaon,Morigaon ,Assam,1128627.708779687,assam::morigaon,957423.0,1.8447248324581,exact state/name candidate; verify district boundaries were not split
+assam::lakhimpur,Lakhimpur ,Assam,1077462.78428497,assam::lakhimpur,1042137.0,0.3710822654147572,exact state/name candidate; verify district boundaries were not split
+assam::dhemaji,Dhemaji ,Assam,698817.9641183707,assam::dhemaji,686133.0,0.20374949376305018,exact state/name candidate; verify district boundaries were not split
+assam::tinsukia,Tinsukia ,Assam,1351515.650547807,assam::tinsukia,1327929.0,0.19581458940896024,exact state/name candidate; verify district boundaries were not split
+assam::dibrugarh,Dibrugarh ,Assam,1473076.1443177594,assam::dibrugarh,1326335.0,1.1727492990904365,exact state/name candidate; verify district boundaries were not split
+assam::golaghat,Golaghat ,Assam,1154178.0374211683,assam::golaghat,1066888.0,0.8776336529146445,exact state/name candidate; verify district boundaries were not split
+assam::dima hasao,Dima Hasao ,Assam,267481.43362150405,assam::dima hasao,214102.0,2.504146853610778,exact state/name candidate; verify district boundaries were not split
+assam::cachar,Cachar ,Assam,2367456.03284527,assam::cachar,1736617.0,3.503037959080868,exact state/name candidate; verify district boundaries were not split
+assam::karimganj,Karimganj ,Assam,1345315.7190055572,assam::karimganj,1228686.0,1.0126868173432557,exact state/name candidate; verify district boundaries were not split
+assam::hailakandi,Hailakandi ,Assam,713405.2461287576,assam::hailakandi,659296.0,0.8802631460406163,exact state/name candidate; verify district boundaries were not split
+assam::bongaigaon,Bongaigaon ,Assam,,assam::bongaigaon,738804.0,,exact state/name candidate; verify district boundaries were not split
+assam::chirang,Chirang ,Assam,480806.3375965636,assam::chirang,482162.0,-0.03127947001428932,exact state/name candidate; verify district boundaries were not split
+assam::kamrup,Kamrup ,Assam,1549057.8213537592,assam::kamrup,1517542.0,0.228649541402981,exact state/name candidate; verify district boundaries were not split
+assam::kamrup metropolitan,Kamrup Metropolitan ,Assam,1390209.579330112,assam::kamrup metropolitan,1253938.0,1.152878482694164,exact state/name candidate; verify district boundaries were not split
+assam::nalbari,Nalbari ,Assam,910667.665499613,assam::nalbari,771639.0,1.8577249884633495,exact state/name candidate; verify district boundaries were not split
+assam::baksa,Baksa ,Assam,985291.3705280165,assam::baksa,950075.0,0.40522411300645267,exact state/name candidate; verify district boundaries were not split
+assam::darrang,Darrang ,Assam,1084459.392531539,assam::darrang,928500.0,1.7401506275506629,exact state/name candidate; verify district boundaries were not split
+assam::udalguri,Udalguri ,Assam,887714.258669702,assam::udalguri,831668.0,0.7272605395277632,exact state/name candidate; verify district boundaries were not split
+assam::biswanath,Biswanath ,Assam,570826.4959184234,assam::biswanath,,,no exact Census 2011 state/name match
+assam::charaideo,Charaideo ,Assam,472199.2033908102,assam::charaideo,,,no exact Census 2011 state/name match
+assam::dhubri,Dhubri ,Assam,1502479.4731042339,assam::dhubri,1949258.0,-2.8511438843598302,exact state/name candidate; verify district boundaries were not split
+assam::hojai,Hojai ,Assam,1205124.6788629203,assam::hojai,,,no exact Census 2011 state/name match
+assam::jorhat,Jorhat ,Assam,1019306.8383466303,assam::jorhat,1092256.0,-0.7650854959008746,exact state/name candidate; verify district boundaries were not split
+assam::karbi anglong,Karbi Anglong ,Assam,725147.2012554965,assam::karbi anglong,956313.0,-3.027778195953912,exact state/name candidate; verify district boundaries were not split
+assam::majuli,Majuli ,Assam,324595.8885448939,assam::majuli,,,no exact Census 2011 state/name match
+assam::nagaon,Nagaon ,Assam,2019512.0964759,assam::nagaon,2823768.0,-3.656113719809939,exact state/name candidate; verify district boundaries were not split
+assam::sivasagar,Sivasagar ,Assam,758199.2286390386,assam::sivasagar,1151050.0,-4.532763781892079,exact state/name candidate; verify district boundaries were not split
+assam::sonitpur,Sonitpur ,Assam,1470247.968038004,assam::sonitpur,1924110.0,-2.945013265003349,exact state/name candidate; verify district boundaries were not split
+assam::south salmara mancachar,South Salmara Mancachar ,Assam,630289.0680917893,assam::south salmara mancachar,,,no exact Census 2011 state/name match
+assam::west karbi anglong,West Karbi Anglong ,Assam,,assam::west karbi anglong,,,no exact Census 2011 state/name match
+bihar::pashchim champaran,Pashchim Champaran ,Bihar,4649061.642890371,bihar::pashchim champaran,3935042.0,1.8699785532746427,exact state/name candidate; verify district boundaries were not split
+bihar::purba champaran,Purba Champaran ,Bihar,6273648.386957561,bihar::purba champaran,5099371.0,2.3293925542088534,exact state/name candidate; verify district boundaries were not split
+bihar::sheohar,Sheohar ,Bihar,901563.4648982153,bihar::sheohar,656246.0,3.591832339151857,exact state/name candidate; verify district boundaries were not split
+bihar::sitamarhi,Sitamarhi ,Bihar,3735218.9519443423,bihar::sitamarhi,3423574.0,0.9727160244511701,exact state/name candidate; verify district boundaries were not split
+bihar::madhubani,Madhubani ,Bihar,4789290.77815842,bihar::madhubani,4487379.0,0.7261073317353484,exact state/name candidate; verify district boundaries were not split
+bihar::supaul,Supaul ,Bihar,2820338.7756632552,bihar::supaul,2229076.0,2.6485770964023825,exact state/name candidate; verify district boundaries were not split
+bihar::araria,Araria ,Bihar,3378478.604775508,bihar::araria,2811569.0,2.06188919223822,exact state/name candidate; verify district boundaries were not split
+bihar::kishanganj,Kishanganj ,Bihar,2057134.6500906423,bihar::kishanganj,1690400.0,2.205626317396203,exact state/name candidate; verify district boundaries were not split
+bihar::purnia,Purnia ,Bihar,3916408.4108353686,bihar::purnia,3264619.0,2.043169896778263,exact state/name candidate; verify district boundaries were not split
+bihar::katihar,Katihar ,Bihar,3491343.0058203926,bihar::katihar,3071029.0,1.4354696860964022,exact state/name candidate; verify district boundaries were not split
+bihar::madhepura,Madhepura ,Bihar,2693143.895491247,bihar::madhepura,2001762.0,3.3513958269009825,exact state/name candidate; verify district boundaries were not split
+bihar::saharsa,Saharsa ,Bihar,2214553.9916642783,bihar::saharsa,1900661.0,1.7128291459872713,exact state/name candidate; verify district boundaries were not split
+bihar::darbhanga,Darbhanga ,Bihar,4225371.237855637,bihar::darbhanga,3937385.0,0.7874209413492261,exact state/name candidate; verify district boundaries were not split
+bihar::muzaffarpur,Muzaffarpur ,Bihar,5739322.201817845,bihar::muzaffarpur,4801062.0,2.003177133521361,exact state/name candidate; verify district boundaries were not split
+bihar::gopalganj,Gopalganj ,Bihar,3002278.2375368797,bihar::gopalganj,2562012.0,1.7775981234209315,exact state/name candidate; verify district boundaries were not split
+bihar::siwan,Siwan ,Bihar,2884404.096502316,bihar::siwan,3330464.0,-1.5850078363519593,exact state/name candidate; verify district boundaries were not split
+bihar::saran,Saran ,Bihar,4588540.791446689,bihar::saran,3951862.0,1.6735744211324954,exact state/name candidate; verify district boundaries were not split
+bihar::vaishali,Vaishali ,Bihar,4432125.368578146,bihar::vaishali,3495021.0,2.674470509091509,exact state/name candidate; verify district boundaries were not split
+bihar::samastipur,Samastipur ,Bihar,5252831.100964971,bihar::samastipur,4261566.0,2.3508797036870366,exact state/name candidate; verify district boundaries were not split
+bihar::begusarai,Begusarai ,Bihar,3941712.945537355,bihar::begusarai,2970541.0,3.192928656497629,exact state/name candidate; verify district boundaries were not split
+bihar::khagaria,Khagaria ,Bihar,1959549.1019668812,bihar::khagaria,1666886.0,1.8135506910198496,exact state/name candidate; verify district boundaries were not split
+bihar::bhagalpur,Bhagalpur ,Bihar,3431949.598560824,bihar::bhagalpur,3037766.0,1.364853781614861,exact state/name candidate; verify district boundaries were not split
+bihar::banka,Banka ,Bihar,2686324.0658700042,bihar::banka,2034763.0,3.1347338851615003,exact state/name candidate; verify district boundaries were not split
+bihar::munger,Munger ,Bihar,1559645.9589716673,bihar::munger,1367765.0,1.4693664298728981,exact state/name candidate; verify district boundaries were not split
+bihar::lakhisarai,Lakhisarai ,Bihar,1150725.380927059,bihar::lakhisarai,1000912.0,1.561859552788114,exact state/name candidate; verify district boundaries were not split
+bihar::sheikhpura,Sheikhpura ,Bihar,580155.7781394979,bihar::sheikhpura,636342.0,-1.0218488851875263,exact state/name candidate; verify district boundaries were not split
+bihar::nalanda,Nalanda ,Bihar,3295817.700315697,bihar::nalanda,2877653.0,1.5189682578112595,exact state/name candidate; verify district boundaries were not split
+bihar::patna,Patna ,Bihar,6350254.290191698,bihar::patna,5838465.0,0.9380045891366651,exact state/name candidate; verify district boundaries were not split
+bihar::bhojpur,Bhojpur ,Bihar,3253596.893282181,bihar::bhojpur,2728407.0,1.9752912570351278,exact state/name candidate; verify district boundaries were not split
+bihar::buxar,Buxar ,Bihar,1816753.6632886815,bihar::buxar,1706352.0,0.6990257310638182,exact state/name candidate; verify district boundaries were not split
+bihar::kaimur bhabua,Kaimur (Bhabua) ,Bihar,1851379.422488043,bihar::kaimur bhabua,1626384.0,1.4501006256210092,exact state/name candidate; verify district boundaries were not split
+bihar::rohtas,Rohtas ,Bihar,3415107.5037106387,bihar::rohtas,2959918.0,1.6021140326986982,exact state/name candidate; verify district boundaries were not split
+bihar::aurangabad,Aurangabad ,Bihar,3169162.2167848162,bihar::aurangabad,2540073.0,2.4890778852254103,exact state/name candidate; verify district boundaries were not split
+bihar::gaya,Gaya ,Bihar,5264067.482048913,bihar::gaya,4391418.0,2.0343252161733494,exact state/name candidate; verify district boundaries were not split
+bihar::nawada,Nawada ,Bihar,2653586.2610777006,bihar::nawada,2219146.0,2.0064142825975795,exact state/name candidate; verify district boundaries were not split
+bihar::jamui,Jamui ,Bihar,2056715.8231731774,bihar::jamui,1760405.0,1.7435425710064623,exact state/name candidate; verify district boundaries were not split
+bihar::jehanabad,Jehanabad ,Bihar,1219237.179301824,bihar::jehanabad,1125313.0,0.8946917771163854,exact state/name candidate; verify district boundaries were not split
+bihar::arwal,Arwal ,Bihar,601201.1404712629,bihar::arwal,700843.0,-1.6895022206430799,exact state/name candidate; verify district boundaries were not split
+chandigarh::chandigarh,Chandigarh,Chandigarh,1193000.0,chandigarh::chandigarh,1055450.0,1.3704606284652865,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::koriya,Koriya ,Chhattisgarh,703241.3659040707,chhattisgarh::koriya,658917.0,0.7259847137515374,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::jashpur,Jashpur ,Chhattisgarh,984896.4662498606,chhattisgarh::jashpur,851669.0,1.6279825639685441,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::raigarh,Raigarh ,Chhattisgarh,1617054.7258436405,chhattisgarh::raigarh,1493984.0,0.883435537162125,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::korba,Korba ,Chhattisgarh,1473948.5961676042,chhattisgarh::korba,1206640.0,2.2482935931728454,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::janjgir champa,Janjgir - Champa ,Chhattisgarh,2431002.716700939,chhattisgarh::janjgir champa,1619707.0,4.615089677648809,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::kabeerdham,Kabeerdham ,Chhattisgarh,1192242.9119656764,chhattisgarh::kabeerdham,822526.0,4.210814541446517,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::rajnandgaon,Rajnandgaon ,Chhattisgarh,1856135.6002027672,chhattisgarh::rajnandgaon,1537133.0,2.117413465506912,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::mahasamund,Mahasamund ,Chhattisgarh,,chhattisgarh::mahasamund,1032754.0,,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::dhamtari,Dhamtari ,Chhattisgarh,927987.9077023616,chhattisgarh::dhamtari,799781.0,1.6657295805776018,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::uttar bastar kanker,Uttar Bastar Kanker ,Chhattisgarh,901582.5654169024,chhattisgarh::uttar bastar kanker,748941.0,2.082401335056594,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::narayanpur,Narayanpur ,Chhattisgarh,119172.70517653365,chhattisgarh::narayanpur,139820.0,-1.7596904538771163,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::bijapur,Bijapur ,Chhattisgarh,273368.0405271877,chhattisgarh::bijapur,255230.0,0.7657382458880369,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::balod,Balod ,Chhattisgarh,944576.2771683219,chhattisgarh::balod,,,no exact Census 2011 state/name match
+chhattisgarh::baloda bazar,Baloda Bazar ,Chhattisgarh,858981.7135122038,chhattisgarh::baloda bazar,,,no exact Census 2011 state/name match
+chhattisgarh::balrampur,Balrampur ,Chhattisgarh,842823.7612592687,chhattisgarh::balrampur,,,no exact Census 2011 state/name match
+chhattisgarh::bastar,Bastar ,Chhattisgarh,1067967.8563368956,chhattisgarh::bastar,1413199.0,-3.0642726518979813,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::bemetara,Bemetara ,Chhattisgarh,,chhattisgarh::bemetara,,,no exact Census 2011 state/name match
+chhattisgarh::bilaspur,Bilaspur ,Chhattisgarh,2033959.6809168,chhattisgarh::bilaspur,2663629.0,-2.9522657296620514,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::dantewada,Dantewada ,Chhattisgarh,331638.84765866393,chhattisgarh::dantewada,,,no exact Census 2011 state/name match
+chhattisgarh::durg,Durg ,Chhattisgarh,2152796.460086841,chhattisgarh::durg,3343872.0,-4.775134143020788,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::gariyaband,Gariyaband ,Chhattisgarh,,chhattisgarh::gariyaband,,,no exact Census 2011 state/name match
+chhattisgarh::kodagaon,Kodagaon ,Chhattisgarh,625017.4596996664,chhattisgarh::kodagaon,,,no exact Census 2011 state/name match
+chhattisgarh::mungeli,Mungeli ,Chhattisgarh,849365.0783655138,chhattisgarh::mungeli,,,no exact Census 2011 state/name match
+chhattisgarh::raipur,Raipur ,Chhattisgarh,3152891.426851024,chhattisgarh::raipur,4063872.0,-2.7807848785352363,exact state/name candidate; verify district boundaries were not split
+chhattisgarh::sukma,Sukma ,Chhattisgarh,,chhattisgarh::sukma,,,no exact Census 2011 state/name match
+chhattisgarh::surajpur,Surajpur ,Chhattisgarh,979019.3767823643,chhattisgarh::surajpur,,,no exact Census 2011 state/name match
+chhattisgarh::surguja,Surguja ,Chhattisgarh,1035388.9297044766,chhattisgarh::surguja,2359886.0,-8.747277033354017,exact state/name candidate; verify district boundaries were not split
+dadra and nagar haveli and daman and diu::diu,Diu ,Dadra and Nagar Haveli & Daman and Diu,75292.93148720874,dadra and nagar haveli and daman and diu::diu,52074.0,4.181974787624521,exact state/name candidate; verify district boundaries were not split
+dadra and nagar haveli and daman and diu::daman,Daman ,Dadra and Nagar Haveli & Daman and Diu,256655.00243299062,dadra and nagar haveli and daman and diu::daman,191173.0,3.326968166395039,exact state/name candidate; verify district boundaries were not split
+dadra and nagar haveli and daman and diu::dadra and nagar haveli,Dadra & Nagar Haveli ,Dadra and Nagar Haveli & Daman and Diu,686052.0660798006,dadra and nagar haveli and daman and diu::dadra and nagar haveli,343709.0,7.9821068850765675,exact state/name candidate; verify district boundaries were not split
+goa::north goa,North Goa ,Goa,846161.7806745411,goa::north goa,818008.0,0.3766905346734406,exact state/name candidate; verify district boundaries were not split
+goa::south goa,South Goa ,Goa,702838.2193254589,goa::south goa,640537.0,1.0366682140040773,exact state/name candidate; verify district boundaries were not split
+gujarat::kachchh,Kachchh ,Gujarat,2617783.2786780316,gujarat::kachchh,2092371.0,2.520462144136748,exact state/name candidate; verify district boundaries were not split
+gujarat::banas kantha,Banas Kantha ,Gujarat,3665064.234303852,gujarat::banas kantha,3120506.0,1.8032964536969898,exact state/name candidate; verify district boundaries were not split
+gujarat::patan,Patan ,Gujarat,1444116.597468448,gujarat::patan,1343734.0,0.8037179163071784,exact state/name candidate; verify district boundaries were not split
+gujarat::mahesana,Mahesana ,Gujarat,2157871.9566871054,gujarat::mahesana,2035064.0,0.6531824681516474,exact state/name candidate; verify district boundaries were not split
+gujarat::gandhinagar,Gandhinagar ,Gujarat,1269416.1320395786,gujarat::gandhinagar,1391753.0,-1.017092796510033,exact state/name candidate; verify district boundaries were not split
+gujarat::porbandar,Porbandar ,Gujarat,654501.0362909553,gujarat::porbandar,585449.0,1.2465284725100556,exact state/name candidate; verify district boundaries were not split
+gujarat::amreli,Amreli ,Gujarat,1604880.8111361368,gujarat::amreli,1514190.0,0.648413717648455,exact state/name candidate; verify district boundaries were not split
+gujarat::anand,Anand ,Gujarat,2725793.888427182,gujarat::anand,2092745.0,2.98001878658003,exact state/name candidate; verify district boundaries were not split
+gujarat::dohad,Dohad ,Gujarat,2228118.3349126806,gujarat::dohad,2127086.0,0.5169367013748705,exact state/name candidate; verify district boundaries were not split
+gujarat::narmada,Narmada ,Gujarat,674045.4815728856,gujarat::narmada,590297.0,1.4850498826917802,exact state/name candidate; verify district boundaries were not split
+gujarat::bharuch,Bharuch ,Gujarat,1701841.0443084254,gujarat::bharuch,1551019.0,1.036428518587762,exact state/name candidate; verify district boundaries were not split
+gujarat::the dangs,The Dangs ,Gujarat,266031.6671845392,gujarat::the dangs,228291.0,1.7144669127892254,exact state/name candidate; verify district boundaries were not split
+gujarat::navsari,Navsari ,Gujarat,1415979.5047628528,gujarat::navsari,1329672.0,0.7012162644509878,exact state/name candidate; verify district boundaries were not split
+gujarat::valsad,Valsad ,Gujarat,2031056.4597405083,gujarat::valsad,1705678.0,1.9588654619144608,exact state/name candidate; verify district boundaries were not split
+gujarat::surat,Surat ,Gujarat,8115014.139289127,gujarat::surat,6081322.0,3.257416187244,exact state/name candidate; verify district boundaries were not split
+gujarat::tapi,Tapi ,Gujarat,963851.8259151889,gujarat::tapi,807022.0,1.9927809245618988,exact state/name candidate; verify district boundaries were not split
+gujarat::ahmadabad,Ahmadabad ,Gujarat,8649645.395235877,gujarat::ahmadabad,7214225.0,2.0367255709614174,exact state/name candidate; verify district boundaries were not split
+gujarat::aravali,Aravali ,Gujarat,1254710.4608293297,gujarat::aravali,,,no exact Census 2011 state/name match
+gujarat::bhavnagar,Bhavnagar ,Gujarat,2751179.871401512,gujarat::bhavnagar,2880365.0,-0.5085597495173344,exact state/name candidate; verify district boundaries were not split
+gujarat::botad,Botad ,Gujarat,677597.3714850137,gujarat::botad,,,no exact Census 2011 state/name match
+gujarat::chhota udaipur,Chhota Udaipur ,Gujarat,,gujarat::chhota udaipur,,,no exact Census 2011 state/name match
+gujarat::devbhumi dwarka,Devbhumi Dwarka ,Gujarat,854588.3195207055,gujarat::devbhumi dwarka,,,no exact Census 2011 state/name match
+gujarat::gir somnath,Gir Somnath ,Gujarat,1339286.0731759402,gujarat::gir somnath,,,no exact Census 2011 state/name match
+gujarat::jamnagar,Jamnagar ,Gujarat,1532410.4635331284,gujarat::jamnagar,2160119.0,-3.7428391118805138,exact state/name candidate; verify district boundaries were not split
+gujarat::junagadh,Junagadh ,Gujarat,1631686.1455440696,gujarat::junagadh,2743082.0,-5.608455396279643,exact state/name candidate; verify district boundaries were not split
+gujarat::kheda,Kheda ,Gujarat,1977132.0406957925,gujarat::kheda,2299885.0,-1.6660955282338241,exact state/name candidate; verify district boundaries were not split
+gujarat::mahisagar,Mahisagar ,Gujarat,1269218.404940264,gujarat::mahisagar,,,no exact Census 2011 state/name match
+gujarat::morbi,Morbi ,Gujarat,1092847.3078603146,gujarat::morbi,,,no exact Census 2011 state/name match
+gujarat::panch mahals,Panch Mahals ,Gujarat,2150955.7166910465,gujarat::panch mahals,2390776.0,-1.1676377620964185,exact state/name candidate; verify district boundaries were not split
+gujarat::rajkot,Rajkot ,Gujarat,3464314.785557821,gujarat::rajkot,3804558.0,-1.0355449457951527,exact state/name candidate; verify district boundaries were not split
+gujarat::sabar kantha,Sabar Kantha ,Gujarat,1551528.308786594,gujarat::sabar kantha,2428589.0,-4.856656558832828,exact state/name candidate; verify district boundaries were not split
+gujarat::surendranagar,Surendranagar ,Gujarat,1750207.0198050195,gujarat::surendranagar,1756268.0,-0.038404014740767156,exact state/name candidate; verify district boundaries were not split
+gujarat::vadodara,Vadodara ,Gujarat,3379325.9222200746,gujarat::vadodara,4165626.0,-2.29753210678727,exact state/name candidate; verify district boundaries were not split
+haryana::panchkula,Panchkula ,Haryana,607791.9999685244,haryana::panchkula,561293.0,0.8882513830491545,exact state/name candidate; verify district boundaries were not split
+haryana::ambala,Ambala ,Haryana,1165201.550047654,haryana::ambala,1128350.0,0.357723728984638,exact state/name candidate; verify district boundaries were not split
+haryana::yamunanagar,Yamunanagar ,Haryana,1326694.948969373,haryana::yamunanagar,1214205.0,0.9893207056487219,exact state/name candidate; verify district boundaries were not split
+haryana::kurukshetra,Kurukshetra ,Haryana,1210143.3198573748,haryana::kurukshetra,964655.0,2.5511493242211802,exact state/name candidate; verify district boundaries were not split
+haryana::kaithal,Kaithal ,Haryana,1146926.2663283793,haryana::kaithal,1074304.0,0.7294536689445463,exact state/name candidate; verify district boundaries were not split
+haryana::karnal,Karnal ,Haryana,2996909.835663895,haryana::karnal,1505324.0,7.951101177669706,exact state/name candidate; verify district boundaries were not split
+haryana::panipat,Panipat ,Haryana,,haryana::panipat,1205437.0,,exact state/name candidate; verify district boundaries were not split
+haryana::sonipat,Sonipat ,Haryana,1726460.1877200736,haryana::sonipat,1450001.0,1.9579085985052647,exact state/name candidate; verify district boundaries were not split
+haryana::jind,Jind ,Haryana,1417477.1870501926,haryana::jind,1334152.0,0.6754126779930036,exact state/name candidate; verify district boundaries were not split
+haryana::fatehabad,Fatehabad ,Haryana,983473.0291877891,haryana::fatehabad,942011.0,0.47973888385359764,exact state/name candidate; verify district boundaries were not split
+haryana::sirsa,Sirsa ,Haryana,1440792.2824870732,haryana::sirsa,1295189.0,1.1907731195867077,exact state/name candidate; verify district boundaries were not split
+haryana::hisar,Hisar ,Haryana,1882629.801363017,haryana::hisar,1743931.0,0.8539350612196683,exact state/name candidate; verify district boundaries were not split
+haryana::rohtak,Rohtak ,Haryana,1160557.8069864563,haryana::rohtak,1061204.0,0.9993678245675763,exact state/name candidate; verify district boundaries were not split
+haryana::jhajjar,Jhajjar ,Haryana,1244982.1631079516,haryana::jhajjar,958405.0,2.9493915699052353,exact state/name candidate; verify district boundaries were not split
+haryana::mahendragarh,Mahendragarh ,Haryana,957329.0387249225,haryana::mahendragarh,922088.0,0.4176083613204762,exact state/name candidate; verify district boundaries were not split
+haryana::rewari,Rewari ,Haryana,893237.6266778283,haryana::rewari,900332.0,-0.08786070662247791,exact state/name candidate; verify district boundaries were not split
+haryana::gurgaon,Gurgaon ,Haryana,2347241.8785227407,haryana::gurgaon,1514432.0,4.9893726881937495,exact state/name candidate; verify district boundaries were not split
+haryana::mewat,Mewat ,Haryana,1242374.4043178444,haryana::mewat,1089263.0,1.4720976247144746,exact state/name candidate; verify district boundaries were not split
+haryana::faridabad,Faridabad ,Haryana,2281025.2489023735,haryana::faridabad,1809733.0,2.6049701914275136,exact state/name candidate; verify district boundaries were not split
+haryana::palwal,Palwal ,Haryana,1316995.8864187333,haryana::palwal,1042708.0,2.6287594287079274,exact state/name candidate; verify district boundaries were not split
+haryana::bhiwani,Bhiwani ,Haryana,1728755.5376978037,haryana::bhiwani,1634445.0,0.6252634405079283,exact state/name candidate; verify district boundaries were not split
+haryana::charkhi dadri,Charkhi Dadri ,Haryana,,haryana::charkhi dadri,,,no exact Census 2011 state/name match
+himachal pradesh::chamba,Chamba ,Himachal Pradesh,536716.7923714971,himachal pradesh::chamba,519080.0,0.3719405776434259,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::kangra,Kangra ,Himachal Pradesh,1616837.3426802382,himachal pradesh::kangra,1510075.0,0.7619175433644099,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::lahul and spiti,Lahul & Spiti ,Himachal Pradesh,29498.339298669103,himachal pradesh::lahul and spiti,31564.0,-0.7492155477371476,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::kullu,Kullu ,Himachal Pradesh,405473.74059315573,himachal pradesh::kullu,437903.0,-0.8512595506043996,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::mandi,Mandi ,Himachal Pradesh,1143079.7947656813,himachal pradesh::mandi,999777.0,1.4994553580313763,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::hamirpur,Hamirpur ,Himachal Pradesh,535471.7408754269,himachal pradesh::hamirpur,454768.0,1.8316925017412222,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::una,Una ,Himachal Pradesh,538572.425397885,himachal pradesh::una,521173.0,0.3655547706846285,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::bilaspur,Bilaspur ,Himachal Pradesh,448296.7522023391,himachal pradesh::bilaspur,381956.0,1.7953707452452727,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::solan,Solan ,Himachal Pradesh,650546.6665059997,himachal pradesh::solan,580320.0,1.2773488350637185,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::sirmaur,Sirmaur ,Himachal Pradesh,540489.6105930131,himachal pradesh::sirmaur,529855.0,0.22104428613989313,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::shimla,Shimla ,Himachal Pradesh,815410.4663879464,himachal pradesh::shimla,814010.0,0.019101549195643663,exact state/name candidate; verify district boundaries were not split
+himachal pradesh::kinnaur,Kinnaur ,Himachal Pradesh,86606.32832814846,himachal pradesh::kinnaur,84121.0,0.32404221577650993,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::kupwara,Kupwara ,Jammu & Kashmir,1072067.7796825022,jammu and kashmir::kupwara,870354.0,2.3430791727309774,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::badgam,Badgam ,Jammu & Kashmir,688404.0207034978,jammu and kashmir::badgam,753745.0,-1.0024770245629422,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::punch,Punch ,Jammu & Kashmir,,jammu and kashmir::punch,476835.0,,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::rajouri,Rajouri ,Jammu & Kashmir,593034.2608036018,jammu and kashmir::rajouri,642415.0,-0.8847554606388641,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::kathua,Kathua ,Jammu & Kashmir,667839.289509918,jammu and kashmir::kathua,616435.0,0.8939126011739074,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::baramula,Baramula ,Jammu & Kashmir,1099088.7637366878,jammu and kashmir::baramula,1008039.0,0.9654594504680869,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::bandipore,Bandipore ,Jammu & Kashmir,417067.5648023285,jammu and kashmir::bandipore,392232.0,0.6844957376632488,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::srinagar,Srinagar ,Jammu & Kashmir,1155272.5135542222,jammu and kashmir::srinagar,1236829.0,-0.7550747408962222,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::ganderbal,Ganderbal ,Jammu & Kashmir,448150.7048104146,jammu and kashmir::ganderbal,297446.0,4.659715557812216,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::pulwama,Pulwama ,Jammu & Kashmir,740103.06789574,jammu and kashmir::pulwama,560440.0,3.137860946990778,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::shupiyan,Shupiyan ,Jammu & Kashmir,522526.73872532963,jammu and kashmir::shupiyan,266215.0,7.78089296680291,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::anantnag,Anantnag ,Jammu & Kashmir,1551411.4487962327,jammu and kashmir::anantnag,1078692.0,4.120588689438098,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::kulgam,Kulgam ,Jammu & Kashmir,,jammu and kashmir::kulgam,424483.0,,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::doda,Doda ,Jammu & Kashmir,461820.4818170336,jammu and kashmir::doda,409936.0,1.332974809553944,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::ramban,Ramban ,Jammu & Kashmir,,jammu and kashmir::ramban,283713.0,,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::kishtwar,Kishtwar ,Jammu & Kashmir,345702.4066904572,jammu and kashmir::kishtwar,230696.0,4.596713187399937,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::udhampur,Udhampur ,Jammu & Kashmir,698769.5113374727,jammu and kashmir::udhampur,554985.0,2.592819849420569,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::reasi,Reasi ,Jammu & Kashmir,,jammu and kashmir::reasi,314667.0,,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::jammu,Jammu ,Jammu & Kashmir,1638341.8407888445,jammu and kashmir::jammu,1529958.0,0.7633921330213012,exact state/name candidate; verify district boundaries were not split
+jammu and kashmir::samba,Samba ,Jammu & Kashmir,307560.57298661524,jammu and kashmir::samba,318898.0,-0.40140608411279866,exact state/name candidate; verify district boundaries were not split
+jharkhand::garhwa,Garhwa ,Jharkhand,1590414.0702168727,jharkhand::garhwa,1322784.0,2.0683873011274834,exact state/name candidate; verify district boundaries were not split
+jharkhand::chatra,Chatra ,Jharkhand,1226150.6326743497,jharkhand::chatra,1042886.0,1.8150286217677225,exact state/name candidate; verify district boundaries were not split
+jharkhand::kodarma,Kodarma ,Jharkhand,815945.378465272,jharkhand::kodarma,716259.0,1.4583717584008227,exact state/name candidate; verify district boundaries were not split
+jharkhand::giridih,Giridih ,Jharkhand,2914236.400814711,jharkhand::giridih,2445474.0,1.9676509068035974,exact state/name candidate; verify district boundaries were not split
+jharkhand::deoghar,Deoghar ,Jharkhand,1718713.5472099197,jharkhand::deoghar,1492073.0,1.5836268166596223,exact state/name candidate; verify district boundaries were not split
+jharkhand::godda,Godda ,Jharkhand,1481747.5579861314,jharkhand::godda,1313551.0,1.347757199821098,exact state/name candidate; verify district boundaries were not split
+jharkhand::sahibganj,Sahibganj ,Jharkhand,1704445.8600894914,jharkhand::sahibganj,1150567.0,4.463236588123487,exact state/name candidate; verify district boundaries were not split
+jharkhand::pakur,Pakur ,Jharkhand,1027098.24282288,jharkhand::pakur,900422.0,1.473295599683122,exact state/name candidate; verify district boundaries were not split
+jharkhand::dhanbad,Dhanbad ,Jharkhand,2938054.5407009386,jharkhand::dhanbad,2684487.0,1.0079121508928868,exact state/name candidate; verify district boundaries were not split
+jharkhand::bokaro,Bokaro ,Jharkhand,2259646.478144164,jharkhand::bokaro,2062330.0,1.020415130139507,exact state/name candidate; verify district boundaries were not split
+jharkhand::lohardaga,Lohardaga ,Jharkhand,578037.3657114648,jharkhand::lohardaga,461790.0,2.5261380707497505,exact state/name candidate; verify district boundaries were not split
+jharkhand::purbi singhbhum,Purbi Singhbhum ,Jharkhand,2632470.8866910366,jharkhand::purbi singhbhum,2293919.0,1.5413266334709963,exact state/name candidate; verify district boundaries were not split
+jharkhand::palamu,Palamu ,Jharkhand,2231868.1648500366,jharkhand::palamu,1939869.0,1.5701835276224818,exact state/name candidate; verify district boundaries were not split
+jharkhand::latehar,Latehar ,Jharkhand,880160.2768731242,jharkhand::latehar,726978.0,2.147260038819998,exact state/name candidate; verify district boundaries were not split
+jharkhand::hazaribagh,Hazaribagh ,Jharkhand,2029606.197287566,jharkhand::hazaribagh,1734495.0,1.7611674829982382,exact state/name candidate; verify district boundaries were not split
+jharkhand::ramgarh,Ramgarh ,Jharkhand,945779.3541048305,jharkhand::ramgarh,949443.0,-0.042948506840467804,exact state/name candidate; verify district boundaries were not split
+jharkhand::dumka,Dumka ,Jharkhand,1456689.4612147063,jharkhand::dumka,1321442.0,1.0885802072967854,exact state/name candidate; verify district boundaries were not split
+jharkhand::jamtara,Jamtara ,Jharkhand,928121.05512477,jharkhand::jamtara,791042.0,1.7915378846015573,exact state/name candidate; verify district boundaries were not split
+jharkhand::ranchi,Ranchi ,Jharkhand,3397552.9039666736,jharkhand::ranchi,2914253.0,1.7195266756488747,exact state/name candidate; verify district boundaries were not split
+jharkhand::khunti,Khunti ,Jharkhand,618856.5396777634,jharkhand::khunti,531885.0,1.6969731167538527,exact state/name candidate; verify district boundaries were not split
+jharkhand::gumla,Gumla ,Jharkhand,1164007.2859483187,jharkhand::gumla,1025213.0,1.4207560709602607,exact state/name candidate; verify district boundaries were not split
+jharkhand::simdega,Simdega ,Jharkhand,649920.8977901796,jharkhand::simdega,599578.0,0.8998532803584203,exact state/name candidate; verify district boundaries were not split
+jharkhand::pashchimi singhbhum,Pashchimi Singhbhum ,Jharkhand,1625775.6464146967,jharkhand::pashchimi singhbhum,1502338.0,0.8812207723966292,exact state/name candidate; verify district boundaries were not split
+jharkhand::saraikela kharsawan,Saraikela-Kharsawan ,Jharkhand,1121701.2552201038,jharkhand::saraikela kharsawan,1065056.0,0.5774288500210112,exact state/name candidate; verify district boundaries were not split
+karnataka::belgaum,Belgaum ,Karnataka,5116035.440122857,karnataka::belgaum,4779661.0,0.7585311319908916,exact state/name candidate; verify district boundaries were not split
+karnataka::bagalkot,Bagalkot ,Karnataka,1979382.5083113697,karnataka::bagalkot,1889752.0,0.5162092150129416,exact state/name candidate; verify district boundaries were not split
+karnataka::bijapur,Bijapur ,Karnataka,2442714.2264247895,karnataka::bijapur,2177331.0,1.2860887143526956,exact state/name candidate; verify district boundaries were not split
+karnataka::bidar,Bidar ,Karnataka,1752253.5815744635,karnataka::bidar,1703300.0,0.31533139896504636,exact state/name candidate; verify district boundaries were not split
+karnataka::raichur,Raichur ,Karnataka,2033095.681413472,karnataka::raichur,1928812.0,0.5867740176948688,exact state/name candidate; verify district boundaries were not split
+karnataka::koppal,Koppal ,Karnataka,1480178.3018304768,karnataka::koppal,1389920.0,0.7015199053487686,exact state/name candidate; verify district boundaries were not split
+karnataka::gadag,Gadag ,Karnataka,1143032.8727108112,karnataka::gadag,1064570.0,0.793287568711798,exact state/name candidate; verify district boundaries were not split
+karnataka::dharwad,Dharwad ,Karnataka,1922516.3075931019,karnataka::dharwad,1847023.0,0.44610042402903893,exact state/name candidate; verify district boundaries were not split
+karnataka::uttara kannada,Uttara Kannada ,Karnataka,1532059.2530573308,karnataka::uttara kannada,1437169.0,0.7129465731749107,exact state/name candidate; verify district boundaries were not split
+karnataka::haveri,Haveri ,Karnataka,1512822.6614369815,karnataka::haveri,1597668.0,-0.6044750759265138,exact state/name candidate; verify district boundaries were not split
+karnataka::bellary,Bellary ,Karnataka,2772898.0114605017,karnataka::bellary,2452595.0,1.3731910480276888,exact state/name candidate; verify district boundaries were not split
+karnataka::chitradurga,Chitradurga ,Karnataka,1723831.5364059103,karnataka::chitradurga,1659456.0,0.4237800069467168,exact state/name candidate; verify district boundaries were not split
+karnataka::davanagere,Davanagere ,Karnataka,1983760.2438597623,karnataka::davanagere,1945497.0,0.21664194484358745,exact state/name candidate; verify district boundaries were not split
+karnataka::shimoga,Shimoga ,Karnataka,1774573.7025123814,karnataka::shimoga,1752753.0,0.1375671122421096,exact state/name candidate; verify district boundaries were not split
+karnataka::udupi,Udupi ,Karnataka,1027161.0344362784,karnataka::udupi,1177361.0,-1.5049690187708964,exact state/name candidate; verify district boundaries were not split
+karnataka::chikmagalur,Chikmagalur ,Karnataka,1090009.2284298753,karnataka::chikmagalur,1137961.0,-0.4772121717374622,exact state/name candidate; verify district boundaries were not split
+karnataka::tumkur,Tumkur ,Karnataka,2648032.4032110474,karnataka::tumkur,2678980.0,-0.1290194782169629,exact state/name candidate; verify district boundaries were not split
+karnataka::bangalore,Bangalore ,Karnataka,12455813.408094116,karnataka::bangalore,9621551.0,2.9102317913687337,exact state/name candidate; verify district boundaries were not split
+karnataka::mandya,Mandya ,Karnataka,1589760.4876417993,karnataka::mandya,1805769.0,-1.4056184211236222,exact state/name candidate; verify district boundaries were not split
+karnataka::hassan,Hassan ,Karnataka,1737249.5647474977,karnataka::hassan,1776421.0,-0.24744350101789658,exact state/name candidate; verify district boundaries were not split
+karnataka::dakshina kannada,Dakshina Kannada ,Karnataka,2337039.469450672,karnataka::dakshina kannada,2089649.0,1.2509692492569835,exact state/name candidate; verify district boundaries were not split
+karnataka::kodagu,Kodagu ,Karnataka,550304.7891185742,karnataka::kodagu,554519.0,-0.08472835788178035,exact state/name candidate; verify district boundaries were not split
+karnataka::mysore,Mysore ,Karnataka,3308264.6650130274,karnataka::mysore,3001127.0,1.088502622561327,exact state/name candidate; verify district boundaries were not split
+karnataka::chamarajanagar,Chamarajanagar ,Karnataka,1044677.8327317343,karnataka::chamarajanagar,1020791.0,0.25733862546091224,exact state/name candidate; verify district boundaries were not split
+karnataka::gulbarga,Gulbarga ,Karnataka,2765158.0943618505,karnataka::gulbarga,2566326.0,0.8325858348761317,exact state/name candidate; verify district boundaries were not split
+karnataka::yadgir,Yadgir ,Karnataka,1282674.1537097134,karnataka::yadgir,1174271.0,0.9859347544645347,exact state/name candidate; verify district boundaries were not split
+karnataka::kolar,Kolar ,Karnataka,1587657.2772920427,karnataka::kolar,1536401.0,0.36529726587497535,exact state/name candidate; verify district boundaries were not split
+karnataka::chikkaballapura,Chikkaballapura ,Karnataka,1250338.4946088356,karnataka::chikkaballapura,1255104.0,-0.0422591497881597,exact state/name candidate; verify district boundaries were not split
+karnataka::bangalore rural,Bangalore Rural ,Karnataka,1377827.270713696,karnataka::bangalore rural,990923.0,3.730410457949973,exact state/name candidate; verify district boundaries were not split
+karnataka::ramanagara,Ramanagara ,Karnataka,1100877.497725023,karnataka::ramanagara,1082636.0,0.1858255408218712,exact state/name candidate; verify district boundaries were not split
+kerala::kasaragod,Kasaragod ,Kerala,1376843.6967393272,kerala::kasaragod,1307375.0,0.5769065466958878,exact state/name candidate; verify district boundaries were not split
+kerala::kannur,Kannur ,Kerala,2662041.6060692775,kerala::kannur,2523003.0,0.597818631825775,exact state/name candidate; verify district boundaries were not split
+kerala::wayanad,Wayanad ,Kerala,862220.7066538893,kerala::wayanad,817420.0,0.5946302755946542,exact state/name candidate; verify district boundaries were not split
+kerala::kozhikode,Kozhikode ,Kerala,3481791.6219351576,kerala::kozhikode,3086293.0,1.348751360585454,exact state/name candidate; verify district boundaries were not split
+kerala::malappuram,Malappuram ,Kerala,4415798.48793477,kerala::malappuram,4112920.0,0.7926296647537079,exact state/name candidate; verify district boundaries were not split
+kerala::palakkad,Palakkad ,Kerala,2982939.3888859553,kerala::palakkad,2809934.0,0.6660772817025817,exact state/name candidate; verify district boundaries were not split
+kerala::thrissur,Thrissur ,Kerala,3408744.0309802126,kerala::thrissur,3121200.0,0.9839914574929054,exact state/name candidate; verify district boundaries were not split
+kerala::ernakulam,Ernakulam ,Kerala,3536039.233611926,kerala::ernakulam,3282388.0,0.8304966916120593,exact state/name candidate; verify district boundaries were not split
+kerala::idukki,Idukki ,Kerala,1139395.1213364445,kerala::idukki,1108974.0,0.30114433931400786,exact state/name candidate; verify district boundaries were not split
+kerala::kottayam,Kottayam ,Kerala,2063979.7498999592,kerala::kottayam,1974551.0,0.49337986030271175,exact state/name candidate; verify district boundaries were not split
+kerala::alappuzha,Alappuzha ,Kerala,2174483.5086822356,kerala::alappuzha,2127789.0,0.24148841068820648,exact state/name candidate; verify district boundaries were not split
+kerala::pathanamthitta,Pathanamthitta ,Kerala,1346256.7145225187,kerala::pathanamthitta,1197412.0,1.310348306413034,exact state/name candidate; verify district boundaries were not split
+kerala::kollam,Kollam ,Kerala,2554722.4623122877,kerala::kollam,2635375.0,-0.3447587201163116,exact state/name candidate; verify district boundaries were not split
+kerala::thiruvananthapuram,Thiruvananthapuram ,Kerala,3301743.670436039,kerala::thiruvananthapuram,3301427.0,0.0010657241279243834,exact state/name candidate; verify district boundaries were not split
+ladakh::leh ladakh,Leh(Ladakh) ,Ladakh,146140.91605598113,ladakh::leh ladakh,,,no exact Census 2011 state/name match
+ladakh::kargil,Kargil ,Ladakh,148859.08394401884,ladakh::kargil,,,no exact Census 2011 state/name match
+lakshadweep::lakshadweep,Lakshadweep , Lakshadweep ,68000.0,lakshadweep::lakshadweep,64473.0,0.5935453597272655,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::sheopur,Sheopur ,Madhya Pradesh,842533.1970257203,madhya pradesh::sheopur,687861.0,2.2792113321460583,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::morena,Morena ,Madhya Pradesh,2305539.1471458673,madhya pradesh::morena,1965970.0,1.786082935254707,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::bhind,Bhind ,Madhya Pradesh,1899610.5747706553,madhya pradesh::bhind,1703005.0,1.2213377848368845,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::gwalior,Gwalior ,Madhya Pradesh,2406737.288302707,madhya pradesh::gwalior,2032036.0,1.8981655189217017,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::datia,Datia ,Madhya Pradesh,912287.9284930815,madhya pradesh::datia,786754.0,1.6584920195049202,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::shivpuri,Shivpuri ,Madhya Pradesh,1983984.7884549361,madhya pradesh::shivpuri,1726050.0,1.5594994586316746,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::tikamgarh,Tikamgarh ,Madhya Pradesh,1215029.5626142249,madhya pradesh::tikamgarh,1445166.0,-1.9088330848395452,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::chhatarpur,Chhatarpur ,Madhya Pradesh,2084372.817313848,madhya pradesh::chhatarpur,1762375.0,1.8819979389564923,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::panna,Panna ,Madhya Pradesh,1079478.0599632768,madhya pradesh::panna,1016520.0,0.669929804841285,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::sagar,Sagar ,Madhya Pradesh,2755944.0076891533,madhya pradesh::sagar,2378458.0,1.6502199155958852,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::damoh,Damoh ,Madhya Pradesh,1402947.8688276554,madhya pradesh::damoh,1264219.0,1.1636191308026511,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::satna,Satna ,Madhya Pradesh,2511479.9923031833,madhya pradesh::satna,2228935.0,1.3349240998281164,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::rewa,Rewa ,Madhya Pradesh,2730520.600619424,madhya pradesh::rewa,2365106.0,1.6091365488885456,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::umaria,Umaria ,Madhya Pradesh,719316.2873713797,madhya pradesh::umaria,644758.0,1.223267087988189,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::neemuch,Neemuch ,Madhya Pradesh,892879.7079863948,madhya pradesh::neemuch,826067.0,0.8679223746573594,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::mandsaur,Mandsaur ,Madhya Pradesh,1362185.5369421726,madhya pradesh::mandsaur,1340411.0,0.17920637181103594,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::ratlam,Ratlam ,Madhya Pradesh,1619630.3971430396,madhya pradesh::ratlam,1455069.0,1.1976107337110964,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::ujjain,Ujjain ,Madhya Pradesh,2182769.333899606,madhya pradesh::ujjain,1986864.0,1.050332007820609,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::dewas,Dewas ,Madhya Pradesh,1767756.0156681708,madhya pradesh::dewas,1563715.0,1.3720671062449785,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::dhar,Dhar ,Madhya Pradesh,2659256.767187505,madhya pradesh::dhar,2185793.0,2.2024364216175485,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::indore,Indore ,Madhya Pradesh,4069121.636489833,madhya pradesh::indore,3276697.0,2.4357611332554097,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::khargone west nimar,Khargone (West Nimar) ,Madhya Pradesh,2134668.3850088133,madhya pradesh::khargone west nimar,1873046.0,1.4633292209166981,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::barwani,Barwani ,Madhya Pradesh,1701500.3193124128,madhya pradesh::barwani,1385881.0,2.3058992586999727,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::rajgarh,Rajgarh ,Madhya Pradesh,1819953.284222256,madhya pradesh::rajgarh,1545814.0,1.8305551848001311,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::vidisha,Vidisha ,Madhya Pradesh,1657570.9307020048,madhya pradesh::vidisha,1458875.0,1.4288636590339854,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::bhopal,Bhopal ,Madhya Pradesh,2836094.736617926,madhya pradesh::bhopal,2371061.0,2.009824582336339,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::sehore,Sehore ,Madhya Pradesh,1524535.821087354,madhya pradesh::sehore,1311332.0,1.6879381460527032,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::raisen,Raisen ,Madhya Pradesh,1543896.5305798603,madhya pradesh::raisen,1331597.0,1.6572543972514842,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::betul,Betul ,Madhya Pradesh,1721543.395710485,madhya pradesh::betul,1575362.0,0.9908335072118302,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::harda,Harda ,Madhya Pradesh,646295.389066693,madhya pradesh::harda,570465.0,1.396380012974574,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::hoshangabad,Hoshangabad ,Madhya Pradesh,1323143.5513692226,madhya pradesh::hoshangabad,1241350.0,0.7115292767969406,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::katni,Katni ,Madhya Pradesh,1393232.2987915948,madhya pradesh::katni,1292042.0,0.8413253023723755,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::jabalpur,Jabalpur ,Madhya Pradesh,2789080.3038764927,madhya pradesh::jabalpur,2463289.0,1.3897287672240966,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::narsimhapur,Narsimhapur ,Madhya Pradesh,1254747.0152258917,madhya pradesh::narsimhapur,1091854.0,1.5570735838143168,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::dindori,Dindori ,Madhya Pradesh,755578.9584459421,madhya pradesh::dindori,704524.0,0.7803835796035719,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::mandla,Mandla ,Madhya Pradesh,1023396.5187428303,madhya pradesh::mandla,1054905.0,-0.3363630251126182,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::chhindwara,Chhindwara ,Madhya Pradesh,2309047.775351389,madhya pradesh::chhindwara,2090922.0,1.1086572683854046,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::seoni,Seoni ,Madhya Pradesh,1550884.375939532,madhya pradesh::seoni,1379131.0,1.3126713432144665,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::balaghat,Balaghat ,Madhya Pradesh,1850157.6371291915,madhya pradesh::balaghat,1701698.0,0.9337129157838131,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::guna,Guna ,Madhya Pradesh,1442392.3868815897,madhya pradesh::guna,1241519.0,1.680265688463889,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::ashoknagar,Ashoknagar ,Madhya Pradesh,1033969.4327215111,madhya pradesh::ashoknagar,845071.0,2.2668654214265116,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::shahdol,Shahdol ,Madhya Pradesh,1194766.6909060744,madhya pradesh::shahdol,1066063.0,1.274480992230198,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::anuppur,Anuppur ,Madhya Pradesh,1137955.1531309597,madhya pradesh::anuppur,749237.0,4.75320650155342,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::sidhi,Sidhi ,Madhya Pradesh,1180275.1939922874,madhya pradesh::sidhi,1127033.0,0.514196482747642,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::singrauli,Singrauli ,Madhya Pradesh,1585607.6408310793,madhya pradesh::singrauli,1178273.0,3.3541110589169643,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::jhabua,Jhabua ,Madhya Pradesh,1246926.2176806568,madhya pradesh::jhabua,1025048.0,2.2010064511746252,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::alirajpur,Alirajpur ,Madhya Pradesh,887521.395574221,madhya pradesh::alirajpur,728999.0,2.210298218627038,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::khandwa east nimar,Khandwa (East Nimar) ,Madhya Pradesh,1480666.618798565,madhya pradesh::khandwa east nimar,1310061.0,1.3695007292562567,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::burhanpur,Burhanpur ,Madhya Pradesh,877983.1227905456,madhya pradesh::burhanpur,757847.0,1.6483924296732955,exact state/name candidate; verify district boundaries were not split
+madhya pradesh::agar malwa,Agar Malwa ,Madhya Pradesh,650570.1582085828,madhya pradesh::agar malwa,,,no exact Census 2011 state/name match
+madhya pradesh::shajapur,Shajapur ,Madhya Pradesh,1058042.278354528,madhya pradesh::shajapur,1512681.0,-3.8939716693786264,exact state/name candidate; verify district boundaries were not split
+maharashtra::nandurbar,Nandurbar ,Maharastra,1933462.2310658619,maharashtra::nandurbar,1648295.0,1.788820874808117,exact state/name candidate; verify district boundaries were not split
+maharashtra::dhule,Dhule ,Maharastra,2341623.3290878315,maharashtra::dhule,2050862.0,1.484062528308061,exact state/name candidate; verify district boundaries were not split
+maharashtra::jalgaon,Jalgaon ,Maharastra,4530987.776651194,maharashtra::jalgaon,4229917.0,0.7668990201640025,exact state/name candidate; verify district boundaries were not split
+maharashtra::buldana,Buldana ,Maharastra,2817671.906876377,maharashtra::buldana,2586258.0,0.9567583436492999,exact state/name candidate; verify district boundaries were not split
+maharashtra::akola,Akola ,Maharastra,1933115.582757877,maharashtra::akola,1813906.0,0.7097341116195199,exact state/name candidate; verify district boundaries were not split
+maharashtra::washim,Washim ,Maharastra,1303738.1749109512,maharashtra::washim,1197160.0,0.952099144167895,exact state/name candidate; verify district boundaries were not split
+maharashtra::amravati,Amravati ,Maharastra,3084863.617430744,maharashtra::amravati,2888445.0,0.733668847712643,exact state/name candidate; verify district boundaries were not split
+maharashtra::wardha,Wardha ,Maharastra,1291355.0696106667,maharashtra::wardha,1300774.0,-0.08071588837852417,exact state/name candidate; verify district boundaries were not split
+maharashtra::nagpur,Nagpur ,Maharastra,5006207.186194382,maharashtra::nagpur,4653570.0,0.8149014235638852,exact state/name candidate; verify district boundaries were not split
+maharashtra::bhandara,Bhandara ,Maharastra,1097271.2759804365,maharashtra::bhandara,1200334.0,-0.9925239972216393,exact state/name candidate; verify district boundaries were not split
+maharashtra::gondiya,Gondiya ,Maharastra,1488883.804665163,maharashtra::gondiya,1322507.0,1.325345162614977,exact state/name candidate; verify district boundaries were not split
+maharashtra::gadchiroli,Gadchiroli ,Maharastra,1115724.188899302,maharashtra::gadchiroli,1072942.0,0.43538151793314217,exact state/name candidate; verify district boundaries were not split
+maharashtra::chandrapur,Chandrapur ,Maharastra,2229675.2258009193,maharashtra::chandrapur,2204307.0,0.1272226641795715,exact state/name candidate; verify district boundaries were not split
+maharashtra::yavatmal,Yavatmal ,Maharastra,2986010.181661934,maharashtra::yavatmal,2772348.0,0.8283396189941117,exact state/name candidate; verify district boundaries were not split
+maharashtra::nanded,Nanded ,Maharastra,3689699.911848354,maharashtra::nanded,3361292.0,1.0411572253973933,exact state/name candidate; verify district boundaries were not split
+maharashtra::hingoli,Hingoli ,Maharastra,1295252.124898666,maharashtra::hingoli,1177345.0,1.0661259817795532,exact state/name candidate; verify district boundaries were not split
+maharashtra::parbhani,Parbhani ,Maharastra,2040846.254552041,maharashtra::parbhani,1836086.0,1.181687635308215,exact state/name candidate; verify district boundaries were not split
+maharashtra::jalna,Jalna ,Maharastra,2220355.639598331,maharashtra::jalna,1959046.0,1.400942061024657,exact state/name candidate; verify district boundaries were not split
+maharashtra::aurangabad,Aurangabad ,Maharastra,4330573.010173837,maharashtra::aurangabad,3701282.0,1.7599819049757937,exact state/name candidate; verify district boundaries were not split
+maharashtra::nashik,Nashik ,Maharastra,6989929.248351836,maharashtra::nashik,6107187.0,1.5113533821941472,exact state/name candidate; verify district boundaries were not split
+maharashtra::mumbai suburban,Mumbai Suburban ,Maharastra,10528659.124731485,maharashtra::mumbai suburban,9356962.0,1.3195222434670528,exact state/name candidate; verify district boundaries were not split
+maharashtra::mumbai,Mumbai ,Maharastra,2650591.299708644,maharashtra::mumbai,3085411.0,-1.6736378360208026,exact state/name candidate; verify district boundaries were not split
+maharashtra::raigarh,Raigarh ,Maharastra,3007466.394831708,maharashtra::raigarh,2634200.0,1.4833209957541227,exact state/name candidate; verify district boundaries were not split
+maharashtra::pune,Pune ,Maharastra,11394649.658802833,maharashtra::pune,9429408.0,2.125729583831104,exact state/name candidate; verify district boundaries were not split
+maharashtra::ahmadnagar,Ahmadnagar ,Maharastra,4886339.702438743,maharashtra::ahmadnagar,4543159.0,0.8124034659345636,exact state/name candidate; verify district boundaries were not split
+maharashtra::bid,Bid ,Maharastra,2886969.260145306,maharashtra::bid,2585049.0,1.2349273557183515,exact state/name candidate; verify district boundaries were not split
+maharashtra::latur,Latur ,Maharastra,2679588.7382280887,maharashtra::latur,2454196.0,0.9810489764665586,exact state/name candidate; verify district boundaries were not split
+maharashtra::osmanabad,Osmanabad ,Maharastra,1822708.8630894152,maharashtra::osmanabad,1657576.0,1.06078110426715,exact state/name candidate; verify district boundaries were not split
+maharashtra::solapur,Solapur ,Maharastra,4614405.726527012,maharashtra::solapur,4317756.0,0.7410351408495552,exact state/name candidate; verify district boundaries were not split
+maharashtra::satara,Satara ,Maharastra,3023228.599776602,maharashtra::satara,3003741.0,0.07187939085919748,exact state/name candidate; verify district boundaries were not split
+maharashtra::ratnagiri,Ratnagiri ,Maharastra,1483092.7999441065,maharashtra::ratnagiri,1615069.0,-0.9427286664053458,exact state/name candidate; verify district boundaries were not split
+maharashtra::sindhudurg,Sindhudurg ,Maharastra,782303.6308195143,maharashtra::sindhudurg,849651.0,-0.9133889938667483,exact state/name candidate; verify district boundaries were not split
+maharashtra::kolhapur,Kolhapur ,Maharastra,3781056.5634660064,maharashtra::kolhapur,3876001.0,-0.2751814277289988,exact state/name candidate; verify district boundaries were not split
+maharashtra::sangli,Sangli ,Maharastra,3093194.4986459995,maharashtra::sangli,2822143.0,1.024185348947726,exact state/name candidate; verify district boundaries were not split
+maharashtra::palghar,Palghar ,Maharastra,3714750.1356093697,maharashtra::palghar,,,no exact Census 2011 state/name match
+maharashtra::thane,Thane ,Maharastra,9218749.262218466,maharashtra::thane,11060148.0,-2.003099344641668,exact state/name candidate; verify district boundaries were not split
+manipur::senapati,Senapati ,Manipur,397662.77543100505,manipur::senapati,479148.0,-2.049867268216976,exact state/name candidate; verify district boundaries were not split
+manipur::tamenglong,Tamenglong ,Manipur,131563.22079157716,manipur::tamenglong,140651.0,-0.7394099497795237,exact state/name candidate; verify district boundaries were not split
+manipur::churachandpur,Churachandpur ,Manipur,226302.52920552687,manipur::churachandpur,274143.0,-2.1083147407090608,exact state/name candidate; verify district boundaries were not split
+manipur::bishnupur,Bishnupur ,Manipur,252230.91931193366,manipur::bishnupur,237399.0,0.6756360195275368,exact state/name candidate; verify district boundaries were not split
+manipur::thoubal,Thoubal ,Manipur,323787.96335848776,manipur::thoubal,422168.0,-2.9049107124566875,exact state/name candidate; verify district boundaries were not split
+manipur::imphal west,Imphal West ,Manipur,515803.9186667499,manipur::imphal west,517992.0,-0.047023467681506226,exact state/name candidate; verify district boundaries were not split
+manipur::imphal east,Imphal East ,Manipur,389015.27863394754,manipur::imphal east,456113.0,-1.7524840467448177,exact state/name candidate; verify district boundaries were not split
+manipur::ukhrul,Ukhrul ,Manipur,179512.9762994626,manipur::ukhrul,183998.0,-0.2738176704304651,exact state/name candidate; verify district boundaries were not split
+manipur::chandel,Chandel ,Manipur,326785.9981197766,manipur::chandel,144182.0,9.517519659267837,exact state/name candidate; verify district boundaries were not split
+meghalaya::south garo hills,South Garo Hills ,Meghalaya,147177.15754100043,meghalaya::south garo hills,142334.0,0.37247648828577784,exact state/name candidate; verify district boundaries were not split
+meghalaya::ribhoi,Ribhoi ,Meghalaya,328947.3150916728,meghalaya::ribhoi,258840.0,2.6989742915631387,exact state/name candidate; verify district boundaries were not split
+meghalaya::east khasi hills,East Khasi Hills ,Meghalaya,1184108.8366106735,meghalaya::east khasi hills,825922.0,4.083915355286938,exact state/name candidate; verify district boundaries were not split
+meghalaya::east garo hills,East Garo Hills ,Meghalaya,110764.29931833653,meghalaya::east garo hills,317917.0,-11.055177544423733,exact state/name candidate; verify district boundaries were not split
+meghalaya::east jantia hills,East Jantia Hills ,Meghalaya,92417.33311311601,meghalaya::east jantia hills,,,no exact Census 2011 state/name match
+meghalaya::north garo hills,North Garo Hills ,Meghalaya,226536.34539547763,meghalaya::north garo hills,,,no exact Census 2011 state/name match
+meghalaya::south west garo hills,South West Garo Hills ,Meghalaya,67964.13748448405,meghalaya::south west garo hills,,,no exact Census 2011 state/name match
+meghalaya::south west khasi hills,South West Khasi Hills ,Meghalaya,96553.58069145742,meghalaya::south west khasi hills,,,no exact Census 2011 state/name match
+meghalaya::west garo hills,West Garo Hills ,Meghalaya,643301.6056789177,meghalaya::west garo hills,643291.0,0.0001831830593213013,exact state/name candidate; verify district boundaries were not split
+meghalaya::west jaintia hills,West Jaintia Hills ,Meghalaya,358229.3890748638,meghalaya::west jaintia hills,,,no exact Census 2011 state/name match
+meghalaya::west khasi hills,West Khasi Hills ,Meghalaya,,meghalaya::west khasi hills,383461.0,,exact state/name candidate; verify district boundaries were not split
+mizoram::chandel,Chandel ,Mizoram,,mizoram::chandel,,,no exact Census 2011 state/name match
+mizoram::mamit,Mamit ,Mizoram,127380.53476319824,mizoram::mamit,86364.0,4.412443082995154,exact state/name candidate; verify district boundaries were not split
+mizoram::kolasib,Kolasib ,Mizoram,109276.7405770751,mizoram::kolasib,83955.0,2.9722327444161145,exact state/name candidate; verify district boundaries were not split
+mizoram::aizawl,Aizawl ,Mizoram,356576.6893715741,mizoram::aizawl,400309.0,-1.277189535772949,exact state/name candidate; verify district boundaries were not split
+mizoram::champhai,Champhai ,Mizoram,75314.44020779865,mizoram::champhai,125745.0,-5.536228531842601,exact state/name candidate; verify district boundaries were not split
+mizoram::serchhip,Serchhip ,Mizoram,77280.6657439485,mizoram::serchhip,64937.0,1.9524404421135788,exact state/name candidate; verify district boundaries were not split
+mizoram::lunglei,Lunglei ,Mizoram,150257.50547953948,mizoram::lunglei,161428.0,-0.7935975588118649,exact state/name candidate; verify district boundaries were not split
+mizoram::lawngtlai,Lawngtlai ,Mizoram,120798.68321108194,mizoram::lawngtlai,117894.0,0.27080456166388434,exact state/name candidate; verify district boundaries were not split
+nagaland::mon,Mon ,Nagaland,259254.4503223327,nagaland::mon,250260.0,0.3930999039923222,exact state/name candidate; verify district boundaries were not split
+nagaland::mokokchung,Mokokchung ,Nagaland,175650.49031475894,nagaland::mokokchung,194622.0,-1.1331206716456377,exact state/name candidate; verify district boundaries were not split
+nagaland::zunheboto,Zunheboto ,Nagaland,155204.80532338822,nagaland::zunheboto,140757.0,1.091587815699624,exact state/name candidate; verify district boundaries were not split
+nagaland::wokha,Wokha ,Nagaland,,nagaland::wokha,166343.0,,exact state/name candidate; verify district boundaries were not split
+nagaland::dimapur,Dimapur ,Nagaland,538617.9580540549,nagaland::dimapur,378811.0,3.9882452390432643,exact state/name candidate; verify district boundaries were not split
+nagaland::phek,Phek ,Nagaland,189900.02227035505,nagaland::phek,163418.0,1.6827389749707988,exact state/name candidate; verify district boundaries were not split
+nagaland::tuensang,Tuensang ,Nagaland,228295.67570266977,nagaland::tuensang,196596.0,1.6748797771770407,exact state/name candidate; verify district boundaries were not split
+nagaland::longleng,Longleng ,Nagaland,41490.32517637135,nagaland::longleng,50484.0,-2.156368232857664,exact state/name candidate; verify district boundaries were not split
+nagaland::kiphire,Kiphire ,Nagaland,52977.30362314855,nagaland::kiphire,74004.0,-3.6458294250346523,exact state/name candidate; verify district boundaries were not split
+nagaland::kohima,Kohima ,Nagaland,369115.2467841332,nagaland::kohima,267988.0,3.6214407334059118,exact state/name candidate; verify district boundaries were not split
+nagaland::peren,Peren ,Nagaland,160493.72242878715,nagaland::peren,95219.0,5.972386526709261,exact state/name candidate; verify district boundaries were not split
+delhi::central,Central ,NCT of Delhi,1808165.1281162058,delhi::central,582320.0,13.41621605074399,exact state/name candidate; verify district boundaries were not split
+delhi::east,East ,NCT of Delhi,1750595.361130274,delhi::east,1709346.0,0.26529679320752564,exact state/name candidate; verify district boundaries were not split
+delhi::new delhi,New Delhi ,NCT of Delhi,2861863.57743346,delhi::new delhi,142004.0,39.61355778567401,exact state/name candidate; verify district boundaries were not split
+delhi::north,North ,NCT of Delhi,2778163.0602243757,delhi::north,887978.0,13.511405964425327,exact state/name candidate; verify district boundaries were not split
+delhi::north east,North East ,NCT of Delhi,788146.028873077,delhi::north east,2241624.0,-10.96506704760759,exact state/name candidate; verify district boundaries were not split
+delhi::north west,North West ,NCT of Delhi,1766262.8035038384,delhi::north west,3656539.0,-7.766808878808984,exact state/name candidate; verify district boundaries were not split
+delhi::shahdara,Shahdara ,NCT of Delhi,,delhi::shahdara,,,no exact Census 2011 state/name match
+delhi::south,South ,NCT of Delhi,4307109.142702326,delhi::south,2731929.0,5.188556786393894,exact state/name candidate; verify district boundaries were not split
+delhi::south east,South East ,NCT of Delhi,,delhi::south east,,,no exact Census 2011 state/name match
+delhi::south west,South West ,NCT of Delhi,1407749.2502154312,delhi::south west,2292958.0,-5.276267967743619,exact state/name candidate; verify district boundaries were not split
+delhi::west,West ,NCT of Delhi,2724945.64780101,delhi::west,2543243.0,0.7697076231331756,exact state/name candidate; verify district boundaries were not split
+odisha::bargarh,Bargarh ,Odisha,1498532.9181526774,odisha::bargarh,,,no exact Census 2011 state/name match
+odisha::jharsuguda,Jharsuguda ,Odisha,605085.2378000531,odisha::jharsuguda,,,no exact Census 2011 state/name match
+odisha::sambalpur,Sambalpur ,Odisha,1208901.8361958931,odisha::sambalpur,,,no exact Census 2011 state/name match
+odisha::debagarh,Debagarh ,Odisha,325462.2633141638,odisha::debagarh,,,no exact Census 2011 state/name match
+odisha::sundargarh,Sundargarh ,Odisha,2267805.8829052937,odisha::sundargarh,,,no exact Census 2011 state/name match
+odisha::kendujhar,Kendujhar ,Odisha,2025737.6572322543,odisha::kendujhar,,,no exact Census 2011 state/name match
+odisha::mayurbhanj,Mayurbhanj ,Odisha,2775780.2114587794,odisha::mayurbhanj,,,no exact Census 2011 state/name match
+odisha::baleshwar,Baleshwar ,Odisha,2339334.165299957,odisha::baleshwar,,,no exact Census 2011 state/name match
+odisha::bhadrak,Bhadrak ,Odisha,1553256.4157253187,odisha::bhadrak,,,no exact Census 2011 state/name match
+odisha::kendrapara,Kendrapara ,Odisha,1588313.5118569632,odisha::kendrapara,,,no exact Census 2011 state/name match
+odisha::jagatsinghapur,Jagatsinghapur ,Odisha,1230441.322819406,odisha::jagatsinghapur,,,no exact Census 2011 state/name match
+odisha::cuttack,Cuttack ,Odisha,2645845.025445285,odisha::cuttack,,,no exact Census 2011 state/name match
+odisha::jajapur,Jajapur ,Odisha,1990780.5376201489,odisha::jajapur,,,no exact Census 2011 state/name match
+odisha::dhenkanal,Dhenkanal ,Odisha,1198091.6174849402,odisha::dhenkanal,,,no exact Census 2011 state/name match
+odisha::anugul,Anugul ,Odisha,1457077.7651964035,odisha::anugul,,,no exact Census 2011 state/name match
+odisha::nayagarh,Nayagarh ,Odisha,1048657.458382974,odisha::nayagarh,,,no exact Census 2011 state/name match
+odisha::khordha,Khordha ,Odisha,2461776.752050397,odisha::khordha,,,no exact Census 2011 state/name match
+odisha::puri,Puri ,Odisha,1767151.3669810973,odisha::puri,,,no exact Census 2011 state/name match
+odisha::ganjam,Ganjam ,Odisha,3751005.5200349437,odisha::ganjam,,,no exact Census 2011 state/name match
+odisha::gajapati,Gajapati ,Odisha,588362.0159211644,odisha::gajapati,,,no exact Census 2011 state/name match
+odisha::kandhamal,Kandhamal ,Odisha,794988.4572658642,odisha::kandhamal,,,no exact Census 2011 state/name match
+odisha::baudh,Baudh ,Odisha,500832.1131049004,odisha::baudh,,,no exact Census 2011 state/name match
+odisha::subarnapur,Subarnapur ,Odisha,606471.9689168034,odisha::subarnapur,,,no exact Census 2011 state/name match
+odisha::balangir,Balangir ,Odisha,1958584.15384782,odisha::balangir,,,no exact Census 2011 state/name match
+odisha::nuapada,Nuapada ,Odisha,655953.1647275588,odisha::nuapada,,,no exact Census 2011 state/name match
+odisha::kalahandi,Kalahandi ,Odisha,1781263.149222234,odisha::kalahandi,,,no exact Census 2011 state/name match
+odisha::rayagada,Rayagada ,Odisha,1072048.0583782126,odisha::rayagada,,,no exact Census 2011 state/name match
+odisha::nabarangapur,Nabarangapur ,Odisha,1348290.1069074594,odisha::nabarangapur,,,no exact Census 2011 state/name match
+odisha::koraput,Koraput ,Odisha,1486026.1593794278,odisha::koraput,,,no exact Census 2011 state/name match
+odisha::malkangiri,Malkangiri ,Odisha,818143.1863716097,odisha::malkangiri,,,no exact Census 2011 state/name match
+puducherry::yanam,Yanam ,Puducherry,,puducherry::yanam,,,no exact Census 2011 state/name match
+puducherry::puducherry,Puducherry ,Puducherry,1281613.2116923498,puducherry::puducherry,,,no exact Census 2011 state/name match
+puducherry::mahe,Mahe ,Puducherry,72355.40035473902,puducherry::mahe,,,no exact Census 2011 state/name match
+puducherry::karaikal,Karaikal ,Puducherry,183031.3879529114,puducherry::karaikal,,,no exact Census 2011 state/name match
+punjab::kapurthala,Kapurthala ,Punjab,896857.8252629976,punjab::kapurthala,815168.0,1.066795922668451,exact state/name candidate; verify district boundaries were not split
+punjab::jalandhar,Jalandhar ,Punjab,2282549.185577224,punjab::jalandhar,2193590.0,0.4426815208340651,exact state/name candidate; verify district boundaries were not split
+punjab::hoshiarpur,Hoshiarpur ,Punjab,1658282.7211410897,punjab::hoshiarpur,1586625.0,0.49202250644022616,exact state/name candidate; verify district boundaries were not split
+punjab::shahid bhagat singh nagar,Shahid Bhagat Singh Nagar ,Punjab,593061.0702920941,punjab::shahid bhagat singh nagar,612310.0,-0.3542744198729353,exact state/name candidate; verify district boundaries were not split
+punjab::fatehgarh sahib,Fatehgarh Sahib ,Punjab,630557.1834276607,punjab::fatehgarh sahib,600163.0,0.5504266635383281,exact state/name candidate; verify district boundaries were not split
+punjab::ludhiana,Ludhiana ,Punjab,3749347.719864287,punjab::ludhiana,3498739.0,0.7716202701489427,exact state/name candidate; verify district boundaries were not split
+punjab::moga,Moga ,Punjab,969384.4627850843,punjab::moga,995746.0,-0.29767727508209774,exact state/name candidate; verify district boundaries were not split
+punjab::muktsar,Muktsar ,Punjab,1104714.567337105,punjab::muktsar,901896.0,2.2794019647641273,exact state/name candidate; verify district boundaries were not split
+punjab::faridkot,Faridkot ,Punjab,625895.0668733496,punjab::faridkot,617508.0,0.15000916093361738,exact state/name candidate; verify district boundaries were not split
+punjab::bathinda,Bathinda ,Punjab,1619206.5671860797,punjab::bathinda,1388525.0,1.7223783791532998,exact state/name candidate; verify district boundaries were not split
+punjab::mansa,Mansa ,Punjab,718306.7929852065,punjab::mansa,769751.0,-0.7656132457641962,exact state/name candidate; verify district boundaries were not split
+punjab::patiala,Patiala ,Punjab,2220361.0918260957,punjab::patiala,1895686.0,1.7720630728162767,exact state/name candidate; verify district boundaries were not split
+punjab::amritsar,Amritsar ,Punjab,2597030.2544442066,punjab::amritsar,2490656.0,0.4657752964158046,exact state/name candidate; verify district boundaries were not split
+punjab::tarn taran,Tarn Taran ,Punjab,1206088.444573112,punjab::tarn taran,1119627.0,0.8299455390872401,exact state/name candidate; verify district boundaries were not split
+punjab::rupnagar,Rupnagar ,Punjab,807679.3913114709,punjab::rupnagar,684627.0,1.8535355269665876,exact state/name candidate; verify district boundaries were not split
+punjab::sahibzada ajit singh nagar,Sahibzada Ajit Singh Nagar ,Punjab,1482738.4229356346,punjab::sahibzada ajit singh nagar,994628.0,4.53629306896024,exact state/name candidate; verify district boundaries were not split
+punjab::sangrur,Sangrur ,Punjab,1760558.9336186927,punjab::sangrur,1655169.0,0.6882265366818352,exact state/name candidate; verify district boundaries were not split
+punjab::barnala,Barnala ,Punjab,644872.3198439584,punjab::barnala,595527.0,0.8884301611496337,exact state/name candidate; verify district boundaries were not split
+punjab::fazilka,Fazilka ,Punjab,1232245.1701396173,punjab::fazilka,,,no exact Census 2011 state/name match
+punjab::firozpur,Firozpur ,Punjab,881174.7572682643,punjab::firozpur,2029074.0,-8.851070276004137,exact state/name candidate; verify district boundaries were not split
+punjab::gurdaspur,Gurdaspur ,Punjab,1709198.6026879658,punjab::gurdaspur,2298323.0,-3.2370607851642696,exact state/name candidate; verify district boundaries were not split
+punjab::pathankot,Pathankot ,Punjab,708889.4486188052,punjab::pathankot,,,no exact Census 2011 state/name match
+rajasthan::ganganagar,Ganganagar ,Rajasthan,2016701.1643928406,rajasthan::ganganagar,1969168.0,0.26537339373513547,exact state/name candidate; verify district boundaries were not split
+rajasthan::hanumangarh,Hanumangarh ,Rajasthan,1943751.8529924434,rajasthan::hanumangarh,1774692.0,1.0161633786323065,exact state/name candidate; verify district boundaries were not split
+rajasthan::bikaner,Bikaner ,Rajasthan,2963531.387492048,rajasthan::bikaner,2363937.0,2.543510583061237,exact state/name candidate; verify district boundaries were not split
+rajasthan::churu,Churu ,Rajasthan,2136797.9923443547,rajasthan::churu,2039547.0,0.5189052168616648,exact state/name candidate; verify district boundaries were not split
+rajasthan::jhunjhunun,Jhunjhunun ,Rajasthan,2340335.6520228246,rajasthan::jhunjhunun,2137045.0,1.0147846626140655,exact state/name candidate; verify district boundaries were not split
+rajasthan::alwar,Alwar ,Rajasthan,4290838.050555469,rajasthan::alwar,3674179.0,1.7388602542700582,exact state/name candidate; verify district boundaries were not split
+rajasthan::bharatpur,Bharatpur ,Rajasthan,2858584.438231614,rajasthan::bharatpur,2548462.0,1.2841363485285084,exact state/name candidate; verify district boundaries were not split
+rajasthan::dhaulpur,Dhaulpur ,Rajasthan,1452067.5002916048,rajasthan::dhaulpur,1206516.0,2.0796805258902706,exact state/name candidate; verify district boundaries were not split
+rajasthan::karauli,Karauli ,Rajasthan,1640498.5802948275,rajasthan::karauli,1458248.0,1.3170926142898942,exact state/name candidate; verify district boundaries were not split
+rajasthan::sawai madhopur,Sawai Madhopur ,Rajasthan,1448129.1052969797,rajasthan::sawai madhopur,1335551.0,0.9032606695827949,exact state/name candidate; verify district boundaries were not split
+rajasthan::dausa,Dausa ,Rajasthan,2093077.6744842473,rajasthan::dausa,1634409.0,2.786497306383673,exact state/name candidate; verify district boundaries were not split
+rajasthan::jaipur,Jaipur ,Rajasthan,7830644.84069999,rajasthan::jaipur,6626178.0,1.8730669311925352,exact state/name candidate; verify district boundaries were not split
+rajasthan::sikar,Sikar ,Rajasthan,2866278.25501476,rajasthan::sikar,2677333.0,0.7605807568838996,exact state/name candidate; verify district boundaries were not split
+rajasthan::nagaur,Nagaur ,Rajasthan,3654060.2876860267,rajasthan::nagaur,3307743.0,1.1125081116153845,exact state/name candidate; verify district boundaries were not split
+rajasthan::jodhpur,Jodhpur ,Rajasthan,4433501.003625594,rajasthan::jodhpur,3687165.0,2.0692480676397507,exact state/name candidate; verify district boundaries were not split
+rajasthan::jaisalmer,Jaisalmer ,Rajasthan,819530.8417284073,rajasthan::jaisalmer,669919.0,2.2649948385170093,exact state/name candidate; verify district boundaries were not split
+rajasthan::barmer,Barmer ,Rajasthan,3171521.492550911,rajasthan::barmer,2603751.0,2.215954837391032,exact state/name candidate; verify district boundaries were not split
+rajasthan::jalor,Jalor ,Rajasthan,2183565.534808774,rajasthan::jalor,1828730.0,1.9899560402285132,exact state/name candidate; verify district boundaries were not split
+rajasthan::sirohi,Sirohi ,Rajasthan,1213037.3019254976,rajasthan::sirohi,1036346.0,1.7645690580056383,exact state/name candidate; verify district boundaries were not split
+rajasthan::pali,Pali ,Rajasthan,2147808.3061468396,rajasthan::pali,2037573.0,0.5871451575038433,exact state/name candidate; verify district boundaries were not split
+rajasthan::ajmer,Ajmer ,Rajasthan,2857675.4682603073,rajasthan::ajmer,2583052.0,1.1289571094666995,exact state/name candidate; verify district boundaries were not split
+rajasthan::tonk,Tonk ,Rajasthan,1625403.4408403707,rajasthan::tonk,1421326.0,1.5018981252946206,exact state/name candidate; verify district boundaries were not split
+rajasthan::bundi,Bundi ,Rajasthan,1310171.7535173926,rajasthan::bundi,1110906.0,1.8500422043237874,exact state/name candidate; verify district boundaries were not split
+rajasthan::bhilwara,Bhilwara ,Rajasthan,2637361.623763285,rajasthan::bhilwara,2408523.0,1.0136062703109738,exact state/name candidate; verify district boundaries were not split
+rajasthan::rajsamand,Rajsamand ,Rajasthan,1274056.12210136,rajasthan::rajsamand,1156597.0,1.0805016539657375,exact state/name candidate; verify district boundaries were not split
+rajasthan::dungarpur,Dungarpur ,Rajasthan,1587283.0961200714,rajasthan::dungarpur,1388552.0,1.4973477279019543,exact state/name candidate; verify district boundaries were not split
+rajasthan::banswara,Banswara ,Rajasthan,2209860.065043515,rajasthan::banswara,1797485.0,2.3214323461281383,exact state/name candidate; verify district boundaries were not split
+rajasthan::chittaurgarh,Chittaurgarh ,Rajasthan,1784707.0819393422,rajasthan::chittaurgarh,1544338.0,1.6203087090721269,exact state/name candidate; verify district boundaries were not split
+rajasthan::kota,Kota ,Rajasthan,2169016.29666446,rajasthan::kota,1951014.0,1.1838921542131509,exact state/name candidate; verify district boundaries were not split
+rajasthan::baran,Baran ,Rajasthan,1343639.924340449,rajasthan::baran,1222755.0,1.0530142816018495,exact state/name candidate; verify district boundaries were not split
+rajasthan::jhalawar,Jhalawar ,Rajasthan,1567482.5481269564,rajasthan::jhalawar,1411129.0,1.1744067083218734,exact state/name candidate; verify district boundaries were not split
+rajasthan::udaipur,Udaipur ,Rajasthan,3466907.5283704475,rajasthan::udaipur,3068420.0,1.3659136618013878,exact state/name candidate; verify district boundaries were not split
+rajasthan::pratapgarh,Pratapgarh ,Rajasthan,935173.7883259896,rajasthan::pratapgarh,867848.0,0.8336310434457594,exact state/name candidate; verify district boundaries were not split
+sikkim::north,North  District ,Sikkim,71988.95206737488,sikkim::north,43709.0,5.700543430784788,exact state/name candidate; verify district boundaries were not split
+sikkim::west,West District ,Sikkim,127497.61026867441,sikkim::west,136435.0,-0.7499591036427611,exact state/name candidate; verify district boundaries were not split
+sikkim::south,South District ,Sikkim,271644.6517184709,sikkim::south,146850.0,7.07320459817129,exact state/name candidate; verify district boundaries were not split
+sikkim::east,East District ,Sikkim,198868.78594547987,sikkim::east,283583.0,-3.866164485456758,exact state/name candidate; verify district boundaries were not split
+tamil nadu::thiruvallur,Thiruvallur ,Tamil Nadu,3881937.531805644,tamil nadu::thiruvallur,3728104.0,0.4502840727378832,exact state/name candidate; verify district boundaries were not split
+tamil nadu::chennai,Chennai ,Tamil Nadu,3738213.1910646763,tamil nadu::chennai,4646732.0,-2.3883111886657593,exact state/name candidate; verify district boundaries were not split
+tamil nadu::kancheepuram,Kancheepuram ,Tamil Nadu,3993343.5795587786,tamil nadu::kancheepuram,3998252.0,-0.013647910353664638,exact state/name candidate; verify district boundaries were not split
+tamil nadu::vellore,Vellore ,Tamil Nadu,1626922.94759781,tamil nadu::vellore,3936331.0,-9.350809435995966,exact state/name candidate; verify district boundaries were not split
+tamil nadu::tiruvannamalai,Tiruvannamalai ,Tamil Nadu,2690293.349162092,tamil nadu::tiruvannamalai,2464875.0,0.9770662386711315,exact state/name candidate; verify district boundaries were not split
+tamil nadu::viluppuram,Viluppuram ,Tamil Nadu,2287545.85569638,tamil nadu::viluppuram,3458873.0,-4.4901078394468446,exact state/name candidate; verify district boundaries were not split
+tamil nadu::salem,Salem ,Tamil Nadu,3522856.757366822,tamil nadu::salem,3482056.0,0.12952064260220997,exact state/name candidate; verify district boundaries were not split
+tamil nadu::namakkal,Namakkal ,Tamil Nadu,1918830.172216282,tamil nadu::namakkal,1726601.0,1.179805208143514,exact state/name candidate; verify district boundaries were not split
+tamil nadu::erode,Erode ,Tamil Nadu,2207943.364337855,tamil nadu::erode,2251744.0,-0.21802364030193422,exact state/name candidate; verify district boundaries were not split
+tamil nadu::the nilgiris,The Nilgiris ,Tamil Nadu,674441.700197572,tamil nadu::the nilgiris,735394.0,-0.9567401958816113,exact state/name candidate; verify district boundaries were not split
+tamil nadu::dindigul,Dindigul ,Tamil Nadu,2272523.262432911,tamil nadu::dindigul,2159775.0,0.5670096032522887,exact state/name candidate; verify district boundaries were not split
+tamil nadu::karur,Karur ,Tamil Nadu,1198180.276079395,tamil nadu::karur,1064493.0,1.3231813567581296,exact state/name candidate; verify district boundaries were not split
+tamil nadu::tiruchirappalli,Tiruchirappalli ,Tamil Nadu,2748170.025448238,tamil nadu::tiruchirappalli,2722290.0,0.1051864712751982,exact state/name candidate; verify district boundaries were not split
+tamil nadu::perambalur,Perambalur ,Tamil Nadu,555064.2783342588,tamil nadu::perambalur,565223.0,-0.20131286754445643,exact state/name candidate; verify district boundaries were not split
+tamil nadu::ariyalur,Ariyalur ,Tamil Nadu,732547.5243125211,tamil nadu::ariyalur,754894.0,-0.333322395000224,exact state/name candidate; verify district boundaries were not split
+tamil nadu::cuddalore,Cuddalore ,Tamil Nadu,2817120.797793101,tamil nadu::cuddalore,2605914.0,0.8696697587956104,exact state/name candidate; verify district boundaries were not split
+tamil nadu::nagapattinam,Nagapattinam ,Tamil Nadu,629927.0175077113,tamil nadu::nagapattinam,1616450.0,-9.941371485099815,exact state/name candidate; verify district boundaries were not split
+tamil nadu::thiruvarur,Thiruvarur ,Tamil Nadu,1409320.8128238914,tamil nadu::thiruvarur,1264277.0,1.2140603579452236,exact state/name candidate; verify district boundaries were not split
+tamil nadu::thanjavur,Thanjavur ,Tamil Nadu,2309603.7521102643,tamil nadu::thanjavur,2405890.0,-0.4527931594234813,exact state/name candidate; verify district boundaries were not split
+tamil nadu::pudukkottai,Pudukkottai ,Tamil Nadu,1711449.735745877,tamil nadu::pudukkottai,1618345.0,0.6234553079814686,exact state/name candidate; verify district boundaries were not split
+tamil nadu::sivaganga,Sivaganga ,Tamil Nadu,1439043.1398769831,tamil nadu::sivaganga,1339101.0,0.8029835717296985,exact state/name candidate; verify district boundaries were not split
+tamil nadu::madurai,Madurai ,Tamil Nadu,3036339.324434468,tamil nadu::madurai,3038252.0,-0.006996753135635192,exact state/name candidate; verify district boundaries were not split
+tamil nadu::theni,Theni ,Tamil Nadu,1240607.1156941652,tamil nadu::theni,1245899.0,-0.04728313424101627,exact state/name candidate; verify district boundaries were not split
+tamil nadu::virudhunagar,Virudhunagar ,Tamil Nadu,1961558.1098106804,tamil nadu::virudhunagar,1942288.0,0.10975409493245714,exact state/name candidate; verify district boundaries were not split
+tamil nadu::ramanathapuram,Ramanathapuram ,Tamil Nadu,1402134.9249335993,tamil nadu::ramanathapuram,1353445.0,0.3934701536246754,exact state/name candidate; verify district boundaries were not split
+tamil nadu::thoothukkudi,Thoothukkudi ,Tamil Nadu,1701080.1412755053,tamil nadu::thoothukkudi,1750176.0,-0.3156444343155207,exact state/name candidate; verify district boundaries were not split
+tamil nadu::tirunelveli,Tirunelveli ,Tamil Nadu,1743390.6229576427,tamil nadu::tirunelveli,3077233.0,-6.11816025260854,exact state/name candidate; verify district boundaries were not split
+tamil nadu::kanniyakumari,Kanniyakumari ,Tamil Nadu,1938680.6547676714,tamil nadu::kanniyakumari,1870374.0,0.39934254460436414,exact state/name candidate; verify district boundaries were not split
+tamil nadu::dharmapuri,Dharmapuri ,Tamil Nadu,1645187.1489539084,tamil nadu::dharmapuri,1506843.0,0.9807493798147826,exact state/name candidate; verify district boundaries were not split
+tamil nadu::krishnagiri,Krishnagiri ,Tamil Nadu,1905581.7513264313,tamil nadu::krishnagiri,1879809.0,0.15141637786755258,exact state/name candidate; verify district boundaries were not split
+tamil nadu::coimbatore,Coimbatore ,Tamil Nadu,4116397.80828151,tamil nadu::coimbatore,3458045.0,1.9552592011764958,exact state/name candidate; verify district boundaries were not split
+tamil nadu::tiruppur,Tiruppur ,Tamil Nadu,3713942.1002516197,tamil nadu::tiruppur,2479052.0,4.593693430732992,exact state/name candidate; verify district boundaries were not split
+telangana::adilabad,Adilabad ,Telangana,759053.8949854935,telangana::adilabad,,,no exact Census 2011 state/name match
+telangana::bhadradri kothagudem,Bhadradri Kothagudem ,Telangana,1351839.1788041946,telangana::bhadradri kothagudem,,,no exact Census 2011 state/name match
+telangana::hyderabad,Hyderabad ,Telangana,4179174.2994531146,telangana::hyderabad,,,no exact Census 2011 state/name match
+telangana::jagitial,Jagitial ,Telangana,970307.664571531,telangana::jagitial,,,no exact Census 2011 state/name match
+telangana::jangoan,Jangoan ,Telangana,519469.4529023643,telangana::jangoan,,,no exact Census 2011 state/name match
+telangana::jayashankar bhupalapally,Jayashankar Bhupalapally ,Telangana,442211.71106084494,telangana::jayashankar bhupalapally,,,no exact Census 2011 state/name match
+telangana::jogulamba gadwal,Jogulamba Gadwal ,Telangana,615399.2329132452,telangana::jogulamba gadwal,,,no exact Census 2011 state/name match
+telangana::kamareddy,Kamareddy ,Telangana,994127.1760278051,telangana::kamareddy,,,no exact Census 2011 state/name match
+telangana::karimnagar,Karimnagar ,Telangana,1158931.416819618,telangana::karimnagar,,,no exact Census 2011 state/name match
+telangana::khammam,Khammam ,Telangana,1417962.2128895314,telangana::khammam,,,no exact Census 2011 state/name match
+telangana::komaram bheem asifabad,Komaram Bheem Asifabad ,Telangana,433487.3173102944,telangana::komaram bheem asifabad,,,no exact Census 2011 state/name match
+telangana::mahabubabad,Mahabubabad ,Telangana,699186.9948092576,telangana::mahabubabad,,,no exact Census 2011 state/name match
+telangana::mahabubnagar,Mahabubnagar ,Telangana,940310.8866046853,telangana::mahabubnagar,,,no exact Census 2011 state/name match
+telangana::mancherial,Mancherial ,Telangana,763094.626693471,telangana::mancherial,,,no exact Census 2011 state/name match
+telangana::medak,Medak ,Telangana,742672.1271166161,telangana::medak,,,no exact Census 2011 state/name match
+telangana::medchal malkajgiri,Medchal-Malkajgiri ,Telangana,2859043.6706805555,telangana::medchal malkajgiri,,,no exact Census 2011 state/name match
+telangana::nagarkurnool,Nagarkurnool ,Telangana,992103.7431630663,telangana::nagarkurnool,,,no exact Census 2011 state/name match
+telangana::nalgonda,Nalgonda ,Telangana,1722426.2971685345,telangana::nalgonda,,,no exact Census 2011 state/name match
+telangana::nirmal,Nirmal ,Telangana,712830.2068240185,telangana::nirmal,,,no exact Census 2011 state/name match
+telangana::nizamabad,Nizamabad ,Telangana,1590897.1160211503,telangana::nizamabad,,,no exact Census 2011 state/name match
+telangana::peddapalli,Peddapalli ,Telangana,938047.2055748487,telangana::peddapalli,,,no exact Census 2011 state/name match
+telangana::rajanna sircilla,Rajanna Sircilla ,Telangana,554246.4267343729,telangana::rajanna sircilla,,,no exact Census 2011 state/name match
+telangana::ranga reddy,Ranga Reddy ,Telangana,3170949.8281512214,telangana::ranga reddy,,,no exact Census 2011 state/name match
+telangana::sangareddy,Sangareddy ,Telangana,1689611.3199312903,telangana::sangareddy,,,no exact Census 2011 state/name match
+telangana::siddipet,Siddipet ,Telangana,1048481.3145294293,telangana::siddipet,,,no exact Census 2011 state/name match
+telangana::suryapet,Suryapet ,Telangana,995708.6757643117,telangana::suryapet,,,no exact Census 2011 state/name match
+telangana::vikarabad,Vikarabad ,Telangana,1260436.2948693135,telangana::vikarabad,,,no exact Census 2011 state/name match
+telangana::wanaparthy,Wanaparthy ,Telangana,683802.5273038957,telangana::wanaparthy,,,no exact Census 2011 state/name match
+telangana::warangal rural,Warangal Rural ,Telangana,732762.2310645483,telangana::warangal rural,,,no exact Census 2011 state/name match
+telangana::warangal urban,Warangal Urban ,Telangana,1017728.0901421704,telangana::warangal urban,,,no exact Census 2011 state/name match
+telangana::yadadri bhuvanagiri,Yadadri Bhuvanagiri ,Telangana,705157.3592407138,telangana::yadadri bhuvanagiri,,,no exact Census 2011 state/name match
+tripura::dhalai,Dhalai ,Tripura,469464.44337571104,tripura::dhalai,378230.0,2.4300570704868463,exact state/name candidate; verify district boundaries were not split
+tripura::gomati,Gomati ,Tripura,601467.8288025423,tripura::gomati,,,no exact Census 2011 state/name match
+tripura::khowai,Khowai ,Tripura,359306.4963663081,tripura::khowai,,,no exact Census 2011 state/name match
+tripura::north tripura,North Tripura ,Tripura,455143.2607906491,tripura::north tripura,693947.0,-4.57836180837451,exact state/name candidate; verify district boundaries were not split
+tripura::sepahijala,Sepahijala ,Tripura,523707.2006435876,tripura::sepahijala,,,no exact Census 2011 state/name match
+tripura::south tripura,South Tripura ,Tripura,449211.41374499217,tripura::south tripura,876001.0,-7.152161493881303,exact state/name candidate; verify district boundaries were not split
+tripura::unakoti,Unakoti ,Tripura,,tripura::unakoti,,,no exact Census 2011 state/name match
+tripura::west tripura,West Tripura ,Tripura,1173699.35627621,tripura::west tripura,1725739.0,-4.192838701216917,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::saharanpur,Saharanpur ,Uttar Pradesh,3809831.989951219,uttar pradesh::saharanpur,3466382.0,1.055236451953534,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::bijnor,Bijnor ,Uttar Pradesh,3871842.372310866,uttar pradesh::bijnor,3682713.0,0.5580038533944842,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::rampur,Rampur ,Uttar Pradesh,2910432.4391682013,uttar pradesh::rampur,2335819.0,2.473872461935467,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::jyotiba phule nagar,Jyotiba Phule Nagar ,Uttar Pradesh,2360983.40486346,uttar pradesh::jyotiba phule nagar,1840221.0,2.807493854212173,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::meerut,Meerut ,Uttar Pradesh,3835954.062997259,uttar pradesh::meerut,3443689.0,1.2058221294040328,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::baghpat,Baghpat ,Uttar Pradesh,1329315.6234772683,uttar pradesh::baghpat,1303048.0,0.22200278934330075,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::gautam buddha nagar,Gautam Buddha Nagar ,Uttar Pradesh,2874562.3029581946,uttar pradesh::gautam buddha nagar,1648115.0,6.375763556047032,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::bulandshahr,Bulandshahr ,Uttar Pradesh,4028972.669152312,uttar pradesh::bulandshahr,3499171.0,1.5788377609343929,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::aligarh,Aligarh ,Uttar Pradesh,4033927.8247097465,uttar pradesh::aligarh,3673889.0,1.0441892625903337,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::mahamaya nagar,Mahamaya Nagar ,Uttar Pradesh,1713825.6072783263,uttar pradesh::mahamaya nagar,1564708.0,1.0165638561082657,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::mathura,Mathura ,Uttar Pradesh,3025332.4205521904,uttar pradesh::mathura,2547184.0,1.9298582785022722,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::agra,Agra ,Uttar Pradesh,5164834.294233636,uttar pradesh::agra,4418797.0,1.748505275373935,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::firozabad,Firozabad ,Uttar Pradesh,2623878.0248079994,uttar pradesh::firozabad,2498156.0,0.5470522944344802,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::mainpuri,Mainpuri ,Uttar Pradesh,,uttar pradesh::mainpuri,1868529.0,,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::bareilly,Bareilly ,Uttar Pradesh,4821123.294425165,uttar pradesh::bareilly,4448359.0,0.898139119363206,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::pilibhit,Pilibhit ,Uttar Pradesh,2387351.2597303498,uttar pradesh::pilibhit,2031007.0,1.8123694459688533,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::shahjahanpur,Shahjahanpur ,Uttar Pradesh,3527766.737683686,uttar pradesh::shahjahanpur,3006538.0,1.7922692019125108,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::kheri,Kheri ,Uttar Pradesh,4752886.846707136,uttar pradesh::kheri,4021243.0,1.8747018651129377,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::sitapur,Sitapur ,Uttar Pradesh,5068336.572372,uttar pradesh::sitapur,4483992.0,1.370404577395501,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::hardoi,Hardoi ,Uttar Pradesh,4643172.837583939,uttar pradesh::hardoi,4092845.0,1.4116217816759091,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::unnao,Unnao ,Uttar Pradesh,3355356.563942512,uttar pradesh::unnao,3108367.0,0.8531805178114249,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::lucknow,Lucknow ,Uttar Pradesh,5704359.984698611,uttar pradesh::lucknow,4589838.0,2.444807788442338,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::farrukhabad,Farrukhabad ,Uttar Pradesh,2091651.1563087897,uttar pradesh::farrukhabad,1885204.0,1.1613333069457443,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::kannauj,Kannauj ,Uttar Pradesh,1766575.185784117,uttar pradesh::kannauj,1656616.0,0.7166197560277698,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::etawah,Etawah ,Uttar Pradesh,1904877.553608804,uttar pradesh::etawah,1581810.0,2.0864456109258134,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::auraiya,Auraiya ,Uttar Pradesh,1508076.818698433,uttar pradesh::auraiya,1379545.0,0.9947088241655466,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::kanpur dehat,Kanpur Dehat ,Uttar Pradesh,1882011.087762342,uttar pradesh::kanpur dehat,1796184.0,0.5199751818106391,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::kanpur nagar,Kanpur Nagar ,Uttar Pradesh,4722724.843787631,uttar pradesh::kanpur nagar,4581268.0,0.33846165601874034,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::jalaun,Jalaun ,Uttar Pradesh,1857097.6649398385,uttar pradesh::jalaun,1689974.0,1.0533056116802442,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::jhansi,Jhansi ,Uttar Pradesh,2234373.101947745,uttar pradesh::jhansi,1998603.0,1.2467328382863352,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::lalitpur,Lalitpur ,Uttar Pradesh,1449196.976486138,uttar pradesh::lalitpur,1221592.0,1.9165190958730927,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::hamirpur,Hamirpur ,Uttar Pradesh,1289391.8853400892,uttar pradesh::hamirpur,1104285.0,1.7368286230516894,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::mahoba,Mahoba ,Uttar Pradesh,933079.2574490032,uttar pradesh::mahoba,875958.0,0.704380299829932,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::banda,Banda ,Uttar Pradesh,2105262.0550157554,uttar pradesh::banda,1799410.0,1.7595352433873668,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::chitrakoot,Chitrakoot ,Uttar Pradesh,1173456.442513156,uttar pradesh::chitrakoot,991730.0,1.8871185713361216,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::fatehpur,Fatehpur ,Uttar Pradesh,2924080.7569975303,uttar pradesh::fatehpur,2632733.0,1.1730231394341706,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::pratapgarh,Pratapgarh ,Uttar Pradesh,3723423.0373145374,uttar pradesh::pratapgarh,3209141.0,1.6652704411875607,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::kaushambi,Kaushambi ,Uttar Pradesh,1767996.426722664,uttar pradesh::kaushambi,1599596.0,1.118383734123829,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::allahabad,Allahabad ,Uttar Pradesh,7003196.05424655,uttar pradesh::allahabad,5954391.0,1.8189866820260692,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::bara banki,Bara Banki ,Uttar Pradesh,3676068.385677236,uttar pradesh::bara banki,3260699.0,1.341160816896969,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::faizabad,Faizabad ,Uttar Pradesh,2896263.1940189926,uttar pradesh::faizabad,2470996.0,1.7801032222285462,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::ambedkar nagar,Ambedkar Nagar ,Uttar Pradesh,2834065.002510934,uttar pradesh::ambedkar nagar,2397888.0,1.8742784738666085,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::bahraich,Bahraich ,Uttar Pradesh,3970763.922498258,uttar pradesh::bahraich,3487731.0,1.4516254215247493,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::shrawasti,Shrawasti ,Uttar Pradesh,1322812.01881227,uttar pradesh::shrawasti,1117361.0,1.8931428682462004,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::balrampur,Balrampur ,Uttar Pradesh,2440424.9718264933,uttar pradesh::balrampur,2148665.0,1.424782116018286,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::gonda,Gonda ,Uttar Pradesh,4001639.2300070394,uttar pradesh::gonda,3433919.0,1.7145538200715293,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::siddharthnagar,Siddharthnagar ,Uttar Pradesh,3172147.321232194,uttar pradesh::siddharthnagar,2559297.0,2.4139659913055445,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::basti,Basti ,Uttar Pradesh,2855203.8316204958,uttar pradesh::basti,2464464.0,1.6486526807036883,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::sant kabir nagar,Sant Kabir Nagar ,Uttar Pradesh,1731794.3319900674,uttar pradesh::sant kabir nagar,1715183.0,0.10714932681357148,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::mahrajganj,Mahrajganj ,Uttar Pradesh,3422529.475352949,uttar pradesh::mahrajganj,2684703.0,2.7346089352377367,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::gorakhpur,Gorakhpur ,Uttar Pradesh,4838595.068479496,uttar pradesh::gorakhpur,4440895.0,0.9575383507437918,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::kushinagar,Kushinagar ,Uttar Pradesh,4068173.0627453113,uttar pradesh::kushinagar,3564544.0,1.479255202815155,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::deoria,Deoria ,Uttar Pradesh,3345275.637575166,uttar pradesh::deoria,3100946.0,0.8462480140051687,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::azamgarh,Azamgarh ,Uttar Pradesh,5106036.410009991,uttar pradesh::azamgarh,4613913.0,1.1324435367526808,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::mau,Mau ,Uttar Pradesh,2311675.6057065497,uttar pradesh::mau,2205968.0,0.5214237864950455,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::ballia,Ballia ,Uttar Pradesh,3562019.9013950354,uttar pradesh::ballia,3239774.0,1.0591721291518752,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::jaunpur,Jaunpur ,Uttar Pradesh,4801329.90020343,uttar pradesh::jaunpur,4494204.0,0.737197077501972,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::ghazipur,Ghazipur ,Uttar Pradesh,4057695.4466455337,uttar pradesh::ghazipur,3620268.0,1.275478292827703,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::chandauli,Chandauli ,Uttar Pradesh,2068430.1965285474,uttar pradesh::chandauli,1952756.0,0.6414737118613845,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::varanasi,Varanasi ,Uttar Pradesh,4209347.584872716,uttar pradesh::varanasi,3676841.0,1.5141680843266725,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::sant ravidas nagar bhadohi,Sant Ravidas Nagar (Bhadohi) ,Uttar Pradesh,1755726.7085731612,uttar pradesh::sant ravidas nagar bhadohi,1578213.0,1.1913704601304032,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::mirzapur,Mirzapur ,Uttar Pradesh,3061198.8947583484,uttar pradesh::mirzapur,2496970.0,2.289466545055552,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::sonbhadra,Sonbhadra ,Uttar Pradesh,2139168.4798154854,uttar pradesh::sonbhadra,1862559.0,1.5504053627241055,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::etah,Etah ,Uttar Pradesh,2022622.2112248163,uttar pradesh::etah,1774480.0,1.4649305835206627,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::kanshiram nagar,Kanshiram Nagar ,Uttar Pradesh,1541360.9463929068,uttar pradesh::kanshiram nagar,1436719.0,0.784211353980746,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::amethi,Amethi ,Uttar Pradesh,2595826.4604878086,uttar pradesh::amethi,,,no exact Census 2011 state/name match
+uttar pradesh::budaun,Budaun ,Uttar Pradesh,3610064.7875679047,uttar pradesh::budaun,3681896.0,-0.21867298389507406,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::ghaziabad,Ghaziabad ,Uttar Pradesh,4219533.152566244,uttar pradesh::ghaziabad,4681645.0,-1.1480814344446144,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::hapur,Hapur ,Uttar Pradesh,1530649.3224253336,uttar pradesh::hapur,,,no exact Census 2011 state/name match
+uttar pradesh::moradabad,Moradabad ,Uttar Pradesh,3391624.8314539087,uttar pradesh::moradabad,4772006.0,-3.7229043604144696,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::muzaffarnagar,Muzaffarnagar ,Uttar Pradesh,3123870.680871341,uttar pradesh::muzaffarnagar,4143512.0,-3.0898238656722588,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::rae bareli,Rae Bareli ,Uttar Pradesh,3256256.145226106,uttar pradesh::rae bareli,3405559.0,-0.4968834600139971,exact state/name candidate; verify district boundaries were not split
+uttar pradesh::sambhal,Sambhal ,Uttar Pradesh,2898538.3642483754,uttar pradesh::sambhal,,,no exact Census 2011 state/name match
+uttar pradesh::shamli,Shamli ,Uttar Pradesh,1441806.937236971,uttar pradesh::shamli,,,no exact Census 2011 state/name match
+uttar pradesh::sultanpur,Sultanpur ,Uttar Pradesh,2324789.1529678763,uttar pradesh::sultanpur,3797117.0,-5.3053353989982455,exact state/name candidate; verify district boundaries were not split
+uttarakhand::uttarkashi,Uttarkashi ,Uttarakhand,449967.2603156275,uttarakhand::uttarkashi,330086.0,3.5024007475820573,exact state/name candidate; verify district boundaries were not split
+uttarakhand::chamoli,Chamoli ,Uttarakhand,416969.8724559867,uttarakhand::chamoli,391605.0,0.6997736327900128,exact state/name candidate; verify district boundaries were not split
+uttarakhand::rudraprayag,Rudraprayag ,Uttarakhand,146536.89949660518,uttarakhand::rudraprayag,242285.0,-5.433871869708506,exact state/name candidate; verify district boundaries were not split
+uttarakhand::tehri garhwal,Tehri Garhwal ,Uttarakhand,760307.9222859588,uttarakhand::tehri garhwal,618931.0,2.312212314477158,exact state/name candidate; verify district boundaries were not split
+uttarakhand::dehradun,Dehradun ,Uttarakhand,1839696.3950840118,uttarakhand::dehradun,1696694.0,0.9031529635741498,exact state/name candidate; verify district boundaries were not split
+uttarakhand::garhwal,Garhwal ,Uttarakhand,766898.5057227862,uttarakhand::garhwal,687271.0,1.225512872258916,exact state/name candidate; verify district boundaries were not split
+uttarakhand::pithoragarh,Pithoragarh ,Uttarakhand,463637.623934081,uttarakhand::pithoragarh,483439.0,-0.46360954609060423,exact state/name candidate; verify district boundaries were not split
+uttarakhand::bageshwar,Bageshwar ,Uttarakhand,259507.1462894987,uttarakhand::bageshwar,259898.0,-0.016720884524346058,exact state/name candidate; verify district boundaries were not split
+uttarakhand::almora,Almora ,Uttarakhand,635294.2691581197,uttarakhand::almora,622506.0,0.22620034449218895,exact state/name candidate; verify district boundaries were not split
+uttarakhand::champawat,Champawat ,Uttarakhand,268062.79866803106,uttarakhand::champawat,259648.0,0.35501099729542407,exact state/name candidate; verify district boundaries were not split
+uttarakhand::nainital,Nainital ,Uttarakhand,944365.8690893262,uttarakhand::nainital,954605.0,-0.11975022110526368,exact state/name candidate; verify district boundaries were not split
+uttarakhand::udham singh nagar,Udham Singh Nagar ,Uttarakhand,2021169.7602039664,uttarakhand::udham singh nagar,1648902.0,2.2876274318128997,exact state/name candidate; verify district boundaries were not split
+uttarakhand::hardwar,Hardwar ,Uttarakhand,2297585.6772960015,uttarakhand::hardwar,1890422.0,2.1909767683582215,exact state/name candidate; verify district boundaries were not split
+west bengal::darjiling,Darjiling ,West Bengal,1768175.2420973678,west bengal::darjiling,1846823.0,-0.48237489964547686,exact state/name candidate; verify district boundaries were not split
+west bengal::jalpaiguri,Jalpaiguri ,West Bengal,2681189.1438415432,west bengal::jalpaiguri,3872846.0,-4.00353358937301,exact state/name candidate; verify district boundaries were not split
+west bengal::koch bihar,Koch Bihar ,West Bengal,3061110.7913681795,west bengal::koch bihar,2819086.0,0.9193686330871031,exact state/name candidate; verify district boundaries were not split
+west bengal::uttar dinajpur,Uttar Dinajpur ,West Bengal,3141116.464450227,west bengal::uttar dinajpur,3007134.0,0.4855174230151693,exact state/name candidate; verify district boundaries were not split
+west bengal::dakshin dinajpur,Dakshin Dinajpur ,West Bengal,1743969.1072147437,west bengal::dakshin dinajpur,1676276.0,0.4408460494013111,exact state/name candidate; verify district boundaries were not split
+west bengal::maldah,Maldah ,West Bengal,4143586.271892989,west bengal::maldah,3988845.0,0.42378373209508435,exact state/name candidate; verify district boundaries were not split
+west bengal::murshidabad,Murshidabad ,West Bengal,7978040.730358774,west bengal::murshidabad,7103807.0,1.2979289300402597,exact state/name candidate; verify district boundaries were not split
+west bengal::birbhum,Birbhum ,West Bengal,3914458.9390491946,west bengal::birbhum,3502404.0,1.2435297469063356,exact state/name candidate; verify district boundaries were not split
+west bengal::nadia,Nadia ,West Bengal,5100509.28201555,west bengal::nadia,5167600.0,-0.1450943045126385,exact state/name candidate; verify district boundaries were not split
+west bengal::north twenty four pargana,North Twenty Four Pargana ,West Bengal,9703696.697387438,west bengal::north twenty four pargana,,,no exact Census 2011 state/name match
+west bengal::hugli,Hugli ,West Bengal,5462465.277500729,west bengal::hugli,5519145.0,-0.11463150459150029,exact state/name candidate; verify district boundaries were not split
+west bengal::bankura,Bankura ,West Bengal,3828304.541259392,west bengal::bankura,3596674.0,0.6958822766475636,exact state/name candidate; verify district boundaries were not split
+west bengal::puruliya,Puruliya ,West Bengal,3241874.017605788,west bengal::puruliya,2930115.0,1.1297775631394336,exact state/name candidate; verify district boundaries were not split
+west bengal::haora,Haora ,West Bengal,4158518.475046444,west bengal::haora,4850029.0,-1.6946521134955428,exact state/name candidate; verify district boundaries were not split
+west bengal::kolkata,Kolkata ,West Bengal,2864926.6474595116,west bengal::kolkata,4496694.0,-4.8855095163737206,exact state/name candidate; verify district boundaries were not split
+west bengal::south twenty four pargana,South Twenty Four Pargana ,West Bengal,12776305.599379806,west bengal::south twenty four pargana,,,no exact Census 2011 state/name match
+west bengal::paschim medinipur,Paschim Medinipur ,West Bengal,5282019.027088283,west bengal::paschim medinipur,5913457.0,-1.2468525152764642,exact state/name candidate; verify district boundaries were not split
+west bengal::purba medinipur,Purba Medinipur ,West Bengal,5561903.274990732,west bengal::purba medinipur,5095875.0,0.9770643680552027,exact state/name candidate; verify district boundaries were not split
+west bengal::paschim barddhaman,Paschim Barddhaman ,West Bengal,8285203.3218985805,west bengal::paschim barddhaman,,,no exact Census 2011 state/name match

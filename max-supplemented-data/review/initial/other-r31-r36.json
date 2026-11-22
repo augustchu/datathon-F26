@@ -1,0 +1,41 @@
+[
+  {
+    "case_id": "R31", "status": "supported", "verified_value": "americanspine.in",
+    "evidence_url": "https://americanspine.in/", "evidence_date": "",
+    "excerpt": "The institute identifies its Ludhiana site at 1A Jeewan Preet Nagar, Ferozepur Road, PIN 141012.",
+    "rationale": "The hospital site identifies the exact branch. The alternative host did not yield an attributable landing page."
+  },
+  {
+    "case_id": "R32", "status": "supported", "verified_value": "ganeshortho.com",
+    "evidence_url": "https://www.ganeshortho.com/contact.html", "evidence_date": "",
+    "excerpt": "The contact page names Ganesh Ortho Trauma & Medical Centre at F-15/7, Krishna Nagar, Delhi 110051.",
+    "rationale": "The site matches the branch name, street number and PIN. The alternative host did not yield an attributable landing page."
+  },
+  {
+    "case_id": "R33", "status": "supported", "verified_value": "kapilhospitaljalandhar.com",
+    "evidence_url": "https://www.kapilhospitaljalandhar.com/contact",
+    "identity_url": "https://jalandhar.nic.in/public-utility-category/hospitals/page/9/", "evidence_date": "",
+    "excerpt": "The site identifies the Civil Lines hospital opposite the Commissioner's office, PIN 144001.",
+    "rationale": "The district directory independently gives the same landmark and institutional phone. The alternative host did not yield an attributable landing page."
+  },
+  {
+    "case_id": "R34", "status": "supported", "verified_value": "singhaniahospital.com",
+    "evidence_url": "https://www.singhaniahospital.com/",
+    "identity_url": "https://kwa.kerala.gov.in/wp-content/uploads/2024/07/PEN-LIST-OF-NETWORK-HOSPITALS_PAN-_INDIA_Ms-ORIENTAL-INSURANCE-COMPANY-LTD.pdf",
+    "evidence_date": "", "excerpt": "The hospital site gives B-162, Bhagat Singh Colony, Bhiwadi.",
+    "rationale": "The public insurance registry links the same street number and locality to PIN 301019. The campus website in FDR does not identify this hospital branch."
+  },
+  {
+    "case_id": "R35", "status": "supported", "verified_value": "kalyanhospital.com",
+    "evidence_url": "https://kalyanhospital.com/contact-us/", "alternative_url": "https://drrajindersingh.com/",
+    "evidence_date": "", "excerpt": "The hospital contact page gives Division No. 3 Chowk, Samrala Road, Ludhiana 141008.",
+    "rationale": "The alternative is a personal site for a surgeon who identifies his institutional role in Mumbai. The supported hospital domain identifies the Ludhiana branch."
+  },
+  {
+    "case_id": "R36", "status": "unresolved", "verified_value": null,
+    "evidence_url": "https://statistics.py.gov.in/sites/default/files/xvi-public-hospitals-and-dispensaries.pdf",
+    "alternative_url": "https://yanam.gov.in/departments/health/", "identity_url": "https://health.py.gov.in/general-hospital-yanam",
+    "evidence_date": "", "excerpt": "The government gazette describes the hospital before and after merger. It provides no establishment year in the Yanam subsection.",
+    "rationale": "The district gives 1882 and the territory statistics give 1925. The historical gazette does not reconcile which milestone each source recorded."
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "case_id": "R17",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://goldrushhospital.com/",
+    "identity_url": "https://goldrushhospital.com/contact-us/",
+    "evidence_date": "",
+    "excerpt": "The hospital highlights individual doctors. Its contact page gives the Kharadi bypass address near Reliance Mart.",
+    "rationale": "The hospital page gives no exact branch-wide doctor total. The published street and landmark match the candidate branch, but the contact page displays PIN 411017 in one section and 411014 in the footer."
+  },
+  {
+    "case_id": "R18",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://gcsmc.org/assets/pdf/downloads/GCS-Hospital-Services-Brochure.pdf#page=2",
+    "identity_url": "https://www.gcsmc.org/assets/pdf/medical-college/nmc-corner/information-under-msr/g.pdf",
+    "evidence_date": "",
+    "excerpt": "The GCS Hospital brochure advertises 300-plus doctors.",
+    "rationale": "The figure in the hospital brochure and the August 2025 medical association bulletin is a rounded lower bound. The available source evidence leaves the exact headcount and reporting period unknown.",
+    "alternative_url": "https://ahmedabadmedicalassociation.com/assets/images/publications/august-2025.pdf#page=62"
+  },
+  {
+    "case_id": "R19",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://thangampmrc.com/",
+    "evidence_date": "",
+    "excerpt": "Thangam Hospital describes its Palakkad hospital, services and care team.",
+    "rationale": "The official facility page gives a bed count and describes care teams. An exact total for doctors at West Yakkara is absent from the evidence reviewed. The official roster link timed out during direct access.",
+    "alternative_url": "https://thangampmrc.com/doctors/"
+  },
+  {
+    "case_id": "R20",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://khannaeyecentre.in/",
+    "identity_url": "https://it.delhigovt.nic.in/writereaddata/Odr2023265753.%28LW%29-%20%20Office%20Order%20No.%2011%20Dated%2016.11.2023.pdf",
+    "evidence_date": "",
+    "excerpt": "The provider describes both its Nirman Vihar and Model Town centres. The government order identifies the clinic at E-368, Nirman Vihar.",
+    "rationale": "The source identifies the target branch, while the provider site covers more than one branch. The available pages give no explicit total for doctors at E-368."
+  },
+  {
+    "case_id": "R21",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.swasaa.com/facilities/",
+    "identity_url": "https://www.swasaa.com/contact-us/",
+    "evidence_date": "",
+    "excerpt": "SWASA describes its respiratory inpatient facility and offers contact and on-call information.",
+    "rationale": "The available clinic pages mention staffing and selected practitioners without stating the exact whole-facility doctor count for Narayanguda. An on-call doctor or featured clinician represents a narrower scope."
+  },
+  {
+    "case_id": "R22",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.dashmeshhospital.in/our-specialist.php",
+    "identity_url": "https://dgehs.delhi.gov.in/sites/default/files/inline-files/msnh_13.pdf",
+    "evidence_date": "",
+    "excerpt": "The provider lists specialists at C-141 Jail Road. The Delhi register identifies the same hospital and lists registered beds.",
+    "rationale": "The specialist page supplies an illustrated roster and the registry supplies a bed count. Neither source states an exact whole-facility doctor total."
+  },
+  {
+    "case_id": "R23",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://portal.nabh.co/Documents/AccreditedList/Entry-Level%20SHCO/PESHCO-2018-0923.pdf",
+    "evidence_date": "",
+    "excerpt": "The primary accreditation certificate identifies Akshaya Nethralaya at Vidyagiri Layout, next to Axis Bank, Nagarbhavi Circle.",
+    "rationale": "The certificate establishes the accreditor's branch identity and assessment scope. An exact physician staffing total is absent from the certificate."
+  },
+  {
+    "case_id": "R24",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://dsseh.com/doctors/",
+    "identity_url": "https://dsseh.com/contact",
+    "evidence_date": "",
+    "excerpt": "The provider profiles eye specialists and places the hospital at GTB Market in Khanna, PIN 141401.",
+    "rationale": "The branch's clinician biographies do not state a whole-facility total. The page offers no basis for assuming it lists every doctor."
+  },
+  {
+    "case_id": "R25",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.pacehospital.com/hitech-city",
+    "evidence_date": "",
+    "excerpt": "PACE identifies its Hitec City hospital near the Avasa Hotel and displays selected super-specialists.",
+    "rationale": "The location-specific page describes the team by specialty. The separate PACE doctor directory spans multiple locations. No exact reported total for the Hitec City branch was established.",
+    "alternative_url": "https://www.pacehospital.com/our-doctors"
+  },
+  {
+    "case_id": "R26",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://primehospitalpatiala.in/",
+    "evidence_date": "",
+    "excerpt": "The provider identifies its Badungar Road address and displays a qualified-doctor counter and selected clinician profiles.",
+    "rationale": "The inspected page text shows a starting value of 0+ alongside other counters with the same starting value. This gives no usable exact doctor total for the branch."
+  },
+  {
+    "case_id": "R27",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://mavjathospital.org/about-mavjat-hospital.html",
+    "identity_url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2024-1433_5th%20Edition.pdf",
+    "evidence_date": "",
+    "excerpt": "The Mavjat provider describes hospital infrastructure. Its accreditation certificate places it at Mansarowar Road, Palanpur.",
+    "rationale": "The official About page reports beds and the accreditor lists clinical service scope. A visiting-doctor page covers a distinct staffing subset. The evidence leaves the whole-facility total unknown.",
+    "alternative_url": "https://mavjathospital.org/visiting-doctors.html"
+  },
+  {
+    "case_id": "R28",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.rajeshwarhospital.com/our-doctors.php",
+    "evidence_date": "",
+    "excerpt": "The doctor directory identifies the Rajeshwar Hospital at Kankarbagh, Patna, PIN 800020, and gives clinician biographies.",
+    "rationale": "The provider does not state a complete staffing total. The Bihar government listing found during the search reports bed metrics. Agreement between the two candidate insurers is insufficient to adjudicate the whole-hospital doctor field.",
+    "alternative_url": "https://betastate.bihar.gov.in/file_2/FileUpload/2024/May/30-May-2024/3/LatestNews/133615250263500315.pdf"
+  },
+  {
+    "case_id": "R29",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2024/Nov/W4/D27/1732699888.pdf",
+    "evidence_date": "",
+    "excerpt": "Haryana's official facility register entry places IAS Medicare Hospital on Main Khandsa Road in Gurugram.",
+    "rationale": "The regulatory register confirms the location and contains no doctor headcount. The facility homepage appeared in search, but the direct page request timed out and did not provide an independently checked total.",
+    "alternative_url": "https://www.iasmedicare.com/"
+  },
+  {
+    "case_id": "R30",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://anandeyecentre.com/",
+    "identity_url": "https://anandeyecentre.com/contact-us/",
+    "evidence_date": "",
+    "excerpt": "Anand Eye Centre's contact page matches the Ramghat Road clinic opposite Vikram Colony Turn, Aligarh.",
+    "rationale": "The provider describes the eye centre and its services. The site evidence leaves the total number of doctors at this clinic unknown."
+  }
+]

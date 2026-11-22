@@ -27,7 +27,8 @@ def build():
     ])
     notebook('07_compare_and_feedback', 'Compare the three recommendation modes', '''
         Run notebook 06b to prepare the place and service snapshots before searching.
-        This notebook exercises the tool logic in Python. Its default example is fictional.
+        Enter a service and a starting location. Each mode shows up to five ranked recommendations.
+        The default example uses fictional facilities and straight-line distance.
         Persistent moderation can be enabled with a private database path.
     ''', [
         markdown('''
@@ -46,7 +47,7 @@ def build():
             # Future checkbox label; the logic stays off unless explicitly enabled.
             print(LOAD_OPT_IN_LABEL)
             SPREAD_DEMAND = False
-            USE_TRAVELTIME = config['traveltime']['enabled']  # Uses credentials if configured; sends coordinates.
+            USE_TRAVELTIME = config['traveltime']['enabled']  # Set False for an offline distance-only comparison.
             TRANSPORT_MODE = config['traveltime']['mode']  # driving, public_transport, walking, cycling
             ROUTE_SORT = None  # Default distance, or time for public transport. Can also choose 'time'.
             FACILITY_SORT = config['lookup']['facility_sort']  # balanced or closest
@@ -65,6 +66,7 @@ def build():
             print(f"{result['service']} | {result['origin'].label} | {result['origin'].basis}")
             print(f"Transport: {result['transport_mode']} | Requested sort: {result['route_sort']}")
             print(f"Facility preference: {result['facility_sort']}")
+            print(result['routing']['message'])
             if MODE == 'demo':
                 print('Fictional facilities, values, and contacts. Do not use them for care decisions.')
             show(result['summary'])
@@ -72,11 +74,18 @@ def build():
         '''),
         markdown('''
             ## Reasons, contacts and travel
-            Driving uses estimated route distance by default. Select walking, cycling or public
-            transport to compare the same search. Public transport uses estimated travel time.
-            Straight-line kilometers remain visible as a separate fallback. Within the same
-            service evidence tier, balanced ranking gives limited travel credit for independent
-            service corroboration and a current external assessment. Compare `travel_only_rank`
+            TravelTime checks every branch that passes the service and location rules. The starting
+            location is the origin for route estimates. The standard API considers trips of up to
+            four hours. The routing summary shows whether estimates cover the full comparison.
+            Driving sorts by route distance by default. Select walking, cycling, or public transport
+            to compare the same search. Public transport sorts by estimated travel time.
+            If the top driving option lacks a route for the requested transport, one of the five
+            slots can show that branch with its driving route and a note. If no requested-mode
+            routes are available, the list can show up to five labeled driving alternatives.
+            `travel_mode` shows how to reach each branch in the list. Offline comparisons and
+            fictional demos use straight-line distance. Within the same service evidence tier,
+            balanced ranking gives limited travel credit for independent service corroboration and
+            a current external assessment. Compare `travel_only_rank`
             with `baseline_rank` before considering opt-in load balancing. These credits are
             ranking preferences in travel units. Clinical outcomes remain unknown. The fit score uses
             the accepted service citation, validity, precision of the origin, and proximity.
@@ -86,7 +95,8 @@ def build():
         code('''
             summary_columns = ['mode', 'kind', 'rank', 'baseline_rank', 'travel_only_rank', 'name',
                                'distance_km', 'route_distance_km', 'travel_minutes',
-                               'travel_mode', 'travel_source_url', 'ranking_travel_metric', 'ranking_travel_reason',
+                               'travel_mode', 'route_note', 'requested_mode_route_status', 'driving_rank',
+                               'travel_source_url', 'ranking_travel_metric', 'ranking_travel_reason',
                                'ranking_policy_reason', 'corroboration_credit', 'assessment_credit',
                                'quality_credit_unit', 'balanced_travel_score', 'quality_assessment_status',
                                'quality_evidence',
@@ -101,7 +111,8 @@ def build():
             show(result['rows'][summary_columns], limit=25)
             route_summary = result['route_status']
             if not route_summary.empty:
-                show(route_summary.groupby('travel_status', dropna=False).size().rename('candidates').reset_index())
+                counts = route_summary.groupby(['travel_mode', 'travel_status'], dropna=False).size()
+                show(counts.rename('candidates').reset_index())
             show(result['trace'], limit=15)
         '''),
         markdown('''
@@ -134,8 +145,9 @@ def build():
                 revised = lookup(STORE, config, **settings, feedback=feedback)
                 added = new_alternatives(result['rows'], revised['rows'])
                 print('Excluded for this caller and service:', revised['excluded_by_caller'])
+                print(revised['routing']['message'])
                 if not CALL_CONFIRMED and added.empty:
-                    print('No additional supported facilities within the current search settings.')
+                    print('The search returned no additional recommendation.')
                 show(added[summary_columns] if not added.empty else revised['rows'][summary_columns])
         '''),
         code('''

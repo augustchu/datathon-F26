@@ -1,0 +1,55 @@
+[
+  {
+    "document_id": "faridabad-medical-center-home",
+    "facility_name": "Faridabad Medical Center",
+    "pin": "121001",
+    "city": "Faridabad",
+    "publisher": "Faridabad Medical Center",
+    "publisher_family": "faridabad_medical_center",
+    "source_url": "https://faridabadmedicalcenter.com/home/",
+    "publication_scope": "Facility self-publication. The same page names the medical center and contains the Faridabad branch address in its footer.",
+    "join_with_anchor": true,
+    "anchor": [
+      {"selector": ".elementor-element-f05c922 p", "contains": "Faridabad Medical Center"},
+      {"selector": ".elementor-element-ada4411 .elementor-icon-list-text", "contains": "Faridabad, Haryana 121001", "from": "Faridabad, Haryana"}
+    ],
+    "passages": [
+      {"selector": ".elementor-element-7bd2cfa p", "contains": "35-bedded capacity", "through": "35-bedded capacity"},
+      {"selector": ".elementor-element-296f6bf p", "contains": "Our Neonatal Intensive Care Unit (NICU)", "through": "critically ill newborns."}
+    ]
+  },
+  {
+    "document_id": "arti-hospital-budge-budge",
+    "facility_name": "Arti Hospital",
+    "address_contains": "539 M. G. Road",
+    "city": "Kolkata",
+    "publisher": "Arti Hospital",
+    "publisher_family": "arti_medical_research_foundation",
+    "source_url": "https://artihospital.com/site_content/budgebudge_branch",
+    "publication_scope": "Named branch identity. The short dialysis mention comes from the common site footer and requires separate branch-specific service evidence.",
+    "anchor": [
+      {"selector": "h2.title", "contains": "ARTI HOSPITAL (Budge Budge)"},
+      {"selector": ".left-con-details .featured-desc p", "contains": "539 M. G. Road", "through": "Budge Budge"}
+    ],
+    "passages": [
+      {"selector": ".ftr_about_dsc p", "contains": "Dialysis Facility.", "from": "Dialysis Facility."}
+    ]
+  },
+  {
+    "document_id": "arti-hospital-group-about",
+    "facility_name": "Arti Hospital",
+    "pin": "700137",
+    "city": "Kolkata",
+    "publisher": "Arti Hospital",
+    "publisher_family": "arti_medical_research_foundation",
+    "source_url": "https://artihospital.com/site_content/about",
+    "publication_scope": "Multi-branch About page. The address is labelled a registered office. The bed sentence does not identify a facility branch.",
+    "anchor": [
+      {"selector": ".our_services_section h2", "contains": "ARTI HOSPITAL"}
+    ],
+    "passages": [
+      {"selector": "p", "contains": "103 beds including ICU."},
+      {"selector": ".our_services_section p", "contains": "Regd. Office-539.", "through": "700137"}
+    ]
+  }
+]

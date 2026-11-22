@@ -1,0 +1,85 @@
+[
+  {
+    "case_id": "R01",
+    "status": "supported",
+    "verified_value": 490,
+    "evidence_url": "https://cdn.babymemorialhospitals.com/static/images/3018a8a4-29dd-47d1-9ef3-323f0caa0550-1770966783281.pdf",
+    "identity_url": "https://www.babymemorialhospitals.com/hospitals/bmh-kozhikode?p=1046",
+    "alternative_url": "https://accr.natboard.edu.in/online_user/hospital_profile.php?token=xSFqs%29DOmlKNp%24Un%28r1Xu52YvH8afV12Zd0cwy4gWT1iot16hI0Jz9%40kOV%28ED0fGc3RZ2otvUXSq",
+    "evidence_date": "2025-12-31",
+    "excerpt": "The hospital's 2025 Form IV lists 490 beds for the facility on I.G. Road, Arayadathupalam, Kozhikode 673004.",
+    "rationale": "The 2025 reporting period ended on December 31 and the hospital's own branch page also names 490 operational beds. The address and PIN identify Kozhikode despite the inconsistent FDR city. The NBEMS profile lists 600 total beds with no observation date. The 490 value applies to the dated facility filing and the operator's operational count. The date and definition of the NBEMS count remain uncertain."
+  },
+  {
+    "case_id": "R02",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.godigit.com/content/dam/godigit/general/financials/public-disclosure/disclosure-of-quality-parameter-of-network-hospitals-march-25.pdf#page=24",
+    "identity_url": "https://kwa.kerala.gov.in/wp-content/uploads/2026/06/GHIS-Employees-2026-27-Hospital-List-.pdf",
+    "evidence_date": "2021-06-23",
+    "excerpt": "Go Digit lists 10 total beds at the Cochin Shipyard branch, ROHINI 8900080227477, with an observation date of June 23, 2021.",
+    "rationale": "The Kerala Water Authority directory resolves the 682015 branch. The Go Digit March 2025 publication reproduces a 2021 observation. A historical insurer report may share the underlying facility submission with other insurers and cannot settle the undated versus 2025 discrepancy."
+  },
+  {
+    "case_id": "R03",
+    "status": "supported",
+    "verified_value": 150,
+    "evidence_url": "https://nscri.in/index.php#:~:text=At%20present%20we%20are%20running%20a%20150%20bedded",
+    "identity_url": "https://nscri.in/contact-us",
+    "evidence_date": "",
+    "excerpt": "The operator says it is running a 150-bed tertiary cancer hospital at Nayabad.",
+    "rationale": "The site's own contact page identifies 3081 Nayabad, New Garia, Kolkata 700094. The main hospital page ties 150 beds to the Nayabad facility and separately describes it as the current whole-hospital capacity. It gives no observation date. The dated insurer count remains a separate report."
+  },
+  {
+    "case_id": "R04",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://bhagyodaytirth.org/hospital.php",
+    "alternative_url": "https://hospitaldoor.in/f/hfr-IN2310022253",
+    "evidence_date": "",
+    "excerpt": "The charitable trust names the hospital at Khurai Road, Achrya Vidhya Sagar Marg, Sagar 470002. It gives no total bed count on that page.",
+    "rationale": "The address establishes branch identity. A public HFR mirror lists 291 under one ID and an apparent hospital channel advertises 408 without a date. The hospital site offers no dated whole-facility count that resolves the competing reports."
+  },
+  {
+    "case_id": "R05",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://covidcbrs.nmc.gov.in/home/hospitalSummary",
+    "identity_url": "https://nashik.gov.in/en/public-utilities/hospitals/",
+    "alternative_url": "https://www.bajajfinservhealth.in/hospitals/nashik/life-care-hospital-lekha-nagar",
+    "evidence_date": "",
+    "excerpt": "Nashik's municipal dashboard lists 80 reserved beds for Life Care in Lekha Nagar. The district's hospital listing gives Saptashrungi Complex and PIN 422009.",
+    "rationale": "The hospital landline and locality match between the district listing and municipal dashboard. The dashboard measures beds reserved for a municipal programme. The only exact total I found was an undated booking profile stating 70. The publications do not reconcile the reported whole-facility counts."
+  },
+  {
+    "case_id": "R06",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2022-0944_5th%20Edition_RA%2C%20SA%2C%20Focus%20%26%20Scope%20Correction.pdf",
+    "alternative_url": "https://www.ashwinihospitals.in/AshwiniTraumaCentre",
+    "evidence_date": "",
+    "excerpt": "NABH certificate H-2022-0944 gives 200 total sanctioned beds at Plot 3(P), Sector 1, CDA, Bidanasi, Cuttack 753014.",
+    "rationale": "The accreditation certificate identifies the exact branch and was valid through April 29, 2026. Its sanctioned count has a different definition from the comparison's reported total. The operator's 500-plus figure explicitly combines three hospitals and cannot be assigned to this branch."
+  },
+  {
+    "case_id": "R07",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://dtf.in/wp-content/files/STATUS_OF_FRESH_EMPANELMENT_APPLICATION_AS_ON_24_OCT_2018_As_on_ECHS_Website_-_26.10.2018.pdf",
+    "identity_url": "https://kwa.kerala.gov.in/wp-content/uploads/2024/07/Employees-LIST-OF-NETWORKS-HOSPITALS_PAN-INDIA-_Ms-United-India-Insurance-Company.pdf",
+    "evidence_date": "2018-10-24",
+    "excerpt": "The archived ECHS status list shows 30 beds for A P Hospital, Ajit Nagar Extension, near the water tank, Amritsar.",
+    "rationale": "The full street description and telephone align with the branch at PIN 143001. The 2018 ECHS snapshot is preserved on a third-party mirror and reflects a prior empanelment. It cannot settle the conflicting later capacity figures."
+  },
+  {
+    "case_id": "R08",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.dmetodisha.gov.in/files/CE_CUTTACK%20CITY%20.pdf",
+    "identity_url": "https://odocmms.nic.in/OCMMS/allReports/popApplicationCountAllModuleCtohalf?cat=green&districtName=All&fromDateStr=2017-04-01&groupId=All&number=2&toDateStr=2024-06-13&type=bmw",
+    "alternative_url": "https://d37e9lgzp3sa8.cloudfront.net/sites/default/files/Public_Disclosure_on_Standards_for_Hospitals_in_the_Provider_Network.pdf",
+    "evidence_date": "2013-11-21",
+    "excerpt": "Odisha's clinical establishments list records a bed strength of 20 for Riverine Hospital at CDA Sector 8 from November 2013 to November 2015.",
+    "rationale": "The pollution-control register independently identifies A-697, CDA Sector 8. The older registration is consistent with one 20-bed insurer disclosure, but it expired in 2015 and cannot establish a current value or reconcile the conflicting 2022 count."
+  }
+]
