@@ -17,8 +17,8 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from classic_data import (
-    capacity_details, load_classic_snapshot, rank_classic_results, safe_url, service_evidence,
-    snapshot_configured,
+    apply_projected_load, capacity_details, load_classic_snapshot, rank_classic_results,
+    safe_url, service_evidence, snapshot_configured,
 )
 from classic_ranking import (
     RANKED_CRITERIA, RECOMMENDED, SEVERITIES, render_priorities, score_priorities, score_recommended,
@@ -27,6 +27,7 @@ from dashboard_equity import (
     adjust_demo_equity_coordinates, prepare_equity_results, render_equity_card,
     render_equity_control, render_equity_summary,
 )
+from projected_load import TIME_CRITICAL_SERVICES
 
 
 st.set_page_config(page_title="Facility Finder", page_icon="🏥", layout="wide")
@@ -528,12 +529,14 @@ def score_facilities(df, service, lat, lon, weights):
     for _, r in pool.iterrows():
         have = set(r["service_list"])
         if service in have:
-            match, match_note = 1.0, f"Facility text mentions **{service}** (keyword match; not a cited source)."
+            match, matched_service = 1.0, service
+            match_note = f"Facility text mentions **{service}** (keyword match)."
         else:
             alt = [x for x in meta["related"] if x in have]
             if not alt:
                 continue
-            match, match_note = 0.5, f"Does not mention {service}, but mentions related service **{alt[0]}** (partial match)."
+            match, matched_service = 0.5, alt[0]
+            match_note = f"Facility text mentions related service **{matched_service}** (partial match for {service})."
         eq_f, eq_m = _covered(meta["equip"], r["equip_list"])
         st_f, st_m = _covered(meta["staff"], r["staff_list"])
         capability = (len(eq_f) / max(len(meta["equip"]), 1) + len(st_f) / max(len(meta["staff"]), 1)) / 2
@@ -565,45 +568,23 @@ def score_facilities(df, service, lat, lon, weights):
         if meta["urgent"] and not r["open_24x7"]:
             caveats.append("Round-the-clock operation is not mentioned, and this service is often time-critical.")
         if occ is None:
-            caveats.append("No occupancy data; current load is unknown.")
+            caveats.append("No recorded occupancy data.")
         if age_m is None:
             caveats.append("No verification date on the record.")
         elif age_m > 12:
             caveats.append(f"Record last verified {age_m / 12:.1f} years ago and may be stale.")
         results.append(dict(row=r, dist=float(r["distance_km"]), fit=round(100 * fit, 1), match=match, comps=comps,
                             occ=occ, spare=None if occ is None else max(0.0, 1 - occ), why=why, caveats=caveats,
+                            matched_service=matched_service,
                             cap_value=cap_value, cap_label=cap_label,
                             equity_tier=(tuple(eq_m), tuple(st_m)) if match == 1 else None,
                             verified=None if pd.isna(r["last_verified"]) else r["last_verified"].date().isoformat()))
     return sorted(results, key=lambda x: x["dist"])
 
 
-def balance_rank(ranked, extra_km, lam):
-    """Opt-in load spreading. Needs real load data (occupancy); returns None when no candidate has any.
-
-    balance = match * ( lam * spare_capacity + (1 - lam) * closeness ); closeness is 1 at the closest option
-    and 0 at +extra_km. Unknown load counts as 50% spare. Bed counts are not used as load.
-    """
-    nearest = ranked[0]
-    cands = [x for x in ranked if x["dist"] - nearest["dist"] <= extra_km]
-    if not any(x["occ"] is not None for x in cands):
-        return None, nearest
-    for x in cands:
-        spare = 0.5 if x["spare"] is None else x["spare"]
-        closeness = 1 - (x["dist"] - nearest["dist"]) / max(extra_km, 1e-9)
-        x["balance"] = round(100 * x["match"] * (lam * spare + (1 - lam) * closeness), 1)
-        extra = x["dist"] - nearest["dist"]
-        n_occ = "unknown" if nearest["occ"] is None else f"{nearest['occ']:.0%}"
-        x_occ = "unknown" if x["occ"] is None else f"{x['occ']:.0%}"
-        x["balance_note"] = (f"Load balancing: this is also the closest option (occupancy {x_occ})." if x is nearest else
-                             f"Load balancing: **{extra:.1f} km farther** than the closest option ({nearest['row']['name']}), "
-                             f"with occupancy {x_occ} vs {n_occ} there.")
-    return sorted(cands, key=lambda x: -x["balance"]), nearest
-
-
-def render_source_details(result, service):
+def render_source_details(result):
     row = result["row"]
-    evidence = service_evidence(row, service, SERVICES[service]["related"], SERVICES)
+    evidence = service_evidence(row, result["matched_service"], (), SERVICES)
     if evidence.term:
         st.write(f"**Matched service text** {evidence.term}")
     if evidence.excerpt:
@@ -627,33 +608,25 @@ def render_source_details(result, service):
                 st.markdown(f"[{label}](<{link}>)")
 
 
-def render_scenario_details(result, severity):
+def render_load_details(result):
     scenario = result.get("scenario")
     if scenario is None:
         return
     confidence = scenario["confidence_score"]
     label = f"{float(confidence):.0f}/100 · {scenario['confidence_tier']}" if pd.notna(confidence) else "Unknown"
     st.markdown(f"**Data confidence** {label}")
-    if pd.notna(scenario["regional_population"]):
-        st.caption(f"Modeled district population (2020) {scenario['regional_population']:,.0f}")
-        st.caption(f"Expected district cases {scenario['regional_expected_cases']:,.1f} · "
-                   f"allocated here {scenario['simulated_load']:,.1f} across "
-                   f"{scenario['regional_facility_count']:,.0f} matched facilities")
-        basis = f"{scenario['capacity_basis_beds']:,.0f} beds"
-        beds = scenario["beds_for_scenario"]
-        if pd.isna(beds) or beds <= 0:
-            basis += " (fallback for unavailable capacity)"
-        st.caption(f"Bed proxy {basis} · allocated cases per bed {scenario['load_ratio']:.3f}")
-    else:
-        st.caption("District population unavailable. The scenario adds zero demand penalty.")
-    if severity == "Emergency":
-        st.caption("Emergency ordering skips regional and occupancy load adjustments.")
+    if projection := result.get("projected_load"):
+        demand_label = "Projected demand" if projection["caseload_predicted"] else "Historical demand"
+        st.markdown(f"**{demand_label}** {projection['caseload']:,.1f} {projection['unit']}")
+        st.markdown(f"**Modeled throughput** {projection['capacity']:,.1f} {projection['unit']}")
+        st.caption(f"{projection['scope']} · {projection['period']} · Planning estimate")
+        st.markdown("[Projection methods and data](https://github.com/augustchu/datathon-F26/blob/main/non-ml/caseload/NETWORK_CASELOAD.md)")
 
 
 def render_recommended_breakdown(result):
     score = result["recommended"]
-    labels = ["Travel", "Service evidence penalty", "Occupancy penalty", "Regional demand penalty", "Data confidence penalty", "Total"]
-    parts = ["travel", "evidence", "occupancy", "regional_load", "data_confidence", "score"]
+    labels = ["Travel", "Service evidence penalty", "Data confidence penalty", "Total"]
+    parts = ["travel", "evidence", "data_confidence", "score"]
     st.dataframe(pd.DataFrame({"Recommended score component": labels,
                                score["units"]: [round(score[key], 2) for key in parts]}),
                  hide_index=True, use_container_width=True)
@@ -765,9 +738,12 @@ with left:
     with st.container(height=360, border=True):
         st.subheader("1. Service")
         by = st.radio("Browse services by", ["Specialty", "Afflicted body area"], horizontal=True)
-        groups = group_services("Specialty" if by == "Specialty" else "Area")
-        group = st.selectbox(by, list(groups))
-        service = st.selectbox("Service", groups[group])
+        groups = group_services(by)
+        all_specialties = "All specialties"
+        group_options = [all_specialties, *groups] if by == "Specialty" else list(groups)
+        group = st.selectbox(by, group_options)
+        services = [name for matches in groups.values() for name in matches] if group == all_specialties else groups[group]
+        service = st.selectbox("Service", services)
         m = SERVICES[service]
         st.caption(f"{m['specialty']} · {m['area']}" + (" · time-critical" if m["urgent"] else ""))
 with right:
@@ -805,28 +781,21 @@ with st.container(border=True):
     st.subheader("3. Options")
     severity = st.selectbox("How urgent is this need?", SEVERITIES, index=1 if m["urgent"] else 0,
                             key=f"severity_{service}",
-                            help="Emergency recommendations use travel and available data confidence. Occupancy, service-evidence, and district-demand penalties are skipped.")
-    population_share_pct = 0.0
+                            help="Emergency recommendations use travel and available data confidence. Projected load comparison is available for eligible routine searches.")
+    consider_projected_load = False
     use_traveltime = False
     if snapshot_mode:
-        scenario_col, routing_col = st.columns(2)
-        population_share_pct = scenario_col.slider(
-            "Regional population needing this care", 0.0, 2.0, 1.0, 0.1, format="%.1f%%",
-            help="This hypothetical share is split equally among facilities in each district that match the selected service or a related service.",
+        load_col, routing_col = st.columns(2)
+        load_allowed = severity == "Routine" and not m["urgent"] and service not in TIME_CRITICAL_SERVICES
+        consider_projected_load = load_col.toggle(
+            "Consider projected load", value=False, disabled=not load_allowed,
+            help="Recommended compares published monthly caseload and throughput for nearby facilities with comparable service evidence.",
         )
+        consider_projected_load = consider_projected_load and load_allowed
         use_traveltime = routing_col.toggle(
             "Use TravelTime driving estimates", value=True,
             help="Recommended uses weekday-morning driving estimates when available and straight-line distance as a fallback.",
         )
-    balance = st.toggle("⚖️ Balance load: also consider farther facilities with more spare capacity",
-                        value=False, disabled=severity == "Emergency") and severity != "Emergency"
-    extra_km, lam = 25, 0.6
-    if balance:
-        o1, o2 = st.columns(2)
-        extra_km = o1.slider("Extra travel accepted vs. the closest option (km)", 5, 150, 25, 5)
-        lam = o2.slider("Favor spare capacity over closeness", 0.0, 1.0, 0.6, 0.1)
-        if m["urgent"]:
-            st.warning(f"{service} is time-critical. Extra travel can cost more than a shorter wait; use load balancing only when the patient is stable.")
     priority_keys = render_priorities()
     consider_equity = render_equity_control(service, synthetic=synthetic)
 
@@ -854,6 +823,7 @@ if search:
         st.subheader("Map")
         show_html(build_map((lat, lon), label=label), 420)
     else:
+        results_context = st.container()
         results_col, map_col = st.columns([1, 1], gap="medium")
         sort_options = [
             RECOMMENDED,
@@ -872,34 +842,20 @@ if search:
             header_col.subheader("Facility options")
             sort_by = sort_col.selectbox("Sort by", sort_options, key=sort_key, label_visibility="collapsed")
 
+        evaluated = None
         uses_routes = False
         if snapshot_mode:
             evaluated = rank_classic_results(
-                ranked, svc, (lat, lon), population_share_pct=population_share_pct,
+                ranked, svc, (lat, lon), population_share_pct=0.0,
                 severity=severity.lower(), use_traveltime=use_traveltime and sort_by == RECOMMENDED,
             )
             uses_routes = evaluated.uses_routes
-            # Occupancy balancing uses the nearest eligible result before the selected sort.
             ranked = sorted(evaluated.results, key=lambda item: item["dist"])
-            if sort_by == RECOMMENDED:
-                st.caption(evaluated.routing_status)
-                if evaluated.routing_warning:
-                    st.warning(evaluated.routing_warning)
             if uses_routes:
                 for item in ranked:
                     item["route_minutes"] = float(item["scenario"]["travel_time_minutes"])
 
-        balance_on = False
         candidates = ranked
-        if balance and ranked:
-            pool, nearest = balance_rank(ranked, extra_km, lam)
-            if pool is None:
-                st.info("Occupancy data is unavailable for these candidates. Showing the selected sort.")
-            else:
-                balance_on = True
-                candidates = pool
-                st.caption(f"Occupancy balancing considers results within {extra_km} km of "
-                           f"{nearest['row']['name']}, the closest eligible option.")
 
         score_recommended(candidates, svc, SERVICES[svc]["aliases"], severity, uses_routes=uses_routes)
         if sort_by == RECOMMENDED:
@@ -923,13 +879,29 @@ if search:
         else:
             candidates = sorted(candidates, key=lambda item: item["dist"])
 
+        compare_projected_load = consider_projected_load and sort_by == RECOMMENDED
+        projected_comparable = 0
+        if compare_projected_load:
+            candidates, projected_comparable = apply_projected_load(candidates, svc, uses_routes=uses_routes)
+
         equity_view = prepare_equity_results(
             candidates, svc, top_n, enabled=consider_equity, synthetic=synthetic,
             urgent=m["urgent"] or severity in {"Urgent", "Emergency"},
         )
         top = equity_view.results
-        render_equity_summary(equity_view)
-        st.caption("Service matches use each facility’s own text. Call to verify the service and branch.")
+        with results_context:
+            if evaluated is not None and sort_by == RECOMMENDED:
+                st.caption(evaluated.routing_status)
+                if evaluated.routing_warning:
+                    st.warning(evaluated.routing_warning)
+            if compare_projected_load:
+                if projected_comparable:
+                    st.caption(f"Compared projected monthly load for {projected_comparable} nearby facilities with comparable service evidence.")
+                else:
+                    st.caption("Comparable projected load is unavailable for this search. Showing the baseline Recommended order.")
+            render_equity_summary(equity_view)
+            st.caption("Service matches use keywords from each facility’s own text. The team’s service evidence "
+                       "and verification notebooks (04 and 04b) document scope checks. Call to verify the service and branch.")
 
         with results_col:
             # Fixed-height container with independent scrolling
@@ -959,11 +931,6 @@ if search:
                                 ("Occupancy", f"{res['occ']:.0%}")
                             )
 
-                        if balance_on:
-                            metrics.append(
-                                ("Balance", f"{res['balance']:.1f}/100")
-                            )
-
                         metric_cols = st.columns(len(metrics))
 
                         for col, (lab, val) in zip(metric_cols, metrics):
@@ -974,11 +941,10 @@ if search:
                             st.caption(f"Estimated drive {minutes:.0f} min · weekday morning")
                         if sort_by == RECOMMENDED:
                             recommended = res["recommended"]
-                            st.caption(f"Recommended score {recommended['score']:.1f} {recommended['units']} · lower is better")
+                            score_label = "Baseline Recommended score" if projected_comparable else "Recommended score"
+                            st.caption(f"{score_label} {recommended['score']:.1f} {recommended['units']} · lower is better")
                         elif "priority" in res:
                             st.caption(f"Ranked criteria score {res['priority']:.1f}/100")
-                        render_equity_card(equity_view, i - 1)
-
                         phone = (
                             f"[{r['phone']}](tel:{re.sub(r'[^+0-9]', '', r['phone'])})"
                             if r["phone"] else "Not listed"
@@ -991,18 +957,10 @@ if search:
                         )
 
                         st.caption(CALL_PROMPT)
-                        render_source_details(res, svc)
-                        render_scenario_details(res, severity)
 
                         st.markdown("**Why this facility**")
                         st.markdown(
-                            "\n".join(
-                                f"- {w}"
-                                for w in (
-                                    ([res["balance_note"]] if balance_on else [])
-                                    + res["why"]
-                                )
-                            )
+                            "\n".join(f"- {w}" for w in res["why"])
                         )
 
                         if res["caveats"]:
@@ -1010,6 +968,10 @@ if search:
                             st.markdown(
                                 "\n".join(f"- {w}" for w in res["caveats"])
                             )
+
+                        render_source_details(res)
+                        render_load_details(res)
+                        render_equity_card(equity_view, i - 1)
 
                         with st.expander("Fit breakdown and source"):
                             comp = pd.DataFrame({
@@ -1076,13 +1038,13 @@ with st.expander("How this prototype decides"):
         - Service matching uses the facility’s own description, equipment, specialties, capabilities, and procedures.
           Related matches are labeled. Links and excerpts help you check the source when available.
         - Recommended combines travel and available data-confidence penalties. Routine and urgent searches also
-          include service evidence, recorded occupancy, and the district-demand scenario when applicable.
+          include service evidence.
           Straight-line travel uses a two-minute-per-kilometer proxy for routine and urgent searches.
         - TravelTime estimates weekday-morning drives for Recommended results from the Databricks snapshot.
           A successful route search shows reachable facilities. The dashboard falls back to straight-line estimates
           if routing is unavailable or cannot find any routes within three hours.
-        - The demand scenario divides the selected share of a district’s modeled population equally among matches.
-          Released capacity is the bed proxy. The calculation uses 50 beds when capacity is unavailable.
+        - Consider projected load compares published monthly caseload and throughput for nearby routine-care options
+          with comparable evidence. The comparison uses planning estimates.
         - Ranked criteria weights your selected priorities in order. Equity scoring is optional and uses comparable
           evidence for the same service and branch. The map follows the final order shown on the cards.
         """

@@ -40,7 +40,8 @@ pipeline_module = importlib.import_module("pipeline")
 # Notebook kernels retain imported modules after Git folders are refreshed. Reload so this
 # notebook picks up helpers added in the current first-prototype/pipeline.py file.
 pipeline_module = importlib.reload(pipeline_module)
-required_helpers = ("SERVICE_TERMS", "attach_regions", "attach_population", "attach_capacity_release", "prepare_facilities", "read_geojson_archive")
+required_helpers = ("SERVICE_TERMS", "CLASSIC_DISPLAY_FIELDS", "attach_regions", "attach_population",
+                    "attach_capacity_release", "prepare_facilities", "read_geojson_archive")
 missing_helpers = [name for name in required_helpers if not hasattr(pipeline_module, name)]
 if missing_helpers:
     raise ImportError(
@@ -83,6 +84,11 @@ capacity_release_columns = [
     "original_capacity", "published_phone", "officialPhone", "phone_numbers", "phone_source_url",
     "officialWebsite", "website", "websites",
 ]
+classic_columns = {column for aliases in pipeline_module.CLASSIC_DISPLAY_FIELDS.values() for column in aliases}
+release_header = pd.read_csv(CAPACITY_RELEASE_CSV, nrows=0).columns
+capacity_release_columns.extend(
+    name for name in release_header if name in classic_columns and name not in capacity_release_columns
+)
 capacity_release = pd.read_csv(CAPACITY_RELEASE_CSV, usecols=capacity_release_columns, dtype={"unique_id": "string"})
 confidence_release = pd.read_csv(CAPACITY_CONFIDENCE_CSV)
 display_source = attach_capacity_release(raw, capacity_release, confidence_release)
@@ -114,7 +120,9 @@ prepared = attach_population(prepared, population)
 # Include source-row traceability and a stable timestamp with each preparation run.
 prepared["snapshot_prepared_at"] = datetime.now(timezone.utc).isoformat()
 prepared["facility_source_table"] = FACILITIES_SOURCE
-prepared["facility_display_source"] = "max-supplemented-data/capacity_and_confidence/facilities_newest_capacity.csv"
+prepared["facility_display_source"] = prepared["facility_display_source"].replace(
+    "", "max-supplemented-data/capacity_and_confidence/facilities_newest_capacity.csv"
+)
 prepared["capacity_release_summary"] = capacity_release_summary
 
 # COMMAND ----------

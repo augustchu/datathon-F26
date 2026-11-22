@@ -1,6 +1,6 @@
 # First prototype: Databricks care finder
 
-The deployment manifest starts the [map-era Facility Finder](classic_dashboard.py). The configured app uses the prepared Databricks snapshot. The original synthetic demo and facility export or CSV inputs are available from the sidebar. The map shows an India overview on load and displays the search origin and numbered result pins after a search. The dashboard opens with Recommended sorting and includes the selected routing, capacity, evidence, confidence, and equity features. Setup and individual import decisions are in [Map restore and import review](MAP_RESTORE.md).
+The deployment manifest starts the [map-era Facility Finder](classic_dashboard.py). The configured app uses the prepared Databricks snapshot. The original synthetic demo and facility export or CSV inputs are available from the sidebar. The map shows an India overview on load and displays the search origin and numbered result pins after a search. In Recommended sorting, **Consider projected load** compares published monthly caseload and throughput for eligible routine searches. Setup and individual import decisions are in [Map restore and import review](MAP_RESTORE.md).
 
 The instructions below describe the evidence-linked prototype in `dashboard.py`. Its prepared Delta tables, app resource configuration, and source files remain available for a later deployment.
 

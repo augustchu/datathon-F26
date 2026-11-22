@@ -5,6 +5,7 @@ import json
 import math
 import os
 import re
+from collections import Counter
 from dataclasses import dataclass
 from urllib.parse import urlsplit
 
@@ -12,7 +13,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from pipeline import EVIDENCE_FIELDS, _service_key, _term_match, rank_candidates
+from pipeline import EVIDENCE_FIELDS, _service_key, _term_match, classic_facility_details, rank_candidates
+from projected_load import prefer_projected_load
 from traveltime_adapter import travel_time_matrix
 
 
@@ -25,6 +27,8 @@ _OBSERVED_RELEASE = {
     "approved_source_recovery",
 }
 _WITHHELD_RELEASE = {"missing", "branch_identity_hold", "review_unresolved", "target_quality_hold", "withheld"}
+_PROJECTION_BRANCH_ID = re.compile(r"fdr:[^:\s]+")
+_PROJECTION_EVIDENCE_KINDS = {"corroborated", "hospital_site", "directory", "record_listing", "mention", "classic_exact"}
 
 
 @dataclass(frozen=True)
@@ -192,30 +196,32 @@ def snapshot_to_classic(snapshot, from_facility_table):
         beds = _released_beds(row) if observed else None
         name = _text(row.get("facility_name")) or _text(row.get("name")) or "Unnamed facility"
         phone = _text(row.get("phone"))
+        details = classic_facility_details(row)
         rows.append({
             **{field: fields.get(field) or _text(row.get(field)) for field in EVIDENCE_FIELDS},
+            "_snapshot_address": details.pop("address"),
+            **details,
             "name": name,
             "latitude": row["latitude"],
             "longitude": row["longitude"],
-            "address_line1": row.get("address_line1"),
-            "address_line2": row.get("address_line2"),
-            "address_line3": row.get("address_line3"),
             "address_city": row.get("city"),
             "address_stateOrRegion": row.get("state"),
             "address_zipOrPostcode": row.get("pin"),
             "phone_numbers": re.split(r"\s+/\s+", phone),
-            "hours": row.get("hours"),
+            "phone_source_url": safe_url(row.get("phone_source_url")) or safe_url(row.get("_phone_source_url")),
             "capacity": beds if beds is not None else "",
-            "operatorTypeId": row.get("operatorTypeId", row.get("ownership")),
-            "occupancy": row.get("occupancy"),
-            "last_verified": row.get("last_verified"),
-            "accreditation": row.get("accreditation"),
-            "rating": row.get("rating"),
-            "source": _text(row.get("facility_display_source")) or "Prepared Databricks snapshot",
+            "source": details["facility_display_source"] or "Prepared Databricks snapshot",
             "_snapshot_row": index,
         })
-    facilities = from_facility_table(pd.DataFrame(rows))
+    raw = pd.DataFrame(rows)
+    raw["last_verified"] = pd.to_datetime(raw["last_verified"], format="mixed", errors="coerce", utc=True).dt.tz_localize(None)
+    percentage = raw["occupancy"].str.endswith("%")
+    raw["occupancy"] = pd.to_numeric(raw["occupancy"].str.rstrip("%"), errors="coerce")
+    raw.loc[percentage, "occupancy"] /= 100
+    facilities = from_facility_table(raw)
     source = snapshot.loc[facilities.pop("_snapshot_row")].reset_index(drop=True)
+    address = facilities.pop("_snapshot_address")
+    facilities["address"] = address.where(address.ne(""), facilities["address"])
 
     # Preserve release-specific fields and district records using each row's original position.
     for field in source.columns.difference(facilities.columns):
@@ -224,9 +230,6 @@ def snapshot_to_classic(snapshot, from_facility_table):
         district = source["district"].map(_text)
         facilities["district"] = district.where(district.ne(""), facilities["city"])
         facilities.attrs["district_from_city"] = not district.ne("").any()
-    if "address" in source:
-        address = source["address"].map(_text)
-        facilities["address"] = address.where(address.ne(""), facilities["address"])
     if "facility_id" in source:
         ids = source["facility_id"].map(_text)
         facilities["facility_id"] = ids.where(ids.ne(""), facilities["facility_id"])
@@ -362,3 +365,74 @@ def rank_classic_results(classic_results, service, origin, *, population_share_p
         result["scenario"] = scenario
         results.append(result)
     return RankedSearch(results, status, warning, travel_times is not None)
+
+
+def _projection_branch_id(row):
+    """Return an unambiguous release branch ID from a prepared snapshot row."""
+    source_id = _text(row.get("source_id"))
+    canonical_id = f"fdr:{source_id}" if source_id else ""
+    branch_id = _text(row.get("facility_id")) or canonical_id
+    if not _PROJECTION_BRANCH_ID.fullmatch(branch_id):
+        return ""
+    if canonical_id and (branch_id != canonical_id or
+                         ("equity_facility_id" in row and _text(row.get("equity_facility_id")) != branch_id)):
+        return ""
+    return branch_id
+
+
+def apply_projected_load(candidates, service, *, uses_routes):
+    """Apply the published exact-service projection to the existing recommendation order."""
+    if not candidates:
+        return candidates, 0
+
+    claim_field = f"service_evidence_kind_{_service_key(service)}"
+    branch_ids = [_projection_branch_id(item["row"]) for item in candidates]
+    branch_counts = Counter(branch_ids)
+    matches = []
+    for item, branch_id in zip(candidates, branch_ids):
+        row = item["row"]
+        evidence_kind = _text(row.get(claim_field))
+        if not evidence_kind and claim_field not in row:
+            # Older snapshots only carry the classic keyword match.
+            evidence_kind = "classic_exact"
+        if (item.get("match") != 1.0
+                or item.get("matched_service", service) != service
+                or evidence_kind not in _PROJECTION_EVIDENCE_KINDS
+                or branch_counts[branch_id] != 1):
+            branch_id = ""
+        route_minutes = _number(item.get("route_minutes"))
+        if uses_routes and route_minutes is None and item.get("scenario") is not None:
+            route_minutes = _number(item["scenario"].get("travel_time_minutes"))
+        if uses_routes and (route_minutes is None or route_minutes < 0):
+            branch_id = ""
+        matches.append({
+            "facility_id": branch_id,
+            "service_evidence_kind": evidence_kind,
+            "distance_km": item["dist"],
+            "travel_time_minutes": route_minutes,
+            "base_travel_cost": route_minutes if uses_routes else item["dist"],
+        })
+
+    ranked, comparable = prefer_projected_load(pd.DataFrame(matches), service, routed=uses_routes)
+    results = []
+    for index, projection in ranked.iterrows():
+        item = candidates[index]
+        caseload = _number(projection.get("projected_caseload"))
+        capacity = _number(projection.get("projected_capacity"))
+        if caseload is not None and caseload >= 0 and capacity is not None and capacity > 0:
+            item = {**item, "projected_load": {
+                "caseload": caseload,
+                "capacity": capacity,
+                "unit": projection["projected_unit"],
+                "scope": projection["projected_scope"],
+                "period": projection["projected_period"],
+                "caseload_predicted": str(projection["projected_caseload_predicted"]).casefold() == "true",
+                "capacity_predicted": str(projection["projected_capacity_predicted"]).casefold() == "true",
+                "caseload_method": projection["projected_caseload_method"],
+                "capacity_method": projection["projected_capacity_method"],
+                "source_url": safe_url(projection["projected_source_url"]),
+                "capacity_source_url": safe_url(projection["projected_capacity_source_url"]),
+                "comparison_score": _number(projection.get("projected_load_comparison_score")),
+            }}
+        results.append(item)
+    return results, comparable

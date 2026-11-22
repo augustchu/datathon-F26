@@ -35,6 +35,20 @@ FIELD_CANDIDATES = {
     "id": ["unique_id", "facility_id", "id", "facilityId"],
     "url": ["source_urls", "sourceUrls", "source_url", "url", "website", "sources"],
 }
+CLASSIC_DISPLAY_FIELDS = {
+    "address": ("address", "full_address"),
+    "address_line1": ("address_line1",),
+    "address_line2": ("address_line2",),
+    "address_line3": ("address_line3",),
+    "operatorTypeId": ("operatorTypeId", "ownership"),
+    "facilityTypeId": ("facilityTypeId", "facility_type"),
+    "facility_display_source": ("facility_display_source", "source"),
+    "hours": ("hours", "opening_hours", "openingHours", "operating_hours", "open_hours"),
+    "occupancy": ("occupancy", "occupancy_rate"),
+    "last_verified": ("last_verified", "lastVerified"),
+    "accreditation": ("accreditation",),
+    "rating": ("rating",),
+}
 EVIDENCE_FIELDS = ["specialties", "capability", "procedure", "equipment", "description"]
 NEGATION = re.compile(r"\b(?:does not|do not|not available|not provide|without|no longer|unavailable|doesn't|isn't)\b", re.I)
 NFHS_HINTS = {
@@ -99,6 +113,14 @@ def _clean_id(value):
 def _contact_text(value):
     items = _items(value)
     return " / ".join(dict.fromkeys(str(x).strip() for x in items if str(x).strip()))
+
+
+def classic_facility_details(row):
+    """Retain available source fields used by the classic cards and fit score."""
+    return {
+        field: next((text for alias in aliases if (text := _contact_text(row.get(alias)))), "")
+        for field, aliases in CLASSIC_DISPLAY_FIELDS.items()
+    }
 
 
 def _website_urls(value):
@@ -308,6 +330,7 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
         confidence_score = _number(source.get("confidence_score"))
         confidence_tier, confidence_penalty = confidence_adjustment(confidence_score)
         row = {
+            **classic_facility_details(source),
             "facility_id": fid, "source_id": source_id, "facility_name": name,
             "city": str(source[cols["city"]]) if cols["city"] and pd.notna(source[cols["city"]]) else "",
             "district": str(source[cols["district"]]) if cols["district"] and pd.notna(source[cols["district"]]) else "",
@@ -319,7 +342,8 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
             "capacity_release_status": release_status,
             "capacity_release_source": _contact_text(source.get("capacity_release_source")),
             "capacity_release_source_url": _contact_text(source.get("capacity_release_source_url")),
-            "phone_source_url": _contact_text(source.get("_phone_source_url")),
+            "phone_source_url": (_contact_text(source.get("phone_source_url"))
+                                 or _contact_text(source.get("_phone_source_url"))),
             "capacity_prediction_lower": _number(source.get("capacity_prediction_lower")),
             "capacity_prediction_upper": _number(source.get("capacity_prediction_upper")),
             "capacity_original_dataset": _contact_text(source.get("capacity_original_dataset")),

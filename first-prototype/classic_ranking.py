@@ -1,8 +1,6 @@
 """Recommended and personalized ranking for the map-based dashboard."""
 from __future__ import annotations
 
-import math
-
 import pandas as pd
 import streamlit as st
 
@@ -29,7 +27,7 @@ CRITERIA = {
 
 
 def score_recommended(results, service, aliases, severity, *, uses_routes=False):
-    """Score all classic matches with care_engine plus available snapshot adjustments."""
+    """Combine travel, service evidence, and the snapshot confidence adjustment."""
     if not results:
         return
 
@@ -38,18 +36,13 @@ def score_recommended(results, service, aliases, severity, *, uses_routes=False)
     care_engine.SERVICE_PROFILES.setdefault(service_key, {"terms": [*aliases, service.lower()], "indicators": []})
     frame = []
     travel = {}
-    occupancy = {}
     for i, item in enumerate(results):
         row = item["row"]
-        observed = item["occ"]
-        if observed is not None and math.isfinite(observed) and 0 <= observed <= 1:
-            occupancy[i] = observed
         frame.append({
             "facility_id": i,
             "facility_name": row["name"],
             "facility_type": row.get("facilityTypeId", ""),
             "service_text": row["service_text"],
-            "capacity_units": 1.0 if i in occupancy else None,
         })
         travel[i] = {
             "distance_km": max(item["dist"], 0.01),
@@ -63,22 +56,19 @@ def score_recommended(results, service, aliases, severity, *, uses_routes=False)
     multiplier = 2 if uses_routes or not emergency else 1
     units = "min equivalent" if multiplier == 2 else "km equivalent"
     scored = care_engine.rank_facilities(pd.DataFrame(frame), service_key, severity,
-                                        travel, occupancy, minimum_evidence=0.0)
+                                        travel, minimum_evidence=0.0)
     for engine in scored:
         item = results[engine["facility_id"]]
         scenario = item.get("scenario")
         confidence_penalty = multiplier * float(scenario["confidence_penalty_km"]) if scenario is not None else 0.0
-        regional_penalty = multiplier * float(scenario["load_penalty_km"]) if scenario is not None else 0.0
         travel_cost = engine["travel_time_minutes"]
         if not uses_routes:
             travel_cost = multiplier * engine["distance_km"]
         item["recommended"] = {
             "travel": travel_cost,
             "evidence": 0.0 if emergency else 35 * (1 - engine["service_confidence"]),
-            "occupancy": engine["load_penalty_applied"],
-            "regional_load": regional_penalty,
             "data_confidence": confidence_penalty,
-            "score": engine["score"] + regional_penalty + confidence_penalty,
+            "score": engine["score"] + confidence_penalty,
             "units": units,
             "service_confidence": engine["service_confidence"],
             "matched_terms": engine["matched_terms"],
