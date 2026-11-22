@@ -6,7 +6,7 @@ Open **Facility Finder Datathon Audit.ipynb** in a Databricks Git folder on the 
 
 - Attach compatible Databricks Python compute. Use a Git folder with Git CLI access and give `main_git_checkout` the Git folder's absolute workspace path. The notebook can reuse that checkout for the restored branch. If the compute cannot use the Git folder through the CLI, configure a workspace secret with GitHub read access and set `github_secret_scope` and `github_secret_key` to its scope and key names.
 - The preflight checks whether compute can read the organizer's `facilities`, `india_post_pincode_directory`, and `nfhs_5_district_health_indicators` tables in `databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset`. If your team uses workspace exports instead, set `facilities_path`, `pin_path`, and `nfhs_path` to the approved files. If the paths and catalog are unavailable, the notebook stages the verified GitHub copies linked below.
-- Run the install and restart cells first. Set `replay_level` to `standard`, check the path and revision receipts, then run the rest of the notebook. Use `full` for additional training and the WorldPop rebuild. Set `download_all_data=yes` to stage the WorldPop raster and request cited publisher documents even in standard mode. Use a writable volume in `output_folder` to keep the downloaded files and receipts.
+- Use **Run All** to install dependencies, check the input paths and run the notebook. The defaults are `replay_level=full` and `download_all_data=yes`, which include retraining, the WorldPop rebuild and requests for cited publisher documents. Use a writable volume in `output_folder` to keep the downloaded files and receipts.
 
 ## What to verify
 
