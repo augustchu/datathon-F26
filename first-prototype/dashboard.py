@@ -71,8 +71,8 @@ with st.sidebar:
     service = st.selectbox("Care needed", list(SERVICE_TERMS))
     severity = st.radio("Urgency", ["routine", "urgent", "emergency"], horizontal=False,
                         help="Emergency ranking is nearest-first and ignores the simulated load adjustment.")
-    intensity = st.slider("Concurrent cases to simulate", 0, 300, 60, 1,
-                          help="Number of hypothetical cases routed before this patient. This is not a measurement or forecast of real demand.")
+    population_share_pct = st.slider("Regional population needing this care", 0.0, 2.0, 1.0, 0.1, format="%.1f%%",
+                                     help="Scenario: this share of each hospital district's modeled population needs this service. Expected cases are split evenly across evidence-backed hospitals in that district; this is not a forecast.")
     top_k = st.slider("Options to show", 1, 10, 5)
     coordinate_mode = st.toggle("Enter coordinates", value=False)
     if coordinate_mode:
@@ -92,7 +92,7 @@ if st.button("Find facility options", type="primary"):
 if st.session_state.get("search_started", False):
     try:
         origin, origin_basis = resolve_location(facilities, location_text, lat, lon)
-        ranked = rank_candidates(facilities, service, origin, severity=severity, intensity=intensity, top_k=top_k)
+        ranked = rank_candidates(facilities, service, origin, severity=severity, population_share_pct=population_share_pct, top_k=top_k)
     except Exception as exc:
         st.error(str(exc))
         st.stop()
@@ -102,17 +102,25 @@ if st.session_state.get("search_started", False):
         st.warning("No facility in this snapshot passed the text match, source-link, and coordinate checks. This does not establish that care is unavailable.")
     else:
         if severity == "emergency":
-            st.info(f"Emergency ranking is nearest-first and ignores the {intensity} case scenario. Routine/urgent score = straight-line km + simulated-load penalty. Bed counts are only coarse facility-size proxies.")
+            st.info(f"Emergency ranking is nearest-first and ignores the {population_share_pct:.1f}% demand scenario. Routine/urgent score = straight-line km + a heuristic load penalty. Bed counts are only coarse facility-size proxies.")
         else:
-            st.info(f"Ranking: {intensity} hypothetical routine cases were assigned sequentially across evidence-matching facilities, then the user's case was ranked. Score = straight-line km + simulated-load penalty. Where a reviewed NFHS field is mapped, its clipped relative regional proxy scales simulated pressure; missing/unsupported indicators use a neutral factor. Bed counts are only coarse facility-size proxies.")
+            st.info(f"Scenario: {population_share_pct:.1f}% of each district's modeled population needs {service.lower()}. That district's expected cases are divided equally across all citable, coordinate-valid facilities in this snapshot that mention the service. Score = straight-line km + heuristic load penalty. The scenario is illustrative, not an incidence estimate or forecast.")
         for rank, row in ranked.iterrows():
             title = f"{rank + 1}. {row.facility_name} · {row.distance_km:.1f} km"
             with st.expander(title, expanded=(rank == 0)):
                 c1, c2, c3 = st.columns(3)
                 c1.metric("Distance", f"{row.distance_km:.1f} km")
                 c2.metric("Score", f"{row.score:.2f}")
-                c3.metric("Simulated-load penalty", f"{row.load_penalty:.2f}")
-                st.write(f"**Hypothetical prior cases assigned here:** {row.simulated_load:.0f} of {intensity}")
+                c3.metric("Load stress penalty", f"{row.load_penalty:.2f} km-equivalent")
+                region_pop = row.get("regional_population")
+                if pd.notna(region_pop):
+                    st.write(f"**Modeled district population (2020):** {float(region_pop):,.0f}")
+                    st.caption(f"Population region: {row.get('nfhs_district', 'unknown')}, {row.get('nfhs_state', 'unknown')} · {row.get('population_source', 'source not recorded')}")
+                    st.write(f"**Expected district cases in scenario:** {float(row.regional_expected_cases):,.1f} total; **allocated to this facility:** {float(row.simulated_load):,.1f} across {int(row.regional_facility_count)} evidence-backed facilities")
+                else:
+                    st.write("**Regional population estimate:** unavailable or ambiguous; no demand-based penalty is applied.")
+                st.write(f"**Bed proxy used for load calculation:** {float(row.capacity_basis_beds):,.0f} beds")
+                st.write(f"**Allocated load / bed proxy:** {float(row.load_ratio):.3f}")
                 if row.get("regional_demand_factor") is not None:
                     st.write(f"**Relative regional demand factor:** {float(row.regional_demand_factor):.2f} (NFHS proxy; 1.00 is neutral)")
                     basis = row.get(f"nfhs_burden_basis_{re.sub(r'[^a-z0-9]+', '_', service.casefold()).strip('_')}", "")
@@ -128,7 +136,7 @@ if st.session_state.get("search_started", False):
                 elif str(row.beds_provenance).startswith("model:"):
                     st.caption(f"Capacity input: about {row.beds_for_scenario:g} estimated beds (model estimate, not a count or current availability).")
                 else:
-                    st.caption("Capacity input missing; simulated-load penalty used the 50-bed fallback and is especially uncertain.")
+                    st.caption("Capacity input missing; load calculation used a 50-bed fallback and is especially uncertain.")
                 urls = source_urls(row.source_urls_json)
                 for i, url in enumerate(urls, 1):
                     st.markdown(f"[Open facility source {i}]({url})")
@@ -139,6 +147,7 @@ with st.expander("How this prototype decides"):
     1. It searches facility capability, procedure, specialty, equipment, and description text for a reviewed service alias.
     2. It requires a source URL and usable India coordinates before a record can be recommended.
     3. It removes straightforward nearby negation matches and preserves the matched excerpt for inspection.
-    4. It first routes the selected number of hypothetical routine cases sequentially, then ranks the user's case. For urgent and routine searches, accumulated scenario load adds a soft penalty scaled by total bed count; emergency searches remain nearest-first.
-    5. The score is a prototype heuristic, not a probability, clinical recommendation, route time, or live capacity signal. No suitable citable result means the app abstains.
+    4. It estimates district demand as modeled 2020 district population × the selected percentage (0–2%). It divides that demand equally among every citable, coordinate-valid facility record for the selected service in that district. This is a scenario allocation, not a forecast.
+    5. For routine and urgent searches, allocated cases divided by total bed proxy is multiplied by the NFHS relative demand proxy and converted to a capped 0–12 km-equivalent penalty: 12 × (1 − exp(−load ratio × NFHS factor)). Missing population estimates receive no load adjustment; missing bed counts use a disclosed 50-bed fallback. Emergency searches remain nearest-first.
+    6. The score is a prototype heuristic, not a probability, clinical recommendation, route time, or live capacity signal. No suitable citable result means the app abstains.
     """)

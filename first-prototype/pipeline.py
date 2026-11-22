@@ -219,7 +219,40 @@ def haversine_km(lat1, lon1, lat2, lon2):
     return 6371.0088 * 2 * math.asin(math.sqrt(a))
 
 
-def rank_candidates(frame, service, origin, severity="routine", intensity=0, top_k=5):
+def _region_norm(value):
+    import unicodedata
+    value = unicodedata.normalize("NFKD", str(value or "")).casefold()
+    return re.sub(r"[^a-z0-9]+", "", value)
+
+
+def attach_population(facilities, population):
+    """Attach a modeled 2020 district population using normalized exact district/state keys."""
+    district_col = _col(population, ["nfhs_district_name", "district_name", "district"])
+    state_col = _col(population, ["nfhs_state", "state_ut", "state", "state_name"])
+    population_col = _col(population, ["pop_2020", "population_2020", "population"])
+    if not all((district_col, state_col, population_col)):
+        raise ValueError("Population CSV needs district/state names and pop_2020 columns.")
+    rows = population.copy()
+    if "district_population_status" in rows:
+        rows = rows[rows.district_population_status.astype(str).str.casefold().eq("available")]
+    rows[population_col] = pd.to_numeric(rows[population_col], errors="coerce")
+    rows = rows.dropna(subset=[population_col])
+    rows["_key"] = rows.apply(lambda r: _region_norm(r[district_col]) + "::" + _region_norm(r[state_col]), axis=1)
+    # Do not choose arbitrarily where the source contains duplicate region estimates.
+    counts = rows.groupby("_key").size()
+    lookup = rows.drop_duplicates("_key").set_index("_key")[population_col].to_dict()
+    lookup = {key: value for key, value in lookup.items() if counts.get(key, 0) == 1}
+    out = facilities.copy()
+    district = out.get("nfhs_district", pd.Series("", index=out.index)).fillna("")
+    state = out.get("nfhs_state", pd.Series("", index=out.index)).fillna("")
+    keys = district.astype(str).map(_region_norm) + "::" + state.astype(str).map(_region_norm)
+    out["regional_population"] = keys.map(lookup)
+    out["population_status"] = out.regional_population.map(lambda x: "modeled_2020_population" if pd.notna(x) else "unavailable_or_ambiguous")
+    out["population_source"] = "WorldPop 2020 constrained raster, state-scaled to MoHFW/NCP projection"
+    return out
+
+
+def rank_candidates(frame, service, origin, severity="routine", population_share_pct=0.0, top_k=5):
     """Rank only cited text matches; return score components for transparent rendering."""
     key = _service_key(service)
     term_col, excerpt_col, cite_col = f"term_{key}", f"excerpt_{key}", f"claim_citable_{key}"
@@ -231,36 +264,38 @@ def rank_candidates(frame, service, origin, severity="routine", intensity=0, top
     if work.empty:
         return work
     work["distance_km"] = work.apply(lambda r: haversine_km(origin[0], origin[1], float(r.latitude), float(r.longitude)), axis=1)
-    intensity = max(0, int(intensity))
-    work["simulated_cases"] = intensity
+    population_share_pct = min(2.0, max(0.0, float(population_share_pct)))
+    work["population_share_pct"] = population_share_pct
     work["severity"] = severity
     work["beds_for_scenario"] = pd.to_numeric(work.beds_for_scenario, errors="coerce")
+    region_cols = [c for c in ("nfhs_district", "nfhs_state") if c in work.columns]
+    if len(region_cols) == 2:
+        work["_region_key"] = work[region_cols].fillna("").astype(str).agg("::".join, axis=1)
+    else:
+        work["_region_key"] = ""
+    work["regional_population"] = pd.to_numeric(work.get("regional_population", pd.Series(index=work.index, dtype=float)), errors="coerce")
+    work["regional_facility_count"] = work.groupby("_region_key")["facility_id"].transform("count")
+    work["regional_expected_cases"] = work.regional_population.fillna(0.0) * population_share_pct / 100.0
+    work["simulated_load"] = work.regional_expected_cases / work.regional_facility_count.clip(lower=1)
+    work["capacity_basis_beds"] = work.beds_for_scenario.where(work.beds_for_scenario > 0, 50.0)
+    work["load_ratio"] = work.simulated_load / work.capacity_basis_beds
     if severity == "emergency":
         # The user's emergency routing stays nearest-first. Scenario outputs are shown for audit.
-        work["simulated_load"] = 0.0
         work["load_penalty"] = 0.0
+        work["load_penalty_basis"] = "ignored for emergency; distance-first routing"
         work["score"] = work.distance_km
     else:
-        # Allocate synthetic routine cases one-by-one. Each case chooses the current
-        # lowest distance + load score, then contributes one scenario unit there.
-        # Total bed count is only a coarse scale proxy, never service availability.
-        loads = {fid: 0.0 for fid in work.facility_id}
-        capacities = {r.facility_id: (float(r.beds_for_scenario) if pd.notna(r.beds_for_scenario) and float(r.beds_for_scenario) > 0 else 50.0)
-                      for r in work.itertuples()}
-        distances = {r.facility_id: float(r.distance_km) for r in work.itertuples()}
+        # Each district's share of population demand is split evenly among every
+        # evidence-backed facility candidate for this service in that district.
+        # This is a scenario allocation, not a forecast of real patients or routing.
         burden_col = f"nfhs_burden_{key}"
         if burden_col in work.columns:
             work["regional_demand_factor"] = pd.to_numeric(work[burden_col], errors="coerce").fillna(1.0).clip(0.5, 2.0)
         else:
             work["regional_demand_factor"] = 1.0
-        burden_factors = dict(zip(work.facility_id, work.regional_demand_factor.astype(float)))
-        ids = list(work.facility_id)
-        for _ in range(intensity):
-            chosen = min(ids, key=lambda fid: distances[fid] + loads[fid] * burden_factors[fid] * 12.0 / math.sqrt(capacities[fid]))
-            loads[chosen] += 1.0
-        work["simulated_load"] = work.facility_id.map(loads)
-        work["load_penalty"] = work.simulated_load * work.regional_demand_factor * 12.0 / np.sqrt(work.beds_for_scenario.clip(lower=1).fillna(50.0))
+        work["load_penalty"] = 12.0 * (1.0 - np.exp(-work.load_ratio * work.regional_demand_factor))
         work["score"] = work.distance_km + work.load_penalty
+        work["load_penalty_basis"] = "heuristic straight-line-km-equivalent adjustment"
     work["matched_term"] = work[term_col]
     work["supporting_excerpt"] = work[excerpt_col]
     work["source_urls"] = work.source_urls_json.map(lambda x: json.loads(x) if isinstance(x, str) else [])

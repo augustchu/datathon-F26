@@ -20,6 +20,7 @@ FACILITIES_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_found
 PINS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory"
 NFHS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.nfhs_5_district_health_indicators"
 BOUNDARY_ZIP = "/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip"
+POPULATION_CSV = "/Volumes/additional_india_data/default/additional_india_data/nfhs_district_population_2020.csv"
 OUTPUT_CATALOG = "additional_india_data"
 OUTPUT_SCHEMA = "default"
 OUTPUT_PREFIX = "first_prototype"
@@ -32,7 +33,7 @@ pipeline_module = importlib.import_module("pipeline")
 # Notebook kernels retain imported modules after Git folders are refreshed. Reload so this
 # notebook picks up helpers added in the current first-prototype/pipeline.py file.
 pipeline_module = importlib.reload(pipeline_module)
-required_helpers = ("SERVICE_TERMS", "attach_regions", "prepare_facilities", "read_geojson_archive")
+required_helpers = ("SERVICE_TERMS", "attach_regions", "attach_population", "prepare_facilities", "read_geojson_archive")
 missing_helpers = [name for name in required_helpers if not hasattr(pipeline_module, name)]
 if missing_helpers:
     raise ImportError(
@@ -42,6 +43,7 @@ if missing_helpers:
     )
 SERVICE_TERMS = pipeline_module.SERVICE_TERMS
 attach_regions = pipeline_module.attach_regions
+attach_population = pipeline_module.attach_population
 prepare_facilities = pipeline_module.prepare_facilities
 read_geojson_archive = pipeline_module.read_geojson_archive
 
@@ -86,6 +88,14 @@ if not Path(BOUNDARY_ZIP).exists():
     raise FileNotFoundError(f"Boundary archive not found at {BOUNDARY_ZIP}")
 boundaries = read_geojson_archive(BOUNDARY_ZIP)
 prepared = attach_regions(prepared, boundaries, nfhs)
+if not Path(POPULATION_CSV).exists():
+    raise FileNotFoundError(
+        f"District population estimates not found at {POPULATION_CSV}. Upload the "
+        "load-balancing-pipeline/outputs/nfhs_district_population_2020.csv file to this Volume "
+        "or update POPULATION_CSV to its actual Volume path."
+    )
+population = pd.read_csv(POPULATION_CSV)
+prepared = attach_population(prepared, population)
 
 # Include source-row traceability and a stable timestamp with each preparation run.
 prepared["snapshot_prepared_at"] = datetime.now(timezone.utc).isoformat()
@@ -104,7 +114,7 @@ spark.sql(f"DESCRIBE SCHEMA `{OUTPUT_CATALOG}`.`{OUTPUT_SCHEMA}`").show(truncate
 print(f"Publishing prototype tables under {output_schema}")
 
 # Use explicit scalar types so nullable model outputs and claim flags stay consistent in Delta.
-numeric_cols = {"latitude", "longitude", "beds_for_scenario"}
+numeric_cols = {"latitude", "longitude", "beds_for_scenario", "regional_population"}
 boolean_cols = {c for c in prepared.columns if c.startswith("claim_citable_")}
 for col in numeric_cols:
     prepared[col] = pd.to_numeric(prepared[col], errors="coerce")
@@ -132,6 +142,7 @@ metadata = spark.createDataFrame([{
     "pin_source_table": PINS_SOURCE,
     "nfhs_source_table": NFHS_SOURCE,
     "boundary_archive": BOUNDARY_ZIP,
+    "population_estimates": POPULATION_CSV,
     "facility_rows": int(len(prepared)),
     "citable_service_claims": int(sum(prepared[f"claim_citable_{key}"].sum() for key in [
         "dialysis", "emergency_c_section", "nicu", "cardiac_surgery", "mri", "burn_care",
@@ -140,7 +151,8 @@ metadata = spark.createDataFrame([{
 }])
 metadata.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(metadata_table)
 
-display(prepared[["facility_name", "city", "state", "adm2_district", "nfhs_district", "region_match_status", "beds_for_scenario", "beds_provenance"]].head(20))
+display(prepared[["facility_name", "city", "state", "adm2_district", "nfhs_district", "region_match_status", "regional_population", "population_status", "beds_for_scenario", "beds_provenance"]].head(20))
 display(spark.table(metadata_table))
 print(f"Published {len(prepared):,} facility rows to {facility_table}")
+print(f"Population matched: {prepared.regional_population.notna().sum():,} / {len(prepared):,} facility rows")
 print(f"App tables: {facility_table}, {metadata_table}")
