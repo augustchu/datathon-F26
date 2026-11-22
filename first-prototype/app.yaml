@@ -1,0 +1,8 @@
+command: ["streamlit", "run", "dashboard.py"]
+env:
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: FACILITY_SNAPSHOT_TABLE
+    valueFrom: facilities-table
+  - name: SNAPSHOT_METADATA_TABLE
+    valueFrom: snapshot-table
