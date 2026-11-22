@@ -37,6 +37,7 @@ Set `DATATHON_REPO_ROOT` if the notebook cannot find the repository. Checkpoints
 | [07 · Compare and follow up](notebooks/07_compare_and_feedback.ipynb) | Side-by-side ranks, citations, phone and fit explanations, travel estimates, and call feedback |
 | [08 · Load-policy scenarios](notebooks/08_load_policy_scenarios.ipynb) | Effects of detour caps and travel weights, compared with the default ranking |
 | [09 · Count model comparison](notebooks/09_count_model_comparison.ipynb) | Training-fold feature selection, median/log-ridge/random forest, calibration, test and supported overlays |
+| [10 · Live TravelTime check](notebooks/10_check_traveltime_live.ipynb) | Three live routing searches, ranked results, car-only labels and a saved JSON receipt |
 
 Notebook 02 exports `location_records`, `location_entity_review`, and `location_quality_summary`. It writes `location_routing_eligible`, `location_hold_reason`, review flags, and source links on each branch. Use `location_entity_review` to inspect whether the branch is held and `location_records` to trace a point back to its source. Strong coordinate and address conflicts block routing. Shared points at the same campus and offsets from uncertain postal references are review signals. See the [location audit](LOCATION_AUDIT.md) for the tests and the current results.
 
@@ -74,7 +75,9 @@ The non-emergency load setting starts off. When enabled, the selector can trade 
 
 ### Run the live TravelTime check
 
-Prepare the real-data lookup assets through notebook 06b. Set `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` in the runner's environment. The checkpoint root is the directory above `export/<as-of>` when running from a local facility export. Use the mode and date from the prepared assets.
+Prepare the real-data lookup assets through notebook 06b. In Databricks, open [notebook 10](notebooks/10_check_traveltime_live.ipynb) from the Git folder and run its first cell to load the settings. Match the mode, date and checkpoint root used by 06b. Use `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` from the environment, or enter the name of a Databricks secret scope containing those keys. Run the second cell. It prints the case outcomes and full JSON, and saves `traveltime-live.json` in the snapshot directory by default. Set `receipt_path` to an absolute writable path to save it elsewhere. [Databricks file locations](https://docs.databricks.com/aws/en/files)
+
+For a terminal run, set `TRAVELTIME_APP_ID` and `TRAVELTIME_API_KEY` in the environment. The checkpoint root is the directory above `export/<as-of>` when running from a local facility export. Use the mode and date from the prepared assets.
 
 ```sh
 python non-ml/check_traveltime_live.py \
@@ -83,20 +86,6 @@ python non-ml/check_traveltime_live.py \
 ```
 
 The check sends real TravelTime requests for blood banks from Jaipur and Gadchiroli. It uses the travel-only sort within the existing evidence tiers so the expected order can be reconstructed from the returned route data. It checks that all eligible branches were submitted, that the top five match the provider-backed rank order, and that any car-only label matches the provider's response for the selected mode. A case without enough usable evidence or routes to demonstrate the target behavior is inconclusive. Use `--case jaipur-driving`, `--case gadchiroli-driving`, or `--case gadchiroli-walking` to run individual cases. The JSON receipt records the outcome and route counts for the working report. [Live check script](check_traveltime_live.py)
-
-From a Python notebook, set `repo` to the Git checkout. The runner receives the same flags as the terminal command.
-
-```python
-from pathlib import Path
-from runpy import run_path
-
-repo = Path('/path/to/datathon-F26')
-run_check = run_path(str(repo / 'non-ml/check_traveltime_live.py'))['main']
-status = run_check([
-    '--checkpoint-root', str(repo / 'non-ml/outputs'), '--mode', 'export',
-    '--as-of', '2026-11-21', '--output', str(repo / 'traveltime-live.json'),
-])
-```
 
 ## Moderation stack
 

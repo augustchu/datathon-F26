@@ -1,14 +1,17 @@
 """Facility Finder dashboard.
 
-Inputs (service + location) -> facility matches, fit scores, and reported data.
+Inputs (service + location) -> facility matches, a care_engine "Recommended" ranking, fit scores, and reported data.
+Advanced options: switch on the criteria you care about and rank them for a "Ranked criteria" sort.
 
 Run:  streamlit run dashboard/dashboard.py
 Data: synthetic demo, a private facilities export (original table columns), or a CSV in this
       dashboard's own schema. Only source-reported capacity is displayed; no model predictions are used.
 """
 import html
+import importlib.util
 import os
 import re
+import sys
 from pathlib import Path
 
 import folium
@@ -17,6 +20,35 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
+
+
+
+def _load_care_engine():
+    """Load care_engine.py by file path, so there is no import for the editor to resolve and no sys.path change.
+
+    Looks in CARE_ENGINE_DIR, next to this file, then ../load-balancing-pipeline/. Returns (module, problem).
+    """
+    here = Path(__file__).resolve().parent
+    tried = []
+    for folder in (os.environ.get("CARE_ENGINE_DIR"), here, here.parent / "load-balancing-pipeline"):
+        if not folder:
+            continue
+        path = Path(folder) / "care_engine.py"
+        tried.append(str(path))
+        if not path.is_file():
+            continue
+        try:
+            spec = importlib.util.spec_from_file_location("care_engine", path)
+            module = importlib.util.module_from_spec(spec)
+            sys.modules["care_engine"] = module
+            spec.loader.exec_module(module)
+            return module, None
+        except Exception as exc:  # noqa: BLE001 - shown in the sidebar
+            return None, f"{path} failed to load: {type(exc).__name__}: {exc}"
+    return None, "care_engine.py not found. Looked in: " + "; ".join(tried)
+
+
+care_engine, CARE_ENGINE_PROBLEM = _load_care_engine()
 
 st.set_page_config(page_title="Facility Finder", page_icon="🏥", layout="wide")
 CALL_PROMPT = "Call this facility before traveling to verify the service, branch, and current availability."
@@ -297,6 +329,12 @@ def from_facility_table(raw: pd.DataFrame) -> pd.DataFrame:
     df["service_list"] = [services_in(t) for t in service_text]
     df["equip_list"] = [[e.lower() for e in _items(v)] or ([t] if t else []) for v, t in zip(df["equipment"] if "equipment" in df else [None] * len(df), _text(df, "equipment"))]
     df["staff_list"] = [[s.lower() for s in _items(v)] for v in (df["specialties"] if "specialties" in df else [None] * len(df))]
+    # care_engine matches service terms in labelled text ("capability: ...", "procedure: ...").
+    labelled = {"capability": "capability", "procedure": "procedure", "specialty": "specialties",
+                "equipment": "equipment", "description": "description"}
+    pieces = {lab: ["; ".join(_items(v)) for v in (df[col] if col in df else [None] * len(df))] for lab, col in labelled.items()}
+    df["service_text"] = [" | ".join(f"{lab}: {pieces[lab][i]}" for lab in labelled if pieces[lab][i]) for i in range(len(df))]
+    df["facility_type"] = _text(df, "facilityTypeId")
     op = _text(df, "operatorTypeId")
     df["ownership"] = op.str.title()
     cap_text = _text(df, "capacity")
@@ -462,15 +500,6 @@ def _covered(required, have):
     return found, [r for r in required if r not in found]
 
 
-def reported_capacity_view(r):
-    """Display only capacity values present in the source data; never infer or predict beds."""
-    if r["capacity_present"]:
-        num = r["capacity_num"]
-        value = f"{num:.0f}" if pd.notna(num) else r["capacity_text"][:12]
-        return f"Reported capacity: {r['capacity_text']}", value, "Beds (reported)"
-    return "Capacity not reported.", "n/a", "Beds"
-
-
 def score_facilities(df, service, lat, lon, weights):
     """Every facility that lists the service (or a related one), sorted nearest-first."""
     meta = SERVICES[service]
@@ -500,10 +529,7 @@ def score_facilities(df, service, lat, lon, weights):
         comps = dict(capability=capability, availability=availability, quality=quality, confidence=confidence)
         fit = match * sum(weights[k] * v for k, v in comps.items()) / max(sum(weights.values()), 1e-9)
         occ = None if pd.isna(r["occupancy"]) else float(r["occupancy"])
-        cap_line, cap_value, cap_label = reported_capacity_view(r)
-
         why = [match_note, f"**{r['distance_km']:.1f} km** straight-line from your location ({r['city'] or 'city n/a'}, {r['state'] or 'state n/a'})."]
-        why.append(cap_line)
         if occ is not None:
             why.append(f"Occupancy on record: **{occ:.0%}** ({1 - occ:.0%} spare capacity).")
         if eq_f:
@@ -525,7 +551,6 @@ def score_facilities(df, service, lat, lon, weights):
             caveats.append(f"Record last verified {age_m / 12:.1f} years ago and may be stale.")
         results.append(dict(row=r, dist=float(r["distance_km"]), fit=round(100 * fit, 1), match=match, comps=comps,
                             occ=occ, spare=None if occ is None else max(0.0, 1 - occ), why=why, caveats=caveats,
-                            cap_value=cap_value, cap_label=cap_label,
                             verified=None if pd.isna(r["last_verified"]) else r["last_verified"].date().isoformat()))
     return sorted(results, key=lambda x: x["dist"])
 
@@ -551,6 +576,75 @@ def balance_rank(ranked, extra_km, lam):
                              f"Load balancing: **{extra:.1f} km farther** than the closest option ({nearest['row']['name']}), "
                              f"with occupancy {x_occ} vs {n_occ} there.")
     return sorted(cands, key=lambda x: -x["balance"]), nearest
+
+
+# --- Recommended ranking: scored by care_engine.rank_facilities -------------------
+SEVERITIES = ["Routine", "Urgent", "Emergency"]
+# Dashboard service -> care_engine profile name. Services without a profile are registered at runtime
+# from this dashboard's aliases so the engine can match them (care_engine.py itself is not modified).
+ENGINE_SERVICE = {"Dialysis": "dialysis", "Emergency C-section": "emergency c-section", "Maternity / delivery": "maternal care",
+                  "NICU": "nicu", "Pediatric care": "pediatric illness", "Cardiac surgery": "cardiac surgery", "MRI": "mri",
+                  "Burn care": "burn care", "Trauma / emergency": "trauma"}
+
+
+def apply_engine(results, service, severity):
+    """Attach care_engine's score to each result (lower = better). Returns False if the engine is unavailable.
+
+    Inputs: evidence from each facility's labelled text; straight-line distance (the engine's own fallback
+    travel proxy is distance x 2 when no road travel time exists); occupancy as load over a capacity of 1.0
+    when occupancy is known (unknown load adds no penalty). Emergency ranking ignores load by design.
+    """
+    for res in results:
+        res["engine"] = None
+    if care_engine is None or not results:
+        return False
+    key = ENGINE_SERVICE.get(service, service.lower())
+    care_engine.SERVICE_PROFILES.setdefault(key, {"terms": SERVICES[service]["aliases"] + [service.lower()], "indicators": []})
+    frame = pd.DataFrame([dict(facility_id=str(i), facility_name=x["row"]["name"], facility_type=x["row"].get("facility_type", ""),
+                               service_text=x["row"].get("service_text", ""), capacity_units=1.0 if x["occ"] is not None else None,
+                               source_url="") for i, x in enumerate(results)])
+    travel = {str(i): {"distance_km": max(x["dist"], 0.01), "travel_time_minutes": None} for i, x in enumerate(results)}
+    load = {str(i): x["occ"] for i, x in enumerate(results) if x["occ"] is not None}
+    scored = {r["facility_id"]: r for r in care_engine.rank_facilities(frame, key, severity.lower(), travel, load, minimum_evidence=0.0)}
+    for i, x in enumerate(results):
+        r = scored[str(i)]
+        emergency = severity.lower() == "emergency"
+        x["engine"] = dict(score=r["score"], confidence=r["service_confidence"], terms=r["matched_terms"],
+                           load_penalty=r["load_penalty_applied"], travel_part=x["dist"] if emergency else x["dist"] * 2,
+                           evidence_penalty=0.0 if emergency else 35 * (1 - r["service_confidence"]))
+        terms = f" (matched: {r['matched_terms']})" if r["matched_terms"] else " (no matching terms found)"
+        x["why"].insert(1, f"care_engine service evidence: **{r['service_confidence']:.0%}**{terms}.")
+    return True
+
+
+# --- User priorities: toggle what you care about, then rank it ---------------------
+CRITERIA = [("distance", "Distance (closer is better)"), ("evidence", "Service evidence"),
+            ("capability", "Equipment & staff match"), ("availability", "Open around the clock"),
+            ("quality", "Accreditation & rating"), ("freshness", "Up-to-date record"),
+            ("spare", "Spare capacity (lower occupancy)")]
+CRITERION_LABEL = dict(CRITERIA)
+
+
+def roc_weights(k: int) -> list:
+    """Rank-order-centroid weights: rank 1 gets the most weight, and the weights sum to 1."""
+    return [sum(1.0 / j for j in range(i, k + 1)) / k for i in range(1, k + 1)]
+
+
+def score_priorities(results, ordered_keys):
+    """Add res['priority'] (0-100): weighted match to the user's ranked criteria, best match = highest."""
+    dists = [x["dist"] for x in results]
+    dmin, dmax = min(dists), max(dists)
+    weights_by_key = dict(zip(ordered_keys, roc_weights(len(ordered_keys))))
+    for x in results:
+        vals = {
+            "distance": 1.0 if dmax == dmin else 1 - (x["dist"] - dmin) / (dmax - dmin),
+            "evidence": (x["engine"]["confidence"] if x.get("engine") else 1.0) * x["match"],
+            "capability": x["comps"]["capability"], "availability": x["comps"]["availability"],
+            "quality": x["comps"]["quality"], "freshness": x["comps"]["confidence"],
+            "spare": 0.5 if x["spare"] is None else x["spare"],   # unknown load counts as neutral
+        }
+        x["priority"] = round(100 * sum(weights_by_key[k] * vals[k] for k in ordered_keys), 1)
+        x["priority_parts"] = [(CRITERION_LABEL[k], round(vals[k], 2), round(weights_by_key[k], 3)) for k in ordered_keys]
 
 
 # ----------------------------------------------------------------------------
@@ -586,7 +680,6 @@ def build_map(origin, top, label) -> str:
                  f'<b>Address:</b> {safe(r["address"] or "Not listed")}<br>'
                  f'<b>Phone:</b> {phone_html}<br><b>Hours:</b> {hours}<br>'
                  f'<b>Distance:</b> {res["dist"]:.1f} km (straight line)<br>'
-                 f'<b>{safe(res["cap_label"])}:</b> {safe(res["cap_value"])}<br>'
                  f'<a href="{gmaps}" target="_blank" rel="noopener">Directions</a><br>'
                  f'<i style="color:#666">{safe(CALL_PROMPT)}</i></div>')
         icon = folium.DivIcon(
@@ -636,17 +729,12 @@ df = load_data()
 with st.sidebar:
     st.header("Results")
     top_n = st.slider("Results to show", 1, 10, 5)
-    with st.expander("Fit-score weights"):
-        st.caption("The fit score rates how well each facility's own text supports delivering the service. Results are ordered by distance.")
-        weights = dict(
-            capability=st.slider("Equipment & staff match", 0.0, 1.0, 0.40, 0.05),
-            availability=st.slider("Availability (24x7)", 0.0, 1.0, 0.25, 0.05),
-            quality=st.slider("Accreditation & rating", 0.0, 1.0, 0.20, 0.05),
-            confidence=st.slider("Data freshness", 0.0, 1.0, 0.15, 0.05))
+    if care_engine is None:
+        st.warning(f"'Recommended' is falling back to nearest-first. {CARE_ENGINE_PROBLEM}")
 
 left, right = st.columns(2)
 with left:
-    with st.container(height=360, border=True):
+    with st.container(height=440, border=True):
         st.subheader("1. Service")
         by = st.radio("Browse services by", ["Specialty", "Afflicted body area"], horizontal=True)
         groups = group_services("Specialty" if by == "Specialty" else "Area")
@@ -655,7 +743,7 @@ with left:
         m = SERVICES[service]
         st.caption(f"{m['specialty']} · {m['area']}" + (" · time-critical" if m["urgent"] else ""))
 with right:
-    with st.container(height=360, border=True):
+    with st.container(height=440, border=True):
         st.subheader("2. Location")
         kind = st.selectbox("Location type", ["PIN code", "City", "District", "Coordinates (lat/lon)"])
         vals, errors, warnings = {}, [], []
@@ -685,9 +773,14 @@ with right:
             st.error(e)
         for w in warnings:
             st.warning(w)
+weights = dict(capability=0.40, availability=0.25, quality=0.20, confidence=0.15)   # fixed fit-score weights
 with st.container(border=True):
     st.subheader("3. Options")
-    balance = st.toggle("⚖️ Balance load: also consider farther facilities with more spare capacity", value=False)
+    default_severity = "Urgent" if m["urgent"] else "Routine"
+    severity = st.selectbox("How urgent is this need?", SEVERITIES, index=SEVERITIES.index(default_severity),
+                            key=f"severity_{service}",
+                            help="Used by the Recommended ranking. Emergency ranks purely by travel; routine and urgent also weigh how busy a facility is.")
+    balance = st.toggle("Balance load: also consider farther facilities with more spare capacity", value=False)
     extra_km, lam = 25, 0.6
     if balance:
         o1, o2 = st.columns(2)
@@ -695,6 +788,37 @@ with st.container(border=True):
         lam = o2.slider("Favor spare capacity over closeness", 0.0, 1.0, 0.6, 0.1)
         if m["urgent"]:
             st.warning(f"{service} is time-critical. Extra travel can cost more than a shorter wait; use load balancing only when the patient is stable.")
+
+    advanced = st.toggle("Advanced options", value=False)
+    priority_keys = []
+    if advanced:
+        st.markdown("**My priorities**")
+        st.caption("Switch on what matters to you, then rank only the ones you switched on (1 = most important). "
+                   "Choose 'Ranked criteria (best match first)' in the Sort by menu to use them.")
+        toggled = []
+        toggle_cols = st.columns(2)
+        for pos, (key, label) in enumerate(CRITERIA):
+            if toggle_cols[pos % 2].toggle(label, key=f"crit_on_{key}"):
+                toggled.append(key)
+        k = len(toggled)
+        if k:
+            st.markdown(f"**Rank your {k} priorit{'y' if k == 1 else 'ies'}** (1 to {k})")
+            chosen = []
+            for pos, key in enumerate(toggled, 1):
+                rank_key = f"crit_rank_{key}"
+                stored = st.session_state.get(rank_key)
+                if stored is not None and not (1 <= int(stored) <= k):   # a switch was turned off: keep the rank inside 1..k
+                    st.session_state[rank_key] = k
+                name_col, rank_col = st.columns([4, 1])
+                name_col.markdown(f"{CRITERION_LABEL[key]} · rank out of {k}")
+                rank = rank_col.number_input(f"Rank of {CRITERION_LABEL[key]} (1 to {k})", min_value=1, max_value=k,
+                                             value=pos, step=1, key=rank_key, label_visibility="collapsed")
+                chosen.append((int(rank), pos, key))
+            priority_keys = [key for _, _, key in sorted(chosen)]
+            st.caption("Your order: " + " > ".join(f"{i}. {CRITERION_LABEL[key]}" for i, key in enumerate(priority_keys, 1))
+                       + " (ties go to the order listed above).")
+        else:
+            st.caption("No criteria switched on yet.")
 ready = not errors and (("pin" in vals and vals["pin"]) or ("name" in vals and vals["name"]) or ("lat" in vals and vals["lat"] is not None))
 
 if st.button("Find facilities", type="primary", disabled=not ready):
@@ -716,10 +840,6 @@ if search:
     if svc != service:
         st.caption(f"Showing results for **{svc}**. Press Find facilities to search for {service}.")
     ranked = score_facilities(df, svc, lat, lon, weights)
-    sort_options = ["Distance (nearest first)",
-                    "Fit (highest first)",
-                    "Beds (most first)",
-                    "Occupancy (lowest first)",]
     if not ranked:
         st.warning(f"No facility's text mentions {svc} or a related service.")
     else:
@@ -751,194 +871,110 @@ if search:
             candidates = ranked
 
 
-        # Sort by source-reported bed count only; missing values stay last.
-        def bed_sort_value(res):
-            value = res["row"]["capacity_num"]
-            return float(value) if pd.notna(value) else None
+        apply_engine(candidates, svc, severity)
+        if advanced and priority_keys:
+            score_priorities(candidates, priority_keys)
 
-
-        # Create the facility-results and map columns
         results_col, map_col = st.columns([1, 1], gap="medium")
+        SORT_RECOMMENDED, SORT_RANKED = "Recommended", "Ranked criteria (best match first)"
+        sort_options = [SORT_RECOMMENDED, "Distance (nearest first)", "Fit (highest first)", "Occupancy (lowest first)"]
+        if advanced:
+            sort_options.append(SORT_RANKED)
+        if st.session_state.get("facility_sort_by") not in sort_options:
+            st.session_state["facility_sort_by"] = SORT_RECOMMENDED   # also the starting choice
 
-        # Put the header and sort dropdown inside the facility-results column
         with results_col:
             header_col, sort_col = st.columns([3, 2])
-
             with header_col:
                 st.subheader("Facility options")
-
             with sort_col:
-                sort_by = st.selectbox(
-                    "Sort by",
-                    [
-                        "Distance (nearest first)",
-                        "Fit (highest first)",
-                        "Beds (most first)",
-                        "Occupancy (lowest first)",
-                    ],
-                    key="facility_sort_by",
-                    label_visibility="collapsed",
-                )
-            
-        # Sort all candidates, placing missing values last.
-        if sort_by == "Distance (nearest first)":
-            candidates = sorted(
-                candidates,
-                key=lambda x: x["dist"]
-            )
+                sort_by = st.selectbox("Sort by", sort_options, key="facility_sort_by", label_visibility="collapsed")
 
-        elif sort_by == "Fit (highest first)":
-            candidates = sorted(
-                candidates,
-                key=lambda x: x["fit"],
-                reverse=True
-            )
+            ranked_note = None
+            if sort_by == SORT_RANKED and not priority_keys:
+                ranked_note = "Switch on at least one criterion under Advanced options to rank by your priorities. Showing the Recommended order for now."
+                sort_by = SORT_RECOMMENDED
 
-        elif sort_by == "Beds (most first)":
-            candidates = sorted(
-                candidates,
-                key=lambda x: (
-                    bed_sort_value(x) is None,
-                    -(bed_sort_value(x) or 0)
-                )
-            )
+            if sort_by == SORT_RECOMMENDED:
+                candidates = sorted(candidates, key=lambda x: (x["engine"]["score"], -x["engine"]["confidence"]) if x["engine"] else (x["dist"], 0))
+            elif sort_by == "Distance (nearest first)":
+                candidates = sorted(candidates, key=lambda x: x["dist"])
+            elif sort_by == "Fit (highest first)":
+                candidates = sorted(candidates, key=lambda x: x["fit"], reverse=True)
+            elif sort_by == "Occupancy (lowest first)":
+                candidates = sorted(candidates, key=lambda x: (x["occ"] is None, x["occ"] if x["occ"] is not None else 0))
+            elif sort_by == SORT_RANKED:
+                candidates = sorted(candidates, key=lambda x: -x["priority"])
+            top = candidates[:top_n]
 
-        elif sort_by == "Occupancy (lowest first)":
-            candidates = sorted(
-                candidates,
-                key=lambda x: (
-                    x["occ"] is None,
-                    x["occ"] if x["occ"] is not None else 0
-                )
-            )
+            if ranked_note:
+                st.info(ranked_note)
+            if sort_by == SORT_RECOMMENDED:
+                st.caption("Recommended uses care_engine's score: travel (straight-line distance x 2, no road times), a penalty for weaker "
+                           "service evidence, and, for routine or urgent needs, a penalty for busy facilities. Lower scores rank first.")
+            st.caption("Service matches are keyword matches in each facility's own text, not cited evidence. "
+                       "The team's notebooks (04, 04b) provide cited, scope-checked service evidence.")
 
-        top = candidates[:top_n]
-
-        st.caption(
-            "Service matches are keyword matches in each facility's own text, "
-            "not cited evidence. The team's notebooks (04, 04b) provide "
-            "cited, scope-checked service evidence."
-        )
-        st.caption("Service matches are keyword matches in each facility's own text, not cited evidence. "
-                   "The team's notebooks (04, 04b) provide cited, scope-checked service evidence.")
-
-        with results_col:
             # Fixed-height container with independent scrolling
             with st.container(height=720, border=False):
                 for i, res in enumerate(top, 1):
                     r = res["row"]
-
                     with st.container(border=True):
-                        # Hospital name and location
                         st.markdown(f"### {i}. {r['name']}")
-                        st.caption(
-                            f"{r['city'] or 'city n/a'}, "
-                            f"{r['state'] or 'state n/a'} · "
-                            f"PIN {r['pin'] or 'n/a'} · "
-                            f"{r['ownership'] or 'ownership n/a'}"
-                        )
+                        st.caption(f"{r['city'] or 'city n/a'}, {r['state'] or 'state n/a'} · "
+                                   f"PIN {r['pin'] or 'n/a'} · {r['ownership'] or 'ownership n/a'}")
 
-                        # Metrics below the name, with enough room for values
-                        metrics = [
-                            ("Distance", f"{res['dist']:.1f} km"),
-                            ("Fit (/100)", f"{res['fit']:.1f}"),
-                            (res["cap_label"], res["cap_value"]),
-                        ]
-
+                        metrics = [("Distance", f"{res['dist']:.1f} km"), ("Fit (/100)", f"{res['fit']:.1f}")]
                         if res["occ"] is not None:
-                            metrics.append(
-                                ("Occupancy", f"{res['occ']:.0%}")
-                            )
-
+                            metrics.append(("Occupancy", f"{res['occ']:.0%}"))
                         if balance_on:
-                            metrics.append(
-                                ("Balance", f"{res['balance']:.1f}/100")
-                            )
-
-                        metric_cols = st.columns(len(metrics))
-
-                        for col, (lab, val) in zip(metric_cols, metrics):
+                            metrics.append(("Balance", f"{res['balance']:.1f}/100"))
+                        if advanced and priority_keys:
+                            metrics.append(("Your match", f"{res['priority']:.0f}/100"))
+                        for col, (lab, val) in zip(st.columns(len(metrics)), metrics):
                             with col:
                                 st.metric(lab, val)
 
-                        phone = (
-                            f"[{r['phone']}](tel:{re.sub(r'[^+0-9]', '', r['phone'])})"
-                            if r["phone"] else "Not listed"
-                        )
-
-                        st.markdown(
-                            f"**Address:** {r['address'] or 'Not listed'}  \n"
-                            f"**Phone:** {phone}  \n"
-                            f"**Hours:** {r['hours'] or 'Not listed (call to confirm)'}"
-                        )
-
+                        phone = (f"[{r['phone']}](tel:{re.sub(r'[^+0-9]', '', r['phone'])})" if r["phone"] else "Not listed")
+                        st.markdown(f"**Address:** {r['address'] or 'Not listed'}  \n"
+                                    f"**Phone:** {phone}  \n"
+                                    f"**Hours:** {r['hours'] or 'Not listed (call to confirm)'}")
                         st.caption(CALL_PROMPT)
 
                         st.markdown("**Why this facility**")
-                        st.markdown(
-                            "\n".join(
-                                f"- {w}"
-                                for w in (
-                                    ([res["balance_note"]] if balance_on else [])
-                                    + res["why"]
-                                )
-                            )
-                        )
-
+                        st.markdown("\n".join(f"- {w}" for w in (([res["balance_note"]] if balance_on else []) + res["why"])))
                         if res["caveats"]:
                             st.markdown("**Caveats**")
-                            st.markdown(
-                                "\n".join(f"- {w}" for w in res["caveats"])
-                            )
+                            st.markdown("\n".join(f"- {w}" for w in res["caveats"]))
 
-                        with st.expander("Fit breakdown and source"):
-                            comp = pd.DataFrame({
-                                "component": list(res["comps"]),
-                                "value (0-1)": [
-                                    round(v, 2) for v in res["comps"].values()
-                                ],
-                                "weight": [
-                                    weights[k] for k in res["comps"]
-                                ],
-                            })
-                            st.dataframe(
-                                comp,
-                                hide_index=True,
-                                use_container_width=True,
-                            )
-                            st.caption(
-                                f"Source: {r['source']} · "
-                                f"facility_id {r['facility_id']} · "
-                                f"last verified: {res['verified'] or 'unknown'}"
-                            )
+                        with st.expander("Score breakdown and source"):
+                            comp = pd.DataFrame({"component": list(res["comps"]),
+                                                 "value (0-1)": [round(v, 2) for v in res["comps"].values()],
+                                                 "weight": [weights[k] for k in res["comps"]]})
+                            st.markdown("Fit score")
+                            st.dataframe(comp, hide_index=True, use_container_width=True)
+                            if res["engine"]:
+                                e = res["engine"]
+                                st.markdown("Recommended score (care_engine; lower is better)")
+                                st.dataframe(pd.DataFrame({"part": ["Travel proxy", "Evidence penalty", "Load penalty", "Total"],
+                                                           "value": [round(e["travel_part"], 1), round(e["evidence_penalty"], 1),
+                                                                     round(e["load_penalty"], 1), round(e["score"], 1)]}),
+                                             hide_index=True, use_container_width=True)
+                            if advanced and priority_keys:
+                                st.markdown("Your ranked criteria")
+                                st.dataframe(pd.DataFrame(res["priority_parts"], columns=["criterion", "value (0-1)", "weight"]),
+                                             hide_index=True, use_container_width=True)
+                            st.caption(f"Source: {r['source']} · facility_id {r['facility_id']} · last verified: {res['verified'] or 'unknown'}")
 
-                with map_col:
-                    st.subheader("Map")
-                    show_html(build_map((lat, lon), top, label), 720)
-
-                    st.caption(
-                        "Click a pin for address, phone, hours and directions. "
-                        "Red = your location, numbered blue pins = results."
-                    )
-
-                    contacts = pd.DataFrame([
-                        {
-                            "#": i,
-                            "Facility": x["row"]["name"],
-                            "Phone": x["row"]["phone"] or "Not listed",
-                            "Hours": x["row"]["hours"] or "Not listed",
-                            "Address": x["row"]["address"] or "Not listed",
-                            "Distance (km)": round(x["dist"], 1)
-                        }
-                        for i, x in enumerate(top, 1)
-                    ])
-
-                    with st.expander("View all facility contact details"):
-                        st.dataframe(
-                            contacts,
-                            hide_index=True,
-                            use_container_width=True
-                        )
+        with map_col:
+            st.subheader("Map")
+            show_html(build_map((lat, lon), top, label), 720)
+            st.caption("Click a pin for address, phone, hours and directions. Red = your location, numbered blue pins = results.")
+            contacts = pd.DataFrame([{"#": i, "Facility": x["row"]["name"], "Phone": x["row"]["phone"] or "Not listed",
+                                      "Hours": x["row"]["hours"] or "Not listed", "Address": x["row"]["address"] or "Not listed",
+                                      "Distance (km)": round(x["dist"], 1)} for i, x in enumerate(top, 1)])
+            with st.expander("View all facility contact details"):
+                st.dataframe(contacts, hide_index=True, use_container_width=True)
 
 st.markdown("""
 <style>
