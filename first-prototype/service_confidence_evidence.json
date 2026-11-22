@@ -74,5 +74,27 @@
     "source_url": "https://faridabadmedicalcenter.com/home/",
     "excerpt": "Our Neonatal Intensive Care Unit (NICU) is dedicated to providing specialized care for premature and critically ill newborns.",
     "stance": "supports"
+  },
+  {
+    "facility_id": "fdr:c259a369-d940-4fdc-a51b-1784d5966941",
+    "pin": "175001",
+    "service": "dialysis",
+    "source_kind": "directory",
+    "publisher_key": "himachal_pradesh_health_department",
+    "source_url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+    "excerpt": "The Himachal Pradesh PMNDP report lists nine functional haemodialysis machines and 405 sessions at ZH Mandi in March 2025.",
+    "valid_from": "2025-03-31",
+    "stance": "supports"
+  },
+  {
+    "facility_id": "fdr:9e64d63e-9421-4b29-ac72-dc73447a1db4",
+    "pin": "175101",
+    "service": "dialysis",
+    "source_kind": "directory",
+    "publisher_key": "himachal_pradesh_health_department",
+    "source_url": "https://himachal.nic.in/ControlsAsync/ViewFTPFile?qs=KI3gZ53zz1zG%2FM2MNgtMD88%2B%2FdIiV4g0qH%2F6C%2BTu6A%2BCGENB6PC4Q3ptiX8VVWg9n4fbej7hbzccABnn7JOg6hIRA2eJF63H",
+    "excerpt": "The Himachal Pradesh PMNDP report lists eight functional haemodialysis machines and 329 sessions at ZH Kullu in March 2025.",
+    "valid_from": "2025-03-31",
+    "stance": "supports"
   }
 ]

@@ -5,6 +5,8 @@ import json
 import math
 import re
 import zipfile
+from functools import lru_cache
+from pathlib import Path
 from urllib.parse import urlparse
 
 import numpy as np
@@ -21,6 +23,10 @@ SERVICE_TERMS = {
     "Maternity / delivery": ["maternity", "obstetrics", "obstetric", "labour room", "labor room", "normal delivery"],
     "General care": ["general hospital", "general medicine", "primary care", "multispecialty", "multi-specialty", "community health centre", "community health center"],
 }
+ROUTING_ELIGIBILITY_FIELDS = ("location_search_eligible", "location_routing_eligible", "routing_eligible")
+_ROUTING_FALSE = {"false", "0", "0.0"}
+_ROUTING_TRUE = {"true", "1", "1.0"}
+_LOCATION_HOLDS_PATH = Path(__file__).with_name("location_routing_holds.json")
 FIELD_CANDIDATES = {
     "name": ["name", "facility_name", "facilityName", "hospital_name"],
     "city": ["city", "address_city", "addressCity"],
@@ -108,6 +114,56 @@ def _clean_id(value):
     if isinstance(value, (float, np.floating)) and float(value).is_integer():
         return str(int(value))
     return str(value).strip()
+
+
+def _branch_id(value):
+    value = _clean_id(value)
+    return value if not value or value.startswith("fdr:") else "fdr:" + value
+
+
+@lru_cache(maxsize=1)
+def load_audited_location_holds(path=_LOCATION_HOLDS_PATH):
+    """Index rejected points by their exact release branch ID."""
+    holds = {}
+    for row in json.loads(Path(path).read_text(encoding="utf-8"))["holds"]:
+        holds.setdefault(row["facility_id"], []).append((row["latitude"], row["longitude"]))
+    return holds
+
+
+def _point_held(holds, branch_id, latitude, longitude):
+    return any(
+        math.isclose(latitude, rejected_lat, rel_tol=0, abs_tol=1e-6)
+        and math.isclose(longitude, rejected_lon, rel_tol=0, abs_tol=1e-6)
+        for rejected_lat, rejected_lon in holds.get(branch_id, ())
+    )
+
+
+def eligible_facility_locations(frame):
+    """Screen prepared points for both origin lookup and route eligibility."""
+    lat = pd.to_numeric(frame["latitude"], errors="coerce")
+    lon = pd.to_numeric(frame["longitude"], errors="coerce")
+    eligible = lat.between(6, 38) & lon.between(68, 98)
+    for field in ROUTING_ELIGIBILITY_FIELDS:
+        if field in frame:
+            eligible &= ~frame[field].map(_clean_id).str.casefold().isin(_ROUTING_FALSE)
+    if "branch_routing_hold" in frame:
+        eligible &= ~frame["branch_routing_hold"].map(_clean_id).str.casefold().isin(_ROUTING_TRUE)
+    if "region_match_status" in frame:
+        eligible &= ~frame["region_match_status"].map(_clean_id).str.casefold().isin({
+            "invalid_or_missing_coordinates", "outside_or_missing",
+        })
+
+    holds = load_audited_location_holds()
+    for field in ("facility_id", "source_id", "unique_id"):
+        if field not in frame:
+            continue
+        branch_ids = frame[field].map(_branch_id)
+        matching = eligible & branch_ids.isin(holds)
+        eligible.loc[matching] = np.asarray([
+            not _point_held(holds, branch_id, latitude, longitude)
+            for branch_id, latitude, longitude in zip(branch_ids[matching], lat[matching], lon[matching])
+        ], dtype=bool)
+    return frame.loc[eligible]
 
 
 def _contact_text(value):
@@ -283,7 +339,8 @@ def _term_match(text, terms):
     return None, ""
 
 
-def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not applied") -> pd.DataFrame:
+def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not applied", *,
+                       audited_location_holds=None) -> pd.DataFrame:
     """Flatten source rows while retaining the source text and claim-level citations."""
     if raw.empty:
         raise ValueError("The facility source table returned no rows.")
@@ -291,6 +348,7 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
     if not cols["name"]:
         raise ValueError(f"Could not identify a facility name column. Available columns: {list(raw.columns)}")
     missing = [f for f in EVIDENCE_FIELDS if _col(raw, [f]) is None]
+    holds = audited_location_holds or {}
     id_seen = {}
     rows = []
     for pos, (_, source) in enumerate(raw.iterrows()):
@@ -300,6 +358,14 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
         base_id = f"fdr:{source_id}"
         id_seen[base_id] = id_seen.get(base_id, 0) + 1
         fid = base_id if id_seen[base_id] == 1 else f"{base_id}:row{pos}"
+        latitude = _number(source[cols["lat"]]) if cols["lat"] else None
+        longitude = _number(source[cols["lon"]]) if cols["lon"] else None
+        possible_point = latitude is not None and longitude is not None and 6 <= latitude <= 38 and 68 <= longitude <= 98
+        routing_hold = any(_clean_id(source.get(field)).casefold() in _ROUTING_FALSE for field in ROUTING_ELIGIBILITY_FIELDS)
+        routing_hold |= _clean_id(source.get("branch_routing_hold")).casefold() in _ROUTING_TRUE
+        if possible_point:
+            release_id = _branch_id(source.get("facility_id")) or base_id
+            routing_hold |= _point_held(holds, release_id, latitude, longitude)
         field_texts = []
         for field in EVIDENCE_FIELDS:
             col = _col(raw, [field])
@@ -336,8 +402,9 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
             "district": str(source[cols["district"]]) if cols["district"] and pd.notna(source[cols["district"]]) else "",
             "state": str(source[cols["state"]]) if cols["state"] and pd.notna(source[cols["state"]]) else "",
             "pin": str(source[cols["pin"]]) if cols["pin"] and pd.notna(source[cols["pin"]]) else "",
-            "latitude": _number(source[cols["lat"]]) if cols["lat"] else None,
-            "longitude": _number(source[cols["lon"]]) if cols["lon"] else None,
+            "latitude": latitude, "longitude": longitude,
+            "branch_routing_hold": routing_hold,
+            "location_search_eligible": possible_point and not routing_hold,
             "beds_for_scenario": beds, "beds_provenance": bed_source,
             "capacity_release_status": release_status,
             "capacity_release_source": _contact_text(source.get("capacity_release_source")),

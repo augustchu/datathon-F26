@@ -1,6 +1,8 @@
 """Recommended and personalized ranking for the map-based dashboard."""
 from __future__ import annotations
 
+from datetime import date
+
 import streamlit as st
 
 from classic_confidence import (
@@ -8,6 +10,7 @@ from classic_confidence import (
     ROUTE_MINUTES_PER_KM_EQUIVALENT,
     assess_service_confidence,
     evidence_penalty_minutes,
+    service_assessment_columns,
 )
 
 RECOMMENDED = "Recommended"
@@ -25,13 +28,30 @@ CRITERIA = {
 }
 
 
-def score_recommended(results, service, aliases, *, uses_routes=False):
+def recommended_assessments(facilities, service, aliases):
+    """Select evidence-backed exact-service records from the normalized snapshot."""
+    columns = facilities.columns.intersection(service_assessment_columns(service))
+    return _recommended_assessments(facilities.loc[:, columns], service, tuple(aliases), date.today())
+
+
+@st.cache_data(ttl=300, max_entries=24, show_spinner=False)
+def _recommended_assessments(facilities, service, aliases, as_of):
+    eligible = {}
+    for index, row in zip(facilities.index, facilities.to_dict("records"), strict=True):
+        confidence = assess_service_confidence(row, service, aliases, as_of=as_of)
+        if confidence.evidence_points and confidence.term and confidence.excerpt:
+            eligible[index] = confidence
+    return eligible
+
+
+def score_recommended(results, service, aliases, *, uses_routes=False, preassessed=False):
     """Apply the published service match and confidence adjustments to travel."""
     minutes_per_km = ROUTE_MINUTES_PER_KM_EQUIVALENT
     multiplier = minutes_per_km if uses_routes else 1.0
     units = "min equivalent" if uses_routes else "km equivalent"
     for item in results:
-        confidence = assess_service_confidence(item["row"], service, aliases)
+        confidence = (item["service_confidence"] if preassessed
+                      else assess_service_confidence(item["row"], service, aliases))
         item["service_confidence"] = confidence
         match_penalty = MATCH_PENALTY_MAX_KM * (1 - confidence.match_score / 100) * multiplier
         confidence_penalty = float(evidence_penalty_minutes(confidence.score)) * multiplier / minutes_per_km

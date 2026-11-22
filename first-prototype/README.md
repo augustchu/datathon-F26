@@ -1,6 +1,8 @@
 # First prototype: Databricks care finder
 
-The deployment manifest starts the [map-era Facility Finder](classic_dashboard.py). The configured app uses the prepared Databricks snapshot. The original synthetic demo and facility export or CSV inputs are available from the sidebar. The map shows an India overview on load and displays the search origin and numbered result pins after a search. Recommended ranks by travel, selected-service match, and branch-specific service confidence. **Consider projected load** compares published monthly caseload and throughput for eligible routine searches. Setup and individual import decisions are in [Map restore and import review](MAP_RESTORE.md).
+The deployment manifest starts the [map-era Facility Finder](classic_dashboard.py). It reads the prepared Databricks snapshot and checks for new Delta versions about once a minute while the app is open. **Refresh from Databricks** checks immediately. The preparation date shows when the facility data was built. Last checked shows when the app queried Databricks. The original synthetic demo and facility export or CSV inputs are available from the sidebar.
+
+Recommended screens branch coordinates and service evidence before ranking by travel, selected-service match, and branch-specific confidence. **Consider projected load** compares the first recommendation with nearby facilities for the same routine service when the evidence tier, workload scope, period, and unit match. The comparison uses published monthly caseload and modeled throughput. Try Dialysis at `31.833, 77.018` with Routine and TravelTime off to check the Mandi–Kullu comparison. Setup and individual import decisions are in [Map restore and import review](MAP_RESTORE.md).
 
 The instructions below describe the evidence-linked prototype in `dashboard.py`. Its prepared Delta tables, app resource configuration, and source files remain available for a later deployment.
 
@@ -42,6 +44,8 @@ Run all cells in `prepare_snapshot.py`. The notebook:
 Inspect the printed samples, region-match counts, and metadata. If the archive does not contain a `.geojson` member, the notebook reports its member names; update `read_geojson_archive` to select the correct member if the filename differs.
 
 If a helper import reports that `pipeline.py` is missing `read_geojson_archive`, pull/sync the entire `first-prototype` folder in the Databricks Git folder, restart the notebook's Python process, and rerun. Databricks notebook kernels can keep an older imported module cached after files change; the notebook now reloads the module when it starts.
+
+Run the preparation notebook again or use your workspace’s existing preparation job when upstream inputs change. The app reads the newly committed facility table and refreshes an open search when its revision changes.
 
 ## 4. Create and configure the Databricks App
 

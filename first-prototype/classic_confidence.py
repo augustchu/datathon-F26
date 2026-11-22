@@ -155,7 +155,7 @@ def _source_url(value):
 def _reviewed_by_branch():
     by_branch = {}
     for (facility_id, pin, service), claims in load_reviewed_service_evidence(EVIDENCE_PATH).items():
-        by_branch.setdefault((facility_id, pin), {})[service] = claims
+        by_branch.setdefault(facility_id, {}).setdefault(pin, {})[service] = claims
     return by_branch
 
 
@@ -219,6 +219,17 @@ def _branch_points(row, name, pin, confirmed):
     return 10 if pin and name and name.casefold() != "unnamed facility" else 0
 
 
+def service_assessment_columns(service):
+    """Identify the snapshot fields that can affect this service assessment."""
+    key = _service_key(service)
+    return {
+        *EVIDENCE_FIELDS, "service_text", "name", "facility_name", "pin", "facility_id",
+        "equity_facility_id", "source_id", "branch_routing_hold", "location_search_eligible",
+        "lat", "lon", "latitude", "longitude", "branch_confidence_points",
+        f"service_evidence_kind_{key}", f"service_evidence_sources_{key}", f"term_{key}", f"excerpt_{key}",
+    }
+
+
 def assess_service_confidence(row, service, aliases, *, as_of=None):
     """Rate only the selected service, using reviewed claims, then prepared or raw facility text."""
     key = _service_key(service)
@@ -226,25 +237,21 @@ def assess_service_confidence(row, service, aliases, *, as_of=None):
     pin = branch_pin(_text(row.get("pin")))
     as_of = as_of or date.today()
     branch_id = _reviewed_branch_id(row)
-    bundled_reviews = _reviewed_by_branch()
-    reviewed = bundled_reviews.get((branch_id, pin), {})
+    branch_reviews = _reviewed_by_branch().get(branch_id, {})
+    reviewed = branch_reviews.get(pin, {})
     reviewed_kind, reviewed_claims = reviewed_service_status(reviewed.get(key, ()), as_of)
     prepared_kind = _text(row.get(f"service_evidence_kind_{key}")).casefold()
-    prepared_claims = _prepared_claims(row, key)
-    prepared_urls = {url for url, _ in prepared_claims}
-    known_source_urls = {
-        claim["source_url"]
-        for (known_id, _), services in bundled_reviews.items()
-        if known_id == branch_id
-        for claim in services.get(key, ())
-    }
-    minimum_sources = 2 if prepared_kind == "corroborated" else 1
-    valid_prepared = (
-        bool(branch_id and pin)
-        and prepared_kind in REVIEWED_KINDS
-        and len(prepared_urls) >= minimum_sources
-        and prepared_urls.isdisjoint(known_source_urls)
-    )
+    valid_prepared = False
+    if branch_id and pin and prepared_kind in REVIEWED_KINDS:
+        prepared_claims = _prepared_claims(row, key)
+        prepared_urls = {url for url, _ in prepared_claims}
+        known_source_urls = {
+            claim["source_url"]
+            for services in branch_reviews.values()
+            for claim in services.get(key, ())
+        }
+        minimum_sources = 2 if prepared_kind == "corroborated" else 1
+        valid_prepared = len(prepared_urls) >= minimum_sources and prepared_urls.isdisjoint(known_source_urls)
     confirmed_branch = any(reviewed_service_status(claims, as_of)[1] for claims in reviewed.values())
     branch = _branch_points(row, name, pin, confirmed_branch or bool(valid_prepared))
     term = _text(row.get(f"term_{key}"))

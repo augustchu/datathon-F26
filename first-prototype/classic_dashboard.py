@@ -6,6 +6,7 @@ Run from first-prototype: streamlit run classic_dashboard.py
 Data: the prepared Databricks snapshot, synthetic demo, facilities export, or dashboard-schema CSV.
 """
 import html
+import logging
 import os
 import re
 from pathlib import Path
@@ -17,11 +18,12 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from classic_data import (
-    apply_projected_load, capacity_details, load_classic_snapshot, rank_classic_results,
+    SNAPSHOT_CHECK_SECONDS, apply_projected_load, capacity_details, load_classic_snapshot, route_classic_results,
     safe_url, service_evidence, snapshot_configured,
 )
 from classic_ranking import (
-    RANKED_CRITERIA, RECOMMENDED, SEVERITIES, render_priorities, score_priorities, score_recommended,
+    RANKED_CRITERIA, RECOMMENDED, SEVERITIES, recommended_assessments,
+    render_priorities, score_priorities, score_recommended,
 )
 from dashboard_equity import (
     adjust_demo_equity_coordinates, prepare_equity_results, render_equity_card,
@@ -33,6 +35,7 @@ from projected_load import TIME_CRITICAL_SERVICES
 st.set_page_config(page_title="Facility Finder", page_icon="🏥", layout="wide")
 CALL_PROMPT = "Call this facility before traveling to verify the service, branch, and current availability."
 SNAPSHOT_MODE = "Prepared Databricks snapshot"
+LOGGER = logging.getLogger(__name__)
 
 st.markdown("""
 <style>
@@ -414,17 +417,35 @@ def prepare(raw: pd.DataFrame, kind: str) -> pd.DataFrame:
     return from_dashboard_csv(raw) if kind == "csv" else from_facility_table(raw)
 
 
+@st.fragment(run_every=SNAPSHOT_CHECK_SECONDS)
+def track_databricks_snapshot(revision):
+    try:
+        snapshot = load_classic_snapshot(from_facility_table)
+    except Exception:
+        LOGGER.exception("Could not check the Databricks facility snapshot")
+        st.warning("Databricks refresh failed. The results use the previous snapshot.")
+        return
+    if snapshot.revision != revision:
+        st.rerun()
+    st.caption(f"Last checked Databricks {snapshot.checked_at}")
+
+
 def load_data():
     st.sidebar.header("Data")
     modes = ["Demo (synthetic)", "Facilities table export", "Dashboard-schema CSV", SNAPSHOT_MODE]
-    mode = st.sidebar.radio("Facility data", modes, index=modes.index(SNAPSHOT_MODE) if snapshot_configured() else 0)
+    default_mode = SNAPSHOT_MODE if snapshot_configured() or os.getenv("DATABRICKS_APP_NAME") else modes[0]
+    mode = st.sidebar.radio("Facility data", modes, index=modes.index(default_mode))
     if mode == SNAPSHOT_MODE:
+        refresh = st.sidebar.button("Refresh from Databricks")
         try:
-            snapshot = load_classic_snapshot(from_facility_table)
+            snapshot = load_classic_snapshot(from_facility_table, force_refresh=refresh)
         except Exception:
+            LOGGER.exception("Could not load the Databricks facility snapshot")
             st.error("The Databricks snapshot could not be loaded. Check the SQL warehouse and table resources, or select another data source.")
             return None, mode
         st.caption(f"Prepared snapshot {snapshot.prepared_at} · {snapshot.source_count:,} facility records")
+        with st.sidebar:
+            track_databricks_snapshot(snapshot.revision)
         df = snapshot.facilities
         if df.empty:
             st.warning("The prepared snapshot has no facility records with usable coordinates.")
@@ -519,16 +540,23 @@ def reported_capacity_view(r):
     return "Capacity not reported.", "n/a", "Beds"
 
 
-def score_facilities(df, service, lat, lon, weights):
-    """Every facility that lists the service (or a related one), sorted nearest-first."""
+def score_facilities(df, service, lat, lon, weights, *, assessments=None):
+    """Build result cards from assessed recommendations or classic keyword matches."""
     meta = SERVICES[service]
+    if assessments is not None:
+        df = df.loc[list(assessments)]
     d = haversine_km(lat, lon, df["lat"].values, df["lon"].values)
     pool = df.assign(distance_km=d)
     today = pd.Timestamp.today()
     results = []
-    for _, r in pool.iterrows():
+    for index, r in pool.iterrows():
         have = set(r["service_list"])
-        if service in have:
+        if assessments is not None:
+            assessment = assessments[index]
+            match, matched_service = assessment.match_score / 100, service
+            match_note = (f"The evidence mentions **{service}**. Call to confirm the branch offers it."
+                          if assessment.kind == "mention" else f"The evidence lists **{service}** for this branch.")
+        elif service in have:
             match, matched_service = 1.0, service
             match_note = f"Facility text mentions **{service}** (keyword match)."
         else:
@@ -561,7 +589,7 @@ def score_facilities(df, service, lat, lon, weights):
         if r["open_24x7"]:
             why.append("Text mentions 24x7 operation.")
         caveats = []
-        if match < 1:
+        if matched_service != service:
             caveats.append("Only a related service is mentioned. Call to confirm.")
         if eq_m:
             caveats.append("Equipment not mentioned: " + ", ".join(eq_m) + ".")
@@ -573,12 +601,15 @@ def score_facilities(df, service, lat, lon, weights):
             caveats.append("No verification date on the record.")
         elif age_m > 12:
             caveats.append(f"Record last verified {age_m / 12:.1f} years ago and may be stale.")
-        results.append(dict(row=r, dist=float(r["distance_km"]), fit=round(100 * fit, 1), match=match, comps=comps,
+        result = dict(row=r, dist=float(r["distance_km"]), fit=round(100 * fit, 1), match=match, comps=comps,
                             occ=occ, spare=None if occ is None else max(0.0, 1 - occ), why=why, caveats=caveats,
                             matched_service=matched_service,
                             cap_value=cap_value, cap_label=cap_label,
                             equity_tier=(tuple(eq_m), tuple(st_m)) if match == 1 else None,
-                            verified=None if pd.isna(r["last_verified"]) else r["last_verified"].date().isoformat()))
+                            verified=None if pd.isna(r["last_verified"]) else r["last_verified"].date().isoformat())
+        if assessments is not None:
+            result["service_confidence"] = assessment
+        results.append(result)
     return sorted(results, key=lambda x: x["dist"])
 
 
@@ -602,7 +633,7 @@ def render_source_details(result, service):
     for i, url in enumerate((url for url in record_evidence.urls if url not in confidence.urls), 1):
         st.markdown(f"[Open facility source {i}](<{url}>)")
 
-    if result.get("scenario") is not None:
+    if "capacity_release_status" in row or "beds_for_scenario" in row:
         capacity = capacity_details(row)
         st.caption(capacity.detail)
         if capacity.crosscheck:
@@ -622,6 +653,13 @@ def render_load_details(result):
         st.markdown(f"**{demand_label}** {projection['caseload']:,.1f} {projection['unit']}")
         st.markdown(f"**Modeled throughput** {projection['capacity']:,.1f} {projection['unit']}")
         st.caption(f"{projection['scope']} · {projection['period']} · Planning estimate")
+        if projection["comparison_score"] is not None:
+            st.caption(f"Load comparison score {projection['comparison_score']:.3f} · lower is better · "
+                       f"baseline rank {projection['baseline_rank']}")
+        if projection["source_url"]:
+            st.markdown(f"[Open demand source](<{projection['source_url']}>)")
+        if projection["capacity_source_url"]:
+            st.markdown(f"[Open throughput source](<{projection['capacity_source_url']}>)")
         st.markdown("[Projection methods and data](https://github.com/augustchu/datathon-F26/blob/main/non-ml/caseload/NETWORK_CASELOAD.md)")
 
 
@@ -791,9 +829,11 @@ with st.container(border=True):
         load_allowed = severity == "Routine" and not m["urgent"] and service not in TIME_CRITICAL_SERVICES
         consider_projected_load = load_col.toggle(
             "Consider projected load", value=False, disabled=not load_allowed,
-            help="Recommended compares published monthly caseload and throughput for nearby facilities with comparable service evidence.",
+            help="With Recommended sorting, compare published monthly caseload and throughput for nearby facilities with comparable service evidence.",
         )
         consider_projected_load = consider_projected_load and load_allowed
+        if not load_allowed:
+            load_col.caption("Available for routine, non-time-critical care.")
         use_traveltime = routing_col.toggle(
             "Use TravelTime driving estimates", value=True,
             help="Recommended uses weekday-morning driving estimates when available and straight-line distance as a fallback.",
@@ -819,47 +859,39 @@ if search:
     if note:
         st.info(note)
     svc = service
-    ranked = score_facilities(df, svc, lat, lon, weights)
-    if not ranked:
-        st.warning(f"No facility's text mentions {svc} or a related service.")
-        st.subheader("Map")
-        show_html(build_map((lat, lon), label=label), 420)
+    aliases = SERVICES[svc]["aliases"]
+    results_context = st.container()
+    results_col, map_col = st.columns([1, 1], gap="medium")
+    sort_options = [
+        RECOMMENDED,
+        "Distance (nearest first)",
+        "Fit (highest first)",
+        "Beds (most first)",
+        "Occupancy (lowest first)",
+    ]
+    if priority_keys:
+        sort_options.append(RANKED_CRITERIA)
+    sort_key = "facility_sort_by"
+    if st.session_state.get(sort_key) not in (None, *sort_options):
+        st.session_state[sort_key] = RECOMMENDED
+    with results_col:
+        header_col, sort_col = st.columns([3, 2])
+        header_col.subheader("Facility options")
+        sort_by = sort_col.selectbox("Sort by", sort_options, key=sort_key, label_visibility="collapsed")
+
+    assessments = recommended_assessments(df, svc, aliases) if sort_by == RECOMMENDED else None
+    candidates = score_facilities(df, svc, lat, lon, weights, assessments=assessments)
+    evaluated = route_classic_results(candidates, (lat, lon), use_traveltime=use_traveltime and sort_by == RECOMMENDED)
+    candidates = evaluated.results
+    uses_routes = evaluated.uses_routes
+    score_recommended(candidates, svc, aliases, uses_routes=uses_routes, preassessed=assessments is not None)
+    candidates = [item for item in candidates if item["service_confidence"].kind != "conflict"]
+    if not candidates:
+        results_col.warning(f"No facility with usable coordinates and supporting evidence for {svc} was found.")
+        with map_col:
+            st.subheader("Map")
+            show_html(build_map((lat, lon), label=label), 420)
     else:
-        results_context = st.container()
-        results_col, map_col = st.columns([1, 1], gap="medium")
-        sort_options = [
-            RECOMMENDED,
-            "Distance (nearest first)",
-            "Fit (highest first)",
-            "Beds (most first)",
-            "Occupancy (lowest first)",
-        ]
-        if priority_keys:
-            sort_options.append(RANKED_CRITERIA)
-        sort_key = "facility_sort_by"
-        if st.session_state.get(sort_key) not in (None, *sort_options):
-            st.session_state[sort_key] = RECOMMENDED
-        with results_col:
-            header_col, sort_col = st.columns([3, 2])
-            header_col.subheader("Facility options")
-            sort_by = sort_col.selectbox("Sort by", sort_options, key=sort_key, label_visibility="collapsed")
-
-        evaluated = None
-        uses_routes = False
-        if snapshot_mode:
-            evaluated = rank_classic_results(
-                ranked, svc, (lat, lon), population_share_pct=0.0,
-                severity=severity.lower(), use_traveltime=use_traveltime and sort_by == RECOMMENDED,
-            )
-            uses_routes = evaluated.uses_routes
-            ranked = sorted(evaluated.results, key=lambda item: item["dist"])
-            if uses_routes:
-                for item in ranked:
-                    item["route_minutes"] = float(item["scenario"]["travel_time_minutes"])
-
-        candidates = ranked
-
-        score_recommended(candidates, svc, SERVICES[svc]["aliases"], uses_routes=uses_routes)
         if sort_by == RECOMMENDED:
             candidates = sorted(candidates, key=lambda item: (
                 item["recommended"]["score"],
@@ -882,9 +914,10 @@ if search:
             candidates = sorted(candidates, key=lambda item: item["dist"])
 
         compare_projected_load = consider_projected_load and sort_by == RECOMMENDED
-        projected_comparable = 0
-        if compare_projected_load:
-            candidates, projected_comparable = apply_projected_load(candidates, svc, uses_routes=uses_routes)
+        candidates, projected_comparable = apply_projected_load(
+            candidates, svc, uses_routes=uses_routes, enabled=compare_projected_load, severity=severity,
+        )
+        projected_first = candidates[0].get("projected_load") if projected_comparable else None
 
         equity_view = prepare_equity_results(
             candidates, svc, top_n, enabled=consider_equity, synthetic=synthetic,
@@ -892,18 +925,24 @@ if search:
         )
         top = equity_view.results
         with results_context:
-            if evaluated is not None and sort_by == RECOMMENDED:
+            if snapshot_mode and sort_by == RECOMMENDED:
                 st.caption(evaluated.routing_status)
                 if evaluated.routing_warning:
                     st.warning(evaluated.routing_warning)
             if compare_projected_load:
                 if projected_comparable:
                     st.caption(f"Compared projected monthly load for {projected_comparable} nearby facilities with comparable service evidence.")
+                    if projected_first and projected_first["baseline_rank"] > 1:
+                        st.caption(f"Projected load moved {candidates[0]['row']['name']} from "
+                                   f"#{projected_first['baseline_rank']} to #1.")
+                elif candidates[0].get("projected_load"):
+                    st.caption("The first Recommended facility has a projection. No nearby facility has comparable evidence and workload data.")
                 else:
-                    st.caption("Comparable projected load is unavailable for this search. Showing the baseline Recommended order.")
+                    st.caption("The first Recommended facility has no usable projection. Showing the baseline Recommended order.")
+            elif consider_projected_load:
+                st.caption("Select Recommended sorting to compare projected load.")
             render_equity_summary(equity_view)
-            st.caption("Service matches use keywords from each facility’s own text. The team’s service evidence "
-                       "and verification notebooks (04 and 04b) document scope checks. Call to verify the service and branch.")
+            st.caption("Service evidence comes from reviewed sources and facility records. Call to verify the service and branch.")
 
         with results_col:
             # Fixed-height container with independent scrolling
@@ -1037,8 +1076,8 @@ else:
 with st.expander("How this prototype decides"):
     st.markdown(
         """
-        - Service matching uses the facility’s own description, equipment, specialties, capabilities, and procedures.
-          Related matches are labeled. Links and excerpts help you check the source when available.
+        - Recommended checks reviewed service evidence and the facility’s own records for the requested service.
+          Source links and excerpts show the basis for each match. Alternate sorts label related matches.
         - Recommended combines travel, service match, and confidence for the selected service at the facility’s
           branch. Confidence combines up to 80 points for service evidence and 20 for branch identity.
           A branch earns zero confidence for a service with no supporting evidence.
@@ -1046,8 +1085,8 @@ with st.expander("How this prototype decides"):
         - TravelTime estimates weekday-morning drives for Recommended results from the Databricks snapshot.
           A successful route search shows reachable facilities. The dashboard falls back to straight-line estimates
           if routing is unavailable or cannot find any routes within three hours.
-        - Consider projected load compares published monthly caseload and throughput for nearby routine-care options
-          with comparable evidence. The comparison uses planning estimates.
+        - Consider projected load compares the first Recommended facility with nearby options for the same routine service.
+          The comparison weighs the extra trip and monthly demand relative to modeled throughput equally.
         - Ranked criteria weights your selected priorities in order. Equity scoring is optional and uses comparable
           evidence for the same service and branch. The map follows the final order shown on the cards.
         """
