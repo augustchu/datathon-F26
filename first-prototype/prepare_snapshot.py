@@ -1,10 +1,12 @@
 # Databricks notebook source
-# COMMAND ----------
+# /// script
+# [tool.databricks.environment]
+# environment_version = "6"
+# ///
 # Prepare the facility snapshot once, then let the Streamlit App query its output.
 # Run this file as a notebook from the Databricks Git folder (Run all).
 
 import os
-import re
 import sys
 import importlib
 from datetime import datetime, timezone
@@ -17,7 +19,7 @@ FACILITIES_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_found
 PINS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory"
 NFHS_SOURCE = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.nfhs_5_district_health_indicators"
 BOUNDARY_ZIP = "/Volumes/additional_india_data/default/additional_india_data/geoBoundaries-IND-ADM2-all.zip"
-OUTPUT_CATALOG = os.getenv("DATATHON_OUTPUT_CATALOG")
+OUTPUT_CATALOG = "main"
 OUTPUT_SCHEMA = "first_prototype"
 
 current = dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get()
@@ -42,6 +44,7 @@ prepare_facilities = pipeline_module.prepare_facilities
 read_geojson_archive = pipeline_module.read_geojson_archive
 
 # COMMAND ----------
+
 # Validate access and inspect schemas before collecting the modest facility table to pandas.
 for source_name in (FACILITIES_SOURCE, PINS_SOURCE, NFHS_SOURCE):
     print(f"{source_name}: {spark.table(source_name).count():,} rows")
@@ -54,6 +57,7 @@ nfhs_spark = spark.table(NFHS_SOURCE)
 nfhs = nfhs_spark.toPandas()
 
 # COMMAND ----------
+
 # Apply the saved enriched bed-count model when present. A model failure is non-fatal;
 # service eligibility never comes from a bed-count prediction.
 prepared = prepare_facilities(raw)
@@ -87,39 +91,10 @@ prepared["facility_source_table"] = FACILITIES_SOURCE
 prepared["capacity_model_status"] = model_status
 
 # COMMAND ----------
-# Create the prototype schema in a catalog available to this workspace. Free Edition
-# workspaces do not necessarily have a `main` catalog. Prefer `workspace`; otherwise
-# try the current catalog and then other non-system, non-Marketplace catalogs.
-available_catalogs = [str(row[0]) for row in spark.sql("SHOW CATALOGS").collect()]
-requested_catalog = OUTPUT_CATALOG
-if requested_catalog:
-    if not re.fullmatch(r"[A-Za-z0-9_-]+", requested_catalog):
-        raise ValueError("DATATHON_OUTPUT_CATALOG must be a simple catalog name.")
-    catalog_candidates = [requested_catalog]
-else:
-    current_catalog = str(spark.sql("SELECT current_catalog()").first()[0])
-    excluded = {"system", "samples", FACILITIES_SOURCE.split(".")[0]}
-    catalog_candidates = [c for c in ("workspace", current_catalog) if c in available_catalogs and c not in excluded]
-    catalog_candidates += [c for c in available_catalogs if c not in excluded and c not in catalog_candidates]
 
-output_catalog = None
-catalog_errors = []
-for candidate_catalog in catalog_candidates:
-    try:
-        spark.sql(f"CREATE SCHEMA IF NOT EXISTS `{candidate_catalog}`.`{OUTPUT_SCHEMA}`")
-        output_catalog = candidate_catalog
-        break
-    except Exception as exc:
-        catalog_errors.append(f"{candidate_catalog}: {type(exc).__name__}: {exc}")
-if output_catalog is None:
-    raise RuntimeError(
-        "Could not create the first_prototype schema in an available catalog. "
-        f"Catalogs found: {available_catalogs}. Set DATATHON_OUTPUT_CATALOG to a catalog where you can create schemas. "
-        f"Attempts: {catalog_errors}"
-    )
-OUTPUT_CATALOG = output_catalog
+# Create the prototype schema and publish the prepared output as a Delta table.
 output_schema = f"{OUTPUT_CATALOG}.{OUTPUT_SCHEMA}"
-print(f"Publishing prototype tables under {output_schema}")
+spark.sql(f"CREATE SCHEMA IF NOT EXISTS {output_schema}")
 
 # Use explicit scalar types so nullable model outputs and claim flags stay consistent in Delta.
 numeric_cols = {"latitude", "longitude", "beds_for_scenario"}
