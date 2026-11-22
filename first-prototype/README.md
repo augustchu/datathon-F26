@@ -1,5 +1,9 @@
 # First prototype: Databricks care finder
 
+The deployment manifest starts the [map-era Facility Finder](classic_dashboard.py). The configured app uses the prepared Databricks snapshot. The original synthetic demo and facility export or CSV inputs are available from the sidebar. The map shows an India overview on load and displays the search origin and numbered result pins after a search. The dashboard opens with Recommended sorting and includes the selected routing, capacity, evidence, confidence, and equity features. Setup and individual import decisions are in [Map restore and import review](MAP_RESTORE.md).
+
+The instructions below describe the evidence-linked prototype in `dashboard.py`. Its prepared Delta tables, app resource configuration, and source files remain available for a later deployment.
+
 This folder is a self-contained Databricks prototype. It reads the Marketplace facility, PIN, and NFHS tables in a preparation notebook, reads the supplied geoBoundaries ZIP from a Unity Catalog Volume, writes prepared Delta tables, and serves an interactive Streamlit app from those tables.
 
 The Streamlit app has service, location, urgency, result-count, and a 0–2% district-population scenario slider. It returns citable text matches and a transparent score. For each district, expected cases at the selected share are split evenly across the evidence-backed facilities in that district that mention the service. This is an illustrative allocation, not measured congestion or a demand forecast. All displayed facility fields and service evidence come from the cleaned newest-source release; the Marketplace table is used to validate alignment and cross-check capacity. The app displays confidence, phone, and website when available, and adds a confidence adjustment to every ranking. Emergency ranking skips regional demand load but still accounts for confidence.

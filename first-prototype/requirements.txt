@@ -4,3 +4,4 @@ numpy>=1.26,<3
 databricks-sdk>=0.40
 databricks-sql-connector>=3.0
 requests>=2.31,<3
+folium>=0.19,<1

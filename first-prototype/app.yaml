@@ -1,4 +1,4 @@
-command: ["streamlit", "run", "dashboard.py"]
+command: ["streamlit", "run", "classic_dashboard.py"]
 env:
   - name: DATABRICKS_WAREHOUSE_ID
     valueFrom: sql-warehouse
