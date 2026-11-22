@@ -1,0 +1,10 @@
+service,old_candidates,new_candidates,shared_candidates,added_candidates,removed_candidates,held_candidates,held_legacy_candidates,unconfirmed_candidates,old_mean,old_median,old_high,new_mean,new_median,new_high,shared_old_mean,shared_old_median,shared_old_high,shared_new_mean,shared_new_median,shared_new_high
+Dialysis,993,822,821,1,172,116,68,820,18.67,15.0,25,24.81,25.0,2,18.56,15.0,20,24.73,25.0,1
+Emergency C-section,228,210,210,0,18,34,17,210,17.83,15.0,4,24.86,25.0,0,17.83,15.0,4,24.86,25.0,0
+NICU,674,547,546,1,128,102,62,546,17.93,15.0,20,24.87,25.0,1,17.66,15.0,15,24.87,25.0,1
+Cardiac surgery,384,353,353,0,31,48,28,353,19.05,20.0,10,24.55,25.0,0,19.04,20.0,9,24.55,25.0,0
+MRI,904,532,530,2,374,68,43,532,16.97,15.0,20,24.59,25.0,0,15.85,15.0,8,24.58,25.0,0
+Burn care,57,47,47,0,10,10,6,47,18.33,20.0,2,25.0,25.0,0,18.62,15.0,2,25.0,25.0,0
+Trauma / emergency,1161,1054,1054,0,107,141,87,1054,18.39,15.0,28,24.64,25.0,0,18.39,15.0,26,24.64,25.0,0
+Maternity / delivery,2437,2236,2236,0,201,307,180,2236,17.05,15.0,49,24.72,25.0,0,17.08,15.0,45,24.72,25.0,0
+General care,2345,2199,2198,1,147,261,140,2199,17.47,15.0,57,24.72,25.0,0,17.49,15.0,53,24.72,25.0,0

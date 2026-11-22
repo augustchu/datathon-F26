@@ -1,14 +1,21 @@
 """Small, auditable preparation and ranking layer for the Databricks prototype."""
 from __future__ import annotations
 
+from datetime import date
 import json
 import math
+from pathlib import Path
 import re
 import zipfile
 from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
+
+from service_confidence import (
+    RECORD_TEXT_KINDS, SERVICE_EVIDENCE_LABELS, SERVICE_EVIDENCE_POINTS, branch_pin,
+    load_reviewed_service_evidence, reviewed_service_status, service_confidence, service_match,
+)
 
 SERVICE_TERMS = {
     "Dialysis": ["dialysis", "haemodialysis", "hemodialysis", "peritoneal dialysis"],
@@ -36,7 +43,44 @@ FIELD_CANDIDATES = {
     "url": ["source_urls", "sourceUrls", "source_url", "url", "website", "sources"],
 }
 EVIDENCE_FIELDS = ["specialties", "capability", "procedure", "equipment", "description"]
-NEGATION = re.compile(r"\b(?:does not|do not|not available|not provide|without|no longer|unavailable|doesn't|isn't)\b", re.I)
+SERVICE_LIST_FIELDS = {"specialties", "capability", "procedure"}
+# These search aliases suggest related capabilities without stating the requested scope.
+MENTION_ONLY_TERMS = {
+    "Emergency C-section": {"cesarean section", "caesarean section"},
+    "NICU": {"sncu"},
+    "General care": {"general hospital", "multispecialty", "multi-specialty"},
+}
+CLAUSE_BOUNDARY = re.compile(r"[.!?;|\n]+")
+NON_OFFER_BEFORE = re.compile(
+    r"\b(?:no|does not|do not|doesn['’]t|without|not available|unavailable|"
+    r"plans? to (?:offer|add|start)|refers? (?:patients? )?(?:elsewhere )?(?:to|for))\b", re.I,
+)
+NON_OFFER_AFTER = re.compile(
+    r"^[\s:–—-]*(?:services?\s+)?(?:(?:is|are)\s+)?"
+    r"(?:no\b|unavailable\b|no longer\b|not\s+(?:available|offered|provided)\b|"
+    r"(?:isn['’]t|aren['’]t)\s+(?:available|offered|provided)\b|"
+    r"referral only\b|planned\b|coming soon\b)", re.I,
+)
+OTHER_LOCATION = re.compile(r"\b(?:another|other|different)\s+(?:branch|hospital|location)\b", re.I)
+OFFER_QUALIFIERS = r"(?:(?:an?|dedicated|on[- ]site|in[- ]house|24/7)\s+)*"
+DIRECT_OFFER_BEFORE = re.compile(
+    r"^\s*(?:(?:we|(?:this|our|the)\s+(?:branch|facility|hospital|clinic|centre|center))\s+)?"
+    r"(?:also\s+)?(?:offers?|provides?|performs?|has|have|operates?|runs?|houses?)\s+"
+    + OFFER_QUALIFIERS + r"$", re.I,
+)
+DIRECT_OFFER_AFTER = re.compile(r"^\s+(?:is|are)\s+(?:available|offered|provided|performed)\b", re.I)
+SERVICE_LIST_HEADER = re.compile(r"^\s*(?:our\s+)?(?:services|procedures)(?:\s+offered)?\s*(?::|include[s]?\s)\s*(?:[^,:;]+,\s*)*$", re.I)
+SERVICE_LIST_PREFIX = re.compile(r"^\s*" + OFFER_QUALIFIERS + r"$", re.I)
+SERVICE_LIST_SUFFIX = re.compile(
+    r"^\s*(?:(?:units?|clinics?|centres?|centers?|departments?|services?|treatments?)"
+    r"(?:\s+(?:of|with)\s+\d+\s+(?:beds?|stations?|chairs?))?)?\s*$", re.I,
+)
+INDIRECT_SERVICE = re.compile(r"\b(?:tie[- ]ups?|referral|affiliated|partner hospital|planned)\b", re.I)
+SERVICE_MODIFIER = re.compile(r"^\s+(?:machines?|equipment|catheters?|access|training|counseling|counselling|patients?)\b", re.I)
+SERVICE_LOCATION = re.compile(
+    r"\b(?:at|through|via)\s+([^,;()]{0,90}?\b(?:hospitals?|branches?|facility|clinics?|centres?|centers?|campus)\b)", re.I,
+)
+OWN_LOCATION = re.compile(r"^(?:this|our|the)\s+(?:branch|facility|hospital|clinic|centre|center|campus)$", re.I)
 NFHS_HINTS = {
     "dialysis": ["blood_sugar", "diabetes"],
     "emergency_c_section": ["institutional_birth", "csection", "caesarean"],
@@ -45,6 +89,11 @@ NFHS_HINTS = {
     "maternity_delivery": ["institutional_birth", "csection", "caesarean"],
     "general_care": ["children_prev_symptoms", "diarrhoea", "diarrhea", "blood_sugar"],
 }
+MATCH_PENALTY_MAX_KM = 5.0
+EVIDENCE_PENALTY_MAX_MINUTES = 60.0
+EVIDENCE_CONFIDENCE_MIDPOINT = 55.0
+EVIDENCE_CONFIDENCE_WIDTH = 3.5
+ROUTE_MINUTES_PER_KM_EQUIVALENT = 2.0
 
 
 def _col(df, aliases):
@@ -245,23 +294,74 @@ def confidence_adjustment(score):
     return "Low", 80.0
 
 
-def _term_match(text, terms):
-    low = text.casefold()
+def evidence_penalty_minutes(confidence):
+    """Map evidence confidence to a decreasing logistic penalty with exact endpoints."""
+    def curve(score):
+        return 1.0 / (1.0 + np.exp((score - EVIDENCE_CONFIDENCE_MIDPOINT) / EVIDENCE_CONFIDENCE_WIDTH))
+
+    bottom, top = curve(0), curve(100)
+    return EVIDENCE_PENALTY_MAX_MINUTES * ((curve(np.clip(confidence, 0, 100)) - top) / (bottom - top))
+
+
+def _term_match(text, terms, *, structured, mention_only, facility_name):
+    first_match = ("none", None, "")
+    name_key = facility_name.casefold()
     for term in sorted(terms, key=len, reverse=True):
-        pattern = re.compile(r"(?<!\w)" + re.escape(term.casefold()) + r"(?!\w)")
-        m = pattern.search(low)
-        if m:
-            start, end = max(0, m.start() - 150), min(len(text), m.end() + 220)
-            excerpt = re.sub(r"\s+", " ", text[start:end]).strip()
-            # Only suppress clear nearby negation; the rule intentionally favors review over claiming certainty.
-            prefix = text[max(0, m.start() - 60):m.start()]
-            if NEGATION.search(prefix):
+        pattern = re.compile(r"(?<!\w)" + re.escape(term) + r"(?!\w)", re.I)
+        for match in pattern.finditer(text):
+            prefix = CLAUSE_BOUNDARY.split(text[max(0, match.start() - 90):match.start()])[-1]
+            suffix = CLAUSE_BOUNDARY.split(text[match.end():match.end() + 140], maxsplit=1)[0]
+            excerpt = prefix + match.group() + suffix
+            if NON_OFFER_BEFORE.search(prefix) or NON_OFFER_AFTER.match(suffix) or OTHER_LOCATION.search(excerpt):
                 continue
-            return term, excerpt
-    return None, ""
+            excerpt = re.sub(r"\s+", " ", excerpt).strip()
+            if first_match[0] == "none":
+                first_match = "mention", term, excerpt
+            if term in mention_only or INDIRECT_SERVICE.search(excerpt) or SERVICE_MODIFIER.match(suffix):
+                continue
+            if any(not OWN_LOCATION.fullmatch(place) and place.casefold() != name_key
+                   for place in SERVICE_LOCATION.findall(excerpt)):
+                continue
+            standalone = SERVICE_LIST_PREFIX.fullmatch(prefix)
+            listed = (structured and standalone and SERVICE_LIST_SUFFIX.fullmatch(suffix))
+            offer_prefix = prefix.lstrip()
+            if name_key and offer_prefix.casefold().startswith(name_key + " "):
+                offer_prefix = offer_prefix[len(facility_name):]
+            offered = DIRECT_OFFER_BEFORE.match(offer_prefix) or (standalone and DIRECT_OFFER_AFTER.match(suffix))
+            if listed or offered or SERVICE_LIST_HEADER.search(prefix):
+                return "record_listing", term, excerpt
+    return first_match
 
 
-def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not applied") -> pd.DataFrame:
+def _record_service_match(fields, terms, mention_only, facility_name):
+    best = ("none", None, "")
+    for field, text in fields.items():
+        if field == "equipment":
+            continue
+        kind, term, excerpt = _term_match(text, terms, structured=field in SERVICE_LIST_FIELDS,
+                                          mention_only=mention_only, facility_name=facility_name)
+        if kind == "record_listing":
+            return kind, term, f"{field}: {excerpt}"
+        if kind == "mention" and best[0] == "none":
+            best = kind, term, f"{field}: {excerpt}"
+    return best
+
+
+def load_audited_location_holds(path):
+    """Index rejected coordinates by the release branch ID."""
+    records = json.loads(Path(path).read_text(encoding="utf-8"))["holds"]
+    by_branch = {}
+    for row in records:
+        by_branch.setdefault(row["facility_id"], []).append((row["latitude"], row["longitude"]))
+    return by_branch
+
+
+def _within_india_bounds(latitude, longitude):
+    return latitude is not None and longitude is not None and 6 <= latitude <= 38 and 68 <= longitude <= 98
+
+
+def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not applied", *,
+                       reviewed_evidence=None, audited_location_holds=None, as_of=None) -> pd.DataFrame:
     """Flatten source rows while retaining the source text and claim-level citations."""
     if raw.empty:
         raise ValueError("The facility source table returned no rows.")
@@ -269,6 +369,10 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
     if not cols["name"]:
         raise ValueError(f"Could not identify a facility name column. Available columns: {list(raw.columns)}")
     missing = [f for f in EVIDENCE_FIELDS if _col(raw, [f]) is None]
+    evidence = reviewed_evidence or {}
+    location_holds = audited_location_holds or {}
+    as_of = as_of or date.today()
+    services = [(_service_key(service), service, terms) for service, terms in SERVICE_TERMS.items()]
     id_seen = {}
     rows = []
     for pos, (_, source) in enumerate(raw.iterrows()):
@@ -278,14 +382,36 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
         base_id = f"fdr:{source_id}"
         id_seen[base_id] = id_seen.get(base_id, 0) + 1
         fid = base_id if id_seen[base_id] == 1 else f"{base_id}:row{pos}"
-        field_texts = []
+        release_id = _clean_id(source.get("facility_id")) or base_id
+        pin_value = source[cols["pin"]] if cols["pin"] else None
+        pin = branch_pin(pin_value)
+        latitude = _number(source[cols["lat"]]) if cols["lat"] else None
+        longitude = _number(source[cols["lon"]]) if cols["lon"] else None
+        reviewed_claims = {key: evidence.get((release_id, pin, key), ()) for key, _, _ in services}
+        reviewed = {key: reviewed_service_status(claims, as_of) for key, claims in reviewed_claims.items()}
+        routing_hold = any(
+            str(source.get(field, "")).strip().casefold() in {"false", "0"}
+            for field in ("routing_eligible", "location_routing_eligible")
+        )
+        valid_point = _within_india_bounds(latitude, longitude)
+        if valid_point:
+            routing_hold = routing_hold or any(
+                math.isclose(latitude, rejected_lat, rel_tol=0, abs_tol=1e-6)
+                and math.isclose(longitude, rejected_lon, rel_tol=0, abs_tol=1e-6)
+                for rejected_lat, rejected_lon in location_holds.get(release_id, ())
+            )
+        location_search_eligible = valid_point and not routing_hold
+        confirmed_branch = any(citations for _, citations in reviewed.values())
+        plausible_branch = bool(pin and pd.notna(name_value) and str(name_value).strip())
+        branch_points = 0 if not location_search_eligible else 20 if confirmed_branch else 10 if plausible_branch else 0
+        field_texts = {}
         for field in EVIDENCE_FIELDS:
             col = _col(raw, [field])
             if col:
                 values = _items(source[col])
                 if values:
-                    field_texts.append(f"{field}: {'; '.join(values)}")
-        full_text = " | ".join(field_texts)
+                    field_texts[field] = "; ".join(values)
+        full_text = " | ".join(f"{field}: {text}" for field, text in field_texts.items())
         urls = _urls(source[cols["url"]]) if cols["url"] else []
         if "capacity_release_value" in raw.columns:
             # A withheld release value stays missing even if the older raw field has a number.
@@ -312,9 +438,9 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
             "city": str(source[cols["city"]]) if cols["city"] and pd.notna(source[cols["city"]]) else "",
             "district": str(source[cols["district"]]) if cols["district"] and pd.notna(source[cols["district"]]) else "",
             "state": str(source[cols["state"]]) if cols["state"] and pd.notna(source[cols["state"]]) else "",
-            "pin": str(source[cols["pin"]]) if cols["pin"] and pd.notna(source[cols["pin"]]) else "",
-            "latitude": _number(source[cols["lat"]]) if cols["lat"] else None,
-            "longitude": _number(source[cols["lon"]]) if cols["lon"] else None,
+            "pin": str(pin_value) if pd.notna(pin_value) else "",
+            "latitude": latitude,
+            "longitude": longitude,
             "beds_for_scenario": beds, "beds_provenance": bed_source,
             "capacity_release_status": release_status,
             "capacity_release_source": _contact_text(source.get("capacity_release_source")),
@@ -329,17 +455,30 @@ def prepare_facilities(raw: pd.DataFrame, predicted_beds=None, model_label="not 
             "confidence_score": confidence_score,
             "confidence_tier": confidence_tier,
             "confidence_penalty": confidence_penalty,
+            "branch_confidence_points": branch_points,
+            "branch_routing_hold": routing_hold,
+            "location_search_eligible": location_search_eligible,
             "phone": _contact_text(phone_value),
             "website_url": next(iter(_website_urls(website_value)), ""),
             "source_urls_json": json.dumps(urls), "service_text": full_text,
             "service_fields_missing": ",".join(missing),
         }
-        for service, terms in SERVICE_TERMS.items():
-            term, excerpt = _term_match(full_text, terms)
-            # Citation is required for a result in the user-facing app.
-            row[f"term_{_service_key(service)}"] = term or ""
-            row[f"excerpt_{_service_key(service)}"] = excerpt if urls else ""
-            row[f"claim_citable_{_service_key(service)}"] = bool(term and urls)
+        for key, service, terms in services:
+            evidence_kind, citations = reviewed[key]
+            term, excerpt = None, ""
+            if citations:
+                term, excerpt = service, citations[0]["excerpt"]
+            elif evidence_kind == "none":
+                evidence_kind, term, excerpt = _record_service_match(
+                    field_texts, terms, MENTION_ONLY_TERMS.get(service, ()), name.strip(),
+                )
+            row[f"term_{key}"] = term or ""
+            row[f"excerpt_{key}"] = excerpt
+            row[f"claim_citable_{key}"] = bool(citations)
+            row[f"service_evidence_kind_{key}"] = evidence_kind
+            row[f"service_evidence_sources_{key}"] = json.dumps([
+                {"url": claim["source_url"], "excerpt": claim["excerpt"]} for claim in citations
+            ])
         rows.append(row)
     return pd.DataFrame(rows)
 
@@ -440,25 +579,68 @@ def attach_population(facilities, population):
     return out
 
 
+def eligible_facility_locations(frame):
+    """Use the saved routing screen for search origins and destinations."""
+    if "location_search_eligible" not in frame:
+        return frame.iloc[:0]
+    eligible = frame.location_search_eligible.eq(True)
+    eligible &= pd.to_numeric(frame.latitude, errors="coerce").between(6, 38)
+    eligible &= pd.to_numeric(frame.longitude, errors="coerce").between(68, 98)
+    if "branch_routing_hold" in frame:
+        eligible &= ~frame.branch_routing_hold.eq(True)
+    if "region_match_status" in frame:
+        eligible &= ~frame.region_match_status.isin({"invalid_or_missing_coordinates", "outside_or_missing"})
+    return frame.loc[eligible]
+
+
+def _has_reviewed_citation(value):
+    try:
+        claims = json.loads(value)
+    except (TypeError, ValueError):
+        return False
+    return isinstance(claims, list) and any(
+        isinstance(claim, dict) and str(claim.get("url", "")).startswith(("https://", "http://"))
+        and str(claim.get("excerpt") or "").strip()
+        for claim in claims
+    )
+
+
 def service_candidates(frame, service):
-    """Return service-matched, citable records with valid India coordinates."""
+    """Score branches with service evidence and a usable location."""
     key = _service_key(service)
     cite_col = f"claim_citable_{key}"
-    if cite_col not in frame.columns:
-        return pd.DataFrame()
-    work = frame.loc[frame[cite_col].fillna(False).astype(bool)].copy()
-    work = work.dropna(subset=["latitude", "longitude"])
-    return work.loc[work.latitude.between(6, 38) & work.longitude.between(68, 98)].copy()
+    kind_col = f"service_evidence_kind_{key}"
+    evidence_col = f"service_evidence_sources_{key}"
+    term_col, excerpt_col = f"term_{key}", f"excerpt_{key}"
+    if not {cite_col, kind_col, evidence_col, term_col, excerpt_col, "branch_confidence_points"}.issubset(frame.columns):
+        return frame.iloc[:0].copy()
+    kind = frame[kind_col]
+    record_text = kind.isin(RECORD_TEXT_KINDS) & frame[term_col].fillna("").str.strip().ne("")
+    record_text &= frame[excerpt_col].fillna("").str.strip().ne("")
+    reviewed = kind.isin(SERVICE_EVIDENCE_POINTS.keys() - RECORD_TEXT_KINDS) & frame[cite_col].eq(True)
+    work = eligible_facility_locations(frame.loc[record_text | reviewed])
+    has_citation = work[evidence_col].map(_has_reviewed_citation).eq(True)
+    work = work.loc[work[kind_col].isin(RECORD_TEXT_KINDS) | has_citation].copy()
+    work["service_evidence_kind"] = work[kind_col]
+    work["service_evidence_sources_json"] = work[evidence_col]
+    work["service_evidence_label"] = work.service_evidence_kind.map(SERVICE_EVIDENCE_LABELS)
+    work["service_match_score"] = work.service_evidence_kind.map(service_match)
+    work["service_confidence_points"] = work.service_evidence_kind.map(SERVICE_EVIDENCE_POINTS)
+    scored = [service_confidence(kind, branch) for kind, branch in
+              zip(work.service_evidence_kind, work.branch_confidence_points, strict=True)]
+    work["service_confidence_score"] = [score for score, _ in scored]
+    work["service_confidence_tier"] = [tier for _, tier in scored]
+    return work
 
 
 def rank_candidates(frame, service, origin, severity="routine", population_share_pct=0.0, top_k=5,
-                    travel_times=None):
-    """Rank only cited text matches; return score components for transparent rendering."""
+                    travel_times=None, *, nearest_only=False):
+    """Rank eligible matches, using distance alone for the no-reachable-routes fallback."""
     key = _service_key(service)
     term_col, excerpt_col, cite_col = f"term_{key}", f"excerpt_{key}", f"claim_citable_{key}"
     if cite_col not in frame.columns:
         return pd.DataFrame()
-    work = service_candidates(frame, service)
+    work = service_candidates(frame, service).drop(columns="confidence_penalty", errors="ignore")
     if work.empty:
         return work
     work["distance_km"] = work.apply(lambda r: haversine_km(origin[0], origin[1], float(r.latitude), float(r.longitude)), axis=1)
@@ -477,28 +659,19 @@ def rank_candidates(frame, service, origin, severity="routine", population_share
     work["simulated_load"] = work.regional_expected_cases / work.regional_facility_count.clip(lower=1)
     work["capacity_basis_beds"] = work.beds_for_scenario.where(work.beds_for_scenario > 0, 50.0)
     work["load_ratio"] = work.simulated_load / work.capacity_basis_beds
-    work["confidence_score"] = pd.to_numeric(work.get("confidence_score", pd.Series(index=work.index, dtype=float)), errors="coerce")
-    confidence = work.confidence_score.map(confidence_adjustment)
-    work["confidence_tier"] = confidence.map(lambda x: x[0])
-    work["confidence_penalty_km"] = confidence.map(lambda x: x[1])
-    work["routing_basis"] = "straight-line"
+    routed = travel_times is not None and not nearest_only
     work["travel_time_minutes"] = np.nan
-    if travel_times is not None:
+    if routed:
         work["travel_time_minutes"] = work.facility_id.map(lambda fid: travel_times.get(str(fid)))
         work["travel_time_minutes"] = pd.to_numeric(work.travel_time_minutes, errors="coerce")
-        work = work.dropna(subset=["travel_time_minutes"])
-        work["routing_basis"] = "TravelTime driving matrix"
-    work["score_unit"] = "km"
-    if severity == "emergency":
-        # Emergency demand load is ignored, but evidence confidence still affects ranking.
+        valid_minutes = np.isfinite(work.travel_time_minutes) & work.travel_time_minutes.ge(0)
+        work = work.loc[valid_minutes].copy()
+    work["routing_basis"] = "TravelTime driving matrix" if routed else "straight-line"
+    work["score_unit"] = "minutes" if routed else "km"
+    work["base_travel_cost"] = work.travel_time_minutes if routed else work.distance_km
+    if severity == "emergency" or nearest_only:
         work["load_penalty_km"] = 0.0
-        work["load_penalty_basis"] = "ignored for emergency"
-        work["base_travel_cost"] = work.travel_time_minutes.where(work.travel_time_minutes.notna(), work.distance_km)
-        work["confidence_penalty"] = work.confidence_penalty_km
-        work["load_penalty"] = 0.0
-        work["score_unit"] = np.where(work.travel_time_minutes.notna(), "minutes", "km")
-        work.loc[work.travel_time_minutes.notna(), "confidence_penalty"] *= 2.0
-        work["score"] = work.base_travel_cost + work.confidence_penalty
+        work["load_penalty_basis"] = "nearest-distance fallback" if nearest_only else "ignored for emergency"
     else:
         # Each district's share of population demand is split evenly among every
         # evidence-backed facility candidate for this service in that district.
@@ -509,29 +682,34 @@ def rank_candidates(frame, service, origin, severity="routine", population_share
         else:
             work["regional_demand_factor"] = 1.0
         work["load_penalty_km"] = 12.0 * (1.0 - np.exp(-work.load_ratio * work.regional_demand_factor))
-        work["base_travel_cost"] = work.travel_time_minutes.where(work.travel_time_minutes.notna(), work.distance_km)
-        work["score_unit"] = np.where(work.travel_time_minutes.notna(), "minutes", "km")
-        multiplier = np.where(work.travel_time_minutes.notna(), 2.0, 1.0)
-        work["load_penalty"] = work.load_penalty_km * multiplier
-        work["confidence_penalty"] = work.confidence_penalty_km * multiplier
-        work["score"] = work.base_travel_cost + work.load_penalty + work.confidence_penalty
         work["load_penalty_basis"] = "heuristic km-equivalent adjustment, converted to minutes for TravelTime"
+    work["service_match_penalty_km"] = MATCH_PENALTY_MAX_KM * (1.0 - work.service_match_score / 100.0)
+    evidence_minutes = evidence_penalty_minutes(work.service_confidence_score)
+    work["evidence_confidence_penalty_km"] = evidence_minutes / ROUTE_MINUTES_PER_KM_EQUIVALENT
+    multiplier = ROUTE_MINUTES_PER_KM_EQUIVALENT if routed else 1.0
+    if nearest_only:
+        multiplier = 0.0
+    work["load_penalty"] = work.load_penalty_km * multiplier
+    work["service_match_penalty"] = work.service_match_penalty_km * multiplier
+    work["evidence_confidence_penalty"] = work.evidence_confidence_penalty_km * multiplier
+    work["score"] = work.base_travel_cost + work.load_penalty + work.service_match_penalty + work.evidence_confidence_penalty
     work["matched_term"] = work[term_col]
     work["supporting_excerpt"] = work[excerpt_col]
     work["source_urls"] = work.source_urls_json.map(lambda x: json.loads(x) if isinstance(x, str) else [])
-    sort_cols = ["score", "distance_km"] if work.travel_time_minutes.isna().all() else ["score", "travel_time_minutes", "distance_km"]
+    sort_cols = ["score", "travel_time_minutes", "distance_km"] if routed else ["score", "distance_km"]
     return work.sort_values(sort_cols, ascending=True, na_position="last").head(int(top_k)).reset_index(drop=True)
 
 
 def resolve_location(frame, location_text="", lat=None, lon=None):
     if lat is not None and lon is not None:
         lat, lon = float(lat), float(lon)
-        if not (6 <= lat <= 38 and 68 <= lon <= 98):
+        if not _within_india_bounds(lat, lon):
             raise ValueError("Coordinates must fall within the India bounds used by this prototype.")
         return (lat, lon), "User-provided coordinates"
     q = re.sub(r"\s+", " ", str(location_text or "")).strip().casefold()
     if not q:
         raise ValueError("Enter a city, district, PIN code, or coordinates.")
+    frame = eligible_facility_locations(frame)
     pin = re.search(r"(?<!\d)([1-9]\d{5})(?!\d)", q)
     if pin:
         hit = frame[frame.pin.fillna("").astype(str).str.extract(r"(\d{6})", expand=False).eq(pin.group(1))]
@@ -549,7 +727,6 @@ def resolve_location(frame, location_text="", lat=None, lon=None):
                 hit = candidate
                 break
         precision = "Facility-coordinate centroid (approximate)"
-    hit = hit.dropna(subset=["latitude", "longitude"])
     if hit.empty:
         raise ValueError("No facility coordinates matched that place. Try a different spelling or enter coordinates.")
     return (float(hit.latitude.mean()), float(hit.longitude.mean())), precision

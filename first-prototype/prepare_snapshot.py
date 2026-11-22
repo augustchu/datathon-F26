@@ -34,13 +34,17 @@ POPULATION_CSV = os.getenv(
 )
 CAPACITY_RELEASE_CSV = Path(repo_root).parent / CAPACITY_RELEASE_RELATIVE / "facilities_newest_capacity.csv"
 CAPACITY_CONFIDENCE_CSV = Path(repo_root).parent / CAPACITY_RELEASE_RELATIVE / "facility_confidence.csv"
+SERVICE_EVIDENCE_JSON = Path(repo_root) / "service_confidence_evidence.json"
+LOCATION_HOLDS_JSON = Path(repo_root) / "location_routing_holds.json"
 if repo_root not in sys.path:
     sys.path.insert(0, repo_root)
 pipeline_module = importlib.import_module("pipeline")
 # Notebook kernels retain imported modules after Git folders are refreshed. Reload so this
 # notebook picks up helpers added in the current first-prototype/pipeline.py file.
 pipeline_module = importlib.reload(pipeline_module)
-required_helpers = ("SERVICE_TERMS", "attach_regions", "attach_population", "attach_capacity_release", "prepare_facilities", "read_geojson_archive")
+required_helpers = ("SERVICE_TERMS", "attach_regions", "attach_population", "attach_capacity_release",
+                    "prepare_facilities", "read_geojson_archive", "load_reviewed_service_evidence",
+                    "load_audited_location_holds")
 missing_helpers = [name for name in required_helpers if not hasattr(pipeline_module, name)]
 if missing_helpers:
     raise ImportError(
@@ -77,18 +81,24 @@ for release_path in (CAPACITY_RELEASE_CSV, CAPACITY_CONFIDENCE_CSV):
         raise FileNotFoundError(f"Required release file is missing from the Databricks Git folder: {release_path}")
 capacity_release_columns = [
     "row_index", "facility_id", "unique_id", "name", "state", "district", "city", "pin", "latitude", "longitude",
+    "routing_eligible",
     "capacity", "description", "specialties", "capability", "procedure", "equipment", "source_urls",
     "capacity_status", "capacity_source",
     "capacity_source_url", "capacity_prediction_lower", "capacity_prediction_upper", "capacity_model_id",
     "original_capacity", "published_phone", "officialPhone", "phone_numbers", "phone_source_url",
     "officialWebsite", "website", "websites",
 ]
-capacity_release = pd.read_csv(CAPACITY_RELEASE_CSV, usecols=capacity_release_columns, dtype={"unique_id": "string"})
+capacity_release = pd.read_csv(CAPACITY_RELEASE_CSV, usecols=capacity_release_columns,
+                               dtype={"unique_id": "string", "pin": "string"})
 confidence_release = pd.read_csv(CAPACITY_CONFIDENCE_CSV)
 display_source = attach_capacity_release(raw, capacity_release, confidence_release)
 # From this point, facility display/service/location fields come from the cleaned
 # release rows. The Marketplace snapshot is used only for capacity cross-checks.
-prepared = prepare_facilities(display_source)
+service_evidence_as_of = datetime.now(timezone.utc).date()
+reviewed_evidence = pipeline_module.load_reviewed_service_evidence(SERVICE_EVIDENCE_JSON)
+location_holds = pipeline_module.load_audited_location_holds(LOCATION_HOLDS_JSON)
+prepared = prepare_facilities(display_source, reviewed_evidence=reviewed_evidence,
+                              audited_location_holds=location_holds, as_of=service_evidence_as_of)
 capacity_release_summary = (
     f"newest-source capacity release; {int(prepared['beds_for_scenario'].notna().sum()):,} capacity values; "
     f"{int(prepared['capacity_release_status'].astype(str).str.casefold().eq('xgboost_estimate').sum()):,} marked estimates"
@@ -132,8 +142,11 @@ print(f"Publishing prototype tables under {output_schema}")
 numeric_cols = {
     "latitude", "longitude", "beds_for_scenario", "regional_population", "confidence_score", "confidence_penalty",
     "capacity_prediction_lower", "capacity_prediction_upper", "capacity_release_original",
+    "branch_confidence_points",
 }
-boolean_cols = {c for c in prepared.columns if c.startswith("claim_citable_")}
+boolean_cols = {c for c in prepared.columns if c.startswith("claim_citable_")} | {
+    "branch_routing_hold", "location_search_eligible",
+}
 for col in numeric_cols:
     prepared[col] = pd.to_numeric(prepared[col], errors="coerce")
 for col in boolean_cols:
@@ -164,6 +177,9 @@ metadata = spark.createDataFrame([{
     "population_estimates": POPULATION_CSV,
     "capacity_release": str(CAPACITY_RELEASE_CSV),
     "confidence_release": str(CAPACITY_CONFIDENCE_CSV),
+    "service_confidence_evidence": str(SERVICE_EVIDENCE_JSON),
+    "service_evidence_as_of": service_evidence_as_of.isoformat(),
+    "location_routing_holds": str(LOCATION_HOLDS_JSON),
     "facility_rows": int(len(prepared)),
     "capacity_values": int(prepared["beds_for_scenario"].notna().sum()),
     "capacity_estimates": int(prepared["capacity_release_status"].astype(str).str.casefold().eq("xgboost_estimate").sum()),

@@ -1,0 +1,78 @@
+[
+  {
+    "facility_id": "fdr:ebb4d2d3-4c1d-436d-b270-2e0f4498cfaa",
+    "pin": "302004",
+    "service": "dialysis",
+    "source_kind": "hospital_site",
+    "publisher_key": "soni_group_of_hospitals",
+    "source_url": "https://www.sonihospitals.com/soni-dialysis-centres/",
+    "excerpt": "Dialysis Centre Soni Hospital, JLN Marg",
+    "stance": "supports"
+  },
+  {
+    "facility_id": "fdr:ebb4d2d3-4c1d-436d-b270-2e0f4498cfaa",
+    "pin": "302004",
+    "service": "dialysis",
+    "source_kind": "directory",
+    "publisher_key": "nabh",
+    "source_url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2013-0191_5th%20Edition.pdf",
+    "excerpt": "Nephrology including Pediatric Nephrology and Dialysis",
+    "valid_from": "2023-04-11",
+    "valid_through": "2027-04-10",
+    "stance": "supports"
+  },
+  {
+    "facility_id": "fdr:122c4874-bae0-4c87-bac8-c22e5b0611f8",
+    "pin": "110055",
+    "service": "dialysis",
+    "source_kind": "directory",
+    "publisher_key": "delhi_pollution_control_committee",
+    "source_url": "https://dpcc.delhi.gov.in/sites/default/files/DPCC/generic_multiple_files/updated_list_of_hospitals_as_on_22.10.2026.pdf",
+    "excerpt": "Nephrology (including Dialysis)",
+    "valid_from": "2026-07-06",
+    "stance": "supports"
+  },
+  {
+    "facility_id": "fdr:122c4874-bae0-4c87-bac8-c22e5b0611f8",
+    "pin": "110055",
+    "service": "dialysis",
+    "source_kind": "directory",
+    "publisher_key": "central_pollution_control_board",
+    "source_url": "https://cpcb.nic.in/employee/ama/Hospital_Delhi.pdf",
+    "excerpt": "Nephrology (Including Dialysis)",
+    "valid_through": "2026-12-31",
+    "stance": "supports"
+  },
+  {
+    "facility_id": "fdr:ede7be8d-fae7-436f-8010-5b59f675a36a",
+    "pin": "500034",
+    "service": "cardiac_surgery",
+    "source_kind": "hospital_site",
+    "publisher_key": "star_hospitals",
+    "source_url": "https://starhospitals.in/doctors/banjara-hills/heart-transplant/dr-k-v-ramana-raju-cardiothoracic-surgeon",
+    "excerpt": "At STAR Hospitals, Banjara Hills, he provides comprehensive cardiac and thoracic surgical care using advanced techniques and a patient-centered approach.",
+    "stance": "supports"
+  },
+  {
+    "facility_id": "fdr:ede7be8d-fae7-436f-8010-5b59f675a36a",
+    "pin": "500034",
+    "service": "cardiac_surgery",
+    "source_kind": "directory",
+    "publisher_key": "nabh",
+    "source_url": "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2011-0078_5th%20Edition_Scope%20Correction.pdf",
+    "excerpt": "Cardiothoracic and Vascular Surgery",
+    "valid_from": "2024-06-10",
+    "valid_through": "2028-06-09",
+    "stance": "supports"
+  },
+  {
+    "facility_id": "fdr:773f1349-9b25-412d-a642-48d8fef193a7",
+    "pin": "121001",
+    "service": "nicu",
+    "source_kind": "hospital_site",
+    "publisher_key": "faridabad_medical_center",
+    "source_url": "https://faridabadmedicalcenter.com/home/",
+    "excerpt": "Our Neonatal Intensive Care Unit (NICU) is dedicated to providing specialized care for premature and critically ill newborns.",
+    "stance": "supports"
+  }
+]
