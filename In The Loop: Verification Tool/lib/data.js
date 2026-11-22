@@ -158,7 +158,7 @@ function encodedPath(path) {
 }
 
 /** Resolve public GitHub files and relative screenshot paths without executing URLs. */
-export function resolveAssetUrl(input, { repository = 'augustchu/datathon-F26', ref = 'main', baseUrl } = {}) {
+export function resolveAssetUrl(input, { repository = 'yana-157/in-the-loop-verification-tool', ref = 'main', baseUrl } = {}) {
   const path = stringOf(input).trim();
   if (!path) throw new Error('The screenshot path is empty.');
   if (/^[a-z][a-z\d+.-]*:/i.test(path) || path.startsWith('//')) {

@@ -37,7 +37,7 @@ const STATUS = {
 };
 const STORAGE = 'in-the-loop:active:v1';
 let records = [], selectedId = null, expanded = 'pending', query = '', zoom = 100;
-let settings = { repository: 'augustchu/datathon-F26', ref: 'main' };
+let settings = { repository: 'yana-157/in-the-loop-verification-tool', ref: 'main' };
 let name = 'Repository evidence', isSample = true, key = '', saveFailed = false;
 const queues = Object.fromEntries(Object.keys(STATUS).map(status => [status, { page: 1, size: 10 }]));
 let pendingImport = null, workbook = null, loadedFileName = '', toastTimeout, importSequence = 0;

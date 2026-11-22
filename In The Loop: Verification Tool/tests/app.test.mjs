@@ -57,7 +57,7 @@ async function harness(records = fixture(), savedStorage) {
   });
   const storage = savedStorage || new Map([[storageKey, JSON.stringify({
     records, selectedId: records[0].id, expanded: 'pending',
-    settings: { repository: 'augustchu/datathon-F26', ref: 'main' },
+    settings: { repository: 'yana-157/in-the-loop-verification-tool', ref: 'main' },
     name: 'Test spreadsheet', isSample: false,
   })]]);
   let objectUrls = 0;
@@ -172,7 +172,7 @@ test('the import dialog honors canonical mappings from a reviewed CSV export', a
   assert.equal(app.get('#asset-column').value, 'review_asset_path');
   assert.equal(app.get('#id-column').value, 'review_asset_id');
   assert.equal(app.get('#title-column').value, 'review_asset_title');
-  app.get('#repository-input').value = 'augustchu/datathon-F26';
+  app.get('#repository-input').value = 'yana-157/in-the-loop-verification-tool';
   app.get('#ref-input').value = 'main';
   app.get('#import-form').dispatch('submit');
   const [imported] = app.state().records;

@@ -47,7 +47,7 @@ test('normalization supports explicit column mapping and rejects missing assets,
 });
 
 test('GitHub blob/raw and repo-relative filenames resolve safely, including spaces and literal hash', () => {
-  assert.equal(resolveAssetUrl('screenshots/a #1.png'), 'https://raw.githubusercontent.com/augustchu/datathon-F26/main/screenshots/a%20%231.png');
+  assert.equal(resolveAssetUrl('screenshots/a #1.png'), 'https://raw.githubusercontent.com/yana-157/in-the-loop-verification-tool/main/screenshots/a%20%231.png');
   assert.equal(resolveAssetUrl('https://github.com/me/repo/blob/main/folder/a%20b.png?raw=1'), 'https://raw.githubusercontent.com/me/repo/main/folder/a%20b.png');
   assert.equal(resolveAssetUrl('https://raw.githubusercontent.com/me/repo/main/a.png'), 'https://raw.githubusercontent.com/me/repo/main/a.png');
   assert.equal(resolveAssetUrl('./assets/a.png', { baseUrl: 'https://me.github.io/project/' }), 'https://me.github.io/project/assets/a.png');
@@ -136,7 +136,7 @@ test('formula-safe CSV round-trips @ filenames and existing apostrophes without 
   const records = normalizeRows(input);
   const restored = normalizeRows(parseDelimited(toCsv(records)).rows);
   assert.deepEqual(restored[0].original, { ...records[0].original, review_status: 'pending', review_notes: '', reviewed_at: '' });
-  assert.equal(resolveAssetUrl(restored[0].assetPath), 'https://raw.githubusercontent.com/augustchu/datathon-F26/main/%40evidence.png');
+  assert.equal(resolveAssetUrl(restored[0].assetPath), 'https://raw.githubusercontent.com/yana-157/in-the-loop-verification-tool/main/%40evidence.png');
   assert.equal(datasetKey(restored), datasetKey(records));
   assert.equal(parseDelimited("id,asset_path,claim\n1,a.png,'=literal").rows[0].claim, "'=literal");
 });
