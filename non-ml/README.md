@@ -84,6 +84,20 @@ python non-ml/check_traveltime_live.py \
 
 The check sends real TravelTime requests for blood banks from Jaipur and Gadchiroli. It uses the travel-only sort within the existing evidence tiers so the expected order can be reconstructed from the returned route data. It checks that all eligible branches were submitted, that the top five match the provider-backed rank order, and that any car-only label matches the provider's response for the selected mode. A case without enough usable evidence or routes to demonstrate the target behavior is inconclusive. Use `--case jaipur-driving`, `--case gadchiroli-driving`, or `--case gadchiroli-walking` to run individual cases. The JSON receipt records the outcome and route counts for the working report. [Live check script](check_traveltime_live.py)
 
+From a Python notebook, set `repo` to the Git checkout. The runner receives the same flags as the terminal command.
+
+```python
+from pathlib import Path
+from runpy import run_path
+
+repo = Path('/path/to/datathon-F26')
+run_check = run_path(str(repo / 'non-ml/check_traveltime_live.py'))['main']
+status = run_check([
+    '--checkpoint-root', str(repo / 'non-ml/outputs'), '--mode', 'export',
+    '--as-of', '2026-11-21', '--output', str(repo / 'traveltime-live.json'),
+])
+```
+
 ## Moderation stack
 
 Set `MODERATION_DB` in notebook 07 to a private local SQLite path to save negative feedback for review. Use a separate database for demo reports. Reports carry the facility ID, service, fixed reason, timestamps and disposition. Newest open reports appear first. Retried reports keep their original position, and changes to review outcomes retain their history. The DB is private operational data. The CLI works on a local copy or host with access to the same database. Hosted access and team sign-in are outside this prototype.
