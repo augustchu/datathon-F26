@@ -9,9 +9,11 @@ from urllib.parse import quote
 
 import pandas as pd
 import streamlit as st
+from streamlit.components.v1 import html as component_html
 from databricks import sql
 from databricks.sdk.core import Config
 
+from facility_map import build_map
 from metric_explanations import EXPLANATIONS
 from pipeline import SERVICE_TERMS, rank_candidates, resolve_location, service_candidates
 from service_confidence import RECORD_TEXT_KINDS
@@ -85,6 +87,18 @@ def set_search_started(started):
     st.session_state["search_started"] = started
 
 
+def show_facility_map(origin=None, ranked=None, *, origin_label="", using_routes=False):
+    st.subheader("Map")
+    markup = build_map(origin, ranked, origin_label=origin_label, using_routes=using_routes)
+    height = 560 if ranked is not None and not ranked.empty else 400
+    if hasattr(st, "iframe"):
+        st.iframe(markup, height=height)
+    else:
+        component_html(markup, height=height)
+    if ranked is not None and not ranked.empty:
+        st.caption("Pin numbers match the result cards. The red pin marks the search origin.")
+
+
 @st.cache_data(ttl=1800, max_entries=32, show_spinner="Getting driving times from TravelTime...")
 def cached_travel_times(origin, facility_records):
     destinations = pd.DataFrame(facility_records, columns=["facility_id", "latitude", "longitude"])
@@ -129,6 +143,7 @@ with search_controls:
 
 if not search_started:
     st.button("Find facility options", type="primary", on_click=set_search_started, args=(True,))
+    show_facility_map()
     st.stop()
 
 try:
@@ -157,6 +172,12 @@ candidates = service_candidates(facilities, service)
 if candidates.empty:
     st.subheader(f"Options for {service}")
     st.warning(f"No facilities with supporting evidence and a usable location were found for {service} in this snapshot.")
+    try:
+        map_origin, map_origin_basis = resolve_location(facilities, location_text, lat, lon)
+    except ValueError:
+        show_facility_map()
+    else:
+        show_facility_map(map_origin, origin_label=location_text or map_origin_basis)
 else:
     try:
         origin, origin_basis = resolve_location(facilities, location_text, lat, lon)
@@ -201,15 +222,10 @@ else:
             st.warning("No evidence-backed facility was returned as reachable within TravelTime's 3-hour search limit. This does not establish that care is unavailable.")
         else:
             st.warning("No facility in this snapshot passed the service evidence and coordinate checks. This does not establish that care is unavailable.")
+        show_facility_map(origin, origin_label=location_text or origin_basis)
     else:
         if nearest_only:
             st.warning("TravelTime found no matching facilities it could route to within its three-hour search window. Showing the closest matches by straight-line distance.")
-        map_points = pd.concat([
-            ranked[["latitude", "longitude"]].assign(color="#2563eb"),
-            pd.DataFrame([{"latitude": origin[0], "longitude": origin[1], "color": "#c2410c"}]),
-        ], ignore_index=True)
-        st.map(map_points, color="color", height=340)
-        st.caption("Blue shows facility results. Orange shows the search origin.")
         order = "Closest by straight-line distance" if nearest_only else "Lowest ranking score first"
         show_calculated("Result order", order, "result_order", compact=True)
         if not nearest_only:
@@ -218,13 +234,16 @@ else:
                 st.info(f"Emergency ranking uses {base}, service match, and evidence confidence.")
             else:
                 st.info(f"Ranking uses {base}, service match, evidence confidence, and the selected regional demand scenario.")
-        for rank, row in ranked.iterrows():
+        result_column, map_column = st.columns([1.25, 1], gap="medium")
+        with map_column:
+            show_facility_map(origin, ranked, origin_label=location_text or origin_basis, using_routes=using_routes)
+        for rank, (_, row) in enumerate(ranked.iterrows(), 1):
             distance_label = f"{row.travel_time_minutes:.0f} min drive" if using_routes else f"{row.distance_km:.1f} km straight-line"
             scope = str(row.facility_id)
-            title = f"{rank + 1}. {row.facility_name} · {distance_label}"
+            title = f"{rank}. {row.facility_name} · {distance_label}"
             if row.service_evidence_kind in RECORD_TEXT_KINDS:
                 title += f" · {row.service_evidence_label}"
-            with st.expander(title, expanded=(rank == 0)):
+            with result_column.expander(title, expanded=(rank == 1)):
                 metrics = st.columns(3 if nearest_only else 4)
                 c1, c2, c3 = metrics[:3]
                 with c1:
