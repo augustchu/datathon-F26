@@ -1,0 +1,59 @@
+[
+  {
+    "case_id": "R43",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://mcchennai.esic.gov.in/attachments/sstfile/464ebed2bd5046b95a101649cd4e2ba2.pdf#page=6",
+    "evidence_date": "",
+    "excerpt": "ESIC lists named scheme doctors for Panvel Hospital at Riddhi Siddhi Plaza, plot 260A, Uran Naka, Old Panvel.",
+    "rationale": "The register covers assigned primary-care scheme doctors, a subset of the branch's staffing. It gives no total and identifies plot 260A where the original record says plot 26. Appointment-directory entries also cover a subset."
+  },
+  {
+    "case_id": "R44",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://ayaaneyehospital.com/",
+    "identity_url": "https://fci.gov.in/fci-storage/storage/app/uploads/678a4a1070dab1737116176.pdf",
+    "evidence_date": "",
+    "excerpt": "Ayaan's site profiles an ophthalmologist in One-Town. An official panel listing places the hospital beside ICICI Bank, BRP Road, Islampet, PIN 520001.",
+    "rationale": "A clinician profile leaves the facility's total unknown. The state medical education recognition list uses a different building number and PIN for a similarly named location, adding address uncertainty.",
+    "alternative_url": "https://www.dme.ap.nic.in/leftmenu_pages/ma_menu/ma/Recognizedhosolist.pdf"
+  },
+  {
+    "case_id": "R45",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.medipulse.in/home",
+    "evidence_date": "",
+    "excerpt": "The hospital at E4, MIA, Basni II Phase reports 50-plus consultants and resident doctors in its annual-metrics section.",
+    "rationale": "The hospital statistic gives a lower bound for specified practitioner groups. The broader team figure on the same page includes nursing, technical and support staff. Neither is an exact whole-facility doctor count."
+  },
+  {
+    "case_id": "R46",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://cdnbbsr.s3waas.gov.in/s32cd4e8a2ce081c3d7c32c3cde4312ef7/uploads/2021/01/2021010512-3.pdf",
+    "evidence_date": "",
+    "excerpt": "The public listing includes Haryana Hospital at Janta Colony, Delhi Road, Vivekanand Chowk, Sonepat.",
+    "rationale": "The listing corroborates the address and provides no aggregate staffing figure. A search for statutory staffing records or provider totals did not establish a whole-branch doctor count."
+  },
+  {
+    "case_id": "R47",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.yashroophospital.com/",
+    "identity_url": "https://www.iitg.ac.in/medical/GMISagree2026.pdf",
+    "evidence_date": "",
+    "excerpt": "Yashroop advertises 50-plus doctors at its published 12-P, Sector 9 location in Gurugram.",
+    "rationale": "The original branch lists Sector 10A, while the provider and the institutional network list use Sector 9 for plot 12-P. The provider offers a rounded lower bound and gives no exact total. Repetition of a different number by both candidate insurers leaves its origin unverified."
+  },
+  {
+    "case_id": "R48",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://portal.nabh.co/Documents/AccreditedList/Entry-Level%20SHCO/PESHCO-2019-2369.pdf",
+    "evidence_date": "",
+    "excerpt": "The NABH certificate identifies Omega Multispeciality Hospital at No. 1236, B Sector Ward No. 4, Yelahanka Newtown, Bangalore, PIN 560064.",
+    "rationale": "The accreditor's scope certificate confirms branch identity. It gives no exact whole-facility doctor count. The regulator and provider-record search identified no such staffing total for the matched branch."
+  }
+]

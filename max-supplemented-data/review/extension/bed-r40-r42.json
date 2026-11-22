@@ -1,0 +1,34 @@
+[
+  {
+    "case_id": "R40",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://web.starhealth.in/sites/default/files/Public_Disclosure_on_Standards_for_Hospitals_in_the_Provider_Network.pdf",
+    "identity_url": "https://kwa.kerala.gov.in/wp-content/uploads/2024/07/LIST-OF-NETWORK-HOSPITALS-IN-KERALA_Ms-United-India-Insurance-Co.pdf",
+    "evidence_date": "2022-03-31",
+    "excerpt": "Star Health reports 50 beds for Krishna Hospital, Kasaragod, ROHINI 8900080224643. The water authority's network list ties this ID to Chinmaya Mission Colony.",
+    "rationale": "The Kasaragod branch is traceable through the ROHINI ID, area and PIN 671123. FDR's city label also includes Karimugal. The two March 2022 insurer figures of 35 and 50 disagree. A 49-bed Krishna Hospital in Kochi is a different facility. No comparable current total was established.",
+    "alternative_url": "https://www.iffcotokio.co.in/content/dam/iffcotokio/iffco-pdf/sites/default/files/download_forms/list-of-network-hospitals_v3.pdf"
+  },
+  {
+    "case_id": "R41",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://ayushmanbharat.mp.gov.in/uploads/media/Final_letter_2020.pdf",
+    "identity_url": "https://phps.mppolice.gov.in/phps/docfld/notifications/Phpsempanelledhospitallist15-04-2025.pdf",
+    "evidence_date": "",
+    "excerpt": "The state Ayushman Bharat table lists 50 beds for Green City Hospital at Plot 07, Saraswati Complex near V Mart, Dig Bungalow, Berasia Road, Bhopal.",
+    "rationale": "The state list and the police empanelment document identify the same branch. Go Digit's March 2022 disclosure also gives 50 at the exact PIN. These support the historical figure, but IFFCO reports 100 in March 2025 and FDR reports 90 without a date. The current comparable count remains unresolved.",
+    "alternative_url": "https://d2h44aw7l5xdvz.cloudfront.net/financials/Disclosure%20of%20Quality%20parameter%20of%20Network%20Hospitals_March%2722.pdf"
+  },
+  {
+    "case_id": "R42",
+    "status": "supported",
+    "verified_value": 130,
+    "evidence_url": "https://www.esic.nic.in/attachments/sstfile/3d8a0e825b3aac82cae666528079ec0e.pdf",
+    "identity_url": "https://accr.natboard.edu.in/online_user/hospital_profile.php?token=Y3WPZHIulpygsFQ6chOUXG4%40D51Ni%243C%28m19xe91jd1bS21wKMz%29qrfafvJOQq8doiK349FW%28P7k",
+    "evidence_date": "2020-11-05",
+    "excerpt": "ESIC row 4 lists 130 beds at Shifa Hospitals, 82 Kailasapuram Middle Street, Tirunelveli 627001. NBEMS lists 130 total hospital beds at the same address.",
+    "rationale": "The two official publications identify the exact street address and PIN. The NBEMS figure explicitly covers total hospital beds. It agrees with the dated ESIC, 2022 SBI and 2025 IFFCO reports. FDR's undated 25 has no comparable branch-wide corroboration."
+  }
+]
