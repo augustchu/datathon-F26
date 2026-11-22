@@ -3,3 +3,9 @@ __pycache__/
 *.py[cod]
 .DS_Store
 .venv/
+
+# Local datasets
+*.tif
+"facilities dataset.csv"
+geoBoundaries-IND-ADM2-all.zip
+.streamlit/secrets.toml

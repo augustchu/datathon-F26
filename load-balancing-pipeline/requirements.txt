@@ -1,0 +1,7 @@
+pandas>=2.2
+geopandas>=1.0
+rasterio>=1.4
+exactextract>=0.2.0
+rapidfuzz>=3.9
+streamlit>=1.40
+requests>=2.32
