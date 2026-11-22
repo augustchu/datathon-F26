@@ -44,7 +44,7 @@ This file records the implementation choices made for the first Databricks proto
 
 ## Interactive controls and persistence
 
-29. The app exposes service, origin, severity, regional population share (0–2%), and result count. Every control is passed to the ranking function. The Find button starts a search; after that, Streamlit reruns and updates results on widget changes.
+29. The app opens on the search controls and loads the snapshot after the user submits a search. Results include a collapsed **Search options** panel that reranks as inputs change. **Back to search** hides the results and restores the full controls with their current values.
 30. Population share creates a deterministic hypothetical district-level scenario. Equal allocation is over eligible facility records in each district. Emergency ranking uses travel, service match, and evidence confidence.
 31. The app reads from a named prepared table and uses a bounded cache. Re-run preparation and increment/update the snapshot timestamp to refresh cached data.
 32. TravelTime uses a typical weekday-morning arrival period and a three-hour search window. A partial matrix ranks the reachable facilities. A successful response with zero reachable facilities shows a banner above the map and sorts eligible results by straight-line distance alone. Provider and credential errors use the regular distance-based ranker.

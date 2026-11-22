@@ -81,6 +81,10 @@ def show_calculated(label, value, metric, scope="search", *, compact=False):
     show_more_info(metric, label, scope)
 
 
+def set_search_started(started):
+    st.session_state["search_started"] = started
+
+
 @st.cache_data(ttl=1800, max_entries=32, show_spinner="Getting driving times from TravelTime...")
 def cached_travel_times(origin, facility_records):
     destinations = pd.DataFrame(facility_records, columns=["facility_id", "latitude", "longitude"])
@@ -89,6 +93,43 @@ def cached_travel_times(origin, facility_records):
 
 st.title("Find the right care")
 st.caption("Evidence-linked facility options from the prepared Virtue Foundation snapshot. This prototype is not a diagnosis or live availability service.")
+
+search_started = st.session_state.get("search_started", False)
+if search_started:
+    st.button("Back to search", on_click=set_search_started, args=(False,))
+    search_controls = st.expander("Search options", expanded=False)
+else:
+    search_controls = st.container()
+
+with search_controls:
+    care_col, location_col = st.columns(2)
+    with care_col:
+        service = st.selectbox("Care needed", list(SERVICE_TERMS), key="search_service")
+        severity = st.radio("Urgency", ["routine", "urgent", "emergency"], horizontal=True, key="search_urgency",
+                            help="Emergency ranking uses travel, service match, and evidence confidence, with no regional demand adjustment.")
+        population_share_pct = st.slider("Regional population needing this care", 0.0, 2.0, 1.0, 0.1,
+                                         format="%.1f%%", key="search_population_share",
+                                         help="Scenario share of the modeled district population that needs the selected service.")
+        show_more_info("scenario_share", "Regional population needing this care")
+        top_k = st.slider("Options to show", 1, 10, 5, key="search_result_count")
+    with location_col:
+        coordinate_mode = st.toggle("Enter coordinates", value=False, key="search_coordinate_mode")
+        if coordinate_mode:
+            lat = st.number_input("Latitude", min_value=6.0, max_value=38.0, value=19.0760,
+                                  format="%.5f", key="search_latitude")
+            lon = st.number_input("Longitude", min_value=68.0, max_value=98.0, value=72.8777,
+                                  format="%.5f", key="search_longitude")
+            location_text = ""
+        else:
+            location_text = st.text_input("City, district, or PIN", value="Jaipur, Rajasthan",
+                                          placeholder="e.g. Jaipur, Rajasthan or 302001", key="search_place")
+            lat = lon = None
+        use_traveltime = st.toggle("Use TravelTime driving estimates", value=True, key="search_use_traveltime",
+                                  help="Uses weekday-morning driving minutes as the travel input when routes are available.")
+
+if not search_started:
+    st.button("Find facility options", type="primary", on_click=set_search_started, args=(True,))
+    st.stop()
 
 try:
     facilities = load_snapshot(FACILITY_TABLE)
@@ -106,41 +147,17 @@ try:
 except Exception:
     snapshot_date = "metadata unavailable"
 
-with st.sidebar:
-    st.header("Search")
-    service = st.selectbox("Care needed", list(SERVICE_TERMS))
-    severity = st.radio("Urgency", ["routine", "urgent", "emergency"], horizontal=False,
-                        help="Emergency ranking uses travel, service match, and evidence confidence, with no regional demand adjustment.")
-    population_share_pct = st.slider("Regional population needing this care", 0.0, 2.0, 1.0, 0.1, format="%.1f%%",
-                                     help="Scenario: this share of each hospital district's modeled population needs this service. Expected cases are split evenly across evidence-backed hospitals in that district; this is not a forecast.")
-    show_more_info("scenario_share", "Regional population needing this care")
-    top_k = st.slider("Options to show", 1, 10, 5)
-    use_traveltime = st.toggle("Use TravelTime driving estimates", value=True,
-                              help="Uses weekday-morning driving minutes as the travel input when routes are available.")
-    coordinate_mode = st.toggle("Enter coordinates", value=False)
-    if coordinate_mode:
-        lat = st.number_input("Latitude", min_value=6.0, max_value=38.0, value=19.0760, format="%.5f")
-        lon = st.number_input("Longitude", min_value=68.0, max_value=98.0, value=72.8777, format="%.5f")
-        location_text = ""
-    else:
-        location_text = st.text_input("City, district, or PIN", value="Jaipur, Rajasthan", placeholder="e.g. Jaipur, Rajasthan or 302001")
-        lat = lon = None
-
 st.caption(f"Prepared snapshot · {snapshot_date}")
 show_calculated("Facility records in snapshot", f"{len(facilities):,}", "snapshot_records", compact=True)
 if "location_search_eligible" not in facilities:
     st.info("Refresh the prepared snapshot to enable service evidence and location screening.")
 st.warning("Bed counts do not show how many beds are staffed, free, or available for this service. Confirm service and availability with the facility before travel.")
 
-if st.button("Find facility options", type="primary"):
-    st.session_state["search_started"] = True
-
-search_started = st.session_state.get("search_started", False)
-candidates = service_candidates(facilities, service) if search_started else None
-if search_started and candidates.empty:
+candidates = service_candidates(facilities, service)
+if candidates.empty:
     st.subheader(f"Options for {service}")
     st.warning(f"No facilities with supporting evidence and a usable location were found for {service} in this snapshot.")
-elif search_started:
+else:
     try:
         origin, origin_basis = resolve_location(facilities, location_text, lat, lon)
         travel_times = None
