@@ -1,0 +1,89 @@
+[
+  {
+    "case_id": "R09",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.godigit.com/content/dam/godigit/general/financials/public-disclosure/disclosure-of-quality-parameter-of-network-hospitals-march-25.pdf",
+    "identity_url": "https://www.bajajfinservhealth.in/hospitals/jaipur/asopa-hospital-brijlalpura",
+    "evidence_date": "2022-01-21",
+    "excerpt": "Go Digit dates the Ajmer Road Asopa Hospital row to January 2022 and reports 12 total beds.",
+    "rationale": "The exact 93-B Tagore Nagar branch is identifiable. The dated Go Digit entry gives 12, the March 2022 SBI row gives 40, and the practice listing gives 23. A directory quoting a hospital profile gives 25, but the hospital domain no longer publishes a usable branch capacity page. The inconsistent counts remain unresolved.",
+    "alternative_url": "https://www.findhealthclinics.org/IN/Jaipur/381851685295571/Asopa-Hospital"
+  },
+  {
+    "case_id": "R10",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://portal.nabh.co/Documents/AccreditedList/Eye%20Care%20Organisation/ECO-2021-0174.pdf",
+    "identity_url": "https://susrut.org/locations",
+    "evidence_date": "2024-04-29",
+    "excerpt": "NABH certificate ECO-2021-0174 identifies the Salt Lake eye-care branch at HB-36/A/1, Kolkata 700106 and lists its accredited services.",
+    "rationale": "The certificate and provider directory agree on the exact address and PIN. The certificate gives service scope without a total bed count. An HFR-derived directory listing gives 50, a third figure, but the underlying registry claim was not confirmed directly. Whole-branch capacity remains unresolved.",
+    "alternative_url": "https://www.hospitaldoor.in/in/west-bengal/north-twenty-four-parganas/eye"
+  },
+  {
+    "case_id": "R11",
+    "status": "supported",
+    "verified_value": 35,
+    "evidence_url": "https://adityahospital.co.in/about-us/",
+    "identity_url": "https://adityahospital.co.in/contact-us/",
+    "evidence_date": "",
+    "excerpt": "Aditya Hospital describes itself as a 35-bedded hospital at 7 Barnaby Road, Kilpauk, Chennai 600010.",
+    "rationale": "The operator states an exact count for the facility at the same street number and PIN as FDR. Its page is undated. Preserve SBI's separate March 2022 count of 23 as a historical insurer report.",
+    "alternative_url": "https://portal.nabh.co/Documents/AccreditedList/Entry-Level%20SHCO/PESHCO-2018-0200.pdf"
+  },
+  {
+    "case_id": "R12",
+    "status": "supported",
+    "verified_value": 300,
+    "evidence_url": "https://koyilihospital.org/about-us",
+    "identity_url": "https://koyilihospital.org/",
+    "evidence_date": "",
+    "excerpt": "Koyili Hospital describes a 300-bed facility and lists Pallikkunnu P.O., Talap, Kannur 670004 on its site.",
+    "rationale": "The hospital's site ties 300 beds to the same branch and scope, also reflected in the affiliated nursing college. A pollution-control consent valid through June 2023 lists a historical bed strength of 250. Retain both dated or scoped claims separately.",
+    "alternative_url": "https://koyilicon.edu.in/facilities"
+  },
+  {
+    "case_id": "R13",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.godigit.com/content/dam/godigit/general/financials/public-disclosure/disclosure-of-quality-parameter-of-network-hospitals-march-25.pdf#page=74",
+    "identity_url": "https://ext.cmcvellore.edu.in/wp-content/uploads/sites/14/2023/10/Weekly-News-2020.pdf",
+    "evidence_date": "2021-11-10",
+    "excerpt": "Go Digit reports 210 beds in a November 2021 row for Scudder Memorial Hospital on Kelleys Road, Ranipet.",
+    "rationale": "The partner's bulletin confirms Kelly's Road and PIN 632401. An interview with the superintendent described 250 existing beds and a separate planned expansion. The November 2021 disclosure gives 210 and the 2022 and 2025 insurer counts differ. A current comparable exact total remains unresolved.",
+    "alternative_url": "https://www.dtnext.in/amp/story/news/tamilnadu/scudder-memorial-hospital-plans-to-start-medical-college-2"
+  },
+  {
+    "case_id": "R14",
+    "status": "supported",
+    "verified_value": 55,
+    "evidence_url": "https://hcghospitals.com/our-centres/hcg-malnad-hospital-and-institute-oncology-shimoga",
+    "identity_url": "https://hcghospitals.com/our-centres/hcg-malnad-hospital-and-institute-oncology-shimoga",
+    "evidence_date": "",
+    "excerpt": "HCG lists 55 inpatient beds at Malnad Hospital and Institute of Oncology, 9th Mile Stone, Nidige Post, Shivamogga 577222.",
+    "rationale": "The operator reports the exact count for the whole named oncology hospital at the address opposite Bidare Bus Stop. The insurers' historical 56-bed figures should remain available as their reported totals. The measurement date of HCG's inpatient count is unstated."
+  },
+  {
+    "case_id": "R15",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.holycrosshospitalngl.com/",
+    "identity_url": "https://www.esic.gov.in/attachments/sstfile/c1da19846148a576c40406240f7519a3.pdf",
+    "evidence_date": "",
+    "excerpt": "The operator says 100 beds and lists Vettoornimadam, Nagercoil 629003. ESIC's July 2023 list reports 150 at this address.",
+    "rationale": "The official hospital page gives 100 without a measurement date, the 2023 ESIC list gives 150 in line with IFFCO and SBI, and the affiliated nursing college lists 120. The exact branch is clear. Their current comparable whole-hospital total remains unresolved.",
+    "alternative_url": "https://www.xaviersnsg.edu.in/header/hospitals"
+  },
+  {
+    "case_id": "R16",
+    "status": "unresolved",
+    "verified_value": null,
+    "evidence_url": "https://www.thiruvengdamhospital.com/about.html",
+    "identity_url": "https://www.adityabirlahealthinsurance.com/assets/pdf/20200930T102857.pdf",
+    "evidence_date": "",
+    "excerpt": "The About page states a 50-bed inpatient capacity and gives 66-T-1 Ramamoorthy Road, Virudhunagar 626001.",
+    "rationale": "The About page gives a facility-wide count and the exact address but has no reporting date. The dated historic insurer publications give 37, 25 and 33 for this address across periods, and Bajaj's facility listing also gives 33. The evidence supports retaining distinct dated claims with the comparable modeling value unresolved.",
+    "alternative_url": "https://www.bajajfinservhealth.in/hospitals/virudhunagar/thiruvengdam-hospital-anna-nagar"
+  }
+]
